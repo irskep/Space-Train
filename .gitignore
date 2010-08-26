@@ -1,4 +1,4 @@
 pyglet/
-resources/
+resources
 .DS_Store
 *.pyc

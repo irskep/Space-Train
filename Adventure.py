@@ -1,5 +1,6 @@
 #import cProfile
 import pyglet, math, os
+
 # pyglet.options['debug_gl'] = False
 
 from pyglet import gl
@@ -16,6 +17,10 @@ class AdventureWindow(pyglet.window.Window):
             font_name='Gill Sans', font_size=48, anchor_x='center', anchor_y='center',
             color=(128,128,128,255)
         )
+        
+        path = os.path.join(settings.resources_path, 'characters', 'fist', 'stand_front.png')
+        fist_image = pyglet.image.load(path)
+        self.fist = pyglet.sprite.Sprite(fist_image, x=50, y=50)
         
         pyglet.clock.schedule(self.on_draw)
     
@@ -56,6 +61,7 @@ class AdventureWindow(pyglet.window.Window):
             env.scale()
         
         self.draw_load_screen()
+        self.fist.draw()
         
         if env.scale_factor != 1.0:
             gl.glPopMatrix()
