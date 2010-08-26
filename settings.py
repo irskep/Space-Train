@@ -10,7 +10,6 @@ resource_locations = [
 ]
 
 for location in resource_locations:
-    print 'trying', location
     if os.path.isdir(location):
         resources_path = location
         break
