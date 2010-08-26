@@ -35,19 +35,6 @@ class AdventureWindow(pyglet.window.Window):
         
         env.main_window = self
         env.init_scale()
-        
-        self.init_gl()
-    
-    def init_gl(self):
-        gl.glEnable(gl.GL_BLEND)
-        gl.glEnable(gl.GL_POINT_SMOOTH)
-        gl.glEnable(gl.GL_LINE_SMOOTH)
-        gl.glShadeModel(gl.GL_SMOOTH)
-        gl.glBlendFunc(gl.GL_SRC_ALPHA,gl.GL_ONE_MINUS_SRC_ALPHA)
-        gl.glHint(gl.GL_PERSPECTIVE_CORRECTION_HINT,gl.GL_NICEST);
-        #gl.glHint(gl.GL_POINT_SMOOTH_HINT,gl.GL_NICEST);
-        #gl.glHint(gl.GL_LINE_SMOOTH_HINT,gl.GL_NICEST);
-        gl.glDisable(gl.GL_DEPTH_TEST)
     
     def draw_load_screen(self):    
         gl.glClearColor(1,1,1,1)
