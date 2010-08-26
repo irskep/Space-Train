@@ -1,0 +1,4 @@
+pyglet/
+resources/
+.DS_Store
+*.pyc
