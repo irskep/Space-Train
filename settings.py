@@ -4,13 +4,13 @@ import os
 
 resource_locations = [
     r"resources",   # the 'r' turns off escape sequences
-    r"C:\PATH\TO\FRED'S\SPECIAL\FOLDER",
+    r"C:\Users\Fred\Documents\My Dropbox\resources",
     r"YOUR_PATH_HERE"
 ]
 
 for location in resource_locations:
     if os.path.isdir(location):
-        resources_path = 'resources'
+        resources_path = location
         break
     else:
         try:
