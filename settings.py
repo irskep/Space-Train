@@ -2,7 +2,7 @@ fullscreen = False
 
 import os
 
-if os.path.isdir('resources')):
+if os.path.isdir('resources'):
     resources_path = 'resources'
 else:
     try:
