@@ -26,7 +26,6 @@ class Actor(object):
         self.current_state = Actor.info[self.name]['start_state']
         self.sprite = pyglet.sprite.Sprite(Actor.images[self.name][self.current_state], 
                                            x=x, y=y, batch=batch)
-        self.draw = self.sprite.draw
     
     def init_info(self):
         if Actor.info == None or Actor.images == None:
