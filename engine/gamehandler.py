@@ -1,4 +1,4 @@
-import settings, state
+import settings
 
 import scene
 

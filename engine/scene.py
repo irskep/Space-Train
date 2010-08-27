@@ -8,10 +8,14 @@ class Scene(object):
     def __init__(self, name):
         self.name = name
         self.batch = pyglet.graphics.Batch()
+        self.interpolators = set()
+        
         with pyglet.resource.file(self.resource_path('info.json'), 'r') as info_file:
             info = json.load(info_file)
             self.environment_name = info['environment']
-            self.env = environment.Environment(self.environment_name)
+        
+        self.env = environment.Environment(self.environment_name)
+        
         self.module = importlib.import_module(name)
         self.module.init(self, self.env)
         game_state.main_window.push_handlers(self.module.scene_handler)
@@ -19,8 +23,16 @@ class Scene(object):
     def resource_path(self, name):
         return os.path.join('game', 'scenes', self.name, name)
     
+    def add_interpolator(self, i):
+        self.interpolators.add(i)
+    
     def update(self, dt=0):
-        pass
+        to_remove = set()
+        for i in self.interpolators:
+            i.update(dt)
+            if i.complete():
+                to_remove.add(i)
+        self.interpolators -= to_remove
     
     def draw(self):
         self.env.draw()

@@ -8,7 +8,7 @@ class SceneHandler(object):
     
     def on_mouse_release(self, x, y, button, modifiers):
         if self.main_actor:
-            self.main_actor.move_to(x, y)
+            self.scene.add_interpolator(self.main_actor.move_to(x, y))
     
     def __repr__(self):
         return "SceneHandler(scene_object=%s, environment_object=%s)" % (str(self.scene), str(self.environment))

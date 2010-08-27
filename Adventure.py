@@ -1,4 +1,4 @@
-#import cProfile
+#r8xih7
 import pyglet, math, os, sys, json
 
 # pyglet.options['debug_gl'] = False

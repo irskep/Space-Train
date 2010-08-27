@@ -2,6 +2,8 @@ import os, json
 
 import pyglet
 
+import interpolator
+
 class Actor(object):
     def __init__(self, name, batch=None, x=0, y=0):
         self.name = name
@@ -17,7 +19,8 @@ class Actor(object):
         return os.path.join('actors', self.name, name)
     
     def move_to(self, x, y):
-        self.sprite.position = (x, y)
+        interp = interpolator.PositionInterpolator(self.sprite, 'position', self.sprite.position, (x,y), speed=200.0)
+        return interp
     
     def __repr__(self):
         return '<Character "%s" at (%d, %d)>' % (self.name, self.sprite.x, self.sprite.y)
