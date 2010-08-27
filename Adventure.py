@@ -6,7 +6,7 @@ import pyglet, math, os
 from pyglet import gl
 from pyglet.window import key
 
-import env, settings
+from engine import env, settings
 
 class AdventureWindow(pyglet.window.Window):
     def __init__(self):
@@ -18,8 +18,7 @@ class AdventureWindow(pyglet.window.Window):
             color=(128,128,128,255)
         )
         
-        path = os.path.join(settings.resources_path, 'characters', 'fist', 'stand_front.png')
-        fist_image = pyglet.image.load(path)
+        fist_image = pyglet.resource.nested_image('characters', 'fist', 'stand_front.png')
         self.fist = pyglet.sprite.Sprite(fist_image, x=50, y=50)
         
         pyglet.clock.schedule(self.on_draw)
