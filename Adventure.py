@@ -41,7 +41,7 @@ class AdventureWindow(pyglet.window.Window):
     def on_key_press(self, symbol, modifiers):
         # Override default behavior of escape key quitting
         if symbol == key.ESCAPE:
-            return True
+            return pyglet.event.EVENT_HANDLED
     
 
 def run_game():
