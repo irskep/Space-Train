@@ -2,7 +2,7 @@ import os, sys, json, importlib, pyglet
 
 import game_state
 
-import environment
+import environment, scenehandler
 
 class Scene(object):
     def __init__(self, name):
@@ -18,12 +18,15 @@ class Scene(object):
         
         self.module = importlib.import_module(name)
         self.module.init(self, self.env)
+        if self.module.scene_handler is None:
+            self.module.scene_handler = scenehandler.SceneHandler(self, self.env)
         game_state.main_window.push_handlers(self.module.scene_handler)
     
     def resource_path(self, name):
         return os.path.join('game', 'scenes', self.name, name)
     
     def add_interpolator(self, i):
+        print i
         self.interpolators.add(i)
     
     def update(self, dt=0):
