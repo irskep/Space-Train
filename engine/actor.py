@@ -13,7 +13,7 @@ class Actor(object):
         self.name = name
         self.scene = scene
         self.actions = collections.deque()
-        self.blocking_actions = False
+        self.blocking_actions = 0
         
         if Actor.info == None:
             with pyglet.resource.file(self.resource_path('info.json'), 'r') as info_file:
@@ -42,22 +42,27 @@ class Actor(object):
     
     def next_action(self):
         if len(self.actions) > 0:
-            action = self.actions.popleft()
-            action[0](*action[1])   # I bet you are so confused as to what this does :-D
-        else:
-            self.blocking_actions = False
+            action_list = self.actions.popleft()
+            for action in action_list:
+                self.blocking_actions += 1
+                action[0](*action[1])   # I bet you are so confused as to what this does :-D
     
     def handle_action_completed(self, action):
+        self.blocking_actions -= 1
         self.next_action()
     
     def prepare_move(self, x, y):
-        if not self.blocking_actions:
-            self.actions.append((self.move_to, (x, y)))
-            self.blocking_actions = True
+        if self.blocking_actions == 0:
+            self.actions.append([(self.move_to, (x, y)), (self.demo_scaling, ())])
             self.next_action()
     
     def move_to(self, x, y):
         interp = interpolator.Linear2DInterpolator(self.sprite, 'position', (x,y), speed=400.0, 
+                                                   done_function=self.handle_action_completed)
+        self.scene.add_interpolator(interp)
+    
+    def demo_scaling(self):
+        interp = interpolator.LinearInterpolator(self.sprite, 'scale', start=0.0, end=1.0, duration=1.0, 
                                                    done_function=self.handle_action_completed)
         self.scene.add_interpolator(interp)
     

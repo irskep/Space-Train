@@ -40,8 +40,8 @@ class Interpolator(object):
     
 
 class LinearInterpolator(Interpolator):
-    def __init__(self, *args):
-        super(LinearInterpolator, self).__init__(*args)
+    def __init__(self, *args, **kwargs):
+        super(LinearInterpolator, self).__init__(*args, **kwargs)
         self.update(0.0)
     
     def update(self, dt=0):
