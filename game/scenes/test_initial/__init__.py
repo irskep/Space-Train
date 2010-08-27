@@ -11,4 +11,6 @@ scene_handler = None
 def init(scene_obj, env):
     global scene_handler
     scene_handler = TestSceneHandler(scene_obj, env)
+
+def scene_loaded():
     print scene_handler

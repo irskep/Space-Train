@@ -1,3 +1,10 @@
 {
-    "environment": "test"
+    "environment": "test",
+    "actors": {
+        "main": {
+            "name": "fist",
+            "x": 300,
+            "y": 300
+        }
+    }
 }

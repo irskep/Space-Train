@@ -21,6 +21,7 @@ class Scene(object):
         if self.module.scene_handler is None:
             self.module.scene_handler = scenehandler.SceneHandler(self, self.env)
         game_state.main_window.push_handlers(self.module.scene_handler)
+        self.module.scene_loaded()
     
     def resource_path(self, name):
         return os.path.join('game', 'scenes', self.name, name)

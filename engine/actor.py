@@ -53,16 +53,23 @@ class Actor(object):
     
     def handle_action_completed(self, action):
         self.blocking_actions -= 1
+        if action.name == 'position':
+            self.sprite.image = Actor.images["%s.stand_front" % self.name]
         self.next_action()
     
     def prepare_move(self, x, y):
         if self.blocking_actions == 0:
-            self.actions.append([(self.move_to, (x, y)), (self.demo_scaling, ())])
+            # self.actions.append([(self.move_to, (x, y)), (self.demo_scaling, ())])
+            self.actions.append([(self.move_to, (x, y))])
             self.next_action()
     
     def move_to(self, x, y):
         interp = interpolator.Linear2DInterpolator(self.sprite, 'position', (x,y), speed=400.0, 
                                                    done_function=self.handle_action_completed)
+        if x > self.sprite.x:
+            self.sprite.image = Actor.images["%s.walk_right" % self.name]
+        else:
+            self.sprite.image = Actor.images["%s.walk_left" % self.name]
         self.scene.add_interpolator(interp)
     
     def demo_scaling(self):
@@ -71,6 +78,6 @@ class Actor(object):
         self.scene.add_interpolator(interp)
     
     def __repr__(self):
-        return 'Character(name="%s", position=%s)>' % (self.name, self.sprite.position)
+        return 'Character(name="%s", position=%s)' % (self.name, self.sprite.position)
     
 
