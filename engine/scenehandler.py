@@ -1,14 +1,18 @@
+import json
+
+import pyglet
+
 import game_state
 
 class SceneHandler(object):
     def __init__(self, scene_object, environment_object):
         self.scene = scene_object
         self.environment = environment_object
-        self.main_actor = None
+        self.actors = {}
     
     def on_mouse_release(self, x, y, button, modifiers):
-        if self.main_actor:
-            self.main_actor.prepare_move(x, y)
+        if self.scene.actors.has_key("main"):
+            self.scene.actors["main"].prepare_move(x, y)
     
     def __repr__(self):
         return "SceneHandler(scene_object=%s, environment_object=%s)" % (str(self.scene), str(self.environment))
