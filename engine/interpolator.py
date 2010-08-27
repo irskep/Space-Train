@@ -1,9 +1,12 @@
 import math
 
 class Interpolator(object):
-    def __init__(self, host_object, attr_name, end, start=None, name="value", speed=0.0, duration=0.0):
+    def __init__(self, host_object, attr_name, end, start=None, 
+                 name="value", speed=0.0, duration=0.0,
+                 done_function=None):
         self.host_object = host_object
         self.attr_name = attr_name
+        self.done_function = done_function
         self.start = start
         if self.start is None:
             self.start = getattr(host_object, attr_name)
@@ -52,7 +55,8 @@ class LinearInterpolator(Interpolator):
     
 
 class Linear2DInterpolator(Interpolator):
-    def __init__(self, host_object, attr_name, end_tuple, name="position", start_tuple=None, speed=0.0, duration=0.0):
+    def __init__(self, host_object, attr_name, end_tuple, name="position", 
+                 start_tuple=None, speed=0.0, duration=0.0, done_function=None):
         if start_tuple is None:
             start_tuple = getattr(host_object, attr_name)
         self.start_tuple = start_tuple
@@ -68,7 +72,7 @@ class Linear2DInterpolator(Interpolator):
         super(Linear2DInterpolator, self).__init__(host_object, attr_name, 
                                                    end=length, start=0.0, 
                                                    speed=self.speed, 
-                                                   name=name,
+                                                   name=name, done_function=done_function,
                                                    duration=self.duration)
         
         self.x_speed = self.speed*math.cos(angle)

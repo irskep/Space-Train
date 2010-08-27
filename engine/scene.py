@@ -26,7 +26,6 @@ class Scene(object):
         return os.path.join('game', 'scenes', self.name, name)
     
     def add_interpolator(self, i):
-        print i
         self.interpolators.add(i)
     
     def update(self, dt=0):
@@ -35,6 +34,8 @@ class Scene(object):
             i.update(dt)
             if i.complete():
                 to_remove.add(i)
+        for i in to_remove:
+            i.done_function(i)
         self.interpolators -= to_remove
     
     def draw(self):

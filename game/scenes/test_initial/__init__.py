@@ -3,7 +3,7 @@ from engine import actor, scenehandler
 class TestSceneHandler(scenehandler.SceneHandler):
     def __init__(self, *args):
         super(TestSceneHandler, self).__init__(*args)
-        self.main_actor = actor.Actor('fist', batch=self.scene.batch, x=300, y=300)
+        self.main_actor = actor.Actor('fist', self.scene, batch=self.scene.batch, x=300, y=300)
     
 
 scene_handler = None

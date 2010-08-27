@@ -1,4 +1,4 @@
-import os, json
+import os, json, collections
 
 import pyglet
 
@@ -9,8 +9,12 @@ class Actor(object):
     info = None
     images = None
     
-    def __init__(self, name, batch=None, x=0, y=0):
+    def __init__(self, name, scene, batch=None, x=0, y=0):
         self.name = name
+        self.scene = scene
+        self.actions = collections.deque()
+        self.blocking_actions = False
+        
         if Actor.info == None:
             with pyglet.resource.file(self.resource_path('info.json'), 'r') as info_file:
                 Actor.info = json.load(info_file)
@@ -36,11 +40,28 @@ class Actor(object):
     def resource_path(self, name):
         return os.path.join('actors', self.name, name)
     
+    def next_action(self):
+        if len(self.actions) > 0:
+            action = self.actions.popleft()
+            action[0](*action[1])   # I bet you are so confused as to what this does :-D
+        else:
+            self.blocking_actions = False
+    
+    def handle_action_completed(self, action):
+        self.next_action()
+    
+    def prepare_move(self, x, y):
+        if not self.blocking_actions:
+            self.actions.append((self.move_to, (x, y)))
+            self.blocking_actions = True
+            self.next_action()
+    
     def move_to(self, x, y):
-        interp = interpolator.Linear2DInterpolator(self.sprite, 'position', (x,y), speed=400.0)
-        return interp
+        interp = interpolator.Linear2DInterpolator(self.sprite, 'position', (x,y), speed=400.0, 
+                                                   done_function=self.handle_action_completed)
+        self.scene.add_interpolator(interp)
     
     def __repr__(self):
-        return '<Character "%s" at (%d, %d)>' % (self.name, self.sprite.x, self.sprite.y)
+        return 'Character(name="%s", position=%s)>' % (self.name, self.sprite.position)
     
 
