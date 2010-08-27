@@ -12,7 +12,6 @@ class Scene(object):
             info = json.load(info_file)
             self.environment_name = info['environment']
             self.env = environment.Environment(self.environment_name)
-            self.draw = self.env.draw
         self.module = importlib.import_module(name)
         self.module.init(self, self.env)
         game_state.main_window.push_handlers(self.module.scene_handler)
@@ -22,6 +21,10 @@ class Scene(object):
     
     def update(self, dt=0):
         pass
+    
+    def draw(self):
+        self.env.draw()
+        self.batch.draw()
     
     def __repr__(self):
         return 'Scene(name="%s")' % self.name

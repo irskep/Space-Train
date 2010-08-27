@@ -3,14 +3,14 @@ import os, json
 import pyglet
 
 class Actor(object):
-    def __init__(self, name, x=0, y=0):
+    def __init__(self, name, batch=None, x=0, y=0):
         self.name = name
         with pyglet.resource.file(self.resource_path('info.json'), 'r') as info_file:
             info = json.load(info_file)
             self.current_state = info['start_state']
             self.state_mappings = info['states']
         img = pyglet.resource.image("%s.png" % self.resource_path(self.current_state))
-        self.sprite = pyglet.sprite.Sprite(img, x=x, y=y)
+        self.sprite = pyglet.sprite.Sprite(img, x=x, y=y, batch=batch)
         self.draw = self.sprite.draw
     
     def resource_path(self, name):
