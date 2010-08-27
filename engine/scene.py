@@ -17,15 +17,17 @@ class Scene(object):
         
         self.env = environment.Environment(self.environment_name)
         
-        self.module = importlib.import_module(name)
-        self.module.init(self, self.env)
-        if self.module.scene_handler is None:
-            self.module.scene_handler = scenehandler.SceneHandler(self, self.env)
+        if game_state.scripts_enabled:
+            self.module = importlib.import_module(name)
+            self.module.init(self, self.env)
+            if self.module.scene_handler is None:
+                self.module.scene_handler = scenehandler.SceneHandler(self, self.env)
         
         self.load_actors()
         
-        game_state.main_window.push_handlers(self.module.scene_handler)
-        self.module.scene_loaded()
+        if game_state.scripts_enabled:
+            game_state.main_window.push_handlers(self.module.scene_handler)
+            self.module.scene_loaded()
     
     def resource_path(self, name):
         return os.path.join('game', 'scenes', self.name, name)

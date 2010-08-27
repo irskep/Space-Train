@@ -4,6 +4,7 @@ main_window = None
 norm_w = 1024
 norm_h = 768
 scale_factor = 1.0
+scripts_enabled = True
 
 dt = 0.0
 

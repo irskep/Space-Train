@@ -4,7 +4,11 @@ import pyglet
 
 import interpolator
 
-next_identifier = 0
+def make_identifier():
+    next_identifier = 0
+    while True:
+        yield next_identifier
+        next_identifier += 1
 
 class Actor(object):
     
@@ -16,11 +20,7 @@ class Actor(object):
         self.scene = scene
         self.actions = collections.deque()
         self.blocking_actions = 0
-        if identifier is None:
-            global next_identifier
-            identifier = next_identifier
-            next_identifier += 1
-        self.identifier = identifier
+        self.identifier = identifier or make_identifier()
         
         self.init_info()
         self.current_state = Actor.info[self.name]['start_state']
@@ -56,6 +56,14 @@ class Actor(object):
     def resource_path(self, name):
         return os.path.join('actors', self.name, name)
     
+    def set_image_if_exists(self, image_name):
+        if Actor.images[self.name].has_key(image_name):
+            self.sprite.image = Actor.images[self.name][image_name]
+    
+    def update_state(self, new_state):
+        self.current_state = new_state
+        self.set_image_if_exists(new_state)
+    
     def next_action(self):
         if len(self.actions) > 0:
             action_list = self.actions.popleft()
@@ -66,7 +74,7 @@ class Actor(object):
     def handle_action_completed(self, action):
         self.blocking_actions -= 1
         if action.name == 'position':
-            self.sprite.image = Actor.images[self.name]["stand_front"]
+            self.update_state('stand_front')
         self.next_action()
     
     def prepare_move(self, x, y):
@@ -79,9 +87,9 @@ class Actor(object):
         interp = interpolator.Linear2DInterpolator(self.sprite, 'position', (x,y), speed=400.0, 
                                                    done_function=self.handle_action_completed)
         if x > self.sprite.x:
-            self.sprite.image = Actor.images[self.name]["walk_right"]
+            self.update_state('walk_right')
         else:
-            self.sprite.image = Actor.images[self.name]["walk_left"]
+            self.update_state('walk_left')
         self.scene.add_interpolator(interp)
     
     def demo_scaling(self):

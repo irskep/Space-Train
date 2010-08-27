@@ -9,23 +9,18 @@ from pyglet.window import key
 from engine import game_state, settings
 from engine import gamehandler
 
-class AdventureWindow(pyglet.window.Window):
+class AdventureMakerWindow(pyglet.window.Window):
     def __init__(self):
-        if settings.fullscreen:
-            super(AdventureWindow,self).__init__(fullscreen=True, vsync=True)
-        else:
-            super(AdventureWindow,self).__init__(width=game_state.norm_w, height=game_state.norm_h, vsync=True)
-        
-        game_state.main_window = self
-        game_state.init_scale()
+        screen = pyglet.window.get_platform().get_default_display().get_default_screen()
+        super(AdventureMakerWindow,self).__init__(width=screen.width-20, height=screen.height-80, vsync=True)
+        game_state.scripts_enabled = False
         
         with pyglet.resource.file(os.path.join('game', 'info.json'), 'r') as game_info_file:
             game_info = json.load(game_info_file)
-            self.set_caption(game_info["name"])
+            self.set_caption("Adventure Maker: %s Edition" % game_info["name"])
             self.game_handler = gamehandler.GameHandler(first_scene=game_info['first_scene'])
         
         pyglet.clock.schedule_interval(self.on_draw, 1/60.0)
-        pyglet.clock.schedule_interval(self.game_handler.update, 1/120.0)
     
     def on_draw(self, dt=0):
         game_state.dt = dt
@@ -46,7 +41,7 @@ class AdventureWindow(pyglet.window.Window):
 
 def run_game():
     sys.path.append(os.path.join(os.path.dirname(__file__), 'game', 'scenes'))
-    main_window = AdventureWindow()
+    main_window = AdventureMakerWindow()
     pyglet.app.run()
 
 if __name__ == '__main__':
