@@ -23,11 +23,15 @@ class Actor(object):
                     dict_name = "%s.%s" % (name, state_name)
                     if num_frames == 1:
                         img = pyglet.resource.image("%s.png" % self.resource_path(state_name))
+                        img.anchor_x = img.width * Actor.info['anchor_x']
+                        img.anchor_y = img.height * Actor.info['anchor_y']
                         Actor.images[dict_name] = img
                     else:
                         images = []
                         for i in range(1, num_frames+1):
                             img = pyglet.resource.image("%s_%d.png" % (self.resource_path(state_name), i))
+                            img.anchor_x = img.width * Actor.info['anchor_x']
+                            img.anchor_y = img.height * Actor.info['anchor_y']
                             images.append(img)
                         bin = pyglet.image.atlas.TextureBin()
                         anim = pyglet.image.Animation.from_image_sequence(images, 0.2);
