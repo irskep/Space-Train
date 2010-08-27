@@ -2,3 +2,6 @@ pyglet/
 resources
 .DS_Store
 *.pyc
+coder_art/
+*.tmproj
+

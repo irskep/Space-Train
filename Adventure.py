@@ -1,63 +1,48 @@
 #import cProfile
-import pyglet, math, os
+import pyglet, math, os, sys
 
 # pyglet.options['debug_gl'] = False
 
 from pyglet import gl
 from pyglet.window import key
 
-from engine import env, settings
+from engine import state, settings
+from engine import gamehandler
 
 class AdventureWindow(pyglet.window.Window):
     def __init__(self):
-        self.init_window()
-        
-        self.load_label = pyglet.text.Label(
-            "Loading...", x=env.norm_w//2, y=env.norm_h//2,
-            font_name='Gill Sans', font_size=48, anchor_x='center', anchor_y='center',
-            color=(128,128,128,255)
-        )
-        
-        fist_image = pyglet.resource.nested_image('characters', 'fist', 'stand_front.png')
-        self.fist = pyglet.sprite.Sprite(fist_image, x=50, y=50)
-        
-        pyglet.clock.schedule(self.on_draw)
-    
-    def init_window(self):
-        vsync = True
-        
         if settings.fullscreen:
-            super(AdventureWindow,self).__init__(fullscreen=True)
+            super(AdventureWindow,self).__init__(fullscreen=True, vsync=True)
         else:
-            super(AdventureWindow,self).__init__(width=env.norm_w, height=env.norm_h)
+            super(AdventureWindow,self).__init__(width=state.norm_w, height=state.norm_h, vsync=True)
             self.set_caption("Space Train")
         
-        env.main_window = self
-        env.init_scale()
-    
-    def draw_load_screen(self):    
-        gl.glClearColor(1,1,1,1)
-        self.clear()
-        self.load_label.draw()
+        state.main_window = self
+        state.init_scale()
+        self.game_handler = gamehandler.GameHandler(first_scene='test_initial')
+        
+        pyglet.clock.schedule_interval(self.on_draw, 1/60.0)
+        pyglet.clock.schedule_interval(self.game_handler.update, 1/120.0)
     
     def on_draw(self, dt=0):
-        env.dt = dt
-        if env.scale_factor != 1.0:
+        state.dt = dt
+        if state.scale_factor != 1.0:
             gl.glPushMatrix()
-            env.scale()
+            state.scale()
         
-        self.draw_load_screen()
-        self.fist.draw()
+        self.game_handler.draw()
         
-        if env.scale_factor != 1.0:
+        if state.scale_factor != 1.0:
             gl.glPopMatrix()
     
     def on_key_press(self, symbol, modifiers):
+        # Override default behavior of escape key quitting
         if symbol == key.ESCAPE:
             return True
     
 
 def run_game():
+    sys.path.append(os.path.join(os.path.dirname(__file__), 'game', 'scenes'))
     main_window = AdventureWindow()
     pyglet.app.run()
 
