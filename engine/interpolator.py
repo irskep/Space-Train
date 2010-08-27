@@ -1,10 +1,12 @@
 import math
 
 class Interpolator(object):
-    def __init__(self, host_object, attr_name, start, end, speed=0.0, duration=0.0):
+    def __init__(self, host_object, attr_name, end, start=None, speed=0.0, duration=0.0):
         self.host_object = host_object
         self.attr_name = attr_name
         self.start = start
+        if self.start is None:
+            self.start = getattr(host_object, attr_name)
         self.end = end
         self.speed = speed
         self.duration = duration
@@ -21,7 +23,7 @@ class Interpolator(object):
                 self.speed = abs((self.start-self.end)/self.duration)
         elif self.duration == 0.0:
             self.duration = abs((self.start-self.end)/self.speed)
-        if self.end < self.start and self.speed > 0:
+        if self.end < self.start:
             self.speed = -self.speed
     
     def update(self, dt=0):
@@ -39,14 +41,16 @@ class LinearInterpolator(Interpolator):
     
 
 class PositionInterpolator(Interpolator):
-    def __init__(self, host_object, attr_name, start_tuple, end_tuple, speed=0.0, duration=0.0):
+    def __init__(self, host_object, attr_name, end_tuple, start_tuple=None, speed=0.0, duration=0.0):
+        if start_tuple is None:
+            start_tuple = getattr(host_object, attr_name)
         self.start_tuple = start_tuple
         self.end_tuple = end_tuple
         
         self.speed = speed
         self.duration = duration
         
-        diff_tuple = (end_tuple[0] - start_tuple[0], end_tuple[1] - start_tuple[1])
+        diff_tuple = (start_tuple[0] - end_tuple[0], start_tuple[1] - end_tuple[1])
         angle = math.atan2(diff_tuple[1], diff_tuple[0])
         length = math.sqrt(diff_tuple[0] * diff_tuple[0] + diff_tuple[1] * diff_tuple[1])
         

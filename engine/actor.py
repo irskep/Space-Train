@@ -19,7 +19,7 @@ class Actor(object):
         return os.path.join('actors', self.name, name)
     
     def move_to(self, x, y):
-        interp = interpolator.PositionInterpolator(self.sprite, 'position', self.sprite.position, (x,y), speed=200.0)
+        interp = interpolator.PositionInterpolator(self.sprite, 'position', (x,y), speed=200.0)
         return interp
     
     def __repr__(self):
