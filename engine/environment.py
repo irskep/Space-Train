@@ -26,5 +26,8 @@ class Environment(object):
         for background_sprite in self.background_sprites:
             background_sprite.delete()
     
+    def __repr__(self):
+        return 'Environment(name="%s")' % self.name
+    
 
         
