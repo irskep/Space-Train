@@ -62,5 +62,5 @@ def unapply_camera():
     pyglet.gl.glPopMatrix()
 
 def mouse_to_canvas(x, y):
-    return ((camera_x-norm_w//2 + x - sidebar_w)/scale_factor + (camera_x - norm_w/2)*(1.0-1.0/scale_factor), 
-            (camera_y-norm_h//2 + y)/scale_factor + (camera_y - norm_h/2)*(1.0-1.0/scale_factor))
+    return ((x - sidebar_w)/scale_factor + camera_x-norm_w//2, 
+            y/scale_factor + camera_y-norm_h//2)
