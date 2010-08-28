@@ -32,10 +32,13 @@ class EditorView(object):
         self.actor_pallet.move(2, gamestate.main_window.height-2)
         gamestate.main_window.push_handlers(self.actor_pallet)
         
-        self.actor_identifier_field = glydget.Entry('(no value)', 
-                                                    on_change=self.update_selected_actor_from_inspector)
+        self.actor_identifier_field = glydget.Entry('', on_change=self.update_actor_from_inspector)
+        self.actor_x_field = glydget.Entry('', on_change=self.update_actor_from_inspector)
+        self.actor_y_field = glydget.Entry('', on_change=self.update_actor_from_inspector)
         self.actor_inspector = glydget.Window("Actor Inspector", [
-            glydget.HBox([glydget.Label('Identifier'), self.actor_identifier_field], True)
+            glydget.HBox([glydget.Label('Identifier'), self.actor_identifier_field], True),
+            glydget.HBox([glydget.Label('x'), self.actor_x_field], True),
+            glydget.HBox([glydget.Label('y'), self.actor_y_field], True),
         ])
         self.actor_inspector.show()
         self.actor_inspector.move(2 + self.actor_pallet.x + self.actor_pallet.width,
@@ -44,14 +47,18 @@ class EditorView(object):
         gamestate.move_camera(1)
     
     def set_selected_actor(self, new_actor):
-        self.update_selected_actor_from_inspector()
-        self.selected_actor = new_actor
+        if new_actor != self.selected_actor:
+            self.update_actor_from_inspector()
+            self.selected_actor = new_actor
         self.actor_identifier_field.text = self.selected_actor.identifier
+        self.actor_x_field.text = str(int(self.selected_actor.sprite.x))
+        self.actor_y_field.text = str(int(self.selected_actor.sprite.y))
     
-    def update_selected_actor_from_inspector(self, *args, **kwargs):
-        print args, kwargs
+    def update_actor_from_inspector(self, *args, **kwargs):
         if self.selected_actor:
             self.selected_actor.identifier = self.actor_identifier_field.text
+            self.selected_actor.sprite.x = int(self.actor_x_field.text)
+            self.selected_actor.sprite.y = int(self.actor_y_field.text)
     
     # Events
     def actor_button_action(self, button):
