@@ -1,6 +1,11 @@
 {
     "environment": "test", 
     "actors": {
+        "another_fist_1": {
+            "y": 564.2878048780487, 
+            "x": 741.8975609756098, 
+            "name": "another_fist"
+        }, 
         "main": {
             "y": 376, 
             "x": 477, 

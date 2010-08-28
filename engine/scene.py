@@ -34,17 +34,40 @@ class Scene(object):
     
     def load_actors(self):
         for identifier, attrs in self.info['actors'].items():
-            new_actor = actor.Actor(attrs['name'], identifier=identifier, scene=self, batch=self.batch)
+            new_actor = actor.Actor(name=attrs['name'], identifier=identifier, scene=self)
             self.actors[identifier] = new_actor
             for attr in ['x', 'y', 'scale', 'rotation']:
                 if attrs.has_key(attr):
                     setattr(new_actor.sprite, attr, attrs[attr])
     
+    def new_actor(self, actor_name, identifier=None, **kwargs):
+        if identifier is None:
+            next_identifier = 1
+            while self.actors.has_key("%s_%d" % (actor_name, next_identifier)):
+                next_identifier += 1
+            identifier = "%s_%d" % (actor_name, next_identifier)
+        new_actor = actor.Actor(identifier, actor_name, self, **kwargs)
+        self.actors[identifier] = new_actor
+        return new_actor
+    
+    def update_actor_info(self, act):
+        if self.info['actors'].has_key(act.identifier):
+            self.info['actors'][act.identifier]['x'] = act.sprite.x
+            self.info['actors'][act.identifier]['y'] = act.sprite.y
+        else:
+            new_info = {
+                'x': act.sprite.x,
+                'y': act.sprite.y,
+                'name': act.name
+            }
+            self.info['actors'][act.identifier] = new_info
+        print self.info
+    
     def save_info(self):
         shutil.copyfile(self.resource_path('info.json'), self.resource_path('info.json~'))
+        
         with pyglet.resource.file(self.resource_path('info.json'), 'w') as info_file:
             json.dump(self.info, info_file, indent=4)
-        print 'saved'
     
     def add_interpolator(self, i):
         self.interpolators.add(i)

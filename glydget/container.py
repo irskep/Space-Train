@@ -225,6 +225,17 @@ class Container(Widget):
 
 
 
+    def _should_forward_event(self, widget):
+        if widget is None:
+            return False
+        while widget.parent is not None:
+            widget = widget.parent
+            if widget == self:
+                return True
+        return False
+
+
+
     def on_mouse_press(self, x, y, button, modifiers):
         ''' Default mouse press hanlder. '''
 
@@ -274,7 +285,7 @@ class Container(Widget):
         ''' Default key press handler. '''
 
         widget = Widget._focused or Widget._activated
-        if widget:
+        if self._should_forward_event(widget):
             widget.on_key_press(symbol, modifiers)
 
 
@@ -283,14 +294,14 @@ class Container(Widget):
         ''' Default key release handler. '''
 
         widget = Widget._focused or Widget._activated
-        if widget:
+        if self._should_forward_event(widget):
             widget.on_key_release(symbol, modifiers)
 
     def on_text(self, text):
         ''' Default text hanlder. '''
 
         widget = Widget._activated
-        if widget:
+        if self._should_forward_event(widget):
             widget.on_text(text)
 
 
@@ -298,7 +309,7 @@ class Container(Widget):
     def on_text_motion(self, motion):
         ''' Default text motion hanlder. '''
         widget = Widget._activated
-        if widget:
+        if self._should_forward_event(widget):
             widget.on_text_motion(motion)
 
 
@@ -307,7 +318,7 @@ class Container(Widget):
         ''' Default text motion select hanlder. '''
 
         widget = Widget._activated
-        if widget:
+        if self._should_forward_event(widget):
             widget.on_text_motion_select(motion)
 
 

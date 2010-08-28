@@ -4,20 +4,12 @@ import pyglet
 
 import interpolator
 
-def identifier_maker():
-    next_identifier = 0
-    while True:
-        yield next_identifier
-        next_identifier += 1
-
-make_identifier = identifier_maker()
-
 class Actor(object):
     
     info = None
     images = None
     
-    def __init__(self, name, scene, identifier=None, batch=None, x=0, y=0):
+    def __init__(self, identifier, name, scene, batch=None, x=0, y=0):
         self.name = name
         self.scene = scene
         self.actions = collections.deque()
@@ -26,6 +18,9 @@ class Actor(object):
         
         self.init_info()
         self.current_state = Actor.info[self.name]['start_state']
+        
+        if self.scene and batch is None:
+            batch = self.scene.batch
         self.sprite = pyglet.sprite.Sprite(Actor.images[self.name][self.current_state], 
                                            x=x, y=y, batch=batch)
     

@@ -13,10 +13,11 @@ class EditorView(object):
         self.drag_anchor = (0, 0)
         self.is_dragging_camera = False
         self.is_dragging_object = False
-        self.selected_object = None
+        self.dragging_object = None
+        self.selected_actor = None
         self.actor_name = None
         
-        self.status_label = pyglet.text.Label('test', x=gamestate.main_window.width, 
+        self.status_label = pyglet.text.Label('', x=gamestate.main_window.width, 
                                               y=gamestate.main_window.height, 
                                               font_name = "Gill Sans",
                                               font_size = 12,
@@ -31,16 +32,33 @@ class EditorView(object):
         self.actor_pallet.move(2, gamestate.main_window.height-2)
         gamestate.main_window.push_handlers(self.actor_pallet)
         
+        self.actor_identifier_field = glydget.Entry('(no value)', 
+                                                    on_change=self.update_selected_actor_from_inspector)
         self.actor_inspector = glydget.Window("Actor Inspector", [
-            glydget.HBox([glydget.Label('Identifier'), glydget.Entry('(no value)')], True)
+            glydget.HBox([glydget.Label('Identifier'), self.actor_identifier_field], True)
         ])
         self.actor_inspector.show()
         self.actor_inspector.move(2 + self.actor_pallet.x + self.actor_pallet.width,
                                   gamestate.main_window.height-2)
         gamestate.main_window.push_handlers(self.actor_inspector)
+        for i in gamestate.main_window._event_stack:
+            print '---------------'
+            for k, v in i.items():
+                print k, v
         
         gamestate.move_camera(1)
     
+    def set_selected_actor(self, new_actor):
+        self.update_selected_actor_from_inspector()
+        self.selected_actor = new_actor
+        self.actor_identifier_field.text = self.selected_actor.identifier
+    
+    def update_selected_actor_from_inspector(self, *args, **kwargs):
+        print args, kwargs
+        if self.selected_actor:
+            self.selected_actor.identifier = self.actor_identifier_field.text
+    
+    # Events
     def actor_button_action(self, button):
         self.actor_name = button.text
         self.status_label.begin_update()
@@ -61,27 +79,31 @@ class EditorView(object):
         if modifiers & (pyglet.window.key.MOD_ACCEL):
             if symbol == pyglet.window.key.S:
                 self.scene.save_info()
+                return True
     
     def on_mouse_press(self, x, y, button, modifiers):
+        world_point = gamestate.mouse_to_canvas(x, y)
         if modifiers & (pyglet.window.key.MOD_ALT | pyglet.window.key.MOD_OPTION):
             self.drag_start = (x, y)
             self.drag_anchor = (gamestate.camera_x, gamestate.camera_y)
             self.is_dragging_camera = True
         elif self.actor_name is None:
-            world_point = gamestate.mouse_to_canvas(x, y)
-            self.selected_object = self.scene.actor_under_point(*world_point)
-            if self.selected_object:
-                self.drag_start = (x, y)
-                self.drag_anchor = self.selected_object.sprite.position
-                self.is_dragging_object = False
+            self.dragging_object = self.scene.actor_under_point(*world_point)
+        elif self.actor_name:
+            self.dragging_object = self.scene.new_actor(self.actor_name, x=world_point[0], y=world_point[1])
+        
+        if self.dragging_object:
+            self.drag_start = (x, y)
+            self.drag_anchor = self.dragging_object.sprite.position
+            self.is_dragging_object = False
     
     def on_mouse_drag(self, x, y, dx, dy, button, modifiers):
         if self.is_dragging_camera:
             gamestate.set_camera(self.drag_anchor[0] + self.drag_start[0] - x,
                                  self.drag_anchor[1] + self.drag_start[1] - y, update_target=True)
-        elif self.selected_object:
+        elif self.dragging_object:
             self.is_dragging_object = True
-            self.selected_object.sprite.position = (self.drag_anchor[0] - (self.drag_start[0] - x),
+            self.dragging_object.sprite.position = (self.drag_anchor[0] - (self.drag_start[0] - x),
                                                     self.drag_anchor[1] - (self.drag_start[1] - y))
     
     def on_mouse_release(self, x, y, button, modifiers):
@@ -91,16 +113,22 @@ class EditorView(object):
             gamestate.camera_target_y = gamestate.camera_y
         elif self.is_dragging_object:
             self.is_dragging_object = False
-            self.scene.info['actors'][self.selected_object.identifier]['x'] = self.selected_object.sprite.x
-            self.scene.info['actors'][self.selected_object.identifier]['y'] = self.selected_object.sprite.y
-            self.selected_object = None
-        elif self.actor_name:
+            self.scene.update_actor_info(self.dragging_object)
+        if self.dragging_object:
+            self.set_selected_actor(self.dragging_object)
+        if self.actor_name:
             self.actor_name = None
+            self.scene.update_actor_info(self.dragging_object)
+            self.status_label.begin_update()
             self.status_label.text = ''
+            self.status_label.end_update()
+        self.dragging_object = None
     
     def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
         gamestate.set_camera(gamestate.camera_x - scroll_x*4, gamestate.camera_y + scroll_y*4, update_target=True)
     
+    
+    # Update/Draw
     def update(self, dt):
         self.check_camera_keys()
     
