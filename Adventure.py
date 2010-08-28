@@ -1,12 +1,11 @@
-#r8xih7
-import pyglet, math, os, sys, json
+import math, os, sys, json
 
 # pyglet.options['debug_gl'] = False
 
+import pyglet
 from pyglet import gl
-from pyglet.window import key
 
-from engine import game_state, settings
+from engine import gamestate, settings
 from engine import gamehandler
 
 class AdventureWindow(pyglet.window.Window):
@@ -14,10 +13,11 @@ class AdventureWindow(pyglet.window.Window):
         if settings.fullscreen:
             super(AdventureWindow,self).__init__(fullscreen=True, vsync=True)
         else:
-            super(AdventureWindow,self).__init__(width=game_state.norm_w, height=game_state.norm_h, vsync=True)
+            super(AdventureWindow,self).__init__(width=gamestate.norm_w, height=gamestate.norm_h, vsync=True)
         
-        game_state.main_window = self
-        game_state.init_scale()
+        gamestate.main_window = self
+        gamestate.init_scale()
+        gamestate.init_keys()
         
         with pyglet.resource.file(os.path.join('game', 'info.json'), 'r') as game_info_file:
             game_info = json.load(game_info_file)
@@ -28,19 +28,18 @@ class AdventureWindow(pyglet.window.Window):
         pyglet.clock.schedule_interval(self.game_handler.update, 1/120.0)
     
     def on_draw(self, dt=0):
-        game_state.dt = dt
-        if game_state.scale_factor != 1.0:
+        if gamestate.scale_factor != 1.0:
             gl.glPushMatrix()
-            game_state.scale()
+            gamestate.scale()
         
         self.game_handler.draw()
         
-        if game_state.scale_factor != 1.0:
+        if gamestate.scale_factor != 1.0:
             gl.glPopMatrix()
     
     def on_key_press(self, symbol, modifiers):
         # Override default behavior of escape key quitting
-        if symbol == key.ESCAPE:
+        if symbol == pyglet.window.key.ESCAPE:
             return pyglet.event.EVENT_HANDLED
     
 

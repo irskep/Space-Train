@@ -1,6 +1,6 @@
 import os, sys, json, importlib, pyglet
 
-import actor, game_state
+import actor, gamestate
 
 import environment, scenehandler
 
@@ -17,7 +17,7 @@ class Scene(object):
         
         self.env = environment.Environment(self.environment_name)
         
-        if game_state.scripts_enabled:
+        if gamestate.scripts_enabled:
             self.module = importlib.import_module(name)
             self.module.init(self, self.env)
             if self.module.scene_handler is None:
@@ -25,9 +25,21 @@ class Scene(object):
         
         self.load_actors()
         
-        if game_state.scripts_enabled:
-            game_state.main_window.push_handlers(self.module.scene_handler)
+        if gamestate.scripts_enabled:
+            gamestate.main_window.push_handlers(self.module.scene_handler)
             self.module.scene_loaded()
+            
+        button_image = pyglet.resource.image(os.path.join('editor', 'widgets', 'imagebutton.png'))
+        self.test_sprite = pyglet.sprite.Sprite(button_image, 0, 0)
+        gamestate.main_window.push_handlers(self)
+        gamestate.camera_x = gamestate.norm_w//2
+        gamestate.camera_y = gamestate.norm_h//2
+        gamestate.camera_target_x = gamestate.norm_w//2
+        gamestate.camera_target_y = gamestate.norm_h//2
+
+    def on_mouse_motion(self, x, y, dx, dy):
+        self.test_sprite.position = gamestate.mouse_to_canvas(x, y)
+        return pyglet.event.EVENT_HANDLED
     
     def resource_path(self, name):
         return os.path.join('game', 'scenes', self.name, name)
@@ -44,6 +56,7 @@ class Scene(object):
         self.interpolators.add(i)
     
     def update(self, dt=0):
+        gamestate.move_camera(dt)
         to_remove = set()
         for i in self.interpolators:
             i.update(dt)
@@ -54,8 +67,19 @@ class Scene(object):
         self.interpolators -= to_remove
     
     def draw(self):
+        if gamestate.keys[pyglet.window.key.LEFT]:
+            gamestate.camera_target_x -= 10
+        if gamestate.keys[pyglet.window.key.RIGHT]:
+            gamestate.camera_target_x += 10
+        if gamestate.keys[pyglet.window.key.DOWN]:
+            gamestate.camera_target_y -= 10
+        if gamestate.keys[pyglet.window.key.UP]:
+            gamestate.camera_target_y += 10
+        gamestate.apply_camera()
         self.env.draw()
         self.batch.draw()
+        self.test_sprite.draw()
+        gamestate.unapply_camera()
     
     def __repr__(self):
         return 'Scene(name="%s")' % self.name

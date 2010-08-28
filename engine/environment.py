@@ -1,6 +1,6 @@
 import os, pyglet, json
 
-import settings
+import settings, gamestate
 
 class Environment(object):
     def __init__(self, name):
@@ -11,6 +11,9 @@ class Environment(object):
             self.background_tile_cols = info['tile_columns']
         self.background_batch = pyglet.graphics.Batch()
         self.background_sprites = []
+        self.width = 0
+        self.height = 0
+        background_sprites_dict = {}
         for x in range(self.background_tile_cols):
             for y in range(self.background_tile_rows):
                 img = pyglet.resource.nested_image('environments', 
@@ -18,6 +21,12 @@ class Environment(object):
                                                    '%d_%d.png' % (x, y))
                 new_sprite = pyglet.sprite.Sprite(img, x=0, y=0, batch=self.background_batch)
                 self.background_sprites.append(new_sprite)
+                background_sprites_dict[(x, y)] = new_sprite
+        for x in range(self.background_tile_cols):
+            self.width += background_sprites_dict[(x, 0)].width
+        for y in range(self.background_tile_rows):
+            self.height += background_sprites_dict[(0, y)].height
+        gamestate.camera_max = (self.width-gamestate.norm_w//2, self.height-gamestate.norm_h//2)
     
     def draw(self):
         self.background_batch.draw()
