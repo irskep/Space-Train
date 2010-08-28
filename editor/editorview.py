@@ -40,7 +40,7 @@ class EditorView(object):
             gamestate.set_camera_target(gamestate.camera_target_x, gamestate.camera_target_y+10)
     
     def on_key_press(self, symbol, modifiers):
-        if modifiers & (pyglet.window.key.MOD_CTRL | pyglet.window.key.MOD_COMMAND):
+        if modifiers & (pyglet.window.key.MOD_ACCEL):
             if symbol == pyglet.window.key.S:
                 self.scene.save_info()
     

@@ -4,11 +4,13 @@ import pyglet
 
 import interpolator
 
-def make_identifier():
+def identifier_maker():
     next_identifier = 0
     while True:
         yield next_identifier
         next_identifier += 1
+
+make_identifier = identifier_maker()
 
 class Actor(object):
     
@@ -20,7 +22,7 @@ class Actor(object):
         self.scene = scene
         self.actions = collections.deque()
         self.blocking_actions = 0
-        self.identifier = identifier or make_identifier()
+        self.identifier = identifier or make_identifier.next()
         
         self.init_info()
         self.current_state = Actor.info[self.name]['start_state']
