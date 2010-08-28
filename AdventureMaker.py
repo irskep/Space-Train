@@ -14,6 +14,7 @@ class AdventureMakerWindow(pyglet.window.Window):
         super(AdventureMakerWindow,self).__init__(width=screen.width-20, height=screen.height-80, vsync=True)
         gamestate.main_window = self
         gamestate.scripts_enabled = False
+        gamestate.init_scale()
         gamestate.init_keys()
         
         with pyglet.resource.file(os.path.join('game', 'info.json'), 'r') as game_info_file:
@@ -22,6 +23,7 @@ class AdventureMakerWindow(pyglet.window.Window):
             self.editorview = editorview.EditorView(sys.argv[1])
         
         pyglet.clock.schedule_interval(self.on_draw, 1/60.0)
+        pyglet.clock.schedule_interval(self.editorview.update, 1/120.0)
     
     def on_draw(self, dt=0):
         self.editorview.draw()

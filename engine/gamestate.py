@@ -38,6 +38,8 @@ def init_scale():
     norm_theta = math.atan2(norm_h, norm_w)
     camera_min = (norm_w//2, norm_h//2)
     camera_max = (norm_w, norm_h)
+    camera_x, camera_y = camera_min
+    set_camera_target(camera_x, camera_y)
 
 def move_camera(dt):
     global camera_x, camera_y
@@ -50,6 +52,16 @@ def move_camera(dt):
     if abs(camera_y-camera_target_y) <= move_amt: camera_y = camera_target_y
     camera_x = min(max(camera_x, camera_min[0]), camera_max[0])
     camera_y = min(max(camera_y, camera_min[1]), camera_max[1])
+
+def set_camera_target(x, y):
+    global camera_target_x, camera_target_y
+    camera_target_x = min(max(x, camera_min[0]), camera_max[0])
+    camera_target_y = min(max(y, camera_min[1]), camera_max[1])
+
+def set_camera(x, y):
+    global camera_x, camera_y
+    camera_x = min(max(x, camera_min[0]), camera_max[0])
+    camera_y = min(max(y, camera_min[1]), camera_max[1])
 
 def scale():
     pyglet.gl.glScalef(scale_factor,scale_factor,1)

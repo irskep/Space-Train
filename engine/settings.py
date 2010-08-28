@@ -1,2 +1,2 @@
-fullscreen = True
+fullscreen = False
 resources_path = 'resources'
