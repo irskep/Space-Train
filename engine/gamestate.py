@@ -58,10 +58,12 @@ def set_camera_target(x, y):
     camera_target_x = min(max(x, camera_min[0]), camera_max[0])
     camera_target_y = min(max(y, camera_min[1]), camera_max[1])
 
-def set_camera(x, y):
+def set_camera(x, y, update_target=False):
     global camera_x, camera_y
     camera_x = min(max(x, camera_min[0]), camera_max[0])
     camera_y = min(max(y, camera_min[1]), camera_max[1])
+    if update_target:
+        set_camera_target(x, y)
 
 def scale():
     pyglet.gl.glScalef(scale_factor,scale_factor,1)

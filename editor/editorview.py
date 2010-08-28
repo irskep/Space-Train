@@ -35,17 +35,19 @@ class EditorView(object):
     def on_mouse_drag(self, x, y, dx, dy, button, modifiers):
         if self.is_dragging:
             gamestate.set_camera(self.drag_anchor[0] + self.drag_start[0] - x,
-                                 self.drag_anchor[1] + self.drag_start[1] - y)
+                                 self.drag_anchor[1] + self.drag_start[1] - y, update_target=True)
     
     def on_mouse_release(self, x, y, button, modifiers):
         self.is_dragging = False
         gamestate.camera_target_x = gamestate.camera_x
         gamestate.camera_target_y = gamestate.camera_y
     
+    def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
+        gamestate.set_camera(gamestate.camera_x - scroll_x*4, gamestate.camera_y + scroll_y*4, update_target=True)
+    
     def update(self, dt):
         self.check_camera_keys()
-        if not self.is_dragging:
-            gamestate.move_camera(dt)
+        gamestate.move_camera(dt)
     
     def draw(self):
         self.scene.draw()
