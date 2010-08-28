@@ -37,9 +37,12 @@ class Window(Folder):
         self.style = theme.Window
         self.title.style = theme.Window.title
         self.child.style = theme.Window.child
-        self.title.text = u'✖ '+title
-        self._closed_prefix = u'✖ '
-        self._opened_prefix = u'✖ '
+        # self.title.text = u'✖ '+title
+        # self._closed_prefix = u'✖ '
+        # self._opened_prefix = u'✖ '
+        self.title.text = title
+        self._closed_prefix = ''
+        self._opened_prefix = ''
 
 
     def on_mouse_press(self, x, y, button, modifiers):

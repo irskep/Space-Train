@@ -2,8 +2,8 @@
     "environment": "test", 
     "actors": {
         "another_fist_1": {
-            "y": 564.2878048780487, 
-            "x": 741.8975609756098, 
+            "y": 184, 
+            "x": 682, 
             "name": "another_fist"
         }, 
         "main": {
@@ -11,5 +11,29 @@
             "x": 477, 
             "name": "fist"
         }
+    },
+    "walkpath": {
+        "points": {
+            "default_1": {
+                "x": 100,
+                "y": 100
+            },
+            "default_2": {
+                "x": 1000,
+                "y": 100            
+            }
+        },
+        "edges": [
+            {
+                "a": "default_1",
+                "b": "default_2",
+                "anim": "walk_right"
+            },
+            {
+                "a": "default_2",
+                "b": "default_1",
+                "anim": "walk_left"
+            }
+        ]
     }
 }

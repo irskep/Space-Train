@@ -13,18 +13,24 @@ class EditorView(object):
         self.drag_anchor = (0, 0)
         self.is_dragging_camera = False
         self.is_dragging_object = False
+        self.is_dragging_point = False
         self.dragging_object = None
+        self.dragging_point = None
         self.selected_actor = None
         self.actor_name = None
         
         self.status_label = pyglet.text.Label('', x=gamestate.main_window.width, 
                                               y=gamestate.main_window.height, 
-                                              font_name = "Gill Sans",
+                                              font_name = "Courier New",
                                               font_size = 12,
                                               color = (0,0,0,255),
                                               anchor_x='right', anchor_y='top')
         
-        self.actor_pallet = glydget.Window("Actors", [
+        self.init_gui()
+        gamestate.move_camera(1)
+    
+    def init_gui(self):
+        self.actor_pallet = glydget.Window("Make Actor", [
             glydget.Button(actor_name, self.actor_button_action) \
             for actor_name in os.listdir(os.path.join(settings.resources_path, 'actors'))
         ])
@@ -42,7 +48,8 @@ class EditorView(object):
             glydget.HBox([glydget.Label('y'), self.actor_y_field], True),
         ])
         self.actor_inspector.move(2, gamestate.main_window.height-2)
-        gamestate.move_camera(1)
+        
+        self.windows = [self.actor_pallet, self.actor_inspector]
     
     def set_selected_actor(self, new_actor):
         if new_actor is None and self.selected_actor is not None:
@@ -56,8 +63,9 @@ class EditorView(object):
                 gamestate.main_window.push_handlers(self.actor_inspector)
             elif new_actor != self.selected_actor:
                 self.update_actor_from_inspector()
-            self.selected_actor = new_actor
-            self.update_inspector_from_actor()
+            if self.selected_actor:
+                self.selected_actor = new_actor
+                self.update_inspector_from_actor()
     
     def update_inspector_from_actor(self):
         self.actor_identifier_field.text = self.selected_actor.identifier
@@ -147,12 +155,40 @@ class EditorView(object):
     
     def draw(self):
         self.scene.draw()
-        self.actor_pallet.batch.draw()
-        if self.actor_inspector.batch:
-            self.actor_inspector.batch.draw()
+        
+        gamestate.apply_camera()
+        self.draw_walkpath()
+        
+        if self.selected_actor:
+            s = self.selected_actor.sprite
+            min_x = s.x - s.image.anchor_x
+            min_y = s.y - s.image.anchor_y
+            max_x = s.x - s.image.anchor_x + s.image.width
+            max_y = s.y - s.image.anchor_y + s.image.height
+            draw.set_color(1, 0, 0, 1)
+            draw.rect_outline(min_x, min_y, max_x, max_y)
+        gamestate.unapply_camera()
+        
+        for w in self.windows:
+            if w.batch:
+                w.batch.draw()
+        
         draw.set_color(1,1,1,1)
         l = self.status_label
         draw.rect(l.x-l.content_width, l.y-l.content_height, l.x, l.y)
         self.status_label.draw()
+    
+    def draw_walkpath(self):    
+        wp = self.scene.walkpath
+        for edge in wp.edges.viewvalues():
+            ax, ay = wp.points[edge.a]
+            bx, by = wp.points[edge.b]
+            if edge.counterpart:
+                draw.line(ax, ay, bx, by, colors=(0, 255, 0, 255, 0, 255, 0, 255))
+            else:
+                draw.line(ax, ay, bx, by, colors=(255, 0, 0, 255, 0, 0, 255, 255))
+        draw.set_color(1,0,0,1)
+        for point in wp.points.viewvalues():
+            draw.rect(point[0]-5, point[1]-5, point[0]+5, point[1]+5)
     
 

@@ -1,6 +1,6 @@
 import os, sys, shutil, json, importlib, pyglet
 
-import actor, gamestate, settings
+import actor, gamestate, settings, walkpath
 
 import environment, scenehandler
 
@@ -13,9 +13,9 @@ class Scene(object):
         
         with pyglet.resource.file(self.resource_path('info.json'), 'r') as info_file:
             self.info = json.load(info_file)
-            self.environment_name = self.info['environment']
-        
+        self.environment_name = self.info['environment']
         self.env = environment.Environment(self.environment_name)
+        self.walkpath = walkpath.WalkPath(dict_repr = self.info['walkpath'])
         
         if gamestate.scripts_enabled:
             self.module = importlib.import_module(name)

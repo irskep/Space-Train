@@ -22,7 +22,7 @@ class AdventureMakerWindow(pyglet.window.Window):
         
         with pyglet.resource.file(os.path.join('game', 'info.json'), 'r') as game_info_file:
             game_info = json.load(game_info_file)
-            self.set_caption("Adventure Maker: %s Edition" % game_info["name"])
+            self.set_caption("Scene Editor: %s" % sys.argv[1])
             self.editorview = editorview.EditorView(sys.argv[1])
         
         pyglet.clock.schedule_interval(self.on_draw, 1/60.0)

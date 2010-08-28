@@ -14,15 +14,18 @@ def label(label):
     """Draws a Pyglet label."""
     label.draw()
 
-def line(x1, y1, x2, y2):
-    pyglet.graphics.draw(2, pyglet.gl.GL_LINES, ('v2f', (x1, y1, x2, y2)))
+def line(x1, y1, x2, y2, colors=None):
+    if colors is None:
+        pyglet.graphics.draw(2, pyglet.gl.GL_LINES, ('v2f', (x1, y1, x2, y2)))
+    else:
+        pyglet.graphics.draw(2, pyglet.gl.GL_LINES, ('v2f', (x1, y1, x2, y2)), ('c4f', colors))
 
 def line_loop(points, colors=None):
     """
     @param points: A list formatted like [x1, y1, x2, y2...]
     @param colors: A list formatted like [r1, g1, b1, a1, r2, g2, b2 a2...]
     """
-    if colors == None:
+    if colors is None:
         pyglet.graphics.draw(len(points)/2, pyglet.gl.GL_LINE_LOOP,('v2f', points))
     else:
         pyglet.graphics.draw(len(points)/2, pyglet.gl.GL_LINE_LOOP,('v2f', points),('c4f', colors))
