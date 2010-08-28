@@ -43,6 +43,11 @@ class Scene(object):
     def add_interpolator(self, i):
         self.interpolators.add(i)
     
+    def actor_under_point(self, x, y):
+        for act in self.actors.viewvalues():
+            if act.covers_point(x, y):
+                return act
+    
     def update(self, dt=0):
         gamestate.move_camera(dt)
         to_remove = set()

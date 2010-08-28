@@ -56,6 +56,13 @@ class Actor(object):
     def resource_path(self, name):
         return os.path.join('actors', self.name, name)
     
+    def covers_point(self, x, y):
+        min_x = self.sprite.x - self.sprite.image.anchor_x
+        min_y = self.sprite.y - self.sprite.image.anchor_y
+        max_x = self.sprite.x + self.sprite.image.anchor_x + self.sprite.image.width
+        max_y = self.sprite.y + self.sprite.image.anchor_y + self.sprite.image.height
+        return min_x <= x <= max_x and min_y <= y <= max_y
+    
     def set_image_if_exists(self, image_name):
         if Actor.images[self.name].has_key(image_name):
             self.sprite.image = Actor.images[self.name][image_name]

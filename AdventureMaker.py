@@ -17,6 +17,9 @@ class AdventureMakerWindow(pyglet.window.Window):
         gamestate.init_scale()
         gamestate.init_keys()
         
+        pyglet.gl.glEnable(pyglet.gl.GL_BLEND)
+        pyglet.gl.glBlendFunc(pyglet.gl.GL_SRC_ALPHA, pyglet.gl.GL_ONE_MINUS_SRC_ALPHA)
+        
         with pyglet.resource.file(os.path.join('game', 'info.json'), 'r') as game_info_file:
             game_info = json.load(game_info_file)
             self.set_caption("Adventure Maker: %s Edition" % game_info["name"])
