@@ -41,11 +41,6 @@ class EditorView(object):
         self.actor_inspector.move(2 + self.actor_pallet.x + self.actor_pallet.width,
                                   gamestate.main_window.height-2)
         gamestate.main_window.push_handlers(self.actor_inspector)
-        for i in gamestate.main_window._event_stack:
-            print '---------------'
-            for k, v in i.items():
-                print k, v
-        
         gamestate.move_camera(1)
     
     def set_selected_actor(self, new_actor):

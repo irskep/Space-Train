@@ -52,16 +52,15 @@ class Scene(object):
     
     def update_actor_info(self, act):
         if self.info['actors'].has_key(act.identifier):
-            self.info['actors'][act.identifier]['x'] = act.sprite.x
-            self.info['actors'][act.identifier]['y'] = act.sprite.y
+            self.info['actors'][act.identifier]['x'] = int(act.sprite.x)
+            self.info['actors'][act.identifier]['y'] = int(act.sprite.y)
         else:
             new_info = {
-                'x': act.sprite.x,
-                'y': act.sprite.y,
+                'x': int(act.sprite.x),
+                'y': int(act.sprite.y),
                 'name': act.name
             }
             self.info['actors'][act.identifier] = new_info
-        print self.info
     
     def save_info(self):
         shutil.copyfile(self.resource_path('info.json'), self.resource_path('info.json~'))
