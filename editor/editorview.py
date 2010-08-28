@@ -39,16 +39,19 @@ class EditorView(object):
         if gamestate.keys[pyglet.window.key.UP]:
             gamestate.set_camera_target(gamestate.camera_target_x, gamestate.camera_target_y+10)
     
+    def on_key_press(self, symbol, modifiers):
+        if modifiers & (pyglet.window.key.MOD_CTRL | pyglet.window.key.MOD_COMMAND):
+            if symbol == pyglet.window.key.S:
+                self.scene.save_info()
+    
     def on_mouse_press(self, x, y, button, modifiers):
         if modifiers & (pyglet.window.key.MOD_ALT | pyglet.window.key.MOD_OPTION):
             self.drag_start = (x, y)
             self.drag_anchor = (gamestate.camera_x, gamestate.camera_y)
             self.is_dragging_camera = True
-            print 'camera'
         else:
             world_point = gamestate.mouse_to_canvas(x, y)
             self.selected_object = self.scene.actor_under_point(*world_point)
-            print self.selected_object
             if self.selected_object:
                 self.drag_start = (x, y)
                 self.drag_anchor = self.selected_object.sprite.position
@@ -70,6 +73,9 @@ class EditorView(object):
             gamestate.camera_target_y = gamestate.camera_y
         elif self.is_dragging_object:
             self.is_dragging_object = False
+            self.scene.info['actors'][self.selected_object.identifier]['x'] = self.selected_object.sprite.x
+            self.scene.info['actors'][self.selected_object.identifier]['y'] = self.selected_object.sprite.y
+            self.selected_object = None
     
     def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
         gamestate.set_camera(gamestate.camera_x - scroll_x*4, gamestate.camera_y + scroll_y*4, update_target=True)

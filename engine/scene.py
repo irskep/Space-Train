@@ -1,6 +1,6 @@
-import os, sys, json, importlib, pyglet
+import os, sys, shutil, json, importlib, pyglet
 
-import actor, gamestate
+import actor, gamestate, settings
 
 import environment, scenehandler
 
@@ -34,11 +34,17 @@ class Scene(object):
     
     def load_actors(self):
         for identifier, attrs in self.info['actors'].items():
-            new_actor = actor.Actor(attrs['name'], scene=self, batch=self.batch)
+            new_actor = actor.Actor(attrs['name'], identifier=identifier, scene=self, batch=self.batch)
             self.actors[identifier] = new_actor
             for attr in ['x', 'y', 'scale', 'rotation']:
                 if attrs.has_key(attr):
                     setattr(new_actor.sprite, attr, attrs[attr])
+    
+    def save_info(self):
+        shutil.copyfile(self.resource_path('info.json'), self.resource_path('info.json~'))
+        with pyglet.resource.file(self.resource_path('info.json'), 'w') as info_file:
+            json.dump(self.info, info_file, indent=4)
+        print 'saved'
     
     def add_interpolator(self, i):
         self.interpolators.add(i)

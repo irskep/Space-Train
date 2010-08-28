@@ -4,4 +4,5 @@ resources
 *.pyc
 coder_art/
 *.tmproj
+*~
 

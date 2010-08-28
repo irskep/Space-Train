@@ -38,8 +38,7 @@ def init_scale():
     norm_theta = math.atan2(norm_h, norm_w)
     camera_min = (norm_w//2, norm_h//2)
     camera_max = (norm_w, norm_h)
-    camera_x, camera_y = camera_min
-    set_camera_target(camera_x, camera_y)
+    set_camera(*camera_min, update_target=True)
 
 def move_camera(dt):
     global camera_x, camera_y
