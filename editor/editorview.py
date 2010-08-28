@@ -2,7 +2,7 @@ import os, pyglet, glydget
 
 from engine import scene, gamestate, settings, actor
 
-import sidebar
+import draw
 
 class EditorView(object):
     def __init__(self, scene_name):
@@ -14,20 +14,38 @@ class EditorView(object):
         self.is_dragging_camera = False
         self.is_dragging_object = False
         self.selected_object = None
-        
         self.actor_name = None
         
-        self.actor_window = glydget.Window ("Actors", [
+        self.status_label = pyglet.text.Label('test', x=gamestate.main_window.width, 
+                                              y=gamestate.main_window.height, 
+                                              font_name = "Gill Sans",
+                                              font_size = 12,
+                                              color = (0,0,0,255),
+                                              anchor_x='right', anchor_y='top')
+        
+        self.actor_pallet = glydget.Window("Actors", [
             glydget.Button(actor_name, self.actor_button_action) \
             for actor_name in os.listdir(os.path.join(settings.resources_path, 'actors'))
         ])
-        self.actor_window.show()
-        self.actor_window.move(2, gamestate.norm_h-2)
-        gamestate.main_window.push_handlers(self.actor_window)
+        self.actor_pallet.show()
+        self.actor_pallet.move(2, gamestate.main_window.height-2)
+        gamestate.main_window.push_handlers(self.actor_pallet)
+        
+        self.actor_inspector = glydget.Window("Actor Inspector", [
+            glydget.HBox([glydget.Label('Identifier'), glydget.Entry('(no value)')], True)
+        ])
+        self.actor_inspector.show()
+        self.actor_inspector.move(2 + self.actor_pallet.x + self.actor_pallet.width,
+                                  gamestate.main_window.height-2)
+        gamestate.main_window.push_handlers(self.actor_inspector)
+        
         gamestate.move_camera(1)
     
     def actor_button_action(self, button):
         self.actor_name = button.text
+        self.status_label.begin_update()
+        self.status_label.text = "Click to place %s" % self.actor_name
+        self.status_label.end_update()
     
     def check_camera_keys(self):
         if gamestate.keys[pyglet.window.key.LEFT]:
@@ -49,7 +67,7 @@ class EditorView(object):
             self.drag_start = (x, y)
             self.drag_anchor = (gamestate.camera_x, gamestate.camera_y)
             self.is_dragging_camera = True
-        else:
+        elif self.actor_name is None:
             world_point = gamestate.mouse_to_canvas(x, y)
             self.selected_object = self.scene.actor_under_point(*world_point)
             if self.selected_object:
@@ -76,16 +94,23 @@ class EditorView(object):
             self.scene.info['actors'][self.selected_object.identifier]['x'] = self.selected_object.sprite.x
             self.scene.info['actors'][self.selected_object.identifier]['y'] = self.selected_object.sprite.y
             self.selected_object = None
+        elif self.actor_name:
+            self.actor_name = None
+            self.status_label.text = ''
     
     def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
         gamestate.set_camera(gamestate.camera_x - scroll_x*4, gamestate.camera_y + scroll_y*4, update_target=True)
     
     def update(self, dt):
         self.check_camera_keys()
-        # gamestate.move_camera(dt)
     
     def draw(self):
         self.scene.draw()
-        self.actor_window.batch.draw()
+        self.actor_pallet.batch.draw()
+        self.actor_inspector.batch.draw()
+        draw.set_color(1,1,1,1)
+        l = self.status_label
+        draw.rect(l.x-l.content_width, l.y-l.content_height, l.x, l.y)
+        self.status_label.draw()
     
 
