@@ -29,7 +29,8 @@ class EditorView(object):
             for actor_name in os.listdir(os.path.join(settings.resources_path, 'actors'))
         ])
         self.actor_pallet.show()
-        self.actor_pallet.move(2, gamestate.main_window.height-2)
+        self.actor_pallet.move(gamestate.main_window.width-2 - self.actor_pallet.width, 
+                               gamestate.main_window.height-2)
         gamestate.main_window.push_handlers(self.actor_pallet)
         
         self.actor_identifier_field = glydget.Entry('', on_change=self.update_actor_from_inspector)
@@ -40,25 +41,35 @@ class EditorView(object):
             glydget.HBox([glydget.Label('x'), self.actor_x_field], True),
             glydget.HBox([glydget.Label('y'), self.actor_y_field], True),
         ])
-        self.actor_inspector.show()
-        self.actor_inspector.move(2 + self.actor_pallet.x + self.actor_pallet.width,
-                                  gamestate.main_window.height-2)
-        gamestate.main_window.push_handlers(self.actor_inspector)
+        self.actor_inspector.move(2, gamestate.main_window.height-2)
         gamestate.move_camera(1)
     
     def set_selected_actor(self, new_actor):
-        if new_actor != self.selected_actor:
+        if new_actor is None and self.selected_actor is not None:
             self.update_actor_from_inspector()
             self.selected_actor = new_actor
+            self.actor_inspector.hide()
+            gamestate.main_window.pop_handlers()
+        else:
+            if new_actor is not None and self.selected_actor is None:
+                self.actor_inspector.show()
+                gamestate.main_window.push_handlers(self.actor_inspector)
+            elif new_actor != self.selected_actor:
+                self.update_actor_from_inspector()
+            self.selected_actor = new_actor
+            self.update_inspector_from_actor()
+    
+    def update_inspector_from_actor(self):
         self.actor_identifier_field.text = self.selected_actor.identifier
         self.actor_x_field.text = str(int(self.selected_actor.sprite.x))
         self.actor_y_field.text = str(int(self.selected_actor.sprite.y))
     
-    def update_actor_from_inspector(self, *args, **kwargs):
+    def update_actor_from_inspector(self):
         if self.selected_actor:
             self.selected_actor.identifier = self.actor_identifier_field.text
             self.selected_actor.sprite.x = int(self.actor_x_field.text)
             self.selected_actor.sprite.y = int(self.actor_y_field.text)
+    
     
     # Events
     def actor_button_action(self, button):
@@ -116,7 +127,7 @@ class EditorView(object):
         elif self.is_dragging_object:
             self.is_dragging_object = False
             self.scene.update_actor_info(self.dragging_object)
-        if self.dragging_object:
+        if isinstance(self.dragging_object, actor.Actor) or self.dragging_object is None:
             self.set_selected_actor(self.dragging_object)
         if self.actor_name:
             self.actor_name = None
@@ -137,7 +148,8 @@ class EditorView(object):
     def draw(self):
         self.scene.draw()
         self.actor_pallet.batch.draw()
-        self.actor_inspector.batch.draw()
+        if self.actor_inspector.batch:
+            self.actor_inspector.batch.draw()
         draw.set_color(1,1,1,1)
         l = self.status_label
         draw.rect(l.x-l.content_width, l.y-l.content_height, l.x, l.y)
