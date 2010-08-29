@@ -25,6 +25,9 @@ def init_keys():
 
 def init_scale():
     global norm_w, norm_h, scale_factor, camera_min, camera_max
+    if not main_window.fullscreen:
+        scale_factor = 1.0
+        return
     scale_factor_1 = main_window.height / float(norm_h)
     norm_w_1 = int(main_window.width/scale_factor_1)
     scale_factor_2 = main_window.width / float(norm_w)
@@ -76,4 +79,4 @@ def unapply_camera():
 
 def mouse_to_canvas(x, y):
     return ((x - sidebar_w)/scale_factor + camera_x-norm_w//2, 
-            y/scale_factor + camera_y-norm_h//2)
+            y/scale_factor               + camera_y-norm_h//2)

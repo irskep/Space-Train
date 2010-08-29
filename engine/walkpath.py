@@ -40,9 +40,10 @@ class WalkPath(object):
             return new_edge
     
     def path_point_near_point(self, mouse):
-        close = lambda a, b: a-5 <= b <= a+5
+        close = lambda a, b: abs(a-b) <= 5
         for identifier, point in self.points.items():
             if close(point[0], mouse[0]) and close(point[1], mouse[1]):
                 return identifier
+        return None
     
 

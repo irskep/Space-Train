@@ -52,6 +52,9 @@ class EditorView(object):
         self.windows = [self.actor_pallet, self.actor_inspector]
     
     def set_selected_actor(self, new_actor):
+        # All the complex logic here is just to deal with the fact that sometimes
+        # the new or old value will be None, so sometimes the associated inspector
+        # will be hidden and therefore its fields will be inaccessible.
         if new_actor is None and self.selected_actor is not None:
             self.update_actor_from_inspector()
             self.selected_actor = new_actor
@@ -60,6 +63,8 @@ class EditorView(object):
         else:
             if new_actor is not None and self.selected_actor is None:
                 self.actor_inspector.show()
+                self.selected_actor = new_actor
+                self.update_inspector_from_actor()
                 gamestate.main_window.push_handlers(self.actor_inspector)
             elif new_actor != self.selected_actor:
                 self.update_actor_from_inspector()
@@ -108,15 +113,19 @@ class EditorView(object):
             self.drag_start = (x, y)
             self.drag_anchor = (gamestate.camera_x, gamestate.camera_y)
             self.is_dragging_camera = True
-        elif self.actor_name is None:
-            self.dragging_object = self.scene.actor_under_point(*world_point)
         elif self.actor_name:
             self.dragging_object = self.scene.new_actor(self.actor_name, x=world_point[0], y=world_point[1])
+        else:
+            self.dragging_point = self.scene.walkpath.path_point_near_point(world_point)
+            if self.dragging_point is None:
+                self.dragging_object = self.scene.actor_under_point(*world_point)
         
         if self.dragging_object:
             self.drag_start = (x, y)
             self.drag_anchor = self.dragging_object.sprite.position
-            self.is_dragging_object = False
+        elif self.dragging_point:
+            self.drag_start = (x, y)
+            self.drag_anchor = self.scene.walkpath.points[self.dragging_point]
     
     def on_mouse_drag(self, x, y, dx, dy, button, modifiers):
         if self.is_dragging_camera:
@@ -124,8 +133,14 @@ class EditorView(object):
                                  self.drag_anchor[1] + self.drag_start[1] - y, update_target=True)
         elif self.dragging_object:
             self.is_dragging_object = True
-            self.dragging_object.sprite.position = (self.drag_anchor[0] - (self.drag_start[0] - x),
-                                                    self.drag_anchor[1] - (self.drag_start[1] - y))
+            new_point = (self.drag_anchor[0] - (self.drag_start[0] - x),
+                         self.drag_anchor[1] - (self.drag_start[1] - y))
+            self.dragging_object.sprite.position = new_point
+        elif self.dragging_point:
+            self.is_dragging_point = True
+            new_point = (self.drag_anchor[0] - (self.drag_start[0] - x),
+                         self.drag_anchor[1] - (self.drag_start[1] - y))
+            self.scene.walkpath.points[self.dragging_point] = new_point
     
     def on_mouse_release(self, x, y, button, modifiers):
         if self.is_dragging_camera:
@@ -135,6 +150,9 @@ class EditorView(object):
         elif self.is_dragging_object:
             self.is_dragging_object = False
             self.scene.update_actor_info(self.dragging_object)
+        elif self.is_dragging_point:
+            self.is_dragging_point = False
+            self.dragging_point = None
         if isinstance(self.dragging_object, actor.Actor) or self.dragging_object is None:
             self.set_selected_actor(self.dragging_object)
         if self.actor_name:

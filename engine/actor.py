@@ -102,6 +102,6 @@ class Actor(object):
         self.scene.add_interpolator(interp)
     
     def __repr__(self):
-        return 'Character(name="%s", position=%s)' % (self.name, self.sprite.position)
+        return 'Actor(name="%s", position=%s)' % (self.name, self.sprite.position)
     
 
