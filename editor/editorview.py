@@ -32,7 +32,7 @@ class EditorView(object):
                                               anchor_x='right', anchor_y='top')
         
         self.init_gui()
-        gamestate.move_camera(1)
+        self.scene.camera.update(1)
     
     def init_gui(self):
         self.actor_pallet = glydget.Window("Make Actor", [
@@ -55,6 +55,15 @@ class EditorView(object):
         self.edge_pallet.move(gamestate.main_window.width-2 - self.edge_pallet.width, 
                               self.actor_pallet.y - self.actor_pallet.height - 2)
         gamestate.main_window.push_handlers(self.edge_pallet)
+        
+        self.camera_pallet = glydget.Window("Camera Tools", [
+            glydget.Button('New camera point', self.new_camera_point),
+            glydget.Button('Delete camera point', self.delete_camera_point),
+        ])
+        self.camera_pallet.show()
+        self.camera_pallet.move(gamestate.main_window.width-2 - self.camera_pallet.width, 
+                                self.edge_pallet.y - self.edge_pallet.height - 2)
+        gamestate.main_window.push_handlers(self.camera_pallet)
         
         self.actor_identifier_field = glydget.Entry('', on_change=self.update_actor_from_inspector)
         self.actor_x_field = glydget.Entry('', on_change=self.update_actor_from_inspector)
@@ -85,7 +94,7 @@ class EditorView(object):
         ])
         self.edge_inspector.move(2, gamestate.main_window.height-2)
         
-        self.windows = [self.actor_pallet, self.edge_pallet, 
+        self.windows = [self.actor_pallet, self.edge_pallet, self.camera_pallet,
                         self.actor_inspector, self.point_inspector, self.edge_inspector]
     
     def set_status_message(self, message=''):
@@ -119,6 +128,7 @@ class EditorView(object):
         if recurse and new_actor is not None:
             self.set_selected_point(None, False)
             self.set_selected_edge(None, False)
+            self.set_selected_camera_point(None, False)
         self._selection_change_logic('selected_actor', new_actor, 
                                      self.actor_inspector, 
                                      self.update_actor_from_inspector,
@@ -128,6 +138,7 @@ class EditorView(object):
         if recurse and new_point is not None:
             self.set_selected_actor(None, False)
             self.set_selected_edge(None, False)
+            self.set_selected_camera_point(None, False)
         self._selection_change_logic('selected_point', new_point, 
                                      self.point_inspector, 
                                      self.update_point_from_inspector,
@@ -137,10 +148,17 @@ class EditorView(object):
         if recurse and new_edge is not None:
             self.set_selected_point(None, False)
             self.set_selected_actor(None, False)
+            self.set_selected_camera_point(None, False)
         self._selection_change_logic('selected_edge', new_edge, 
                                      self.edge_inspector, 
                                      self.update_edge_from_inspector,
                                      self.update_inspector_from_edge)
+    
+    def set_selected_camera_point(self, new_point, recurse=True):
+        if recurse and new_point is not None:
+            self.set_selected_actor(None, False)
+            self.set_selected_point(None, False)
+            self.set_selected_edge(None, False)
     
     def update_inspector_from_edge(self, widget=None):
         self.edge_a_field.text = self.selected_edge.a
@@ -190,23 +208,29 @@ class EditorView(object):
     def new_point(self, button):
         self.set_status_message("Click to place a point")
         def point_placer(x, y):
-            world_point = gamestate.mouse_to_canvas(x, y)
+            world_point = self.scene.camera.mouse_to_canvas(x, y)
             self.set_selected_point(self.scene.walkpath.add_point(*world_point))
             self.set_status_message('')
         self.click_actions.append(point_placer)
     
     def delete_point(self, button):
         def point_deleter(x, y):
-            world_point = gamestate.mouse_to_canvas(x, y)
+            world_point = self.scene.camera.mouse_to_canvas(x, y)
             self.scene.walkpath.remove_point(self.scene.walkpath.path_point_near_point(world_point))
             self.set_status_message('')
         self.click_actions.append(point_deleter)
         self.set_status_message("Click a point to delete it")
     
+    def new_camera_point(self, button):
+        pass
+    
+    def delete_camera_point(self, button):
+        pass
+    
     def new_edge(self, button):
         self.set_status_message('Click the source point')
         def edge_setup(x, y):
-            world_point = gamestate.mouse_to_canvas(x, y)
+            world_point = self.scene.camera.mouse_to_canvas(x, y)
             self.point_1 = self.scene.walkpath.path_point_near_point(world_point)
             if self.point_1:
                 self.set_status_message('Click the destination point')
@@ -215,7 +239,7 @@ class EditorView(object):
                 self.click_actions = collections.deque()
                 self.set_status_message('')
         def edge_finish(x, y):
-            world_point = gamestate.mouse_to_canvas(x, y)
+            world_point = self.scene.camera.mouse_to_canvas(x, y)
             self.point_2 = self.scene.walkpath.path_point_near_point(world_point)
             if self.point_2 and self.point_1 != self.point_2:
                 self.set_selected_edge(self.scene.walkpath.add_edge(self.point_1, self.point_2))
@@ -226,7 +250,7 @@ class EditorView(object):
     def delete_edge(self, button):
         self.set_status_message('Click the source point')
         def edge_setup(x, y):
-            world_point = gamestate.mouse_to_canvas(x, y)
+            world_point = self.scene.camera.mouse_to_canvas(x, y)
             self.point_1 = self.scene.walkpath.path_point_near_point(world_point)
             if self.point_1:
                 self.set_status_message('Click the destination point')
@@ -235,7 +259,7 @@ class EditorView(object):
                 self.click_actions = collections.deque()
                 self.set_status_message('')
         def edge_finish(x, y):
-            world_point = gamestate.mouse_to_canvas(x, y)
+            world_point = self.scene.camera.mouse_to_canvas(x, y)
             self.point_2 = self.scene.walkpath.path_point_near_point(world_point)
             if self.point_2:
                 self.set_selected_edge(None)
@@ -246,7 +270,7 @@ class EditorView(object):
     
     def actor_button_action(self, button):
         def actor_placer(x, y):
-            world_point = gamestate.mouse_to_canvas(x, y)
+            world_point = self.scene.camera.mouse_to_canvas(x, y)
             self.dragging_object = self.scene.new_actor(button.text, x=world_point[0], y=world_point[1])
             self.set_status_message('')
         self.click_actions.append(actor_placer)
@@ -255,14 +279,15 @@ class EditorView(object):
     
     # Other events
     def check_camera_keys(self):
+        c = self.scene.camera
         if gamestate.keys[pyglet.window.key.LEFT]:
-            gamestate.set_camera_target(gamestate.camera_target_x-10, gamestate.camera_target_y)
+            c.set_target(c.target[0]-10, c.target[1])
         if gamestate.keys[pyglet.window.key.RIGHT]:
-            gamestate.set_camera_target(gamestate.camera_target_x+10, gamestate.camera_target_y)
+            c.set_target(c.target[0]+10, c.target[1])
         if gamestate.keys[pyglet.window.key.DOWN]:
-            gamestate.set_camera_target(gamestate.camera_target_x, gamestate.camera_target_y-10)
+            c.set_target(c.target[0], c.target[1]-10)
         if gamestate.keys[pyglet.window.key.UP]:
-            gamestate.set_camera_target(gamestate.camera_target_x, gamestate.camera_target_y+10)
+            c.set_target(c.target[0], c.target[1]+10)
     
     def on_key_press(self, symbol, modifiers):
         if modifiers & (pyglet.window.key.MOD_ACCEL):
@@ -273,12 +298,12 @@ class EditorView(object):
     def on_mouse_press(self, x, y, button, modifiers):
         if modifiers & (pyglet.window.key.MOD_ALT | pyglet.window.key.MOD_OPTION):
             self.drag_start = (x, y)
-            self.drag_anchor = (gamestate.camera_x, gamestate.camera_y)
+            self.drag_anchor = self.scene.camera.position
             self.is_dragging_camera = True
         elif len(self.click_actions) > 0:
             self.click_actions.popleft()(x, y)
         else:
-            world_point = gamestate.mouse_to_canvas(x, y)
+            world_point = self.scene.camera.mouse_to_canvas(x, y)
             self.dragging_point = self.scene.walkpath.path_point_near_point(world_point)
             if self.dragging_point is None:
                 self.dragging_object = self.scene.actor_under_point(*world_point)
@@ -292,8 +317,8 @@ class EditorView(object):
     
     def on_mouse_drag(self, x, y, dx, dy, button, modifiers):
         if self.is_dragging_camera:
-            gamestate.set_camera(self.drag_anchor[0] + self.drag_start[0] - x,
-                                 self.drag_anchor[1] + self.drag_start[1] - y, update_target=True)
+            self.scene.camera.set_position(self.drag_anchor[0] + self.drag_start[0] - x,
+                                           self.drag_anchor[1] + self.drag_start[1] - y)
         elif self.dragging_object:
             self.is_dragging_object = True
             new_point = (self.drag_anchor[0] - (self.drag_start[0] - x),
@@ -308,8 +333,6 @@ class EditorView(object):
     def on_mouse_release(self, x, y, button, modifiers):
         if self.is_dragging_camera:
             self.is_dragging_camera = False
-            gamestate.camera_target_x = gamestate.camera_x
-            gamestate.camera_target_y = gamestate.camera_y
         elif self.is_dragging_object:
             self.is_dragging_object = False
             self.scene.update_actor_info(self.dragging_object)
@@ -325,7 +348,8 @@ class EditorView(object):
         self.dragging_object = None
     
     def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
-        gamestate.set_camera(gamestate.camera_x - scroll_x*4, gamestate.camera_y + scroll_y*4, update_target=True)
+        c = self.scene.camera
+        c.set_position(c.position[0] - scroll_x*4, c.position[1] + scroll_y*4)
     
     
     # Update/Draw
@@ -335,7 +359,7 @@ class EditorView(object):
     def draw(self):
         self.scene.draw()
         
-        gamestate.apply_camera()
+        self.scene.camera.apply()
         self.draw_walkpath()
         
         if self.selected_actor:
@@ -346,7 +370,7 @@ class EditorView(object):
             max_y = s.y - s.image.anchor_y + s.image.height
             draw.set_color(1, 0, 0, 1)
             draw.rect_outline(min_x, min_y, max_x, max_y)
-        gamestate.unapply_camera()
+        self.scene.camera.unapply()
         
         for w in self.windows:
             if w.batch:

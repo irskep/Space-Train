@@ -1,6 +1,6 @@
 import os, sys, shutil, json, importlib, pyglet
 
-import actor, gamestate, settings, walkpath
+import camera, actor, gamestate, settings, walkpath
 
 import environment, scenehandler
 
@@ -10,12 +10,14 @@ class Scene(object):
         self.batch = pyglet.graphics.Batch()
         self.interpolators = set()
         self.actors = {}
+        self.camera_points = {}
         
         with pyglet.resource.file(self.resource_path('info.json'), 'r') as info_file:
             self.info = json.load(info_file)
         self.environment_name = self.info['environment']
         self.env = environment.Environment(self.environment_name)
         self.walkpath = walkpath.WalkPath(dict_repr = self.info['walkpath'])
+        self.camera = camera.Camera()
         
         if gamestate.scripts_enabled:
             self.module = importlib.import_module(name)
@@ -79,7 +81,7 @@ class Scene(object):
                 return act
     
     def update(self, dt=0):
-        gamestate.move_camera(dt)
+        self.camera.update(dt)
         to_remove = set()
         for i in self.interpolators:
             i.update(dt)
@@ -90,10 +92,10 @@ class Scene(object):
         self.interpolators -= to_remove
     
     def draw(self):
-        gamestate.apply_camera()
+        self.camera.apply()
         self.env.draw()
         self.batch.draw()
-        gamestate.unapply_camera()
+        self.camera.unapply()
     
     def __repr__(self):
         return 'Scene(name="%s")' % self.name
