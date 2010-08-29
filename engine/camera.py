@@ -19,6 +19,9 @@ class Camera(object):
         self.points = {identifier: CameraPoint(identifier, (d['x'], d['y'])) \
                        for identifier, d in points_dict.viewitems()}
     
+    def points_dict(self):
+        return {identifier: {'x': p.x, 'y': p.y} for identifier, p in self.points.viewitems()}
+    
     def set_target(self, x, y):
         x = min(max(x, self.min_bounds[0]), self.max_bounds[0])
         y = min(max(y, self.min_bounds[1]), self.max_bounds[1])
@@ -29,6 +32,25 @@ class Camera(object):
         y = min(max(y, self.min_bounds[1]), self.max_bounds[1])
         self.position = (x, y)
         self.target = self.position
+    
+    def camera_point_near_point(self, mouse):
+        close = lambda a, b: abs(a-b) <= 5
+        for point in self.points.viewvalues():
+            if close(point.position[0], mouse[0]) and close(point.position[1], mouse[1]):
+                return point
+        return None
+    
+    def add_point(self, identifier, x, y):
+        x = min(max(x, self.min_bounds[0]), self.max_bounds[0])
+        y = min(max(y, self.min_bounds[1]), self.max_bounds[1])
+        self.points[identifier] = CameraPoint(identifier, (x, y))
+        return self.points[identifier]
+    
+    def remove_point(self, identifier):
+        try:
+            del self.points[identifier]
+        except KeyError:
+            return
     
     def update(self, dt):
         move_amt = self.speed*dt

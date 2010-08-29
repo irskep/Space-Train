@@ -14,10 +14,12 @@ class EditorView(object):
         self.is_dragging_camera = False
         self.is_dragging_object = False
         self.is_dragging_point = False
+        self.is_dragging_cpoint = False
         self.dragging_object = None
         self.dragging_point = None
         self.selected_actor = None
         self.selected_point = None
+        self.selected_cpoint = None
         self.selected_edge = None
         self.point_1 = None
         self.point_2 = None
@@ -94,8 +96,19 @@ class EditorView(object):
         ])
         self.edge_inspector.move(2, gamestate.main_window.height-2)
         
+        self.cpoint_identifier_field = glydget.Entry('', on_change=self.update_camera_point_from_inspector)
+        self.cpoint_x_field = glydget.Entry('', on_change=self.update_camera_point_from_inspector)
+        self.cpoint_y_field = glydget.Entry('', on_change=self.update_camera_point_from_inspector)
+        self.cpoint_inspector = glydget.Window("Camera Point Inspector", [
+            glydget.HBox([glydget.Label('Identifier'), self.cpoint_identifier_field], True),
+            glydget.HBox([glydget.Label('x'), self.cpoint_x_field], True),
+            glydget.HBox([glydget.Label('y'), self.cpoint_y_field], True),
+        ])
+        self.point_inspector.move(2, gamestate.main_window.height-2)
+        
         self.windows = [self.actor_pallet, self.edge_pallet, self.camera_pallet,
-                        self.actor_inspector, self.point_inspector, self.edge_inspector]
+                        self.actor_inspector, self.point_inspector, self.edge_inspector,
+                        self.cpoint_inspector]
     
     def set_status_message(self, message=''):
         self.status_label.begin_update()
@@ -159,6 +172,10 @@ class EditorView(object):
             self.set_selected_actor(None, False)
             self.set_selected_point(None, False)
             self.set_selected_edge(None, False)
+        self._selection_change_logic('selected_edge', new_point, 
+                                     self.cpoint_inspector, 
+                                     self.update_camera_point_from_inspector,
+                                     self.update_inspector_from_camera_point)
     
     def update_inspector_from_edge(self, widget=None):
         self.edge_a_field.text = self.selected_edge.a
@@ -191,6 +208,18 @@ class EditorView(object):
             if edge.b == old_identifier:
                 edge.b = new_identifier
         self.update_point_from_inspector()
+    
+    def update_inspector_from_camera_point(self, widget=None):
+        self.cpoint_identifier_field.text = self.selected_point.identifier
+        self.cpoint_x_field.text = str(int(self.selected_point.position[0]))
+        self.cpoint_y_field.text = str(int(self.selected_point.position[1]))
+    
+    def update_camera_point_from_inspector(self, widget=None):
+        if self.selected_cpoint:
+            self.scene.camera.remove_point(self.selected_cpoint.identifier)
+            self.selected_cpoint = self.scene.camera.add_point(
+                                        self.point_identifier_field.text, 
+                                        int(self.cpoint_x_field.text), int(self.cpoint_y_field.text))
     
     def update_inspector_from_actor(self, widget=None):
         self.actor_identifier_field.text = self.selected_actor.identifier

@@ -69,6 +69,7 @@ class Scene(object):
     def save_info(self):
         shutil.copyfile(self.resource_path('info.json'), self.resource_path('info.json~'))
         self.info['walkpath'] = self.walkpath.dict_repr()
+        self.info['camera_points'] = self.camera.points_dict()
         with pyglet.resource.file(self.resource_path('info.json'), 'w') as info_file:
             json.dump(self.info, info_file, indent=4)
     
