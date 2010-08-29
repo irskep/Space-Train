@@ -5,7 +5,15 @@ class Edge(object):
         self.anim = anim
         self.annotations = annotations or []
         self.counterpart = None
-        
+    
+    def dict_repr(self):
+        dict_repr = {'a': self.a, 'b': self.b}
+        if self.anim:
+            dict_repr['anim'] = self.anim
+        if self.annotations:
+            dict_repr['annotations'] = self.annotations
+        return dict_repr
+    
 
 class WalkPath(object):
     def __init__(self, dict_repr=None):
@@ -20,17 +28,9 @@ class WalkPath(object):
                     new_edge.anim = edge_dict['anim']
     
     def dict_repr(self):
-        dict_repr = {'points': {identifier : {'x': point[0], 'y': point[1]} \
-                                for identifier, point in self.points.iteritems()},
-                     'edges': []}
-        for edge in self.edges.viewvalues():
-            edge_repr = {'a': edge.a, 'b': edge.b}
-            if edge.anim:
-                edge_repr['anim'] = edge.anim
-            if edge.annotations:
-                edge_repr['annotations'] = edge.annotations
-            dict_repr['edges'].append(edge_repr)
-        return dict_repr
+        return {'points': {identifier : {'x': point[0], 'y': point[1]} \
+                           for identifier, point in self.points.iteritems()},
+                'edges': [edge.dict_repr() for edge in self.edges.viewvalues()]}
     
     def add_point(self, x, y, identifier=None):
         if identifier is None:
