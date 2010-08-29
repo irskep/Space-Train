@@ -105,7 +105,7 @@ class EditorView(object):
             glydget.HBox([glydget.Label('x'), self.cpoint_x_field], True),
             glydget.HBox([glydget.Label('y'), self.cpoint_y_field], True),
         ])
-        self.point_inspector.move(2, gamestate.main_window.height-2)
+        self.cpoint_inspector.move(2, gamestate.main_window.height-2)
         
         self.windows = [self.actor_pallet, self.edge_pallet, self.camera_pallet,
                         self.actor_inspector, self.point_inspector, self.edge_inspector,
