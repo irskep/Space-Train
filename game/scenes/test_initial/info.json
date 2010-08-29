@@ -35,5 +35,11 @@
                 "b": "default_2"
             }
         ]
+    },
+    "camera_points": {
+        "start": {
+            "x": 512,
+            "y": 384
+        }
     }
 }

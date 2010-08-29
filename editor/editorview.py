@@ -361,6 +361,7 @@ class EditorView(object):
         
         self.scene.camera.apply()
         self.draw_walkpath()
+        self.draw_camera_points()
         
         if self.selected_actor:
             s = self.selected_actor.sprite
@@ -394,5 +395,11 @@ class EditorView(object):
         draw.set_color(1,0,0,1)
         for point in wp.points.viewvalues():
             draw.rect(point[0]-5, point[1]-5, point[0]+5, point[1]+5)
+    
+    def draw_camera_points(self):
+        draw.set_color(1,0,1,1)
+        for point in self.scene.camera.points.viewvalues():
+            p = point.position
+            draw.rect_outline(p[0]-5, p[1]-5, p[0]+5, p[1]+5)
     
 

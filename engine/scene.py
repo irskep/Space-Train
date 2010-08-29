@@ -17,7 +17,7 @@ class Scene(object):
         self.environment_name = self.info['environment']
         self.env = environment.Environment(self.environment_name)
         self.walkpath = walkpath.WalkPath(dict_repr = self.info['walkpath'])
-        self.camera = camera.Camera()
+        self.camera = camera.Camera(points_dict=self.info['camera_points'])
         
         if gamestate.scripts_enabled:
             self.module = importlib.import_module(name)
