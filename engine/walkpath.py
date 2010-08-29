@@ -3,6 +3,8 @@ class Edge(object):
         self.a = a
         self.b = b
         self.anim = anim
+        if self.anim == '':
+            self.anim = None
         self.annotations = annotations or []
         self.counterpart = None
     
@@ -53,7 +55,10 @@ class WalkPath(object):
             return new_edge
     
     def remove_point(self, identifier):
-        del self.points[identifier]
+        try:
+            del self.points[identifier]
+        except KeyError:
+            return
     
     def remove_edge(self, p1, p2):
         if self.edges.has_key((p1, p2)):

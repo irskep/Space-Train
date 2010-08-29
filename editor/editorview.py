@@ -66,8 +66,32 @@ class EditorView(object):
         ])
         self.actor_inspector.move(2, gamestate.main_window.height-2)
         
-        self.windows = [self.actor_pallet, self.edge_pallet, self.actor_inspector]
+        self.point_identifier_field = glydget.Entry('', on_change=self.update_point_identifier)
+        self.point_x_field = glydget.Entry('', on_change=self.update_point_from_inspector)
+        self.point_y_field = glydget.Entry('', on_change=self.update_point_from_inspector)
+        self.point_inspector = glydget.Window("Point Inspector", [
+            glydget.HBox([glydget.Label('Identifier'), self.point_identifier_field], True),
+            glydget.HBox([glydget.Label('x'), self.point_x_field], True),
+            glydget.HBox([glydget.Label('y'), self.point_y_field], True),
+        ])
+        self.point_inspector.move(2, gamestate.main_window.height-2)
+        
+        self.edge_a_field = glydget.Entry('', on_change=self.update_edge_from_inspector)
+        self.edge_b_field = glydget.Entry('', on_change=self.update_edge_from_inspector)
+        self.edge_anim_field = glydget.Entry('', on_change=self.update_edge_from_inspector)
+        self.edge_inspector = glydget.Window("Edge Inspector", [
+            glydget.HBox([glydget.Label('a'), self.edge_a_field], True),
+            glydget.HBox([glydget.Label('a'), self.edge_b_field], True),
+        ])
+        self.edge_inspector.move(2, gamestate.main_window.height-2)
+        
+        self.windows = [self.actor_pallet, self.edge_pallet, 
+                        self.actor_inspector, self.point_inspector, self.edge_inspector]
     
+    def set_status_message(self, message=''):
+        self.status_label.begin_update()
+        self.status_label.text = message
+        self.status_label.end_update()
     
     def _selection_change_logic(self, attr_name, new_obj, inspector, obj_update, inspect_update):
         # All the complex logic here is just to deal with the fact that sometimes
@@ -91,29 +115,71 @@ class EditorView(object):
                 setattr(self, attr_name, new_obj)
                 inspect_update()
     
-    def set_selected_actor(self, new_actor):
+    def set_selected_actor(self, new_actor, recurse=True):
+        if recurse and new_actor is not None:
+            self.set_selected_point(None, False)
+            self.set_selected_edge(None, False)
         self._selection_change_logic('selected_actor', new_actor, 
                                      self.actor_inspector, 
                                      self.update_actor_from_inspector,
                                      self.update_inspector_from_actor)
     
-    def set_selected_point(self, new_point):
-        pass
+    def set_selected_point(self, new_point, recurse=True):
+        if recurse and new_point is not None:
+            self.set_selected_actor(None, False)
+            self.set_selected_edge(None, False)
+        self._selection_change_logic('selected_point', new_point, 
+                                     self.point_inspector, 
+                                     self.update_point_from_inspector,
+                                     self.update_inspector_from_point)
     
-    def set_selected_edge(self, new_edge):
-        pass
+    def set_selected_edge(self, new_edge, recurse=True):
+        if recurse and new_edge is not None:
+            self.set_selected_point(None, False)
+            self.set_selected_actor(None, False)
+        self._selection_change_logic('selected_edge', new_edge, 
+                                     self.edge_inspector, 
+                                     self.update_edge_from_inspector,
+                                     self.update_inspector_from_edge)
     
-    def set_status_message(self, message=''):
-        self.status_label.begin_update()
-        self.status_label.text = message
-        self.status_label.end_update()
+    def update_inspector_from_edge(self, widget=None):
+        self.edge_a_field.text = self.selected_edge.a
+        self.edge_b_field.text = self.selected_edge.b
+        self.edge_anim_field.text = self.selected_edge.anim or ''
     
-    def update_inspector_from_actor(self):
+    def update_edge_from_inspector(self, widget=None):
+        if self.selected_edge:
+            self.scene.walkpath.remove_edge(self.selected_edge.a, self.selected_edge.b)
+            self.scene.walkpath.add_edge(self.edge_a_field.text, self.edge_b_field.text,
+                                anim=self.edge_anim_field.text)
+
+    def update_inspector_from_point(self, widget=None):
+        self.point_identifier_field.text = self.selected_point
+        self.point_x_field.text = str(int(self.scene.walkpath.points[self.selected_point][0]))
+        self.point_y_field.text = str(int(self.scene.walkpath.points[self.selected_point][1]))
+    
+    def update_point_from_inspector(self, widget=None):
+        if self.selected_point:
+            self.scene.walkpath.remove_point(self.selected_point)
+            self.scene.walkpath.add_point(int(self.point_x_field.text), int(self.point_y_field.text), 
+                                          self.point_identifier_field.text)
+    
+    def update_point_identifier(self, widget=None):
+        old_identifier = self.selected_point
+        new_identifier = self.point_identifier_field.text
+        for edge in self.scene.walkpath.edges.viewvalues():
+            if edge.a == old_identifier:
+                edge.a = new_identifier
+            if edge.b == old_identifier:
+                edge.b = new_identifier
+        self.update_point_from_inspector()
+    
+    def update_inspector_from_actor(self, widget=None):
         self.actor_identifier_field.text = self.selected_actor.identifier
         self.actor_x_field.text = str(int(self.selected_actor.sprite.x))
         self.actor_y_field.text = str(int(self.selected_actor.sprite.y))
     
-    def update_actor_from_inspector(self):
+    def update_actor_from_inspector(self, widget=None):
         if self.selected_actor:
             self.selected_actor.identifier = self.actor_identifier_field.text
             self.selected_actor.sprite.x = int(self.actor_x_field.text)
@@ -151,7 +217,7 @@ class EditorView(object):
         def edge_finish(x, y):
             world_point = gamestate.mouse_to_canvas(x, y)
             self.point_2 = self.scene.walkpath.path_point_near_point(world_point)
-            if self.point_2:
+            if self.point_2 and self.point_1 != self.point_2:
                 self.set_selected_edge(self.scene.walkpath.add_edge(self.point_1, self.point_2))
             self.set_status_message('')
         self.click_actions.append(edge_setup)
@@ -253,6 +319,9 @@ class EditorView(object):
         if isinstance(self.dragging_object, actor.Actor) or self.dragging_object is None:
             self.set_selected_actor(self.dragging_object)
             self.scene.update_actor_info(self.dragging_object)
+        if self.dragging_point:
+            self.set_selected_point(self.dragging_point)
+        self.dragging_point = None
         self.dragging_object = None
     
     def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
