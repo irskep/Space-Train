@@ -71,10 +71,12 @@ class EditorView(object):
         self.actor_identifier_field = glydget.Entry('', on_change=self.update_actor_from_inspector)
         self.actor_x_field = glydget.Entry('', on_change=self.update_actor_from_inspector)
         self.actor_y_field = glydget.Entry('', on_change=self.update_actor_from_inspector)
+        self.actor_walkpoint_field = glydget.Entry('', on_change=self.update_actor_from_inspector)
         self.actor_inspector = glydget.Window("Actor Inspector", [
             glydget.HBox([glydget.Label('Identifier'), self.actor_identifier_field], True),
             glydget.HBox([glydget.Label('x'), self.actor_x_field], True),
             glydget.HBox([glydget.Label('y'), self.actor_y_field], True),
+            glydget.HBox([glydget.Label('Walkpath point'), self.actor_walkpoint_field], True),
         ])
         self.actor_inspector.move(2, gamestate.main_window.height-2)
         
@@ -226,6 +228,12 @@ class EditorView(object):
     
     def update_inspector_from_actor(self, widget=None):
         self.actor_identifier_field.text = self.selected_actor.identifier
+        if self.selected_actor.walkpath_point:
+            if self.scene.walkpath.points.has_key(self.selected_actor.walkpath_point):
+                self.actor_walkpoint_field.text = self.selected_actor.walkpath_point
+            else:
+                self.actor_walkpoint_field.text = ''
+                self.selected_actor.walkpath_point = None
         self.actor_x_field.text = str(int(self.selected_actor.sprite.x))
         self.actor_y_field.text = str(int(self.selected_actor.sprite.y))
     
@@ -234,6 +242,14 @@ class EditorView(object):
             del self.scene.actors[self.selected_actor.identifier]
             self.selected_actor.identifier = self.actor_identifier_field.text
             self.scene.actors[self.selected_actor.identifier] = self.selected_actor
+            
+            if self.actor_walkpoint_field.text:
+                if self.scene.walkpath.points.has_key(self.actor_walkpoint_field.text):
+                    self.selected_actor.walkpath_point = self.actor_walkpoint_field.text
+                    self.selected_actor.sprite.position = self.scene.walkpath.point[self.selected_actor.walkpath_point]
+                else:
+                    self.actor_walkpoint_field.text = ''
+                    self.selected_actor.walkpath_point = None
             self.selected_actor.sprite.x = int(self.actor_x_field.text)
             self.selected_actor.sprite.y = int(self.actor_y_field.text)
     
@@ -340,6 +356,11 @@ class EditorView(object):
                 return True
     
     def on_mouse_press(self, x, y, button, modifiers):
+        # hacky hack
+        for w in self.windows:
+            if w._hit(x, y):
+                return True
+        
         if modifiers & (pyglet.window.key.MOD_ALT | pyglet.window.key.MOD_OPTION):
             self.drag_start = (x, y)
             self.drag_anchor = self.scene.camera.position
@@ -378,9 +399,16 @@ class EditorView(object):
             self.scene.walkpath.points[self.dragging_point] = new_point
         elif self.dragging_cpoint:
             self.is_dragging_cpoint = True
-            self.dragging_cpoint.position = self.scene.camera.constrain_point(*new_point)
+            new_point = (min(max(new_point[0], 512), self.scene.env.width-512),
+                         min(max(new_point[1], 384), self.scene.env.height-384))
+            self.dragging_cpoint.position = new_point
     
     def on_mouse_release(self, x, y, button, modifiers):
+        # hacky hack
+        for w in self.windows:
+            if w._hit(x, y):
+                return True
+        
         self.is_dragging_camera = False
         self.is_dragging_object = False
         self.is_dragging_point = False
@@ -452,7 +480,7 @@ class EditorView(object):
         for point in self.scene.camera.points.viewvalues():
             p = point.position
             draw.rect(p[0]-5, p[1]-5, p[0]+5, p[1]+5)
-        p = self.dragging_point or self.selected_cpoint
+        p = self.dragging_cpoint or self.selected_cpoint
         if p:
             draw.rect_outline(p.position[0]-512, p.position[1]-384, p.position[0]+512, p.position[1]+384)
     
