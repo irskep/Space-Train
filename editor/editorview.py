@@ -15,7 +15,7 @@ class EditorView(object):
         self.is_dragging_object = False
         self.is_dragging_point = False
         self.is_dragging_cpoint = False
-        self.dragging_object = None
+        self.dragging_actor = None
         self.dragging_point = None
         self.dragging_cpoint = None
         self.selected_actor = None
@@ -116,6 +116,8 @@ class EditorView(object):
         self.status_label.text = message
         self.status_label.end_update()
     
+    
+    # Selection update crud
     def _selection_change_logic(self, attr_name, new_obj, inspector, obj_update, inspect_update):
         # All the complex logic here is just to deal with the fact that sometimes
         # the new or old value will be None, so sometimes the associated inspector
@@ -252,10 +254,20 @@ class EditorView(object):
         self.set_status_message("Click a point to delete it")
     
     def new_camera_point(self, button):
-        pass
+        self.set_status_message("Click to place a camera point")
+        def point_placer(x, y):
+            world_point = self.scene.camera.mouse_to_canvas(x, y)
+            self.set_selected_cpoint(self.scene.camera.add_point(*world_point))
+            self.set_status_message('')
+        self.click_actions.append(point_placer)
     
     def delete_camera_point(self, button):
-        pass
+        def point_deleter(x, y):
+            world_point = self.scene.camera.mouse_to_canvas(x, y)
+            self.scene.camera.remove_point(self.scene.camera.camera_point_near_point(world_point))
+            self.set_status_message('')
+        self.click_actions.append(point_deleter)
+        self.set_status_message("Click a camera point to delete it")
     
     def new_edge(self, button):
         self.set_status_message('Click the source point')
@@ -301,7 +313,7 @@ class EditorView(object):
     def actor_button_action(self, button):
         def actor_placer(x, y):
             world_point = self.scene.camera.mouse_to_canvas(x, y)
-            self.dragging_object = self.scene.new_actor(button.text, x=world_point[0], y=world_point[1])
+            self.dragging_actor = self.scene.new_actor(button.text, x=world_point[0], y=world_point[1])
             self.set_status_message('')
         self.click_actions.append(actor_placer)
         self.set_status_message("Click to place %s" % button.text)
@@ -338,11 +350,11 @@ class EditorView(object):
             if self.dragging_point is None:
                 self.dragging_cpoint = self.scene.camera.camera_point_near_point(world_point)
                 if self.dragging_cpoint is None:
-                    self.dragging_object = self.scene.actor_under_point(*world_point)
+                    self.dragging_actor = self.scene.actor_under_point(*world_point)
         
-        if self.dragging_object:
+        if self.dragging_actor:
             self.drag_start = (x, y)
-            self.drag_anchor = self.dragging_object.sprite.position
+            self.drag_anchor = self.dragging_actor.sprite.position
         elif self.dragging_point:
             self.drag_start = (x, y)
             self.drag_anchor = self.scene.walkpath.points[self.dragging_point]
@@ -355,36 +367,37 @@ class EditorView(object):
                      self.drag_anchor[1] - (self.drag_start[1] - y))
         if self.is_dragging_camera:
             self.scene.camera.set_position(*new_point)
-        elif self.dragging_object:
+        elif self.dragging_actor:
             self.is_dragging_object = True
-            self.dragging_object.sprite.position = new_point
+            self.dragging_actor.sprite.position = new_point
         elif self.dragging_point:
             self.is_dragging_point = True
             self.scene.walkpath.points[self.dragging_point] = new_point
         elif self.dragging_cpoint:
             self.is_dragging_cpoint = True
-            self.dragging_cpoint.position = new_point
+            self.dragging_cpoint.position = self.scene.camera.constrain_point(*new_point)
     
     def on_mouse_release(self, x, y, button, modifiers):
         self.is_dragging_camera = False
         self.is_dragging_object = False
         self.is_dragging_point = False
         if self.is_dragging_object:
-            self.scene.update_actor_info(self.dragging_object)
-        if isinstance(self.dragging_object, actor.Actor) or self.dragging_object is None:
-            self.set_selected_actor(self.dragging_object)
-            self.scene.update_actor_info(self.dragging_object)
+            self.scene.update_actor_info(self.dragging_actor)
+        if isinstance(self.dragging_actor, actor.Actor) or self.dragging_actor is None:
+            self.set_selected_actor(self.dragging_actor)
+            self.scene.update_actor_info(self.dragging_actor)
         if self.dragging_point:
             self.set_selected_point(self.dragging_point)
             self.dragging_point = None
         if self.dragging_cpoint:
             self.set_selected_cpoint(self.dragging_cpoint)
             self.dragging_cpoint = None
-        self.dragging_object = None
+        self.dragging_actor = None
     
     def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
         c = self.scene.camera
         c.set_position(c.position[0] - scroll_x*4, c.position[1] + scroll_y*4)
+        self.drag_start = (self.drag_start[0] - scroll_x*4, self.drag_start[1] - scroll_y*4)
     
     
     # Update/Draw
@@ -435,6 +448,9 @@ class EditorView(object):
         draw.set_color(1,0,1,1)
         for point in self.scene.camera.points.viewvalues():
             p = point.position
-            draw.rect_outline(p[0]-5, p[1]-5, p[0]+5, p[1]+5)
+            draw.rect(p[0]-5, p[1]-5, p[0]+5, p[1]+5)
+        p = self.dragging_point or self.selected_cpoint
+        if p:
+            draw.rect_outline(p.position[0]-512, p.position[1]-384, p.position[0]+512, p.position[1]+384)
     
 

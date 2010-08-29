@@ -22,15 +22,16 @@ class Camera(object):
     def points_dict(self):
         return {identifier: {'x': p.x, 'y': p.y} for identifier, p in self.points.viewitems()}
     
-    def set_target(self, x, y):
+    def constrain_point(self, x, y):
         x = min(max(x, self.min_bounds[0]), self.max_bounds[0])
         y = min(max(y, self.min_bounds[1]), self.max_bounds[1])
-        self.target = (x, y)
+        return (x, y)
+    
+    def set_target(self, x, y):
+        self.target = self.constrain_point(x, y)
     
     def set_position(self, x, y):
-        x = min(max(x, self.min_bounds[0]), self.max_bounds[0])
-        y = min(max(y, self.min_bounds[1]), self.max_bounds[1])
-        self.position = (x, y)
+        self.position = self.constrain_point(x, y)
         self.target = self.position
     
     def camera_point_near_point(self, mouse):
@@ -40,13 +41,21 @@ class Camera(object):
                 return point
         return None
     
-    def add_point(self, identifier, x, y):
-        x = min(max(x, self.min_bounds[0]), self.max_bounds[0])
-        y = min(max(y, self.min_bounds[1]), self.max_bounds[1])
-        self.points[identifier] = CameraPoint(identifier, (x, y))
+    def add_point(self, x, y, identifier=None):
+        if identifier is None:
+            next_identifier = 1
+            while self.points.has_key("camera_point_%d" % next_identifier):
+                next_identifier += 1
+            identifier = "camera_point_%d" % next_identifier
+        self.points[identifier] = CameraPoint(identifier, self.constrain_point(x, y))
         return self.points[identifier]
     
-    def remove_point(self, identifier):
+    def remove_point(self, point):
+        if hasattr(point, 'identifier'):
+            identifier = point.identifier
+        else:
+            # We were probably passed the identifier string
+            identifier= point
         try:
             del self.points[identifier]
         except KeyError:
@@ -62,9 +71,7 @@ class Camera(object):
         if y < ty - move_amt: y += move_amt
         if y > ty + move_amt: y -= move_amt
         if abs(y - ty) <= move_amt: y = ty
-        x = min(max(x, self.min_bounds[0]), self.max_bounds[0])
-        y = min(max(y, self.min_bounds[1]), self.max_bounds[1])
-        self.position = (x, y)
+        self.position = self.constrain_point(x, y)
     
     def apply(self):
         pyglet.gl.glPushMatrix()
