@@ -36,3 +36,6 @@ def init_scale():
     norm_theta = math.atan2(norm_h, norm_w)
     camera_min = (norm_w//2, norm_h//2)
     camera_max = (norm_w, norm_h)
+
+def scale():
+    pyglet.gl.glScalef(scale_factor,scale_factor,1)
