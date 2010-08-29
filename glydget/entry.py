@@ -34,7 +34,7 @@ class Entry(Widget):
         self._text = text
         self._active = False
         self._label = cached.Label(text = self._text)
-        doc = pyglet.text.document.UnformattedDocument(self._text or ' ')
+        doc = pyglet.text.document.UnformattedDocument(self._text or '')
         self._layout = pyglet.text.layout.IncrementalTextLayout(doc,1,1)
         self._caret = pyglet.text.caret.Caret(self._layout)
         Widget.__init__(self)
@@ -74,7 +74,7 @@ class Entry(Widget):
                                        batch=self._batch, group=self._fg_group,
                                        anchor_x='left', anchor_y='top')
         else:
-            doc = pyglet.text.document.UnformattedDocument(self._text or ' ')
+            doc = pyglet.text.document.UnformattedDocument(self._text or '')
             self._layout = pyglet.text.layout.IncrementalTextLayout(
                 doc, 1, 1, multiline=False, batch=self._batch, group=self._fg_group)
             self._layout.anchor_x = 'left'

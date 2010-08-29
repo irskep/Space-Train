@@ -243,15 +243,15 @@ class EditorView(object):
             self.selected_actor.identifier = self.actor_identifier_field.text
             self.scene.actors[self.selected_actor.identifier] = self.selected_actor
             
-            if self.actor_walkpoint_field.text:
-                if self.scene.walkpath.points.has_key(self.actor_walkpoint_field.text):
-                    self.selected_actor.walkpath_point = self.actor_walkpoint_field.text
-                    self.selected_actor.sprite.position = self.scene.walkpath.point[self.selected_actor.walkpath_point]
-                else:
-                    self.actor_walkpoint_field.text = ''
-                    self.selected_actor.walkpath_point = None
-            self.selected_actor.sprite.x = int(self.actor_x_field.text)
-            self.selected_actor.sprite.y = int(self.actor_y_field.text)
+            wp = self.actor_walkpoint_field.text
+            if wp and self.scene.walkpath.points.has_key(wp):
+                self.selected_actor.walkpath_point = wp
+                self.selected_actor.sprite.position = self.scene.walkpath.points[wp]
+            else:
+                self.actor_walkpoint_field.text = ''
+                self.selected_actor.walkpath_point = None
+                self.selected_actor.sprite.x = int(self.actor_x_field.text)
+                self.selected_actor.sprite.y = int(self.actor_y_field.text)
     
     
     # Buttons
