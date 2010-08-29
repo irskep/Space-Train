@@ -20,7 +20,7 @@ class Camera(object):
                        for identifier, d in points_dict.viewitems()}
     
     def points_dict(self):
-        return {identifier: {'x': p.x, 'y': p.y} for identifier, p in self.points.viewitems()}
+        return {identifier: {'x': p.position[0], 'y': p.position[1]} for identifier, p in self.points.viewitems()}
     
     def constrain_point(self, x, y):
         x = min(max(x, self.min_bounds[0]), self.max_bounds[0])
