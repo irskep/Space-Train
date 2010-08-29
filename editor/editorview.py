@@ -45,7 +45,7 @@ class EditorView(object):
         gamestate.main_window.push_handlers(self.actor_pallet)
         
         self.edge_pallet = glydget.Window("Edge Tools", [
-            glydget.Button('Select edge', self.select_edge),
+            glydget.Button('Select edge', self.new_edge),
             glydget.Button('New point', self.new_point),
             glydget.Button('New edge', self.new_edge),
             glydget.Button('Delete point', self.delete_point),
@@ -129,6 +129,14 @@ class EditorView(object):
             self.set_status_message('')
         self.click_actions.append(point_placer)
     
+    def delete_point(self, button):
+        def point_deleter(x, y):
+            world_point = gamestate.mouse_to_canvas(x, y)
+            self.scene.walkpath.remove_point(self.scene.walkpath.path_point_near_point(world_point))
+            self.set_status_message('')
+        self.click_actions.append(point_deleter)
+        self.set_status_message("Click a point to delete it")
+    
     def new_edge(self, button):
         self.set_status_message('Click the source point')
         def edge_setup(x, y):
@@ -149,19 +157,26 @@ class EditorView(object):
         self.click_actions.append(edge_setup)
         self.click_actions.append(edge_finish)
     
-    def delete_point(self, button):
-        def point_deleter(x, y):
-            world_point = gamestate.mouse_to_canvas(x, y)
-            self.scene.walkpath.remove_point(self.scene.walkpath.path_point_near_point(world_point))
-            self.set_status_message('')
-        self.click_actions.append(point_deleter)
-        self.set_status_message("Click a point to delete it")
-    
     def delete_edge(self, button):
-        pass
-    
-    def select_edge(self, button):
-        pass
+        self.set_status_message('Click the source point')
+        def edge_setup(x, y):
+            world_point = gamestate.mouse_to_canvas(x, y)
+            self.point_1 = self.scene.walkpath.path_point_near_point(world_point)
+            if self.point_1:
+                self.set_status_message('Click the destination point')
+            else:
+                # empty the queue, never mind
+                self.click_actions = collections.deque()
+                self.set_status_message('')
+        def edge_finish(x, y):
+            world_point = gamestate.mouse_to_canvas(x, y)
+            self.point_2 = self.scene.walkpath.path_point_near_point(world_point)
+            if self.point_2:
+                self.set_selected_edge(None)
+                self.scene.walkpath.remove_edge(self.point_1, self.point_2)
+            self.set_status_message('')
+        self.click_actions.append(edge_setup)
+        self.click_actions.append(edge_finish)
     
     def actor_button_action(self, button):
         def actor_placer(x, y):

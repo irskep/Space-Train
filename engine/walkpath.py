@@ -56,7 +56,11 @@ class WalkPath(object):
         del self.points[identifier]
     
     def remove_edge(self, p1, p2):
-        del self.edges[(p1, p2)]
+        if self.edges.has_key((p1, p2)):
+            e = self.edges[(p1, p2)]
+            if e.counterpart:
+                e.counterpart.counterpart = None
+            del self.edges[(p1, p2)]
     
     def path_point_near_point(self, mouse):
         close = lambda a, b: abs(a-b) <= 5
