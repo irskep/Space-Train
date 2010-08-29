@@ -17,6 +17,7 @@ class EditorView(object):
         self.is_dragging_cpoint = False
         self.dragging_object = None
         self.dragging_point = None
+        self.dragging_cpoint = None
         self.selected_actor = None
         self.selected_point = None
         self.selected_cpoint = None
@@ -120,13 +121,13 @@ class EditorView(object):
         # the new or old value will be None, so sometimes the associated inspector
         # will be hidden and therefore its fields will be inaccessible.
         old_obj = getattr(self, attr_name)
-        if new_obj is None and old_obj is not None:
+        if old_obj is not None and new_obj is None:
             obj_update()
             setattr(self, attr_name, new_obj)
             inspector.hide()
             gamestate.main_window.pop_handlers()
         else:
-            if new_obj is not None and old_obj is None:
+            if old_obj is None and new_obj is not None:
                 inspector.show()
                 setattr(self, attr_name, new_obj)
                 inspect_update()
@@ -141,7 +142,7 @@ class EditorView(object):
         if recurse and new_actor is not None:
             self.set_selected_point(None, False)
             self.set_selected_edge(None, False)
-            self.set_selected_camera_point(None, False)
+            self.set_selected_cpoint(None, False)
         self._selection_change_logic('selected_actor', new_actor, 
                                      self.actor_inspector, 
                                      self.update_actor_from_inspector,
@@ -151,7 +152,7 @@ class EditorView(object):
         if recurse and new_point is not None:
             self.set_selected_actor(None, False)
             self.set_selected_edge(None, False)
-            self.set_selected_camera_point(None, False)
+            self.set_selected_cpoint(None, False)
         self._selection_change_logic('selected_point', new_point, 
                                      self.point_inspector, 
                                      self.update_point_from_inspector,
@@ -161,18 +162,18 @@ class EditorView(object):
         if recurse and new_edge is not None:
             self.set_selected_point(None, False)
             self.set_selected_actor(None, False)
-            self.set_selected_camera_point(None, False)
+            self.set_selected_cpoint(None, False)
         self._selection_change_logic('selected_edge', new_edge, 
                                      self.edge_inspector, 
                                      self.update_edge_from_inspector,
                                      self.update_inspector_from_edge)
     
-    def set_selected_camera_point(self, new_point, recurse=True):
+    def set_selected_cpoint(self, new_point, recurse=True):
         if recurse and new_point is not None:
             self.set_selected_actor(None, False)
             self.set_selected_point(None, False)
             self.set_selected_edge(None, False)
-        self._selection_change_logic('selected_edge', new_point, 
+        self._selection_change_logic('selected_cpoint', new_point, 
                                      self.cpoint_inspector, 
                                      self.update_camera_point_from_inspector,
                                      self.update_inspector_from_camera_point)
@@ -187,7 +188,7 @@ class EditorView(object):
             self.scene.walkpath.remove_edge(self.selected_edge.a, self.selected_edge.b)
             self.scene.walkpath.add_edge(self.edge_a_field.text, self.edge_b_field.text,
                                 anim=self.edge_anim_field.text)
-
+    
     def update_inspector_from_point(self, widget=None):
         self.point_identifier_field.text = self.selected_point
         self.point_x_field.text = str(int(self.scene.walkpath.points[self.selected_point][0]))
@@ -210,9 +211,9 @@ class EditorView(object):
         self.update_point_from_inspector()
     
     def update_inspector_from_camera_point(self, widget=None):
-        self.cpoint_identifier_field.text = self.selected_point.identifier
-        self.cpoint_x_field.text = str(int(self.selected_point.position[0]))
-        self.cpoint_y_field.text = str(int(self.selected_point.position[1]))
+        self.cpoint_identifier_field.text = self.selected_cpoint.identifier
+        self.cpoint_x_field.text = str(int(self.selected_cpoint.position[0]))
+        self.cpoint_y_field.text = str(int(self.selected_cpoint.position[1]))
     
     def update_camera_point_from_inspector(self, widget=None):
         if self.selected_cpoint:
@@ -335,7 +336,9 @@ class EditorView(object):
             world_point = self.scene.camera.mouse_to_canvas(x, y)
             self.dragging_point = self.scene.walkpath.path_point_near_point(world_point)
             if self.dragging_point is None:
-                self.dragging_object = self.scene.actor_under_point(*world_point)
+                self.dragging_cpoint = self.scene.camera.camera_point_near_point(world_point)
+                if self.dragging_cpoint is None:
+                    self.dragging_object = self.scene.actor_under_point(*world_point)
         
         if self.dragging_object:
             self.drag_start = (x, y)
@@ -343,37 +346,40 @@ class EditorView(object):
         elif self.dragging_point:
             self.drag_start = (x, y)
             self.drag_anchor = self.scene.walkpath.points[self.dragging_point]
+        elif self.dragging_cpoint:
+            self.drag_start = (x, y)
+            self.drag_anchor = self.dragging_cpoint.position
     
     def on_mouse_drag(self, x, y, dx, dy, button, modifiers):
+        new_point = (self.drag_anchor[0] - (self.drag_start[0] - x),
+                     self.drag_anchor[1] - (self.drag_start[1] - y))
         if self.is_dragging_camera:
-            self.scene.camera.set_position(self.drag_anchor[0] + self.drag_start[0] - x,
-                                           self.drag_anchor[1] + self.drag_start[1] - y)
+            self.scene.camera.set_position(*new_point)
         elif self.dragging_object:
             self.is_dragging_object = True
-            new_point = (self.drag_anchor[0] - (self.drag_start[0] - x),
-                         self.drag_anchor[1] - (self.drag_start[1] - y))
             self.dragging_object.sprite.position = new_point
         elif self.dragging_point:
             self.is_dragging_point = True
-            new_point = (self.drag_anchor[0] - (self.drag_start[0] - x),
-                         self.drag_anchor[1] - (self.drag_start[1] - y))
             self.scene.walkpath.points[self.dragging_point] = new_point
+        elif self.dragging_cpoint:
+            self.is_dragging_cpoint = True
+            self.dragging_cpoint.position = new_point
     
     def on_mouse_release(self, x, y, button, modifiers):
-        if self.is_dragging_camera:
-            self.is_dragging_camera = False
-        elif self.is_dragging_object:
-            self.is_dragging_object = False
+        self.is_dragging_camera = False
+        self.is_dragging_object = False
+        self.is_dragging_point = False
+        if self.is_dragging_object:
             self.scene.update_actor_info(self.dragging_object)
-        elif self.is_dragging_point:
-            self.is_dragging_point = False
-            self.dragging_point = None
         if isinstance(self.dragging_object, actor.Actor) or self.dragging_object is None:
             self.set_selected_actor(self.dragging_object)
             self.scene.update_actor_info(self.dragging_object)
         if self.dragging_point:
             self.set_selected_point(self.dragging_point)
-        self.dragging_point = None
+            self.dragging_point = None
+        if self.dragging_cpoint:
+            self.set_selected_cpoint(self.dragging_cpoint)
+            self.dragging_cpoint = None
         self.dragging_object = None
     
     def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
