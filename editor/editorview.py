@@ -231,7 +231,9 @@ class EditorView(object):
     
     def update_actor_from_inspector(self, widget=None):
         if self.selected_actor:
+            del self.scene.actors[self.selected_actor.identifier]
             self.selected_actor.identifier = self.actor_identifier_field.text
+            self.scene.actors[self.selected_actor.identifier] = self.selected_actor
             self.selected_actor.sprite.x = int(self.actor_x_field.text)
             self.selected_actor.sprite.y = int(self.actor_y_field.text)
     

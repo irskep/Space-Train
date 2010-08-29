@@ -41,6 +41,9 @@ class Scene(object):
             for attr in ['x', 'y', 'scale', 'rotation']:
                 if attrs.has_key(attr):
                     setattr(new_actor.sprite, attr, attrs[attr])
+            if attrs.has_key('walkpath_point'):
+                new_actor.walkpath_point = attrs['walkpath_point']
+                new_actor.position = self.walkpath.points[new_actor.walkpath_point]
     
     def new_actor(self, actor_name, identifier=None, **kwargs):
         if identifier is None:

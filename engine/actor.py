@@ -15,6 +15,7 @@ class Actor(object):
         self.actions = collections.deque()
         self.blocking_actions = 0
         self.identifier = identifier or make_identifier.next()
+        self.walkpath_point = None
         
         self.init_info()
         self.current_state = Actor.info[self.name]['start_state']
