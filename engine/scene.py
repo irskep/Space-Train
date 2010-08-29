@@ -51,6 +51,8 @@ class Scene(object):
         return new_actor
     
     def update_actor_info(self, act):
+        if act is None:
+            return
         if self.info['actors'].has_key(act.identifier):
             self.info['actors'][act.identifier]['x'] = int(act.sprite.x)
             self.info['actors'][act.identifier]['y'] = int(act.sprite.y)

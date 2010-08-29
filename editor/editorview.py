@@ -1,4 +1,4 @@
-import os, pyglet, glydget
+import os, pyglet, glydget, collections
 
 from engine import scene, gamestate, settings, actor
 
@@ -17,7 +17,8 @@ class EditorView(object):
         self.dragging_object = None
         self.dragging_point = None
         self.selected_actor = None
-        self.actor_name = None
+        
+        self.click_actions = collections.deque()
         
         self.status_label = pyglet.text.Label('', x=gamestate.main_window.width, 
                                               y=gamestate.main_window.height, 
@@ -35,8 +36,19 @@ class EditorView(object):
             for actor_name in os.listdir(os.path.join(settings.resources_path, 'actors'))
         ])
         self.actor_pallet.show()
-        self.actor_pallet.move(gamestate.main_window.width-2 - self.actor_pallet.width, 
-                               gamestate.main_window.height-2)
+        self.actor_pallet.move(gamestate.main_window.width - 2 - self.actor_pallet.width, 
+                               gamestate.main_window.height - 22)
+        gamestate.main_window.push_handlers(self.actor_pallet)
+        
+        self.edge_pallet = glydget.Window("Edge Tools", [
+            glydget.Button('New point', self.new_point),
+            glydget.Button('New edge', self.new_point),
+            glydget.Button('Delete point', self.new_point),
+            glydget.Button('Delete edge', self.new_point),
+        ])
+        self.edge_pallet.show()
+        self.edge_pallet.move(gamestate.main_window.width-2 - self.edge_pallet.width, 
+                              self.actor_pallet.y - self.actor_pallet.height - 2)
         gamestate.main_window.push_handlers(self.actor_pallet)
         
         self.actor_identifier_field = glydget.Entry('', on_change=self.update_actor_from_inspector)
@@ -49,7 +61,7 @@ class EditorView(object):
         ])
         self.actor_inspector.move(2, gamestate.main_window.height-2)
         
-        self.windows = [self.actor_pallet, self.actor_inspector]
+        self.windows = [self.actor_pallet, self.edge_pallet, self.actor_inspector]
     
     def set_selected_actor(self, new_actor):
         # All the complex logic here is just to deal with the fact that sometimes
@@ -84,13 +96,32 @@ class EditorView(object):
             self.selected_actor.sprite.y = int(self.actor_y_field.text)
     
     
-    # Events
+    # Buttons
+    def new_point(self, button):
+        pass
+    
+    def new_edge(self, button):
+        pass
+    
+    def delete_point(self, button):
+        pass
+    
+    def delete_edge(self, button):
+        pass
+    
     def actor_button_action(self, button):
-        self.actor_name = button.text
+        def actor_placer(x, y):
+            world_point = gamestate.mouse_to_canvas(x, y)
+            self.dragging_object = self.scene.new_actor(button.text, x=world_point[0], y=world_point[1])
+            self.status_label.begin_update()
+            self.status_label.text = ""
+            self.status_label.end_update()
+        self.click_actions.append(actor_placer)
         self.status_label.begin_update()
-        self.status_label.text = "Click to place %s" % self.actor_name
+        self.status_label.text = "Click to place %s" % button.text
         self.status_label.end_update()
     
+    # Other events
     def check_camera_keys(self):
         if gamestate.keys[pyglet.window.key.LEFT]:
             gamestate.set_camera_target(gamestate.camera_target_x-10, gamestate.camera_target_y)
@@ -108,14 +139,14 @@ class EditorView(object):
                 return True
     
     def on_mouse_press(self, x, y, button, modifiers):
-        world_point = gamestate.mouse_to_canvas(x, y)
         if modifiers & (pyglet.window.key.MOD_ALT | pyglet.window.key.MOD_OPTION):
             self.drag_start = (x, y)
             self.drag_anchor = (gamestate.camera_x, gamestate.camera_y)
             self.is_dragging_camera = True
-        elif self.actor_name:
-            self.dragging_object = self.scene.new_actor(self.actor_name, x=world_point[0], y=world_point[1])
+        elif len(self.click_actions) > 0:
+            self.click_actions.popleft()(x, y)
         else:
+            world_point = gamestate.mouse_to_canvas(x, y)
             self.dragging_point = self.scene.walkpath.path_point_near_point(world_point)
             if self.dragging_point is None:
                 self.dragging_object = self.scene.actor_under_point(*world_point)
@@ -155,12 +186,7 @@ class EditorView(object):
             self.dragging_point = None
         if isinstance(self.dragging_object, actor.Actor) or self.dragging_object is None:
             self.set_selected_actor(self.dragging_object)
-        if self.actor_name:
-            self.actor_name = None
             self.scene.update_actor_info(self.dragging_object)
-            self.status_label.begin_update()
-            self.status_label.text = ''
-            self.status_label.end_update()
         self.dragging_object = None
     
     def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
