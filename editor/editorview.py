@@ -17,6 +17,8 @@ class EditorView(object):
         self.dragging_object = None
         self.dragging_point = None
         self.selected_actor = None
+        self.selected_point = None
+        self.selected_edge = None
         self.point_1 = None
         self.point_2 = None
         
@@ -66,26 +68,40 @@ class EditorView(object):
         
         self.windows = [self.actor_pallet, self.edge_pallet, self.actor_inspector]
     
-    def set_selected_actor(self, new_actor):
+    
+    def _selection_change_logic(self, attr_name, new_obj, inspector, obj_update, inspect_update):
         # All the complex logic here is just to deal with the fact that sometimes
         # the new or old value will be None, so sometimes the associated inspector
         # will be hidden and therefore its fields will be inaccessible.
-        if new_actor is None and self.selected_actor is not None:
-            self.update_actor_from_inspector()
-            self.selected_actor = new_actor
-            self.actor_inspector.hide()
+        old_obj = getattr(self, attr_name)
+        if new_obj is None and old_obj is not None:
+            obj_update()
+            setattr(self, attr_name, new_obj)
+            inspector.hide()
             gamestate.main_window.pop_handlers()
         else:
-            if new_actor is not None and self.selected_actor is None:
-                self.actor_inspector.show()
-                self.selected_actor = new_actor
-                self.update_inspector_from_actor()
-                gamestate.main_window.push_handlers(self.actor_inspector)
-            elif new_actor != self.selected_actor:
-                self.update_actor_from_inspector()
-            if self.selected_actor:
-                self.selected_actor = new_actor
-                self.update_inspector_from_actor()
+            if new_obj is not None and old_obj is None:
+                inspector.show()
+                setattr(self, attr_name, new_obj)
+                inspect_update()
+                gamestate.main_window.push_handlers(inspector)
+            elif new_obj != old_obj:
+                obj_update()
+            if old_obj:    
+                setattr(self, attr_name, new_obj)
+                inspect_update()
+    
+    def set_selected_actor(self, new_actor):
+        self._selection_change_logic('selected_actor', new_actor, 
+                                     self.actor_inspector, 
+                                     self.update_actor_from_inspector,
+                                     self.update_inspector_from_actor)
+    
+    def set_selected_point(self, new_point):
+        pass
+    
+    def set_selected_edge(self, new_edge):
+        pass
     
     def set_status_message(self, message=''):
         self.status_label.begin_update()
@@ -106,15 +122,32 @@ class EditorView(object):
     
     # Buttons
     def new_point(self, button):
+        self.set_status_message("Click to place a point")
         def point_placer(x, y):
             world_point = gamestate.mouse_to_canvas(x, y)
-            self.scene.walkpath.add_point(*world_point)
+            self.set_selected_point(self.scene.walkpath.add_point(*world_point))
             self.set_status_message('')
         self.click_actions.append(point_placer)
-        self.set_status_message("Click to place a point")
     
     def new_edge(self, button):
-        pass
+        self.set_status_message('Click the source point')
+        def edge_setup(x, y):
+            world_point = gamestate.mouse_to_canvas(x, y)
+            self.point_1 = self.scene.walkpath.path_point_near_point(world_point)
+            if self.point_1:
+                self.set_status_message('Click the destination point')
+            else:
+                # empty the queue, never mind
+                self.click_actions = collections.deque()
+                self.set_status_message('')
+        def edge_finish(x, y):
+            world_point = gamestate.mouse_to_canvas(x, y)
+            self.point_2 = self.scene.walkpath.path_point_near_point(world_point)
+            if self.point_2:
+                self.set_selected_edge(self.scene.walkpath.add_edge(self.point_1, self.point_2))
+            self.set_status_message('')
+        self.click_actions.append(edge_setup)
+        self.click_actions.append(edge_finish)
     
     def delete_point(self, button):
         def point_deleter(x, y):
@@ -137,6 +170,7 @@ class EditorView(object):
             self.set_status_message('')
         self.click_actions.append(actor_placer)
         self.set_status_message("Click to place %s" % button.text)
+    
     
     # Other events
     def check_camera_keys(self):
