@@ -35,12 +35,15 @@ class WalkPath(object):
                 'edges': [edge.dict_repr() for edge in self.edges.viewvalues()]}
     
     def add_point(self, x, y, identifier=None):
+        if self.points.has_key(identifier):
+            return self.points[identifier]
         if identifier is None:
             next_identifier = 1
             while self.points.has_key("point_%d" % next_identifier):
                 next_identifier += 1
             identifier = "point_%d" % next_identifier
         self.points[identifier] = (x, y)
+        return identifier
     
     def add_edge(self, p1, p2, *args, **kwargs):
         if self.edges.has_key((p1, p2)):

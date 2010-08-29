@@ -48,8 +48,8 @@ class EditorView(object):
         gamestate.main_window.push_handlers(self.actor_pallet)
         
         self.edge_pallet = glydget.Window("Edge Tools", [
-            glydget.Button('Select edge', self.new_edge),
-            glydget.Button('New point', self.new_point),
+            glydget.Button('Select edge (e)', self.new_edge),
+            glydget.Button('New point (p)', self.new_point),
             glydget.Button('New edge', self.new_edge),
             glydget.Button('Delete point', self.delete_point),
             glydget.Button('Delete edge', self.delete_edge),
@@ -80,13 +80,14 @@ class EditorView(object):
         ])
         self.actor_inspector.move(2, gamestate.main_window.height-2)
         
-        self.point_identifier_field = glydget.Entry('', on_change=self.update_point_identifier)
+        self.point_identifier_field = glydget.Entry('', on_change=self.update_point_from_inspector)
         self.point_x_field = glydget.Entry('', on_change=self.update_point_from_inspector)
         self.point_y_field = glydget.Entry('', on_change=self.update_point_from_inspector)
         self.point_inspector = glydget.Window("Point Inspector", [
             glydget.HBox([glydget.Label('Identifier'), self.point_identifier_field], True),
             glydget.HBox([glydget.Label('x'), self.point_x_field], True),
             glydget.HBox([glydget.Label('y'), self.point_y_field], True),
+            glydget.Button('New edge out (o)', self.new_edge_from_point),
         ])
         self.point_inspector.move(2, gamestate.main_window.height-2)
         
@@ -95,7 +96,8 @@ class EditorView(object):
         self.edge_anim_field = glydget.Entry('', on_change=self.update_edge_from_inspector)
         self.edge_inspector = glydget.Window("Edge Inspector", [
             glydget.HBox([glydget.Label('a'), self.edge_a_field], True),
-            glydget.HBox([glydget.Label('a'), self.edge_b_field], True),
+            glydget.HBox([glydget.Label('b'), self.edge_b_field], True),
+            glydget.Button('Subdivide (d)', self.subdivide_edge),
         ])
         self.edge_inspector.move(2, gamestate.main_window.height-2)
         
@@ -200,19 +202,17 @@ class EditorView(object):
     
     def update_point_from_inspector(self, widget=None):
         if self.selected_point:
+            old_identifier = self.selected_point
+            new_identifier = self.point_identifier_field.text
+            if old_identifier != new_identifier:
+                for edge in self.scene.walkpath.edges.viewvalues():
+                    if edge.a == old_identifier:
+                        edge.a = new_identifier
+                    if edge.b == old_identifier:
+                        edge.b = new_identifier
             self.scene.walkpath.remove_point(self.selected_point)
             self.scene.walkpath.add_point(int(self.point_x_field.text), int(self.point_y_field.text), 
                                           self.point_identifier_field.text)
-    
-    def update_point_identifier(self, widget=None):
-        old_identifier = self.selected_point
-        new_identifier = self.point_identifier_field.text
-        for edge in self.scene.walkpath.edges.viewvalues():
-            if edge.a == old_identifier:
-                edge.a = new_identifier
-            if edge.b == old_identifier:
-                edge.b = new_identifier
-        self.update_point_from_inspector()
     
     def update_inspector_from_camera_point(self, widget=None):
         self.cpoint_identifier_field.text = self.selected_cpoint.identifier
@@ -255,7 +255,7 @@ class EditorView(object):
     
     
     # Buttons
-    def new_point(self, button):
+    def new_point(self, button=None):
         self.set_status_message("Click to place a point")
         def point_placer(x, y):
             world_point = self.scene.camera.mouse_to_canvas(x, y)
@@ -263,7 +263,7 @@ class EditorView(object):
             self.set_status_message('')
         self.click_actions.append(point_placer)
     
-    def delete_point(self, button):
+    def delete_point(self, button=None):
         def point_deleter(x, y):
             world_point = self.scene.camera.mouse_to_canvas(x, y)
             self.scene.walkpath.remove_point(self.scene.walkpath.path_point_near_point(world_point))
@@ -271,7 +271,20 @@ class EditorView(object):
         self.click_actions.append(point_deleter)
         self.set_status_message("Click a point to delete it")
     
-    def new_camera_point(self, button):
+    def new_edge_from_point(self, button=None):
+        if not self.selected_point:
+            return
+        self.point_1 = self.selected_point
+        def edge_finish(x, y):
+            world_point = self.scene.camera.mouse_to_canvas(x, y)
+            self.point_2 = self.scene.walkpath.add_point(*world_point)
+            if self.point_2 and self.point_1 != self.point_2:
+                self.set_selected_edge(self.scene.walkpath.add_edge(self.point_1, self.point_2))
+            self.set_status_message('')
+        self.set_status_message('Click to place the destination point')
+        self.click_actions.append(edge_finish)
+    
+    def new_camera_point(self, button=None):
         self.set_status_message("Click to place a camera point")
         def point_placer(x, y):
             world_point = self.scene.camera.mouse_to_canvas(x, y)
@@ -279,7 +292,7 @@ class EditorView(object):
             self.set_status_message('')
         self.click_actions.append(point_placer)
     
-    def delete_camera_point(self, button):
+    def delete_camera_point(self, button=None):
         def point_deleter(x, y):
             world_point = self.scene.camera.mouse_to_canvas(x, y)
             self.scene.camera.remove_point(self.scene.camera.camera_point_near_point(world_point))
@@ -287,7 +300,7 @@ class EditorView(object):
         self.click_actions.append(point_deleter)
         self.set_status_message("Click a camera point to delete it")
     
-    def new_edge(self, button):
+    def new_edge(self, button=None):
         self.set_status_message('Click the source point')
         def edge_setup(x, y):
             world_point = self.scene.camera.mouse_to_canvas(x, y)
@@ -307,7 +320,7 @@ class EditorView(object):
         self.click_actions.append(edge_setup)
         self.click_actions.append(edge_finish)
     
-    def delete_edge(self, button):
+    def delete_edge(self, button=None):
         self.set_status_message('Click the source point')
         def edge_setup(x, y):
             world_point = self.scene.camera.mouse_to_canvas(x, y)
@@ -327,6 +340,20 @@ class EditorView(object):
             self.set_status_message('')
         self.click_actions.append(edge_setup)
         self.click_actions.append(edge_finish)
+    
+    def subdivide_edge(self, button=None):
+        if not self.selected_edge:
+            return
+        p1 = self.scene.walkpath.points[self.selected_edge.a]
+        p2 = self.scene.walkpath.points[self.selected_edge.b]
+        p1name = self.selected_edge.a
+        p2name = self.selected_edge.b
+        midpoint = self.scene.walkpath.add_point((p1[0] + p2[0])/2, (p1[1] + p2[1])/2)
+        self.selected_edge.b = midpoint
+        new_edge = self.scene.walkpath.add_edge(midpoint, p2name, anim=self.selected_edge.anim)
+        if self.selected_edge.counterpart:
+            self.selected_edge.counterpart.a = midpoint
+            new_cp = self.scene.walkpath.add_edge(p2name, midpoint, anim=self.selected_edge.counterpart.anim)
     
     def actor_button_action(self, button):
         def actor_placer(x, y):
@@ -354,6 +381,15 @@ class EditorView(object):
             if symbol == pyglet.window.key.S:
                 self.scene.save_info()
                 return True
+        else:
+            actions = {
+                pyglet.window.key.E: self.new_edge,
+                pyglet.window.key.P: self.new_point,
+                pyglet.window.key.D: self.subdivide_edge,
+                pyglet.window.key.O: self.new_edge_from_point,
+            }
+            if actions.has_key(symbol):
+                actions[symbol]()
     
     def on_mouse_press(self, x, y, button, modifiers):
         # hacky hack
@@ -397,6 +433,9 @@ class EditorView(object):
         elif self.dragging_point:
             self.is_dragging_point = True
             self.scene.walkpath.points[self.dragging_point] = new_point
+            for actor in self.scene.actors.viewvalues():
+                if actor.walkpath_point == self.dragging_point:
+                    actor.sprite.position = new_point
         elif self.dragging_cpoint:
             self.is_dragging_cpoint = True
             new_point = (min(max(new_point[0], 512), self.scene.env.width-512),
@@ -404,7 +443,7 @@ class EditorView(object):
             self.dragging_cpoint.position = new_point
     
     def on_mouse_release(self, x, y, button, modifiers):
-        # hacky hack
+        # hacky hack because glydget doesn't handle mouse events properly >:-(
         for w in self.windows:
             if w._hit(x, y):
                 return True
