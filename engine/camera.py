@@ -9,17 +9,17 @@ class CameraPoint(object):
     
 
 class Camera(object):
-    def __init__(self, min_bounds=None, max_bounds=None, speed=100.0, points_dict=None):
+    def __init__(self, min_bounds=None, max_bounds=None, speed=100.0, dict_repr=None):
         self.min_bounds = min_bounds or gamestate.camera_min
         self.max_bounds = max_bounds or gamestate.camera_max
         self.speed = speed
         self.position = self.min_bounds
         self.target = self.position
-        points_dict = points_dict or {}
+        dict_repr = dict_repr or {}
         self.points = {identifier: CameraPoint(identifier, (d['x'], d['y'])) \
-                       for identifier, d in points_dict.viewitems()}
+                       for identifier, d in dict_repr.viewitems()}
     
-    def points_dict(self):
+    def dict_repr(self):
         return {identifier: {'x': p.position[0], 'y': p.position[1]} for identifier, p in self.points.viewitems()}
     
     def constrain_point(self, x, y):

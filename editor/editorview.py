@@ -228,12 +228,12 @@ class EditorView(object):
     
     def update_inspector_from_actor(self, widget=None):
         self.actor_identifier_field.text = self.selected_actor.identifier
-        if self.selected_actor.walkpath_point:
-            if self.scene.walkpath.points.has_key(self.selected_actor.walkpath_point):
-                self.actor_walkpoint_field.text = self.selected_actor.walkpath_point
-            else:
-                self.actor_walkpoint_field.text = ''
-                self.selected_actor.walkpath_point = None
+        wp = self.selected_actor.walkpath_point
+        if wp and self.scene.walkpath.points.has_key(wp):
+            self.actor_walkpoint_field.text = wp
+        else:
+            self.actor_walkpoint_field.text = ''
+            self.selected_actor.walkpath_point = None
         self.actor_x_field.text = str(int(self.selected_actor.sprite.x))
         self.actor_y_field.text = str(int(self.selected_actor.sprite.y))
     
@@ -391,7 +391,7 @@ class EditorView(object):
         if self.is_dragging_camera:
             self.scene.camera.set_position(self.drag_anchor[0] + (self.drag_start[0] - x),
                                            self.drag_anchor[1] + (self.drag_start[1] - y))
-        elif self.dragging_actor:
+        elif self.dragging_actor and self.dragging_actor.walkpath_point is None:
             self.is_dragging_object = True
             self.dragging_actor.sprite.position = new_point
         elif self.dragging_point:
@@ -412,11 +412,8 @@ class EditorView(object):
         self.is_dragging_camera = False
         self.is_dragging_object = False
         self.is_dragging_point = False
-        if self.is_dragging_object:
-            self.scene.update_actor_info(self.dragging_actor)
         if isinstance(self.dragging_actor, actor.Actor) or self.dragging_actor is None:
             self.set_selected_actor(self.dragging_actor)
-            self.scene.update_actor_info(self.dragging_actor)
         if self.dragging_point:
             self.set_selected_point(self.dragging_point)
             self.dragging_point = None

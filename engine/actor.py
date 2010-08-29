@@ -25,6 +25,15 @@ class Actor(object):
         self.sprite = pyglet.sprite.Sprite(Actor.images[self.name][self.current_state], 
                                            x=x, y=y, batch=batch)
     
+    def dict_repr(self):
+        dict_repr = {'name': self.name}
+        if self.walkpath_point:
+            dict_repr['walkpath_point'] = self.walkpath_point
+        else:
+            dict_repr['x'] = int(self.sprite.x)
+            dict_repr['y'] = int(self.sprite.y)
+        return dict_repr
+    
     def init_info(self):
         if Actor.info == None or Actor.images == None:
             Actor.info = {}

@@ -1,14 +1,19 @@
 {
     "environment": "test", 
+    "camera_points": {
+        "start": {
+            "y": 384, 
+            "x": 512
+        }
+    }, 
     "actors": {
         "another_fist_1": {
-            "y": 184, 
-            "x": 682, 
+            "y": 301, 
+            "x": 708, 
             "name": "another_fist"
         }, 
         "main": {
-            "y": 376, 
-            "x": 477, 
+            "walkpath_point": "default_1", 
             "name": "fist"
         }
     }, 
@@ -35,11 +40,5 @@
                 "b": "default_2"
             }
         ]
-    },
-    "camera_points": {
-        "start": {
-            "x": 512,
-            "y": 384
-        }
     }
 }

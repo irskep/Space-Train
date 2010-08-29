@@ -17,7 +17,7 @@ class Scene(object):
         self.environment_name = self.info['environment']
         self.env = environment.Environment(self.environment_name)
         self.walkpath = walkpath.WalkPath(dict_repr = self.info['walkpath'])
-        self.camera = camera.Camera(points_dict=self.info['camera_points'])
+        self.camera = camera.Camera(dict_repr=self.info['camera_points'])
         
         if gamestate.scripts_enabled:
             self.module = importlib.import_module(name)
@@ -43,7 +43,13 @@ class Scene(object):
                     setattr(new_actor.sprite, attr, attrs[attr])
             if attrs.has_key('walkpath_point'):
                 new_actor.walkpath_point = attrs['walkpath_point']
-                new_actor.position = self.walkpath.points[new_actor.walkpath_point]
+                new_actor.sprite.position = self.walkpath.points[new_actor.walkpath_point]
+    
+    def dict_repr(self):
+        self.info['actors'] = {i: act.dict_repr() for i, act in self.actors.viewitems()}
+        self.info['walkpath'] = self.walkpath.dict_repr()
+        self.info['camera_points'] = self.camera.dict_repr()
+        return self.info
     
     def new_actor(self, actor_name, identifier=None, **kwargs):
         if identifier is None:
@@ -55,26 +61,10 @@ class Scene(object):
         self.actors[identifier] = new_actor
         return new_actor
     
-    def update_actor_info(self, act):
-        if act is None:
-            return
-        if self.info['actors'].has_key(act.identifier):
-            self.info['actors'][act.identifier]['x'] = int(act.sprite.x)
-            self.info['actors'][act.identifier]['y'] = int(act.sprite.y)
-        else:
-            new_info = {
-                'x': int(act.sprite.x),
-                'y': int(act.sprite.y),
-                'name': act.name
-            }
-            self.info['actors'][act.identifier] = new_info
-    
     def save_info(self):
         shutil.copyfile(self.resource_path('info.json'), self.resource_path('info.json~'))
-        self.info['walkpath'] = self.walkpath.dict_repr()
-        self.info['camera_points'] = self.camera.points_dict()
         with pyglet.resource.file(self.resource_path('info.json'), 'w') as info_file:
-            json.dump(self.info, info_file, indent=4)
+            json.dump(self.dict_repr(), info_file, indent=4)
     
     def add_interpolator(self, i):
         self.interpolators.add(i)
