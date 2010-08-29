@@ -33,7 +33,7 @@ class Actor(object):
                 my_info = json.load(info_file)
                 Actor.info[self.name] = my_info
                 Actor.images[self.name] = {}
-                for state_name, num_frames in my_info['states'].iteritems():
+                for state_name, num_frames in my_info['states'].viewitems():
                     if num_frames == 1:
                         img = pyglet.resource.image("%s.png" % self.resource_path(state_name))
                         img.anchor_x = img.width * my_info['anchor_x']

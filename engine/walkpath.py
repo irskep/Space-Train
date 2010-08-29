@@ -20,7 +20,7 @@ class WalkPath(object):
         self.points = {}
         self.edges = {}
         if dict_repr:
-            for identifier, point_dict in dict_repr['points'].iteritems():
+            for identifier, point_dict in dict_repr['points'].viewitems():
                 self.points[identifier] = (int(point_dict['x']), int(point_dict['y']))
             for edge_dict in dict_repr['edges']:
                 new_edge = self.add_edge(edge_dict['a'], edge_dict['b'])
@@ -29,7 +29,7 @@ class WalkPath(object):
     
     def dict_repr(self):
         return {'points': {identifier : {'x': point[0], 'y': point[1]} \
-                           for identifier, point in self.points.iteritems()},
+                           for identifier, point in self.points.viewitems()},
                 'edges': [edge.dict_repr() for edge in self.edges.viewvalues()]}
     
     def add_point(self, x, y, identifier=None):
@@ -52,9 +52,15 @@ class WalkPath(object):
                 other_way.counterpart = new_edge
             return new_edge
     
+    def remove_point(self, identifier):
+        del self.points[identifier]
+    
+    def remove_edge(self, p1, p2):
+        del self.edges[(p1, p2)]
+    
     def path_point_near_point(self, mouse):
         close = lambda a, b: abs(a-b) <= 5
-        for identifier, point in self.points.iteritems():
+        for identifier, point in self.points.viewitems():
             if close(point[0], mouse[0]) and close(point[1], mouse[1]):
                 return identifier
         return None

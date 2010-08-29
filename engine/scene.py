@@ -33,7 +33,7 @@ class Scene(object):
         return os.path.join('game', 'scenes', self.name, name)
     
     def load_actors(self):
-        for identifier, attrs in self.info['actors'].iteritems():
+        for identifier, attrs in self.info['actors'].viewitems():
             new_actor = actor.Actor(name=attrs['name'], identifier=identifier, scene=self)
             self.actors[identifier] = new_actor
             for attr in ['x', 'y', 'scale', 'rotation']:

@@ -17,6 +17,8 @@ class EditorView(object):
         self.dragging_object = None
         self.dragging_point = None
         self.selected_actor = None
+        self.point_1 = None
+        self.point_2 = None
         
         self.click_actions = collections.deque()
         
@@ -41,15 +43,16 @@ class EditorView(object):
         gamestate.main_window.push_handlers(self.actor_pallet)
         
         self.edge_pallet = glydget.Window("Edge Tools", [
+            glydget.Button('Select edge', self.select_edge),
             glydget.Button('New point', self.new_point),
-            glydget.Button('New edge', self.new_point),
-            glydget.Button('Delete point', self.new_point),
-            glydget.Button('Delete edge', self.new_point),
+            glydget.Button('New edge', self.new_edge),
+            glydget.Button('Delete point', self.delete_point),
+            glydget.Button('Delete edge', self.delete_edge),
         ])
         self.edge_pallet.show()
         self.edge_pallet.move(gamestate.main_window.width-2 - self.edge_pallet.width, 
                               self.actor_pallet.y - self.actor_pallet.height - 2)
-        gamestate.main_window.push_handlers(self.actor_pallet)
+        gamestate.main_window.push_handlers(self.edge_pallet)
         
         self.actor_identifier_field = glydget.Entry('', on_change=self.update_actor_from_inspector)
         self.actor_x_field = glydget.Entry('', on_change=self.update_actor_from_inspector)
@@ -84,6 +87,11 @@ class EditorView(object):
                 self.selected_actor = new_actor
                 self.update_inspector_from_actor()
     
+    def set_status_message(self, message=''):
+        self.status_label.begin_update()
+        self.status_label.text = message
+        self.status_label.end_update()
+    
     def update_inspector_from_actor(self):
         self.actor_identifier_field.text = self.selected_actor.identifier
         self.actor_x_field.text = str(int(self.selected_actor.sprite.x))
@@ -98,28 +106,37 @@ class EditorView(object):
     
     # Buttons
     def new_point(self, button):
-        pass
+        def point_placer(x, y):
+            world_point = gamestate.mouse_to_canvas(x, y)
+            self.scene.walkpath.add_point(*world_point)
+            self.set_status_message('')
+        self.click_actions.append(point_placer)
+        self.set_status_message("Click to place a point")
     
     def new_edge(self, button):
         pass
     
     def delete_point(self, button):
-        pass
+        def point_deleter(x, y):
+            world_point = gamestate.mouse_to_canvas(x, y)
+            self.scene.walkpath.remove_point(self.scene.walkpath.path_point_near_point(world_point))
+            self.set_status_message('')
+        self.click_actions.append(point_deleter)
+        self.set_status_message("Click a point to delete it")
     
     def delete_edge(self, button):
+        pass
+    
+    def select_edge(self, button):
         pass
     
     def actor_button_action(self, button):
         def actor_placer(x, y):
             world_point = gamestate.mouse_to_canvas(x, y)
             self.dragging_object = self.scene.new_actor(button.text, x=world_point[0], y=world_point[1])
-            self.status_label.begin_update()
-            self.status_label.text = ""
-            self.status_label.end_update()
+            self.set_status_message('')
         self.click_actions.append(actor_placer)
-        self.status_label.begin_update()
-        self.status_label.text = "Click to place %s" % button.text
-        self.status_label.end_update()
+        self.set_status_message("Click to place %s" % button.text)
     
     # Other events
     def check_camera_keys(self):
@@ -217,10 +234,11 @@ class EditorView(object):
             if w.batch:
                 w.batch.draw()
         
-        draw.set_color(1,1,1,1)
         l = self.status_label
-        draw.rect(l.x-l.content_width, l.y-l.content_height, l.x, l.y)
-        self.status_label.draw()
+        if l.text:
+            draw.set_color(1,1,1,1)
+            draw.rect(l.x-l.content_width, l.y-l.content_height, l.x, l.y)
+            self.status_label.draw()
     
     def draw_walkpath(self):    
         wp = self.scene.walkpath

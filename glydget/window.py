@@ -43,6 +43,7 @@ class Window(Folder):
         self.title.text = title
         self._closed_prefix = ''
         self._opened_prefix = ''
+        self._action = ''
 
 
     def on_mouse_press(self, x, y, button, modifiers):
