@@ -33,7 +33,7 @@ class Scene(object):
         return os.path.join('game', 'scenes', self.name, name)
     
     def load_actors(self):
-        for identifier, attrs in self.info['actors'].items():
+        for identifier, attrs in self.info['actors'].iteritems():
             new_actor = actor.Actor(name=attrs['name'], identifier=identifier, scene=self)
             self.actors[identifier] = new_actor
             for attr in ['x', 'y', 'scale', 'rotation']:
@@ -64,7 +64,7 @@ class Scene(object):
     
     def save_info(self):
         shutil.copyfile(self.resource_path('info.json'), self.resource_path('info.json~'))
-        
+        self.info['walkpath'] = self.walkpath.dict_repr()
         with pyglet.resource.file(self.resource_path('info.json'), 'w') as info_file:
             json.dump(self.info, info_file, indent=4)
     

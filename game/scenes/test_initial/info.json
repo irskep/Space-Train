@@ -11,28 +11,28 @@
             "x": 477, 
             "name": "fist"
         }
-    },
+    }, 
     "walkpath": {
         "points": {
-            "default_1": {
-                "x": 100,
-                "y": 100
-            },
             "default_2": {
-                "x": 1000,
-                "y": 100            
+                "y": 100, 
+                "x": 1000
+            }, 
+            "default_1": {
+                "y": 283, 
+                "x": 262
             }
-        },
+        }, 
         "edges": [
             {
-                "a": "default_1",
-                "b": "default_2",
-                "anim": "walk_right"
-            },
+                "a": "default_2", 
+                "anim": "walk_left", 
+                "b": "default_1"
+            }, 
             {
-                "a": "default_2",
-                "b": "default_1",
-                "anim": "walk_left"
+                "a": "default_1", 
+                "anim": "walk_right", 
+                "b": "default_2"
             }
         ]
     }
