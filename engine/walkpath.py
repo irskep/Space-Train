@@ -1,3 +1,5 @@
+import util
+
 class Edge(object):
     def __init__(self, a, b, anim=None, annotations=None):
         self.a = a
@@ -76,5 +78,8 @@ class WalkPath(object):
             if close(point[0], mouse[0]) and close(point[1], mouse[1]):
                 return identifier
         return None
+    
+    def closest_edge_point_to_point(self, edge, point):
+        return util.closest_point_on_line(point, self.points[edge.a], self.points[edge.b])
     
 

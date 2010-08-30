@@ -1,6 +1,7 @@
 import os, pyglet, glydget, collections
 
-from engine import scene, gamestate, settings, actor
+from engine import scene, actor
+from engine import gamestate, settings, util
 
 import draw
 
@@ -11,6 +12,7 @@ class EditorView(object):
         
         self.drag_start = (0, 0)
         self.drag_anchor = (0, 0)
+        self.mouse = (0, 0)
         self.is_dragging_camera = False
         self.is_dragging_object = False
         self.is_dragging_point = False
@@ -22,6 +24,7 @@ class EditorView(object):
         self.selected_point = None
         self.selected_cpoint = None
         self.selected_edge = None
+        self.closest_edge = None
         self.point_1 = None
         self.point_2 = None
         
@@ -277,8 +280,10 @@ class EditorView(object):
         self.point_1 = self.selected_point
         def edge_finish(x, y):
             world_point = self.scene.camera.mouse_to_canvas(x, y)
-            self.point_2 = self.scene.walkpath.add_point(*world_point)
-            if self.point_2 and self.point_1 != self.point_2:
+            self.point_2 = self.scene.walkpath.path_point_near_point(world_point)
+            if not self.point_2:
+                self.point_2 = self.scene.walkpath.add_point(*world_point)
+            if self.point_1 != self.point_2:
                 self.set_selected_edge(self.scene.walkpath.add_edge(self.point_1, self.point_2))
             self.set_status_message('')
         self.set_status_message('Click to place the destination point')
@@ -451,20 +456,35 @@ class EditorView(object):
         self.is_dragging_camera = False
         self.is_dragging_object = False
         self.is_dragging_point = False
-        if isinstance(self.dragging_actor, actor.Actor) or self.dragging_actor is None:
-            self.set_selected_actor(self.dragging_actor)
+        self.set_selected_actor(self.dragging_actor)
         if self.dragging_point:
             self.set_selected_point(self.dragging_point)
-            self.dragging_point = None
         if self.dragging_cpoint:
             self.set_selected_cpoint(self.dragging_cpoint)
-            self.dragging_cpoint = None
+        if self.dragging_point is None and self.dragging_cpoint is None and self.dragging_actor is None:
+            self.mouse = self.scene.camera.mouse_to_canvas(x, y)
+            closest_point = None
+            closest_dist = None
+            wp = self.scene.walkpath
+            for edge in wp.edges.viewvalues():
+                cp = self.scene.walkpath.closest_edge_point_to_point(edge, self.mouse)
+                test_dist = util.dist_squared((self.mouse[0]-cp[0], self.mouse[1]-cp[1]))
+                if closest_dist is None or test_dist < closest_dist:
+                    closest_point = cp
+                    self.closest_edge = edge
+                    closest_dist = test_dist
+            self.set_selected_edge(self.closest_edge)
+        self.dragging_cpoint = None
+        self.dragging_point = None
         self.dragging_actor = None
     
     def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
         c = self.scene.camera
         c.set_position(c.position[0] - scroll_x*4, c.position[1] + scroll_y*4)
         self.drag_start = (self.drag_start[0] - scroll_x*4, self.drag_start[1] - scroll_y*4)
+    
+    def on_mouse_motion(self, x, y, dx, dy):
+        self.mouse = self.scene.camera.mouse_to_canvas(x, y)
     
     
     # Update/Draw
@@ -510,6 +530,14 @@ class EditorView(object):
         draw.set_color(1,0,0,1)
         for point in wp.points.viewvalues():
             draw.rect(point[0]-5, point[1]-5, point[0]+5, point[1]+5)
+        if self.selected_point:
+            point = wp.points[self.selected_point]
+            draw.set_color(1,1,0,1)
+            draw.rect(point[0]-2, point[1]-2, point[0]+2, point[1]+2)
+        if self.selected_edge:
+            cp = self.scene.walkpath.closest_edge_point_to_point(self.selected_edge, self.mouse)
+            draw.set_color(1,1,0,1)
+            draw.rect(cp[0]-3, cp[1]-3, cp[0]+3, cp[1]+3)
     
     def draw_camera_points(self):
         draw.set_color(1,0,1,1)
