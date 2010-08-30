@@ -6,14 +6,19 @@ def round_down(v):
 def tuple_op(a, b, op=operator.sub):
     return (op(a[0], b[0]), op(a[1], b[1]))
 
+def op_between(func):
+    def f(a, b):
+        return func(tuple_op(a, b, operator.sub))
+    return f
+
 def length(v):
     return math.sqrt(v[0]*v[0] + v[1]*v[1])
 
-def dist_between(a, b):
-    return length(tuple_op(a, b, operator.sub))
-
 def dist_squared(v):
     return v[0]*v[0] + v[1]*v[1]
+
+dist_between = op_between(length)
+dist_squared_between = op_between(dist_squared)
 
 def normalize(v):
     l = length(v)

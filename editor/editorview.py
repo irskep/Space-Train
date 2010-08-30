@@ -2,8 +2,7 @@ import os, pyglet, glydget, collections
 
 from engine import scene, actor
 from engine import gamestate, settings, util
-
-import draw
+from engine import draw
 
 class EditorView(object):
     def __init__(self, scene_name):
@@ -514,16 +513,7 @@ class EditorView(object):
     
     def draw_walkpath(self):    
         wp = self.scene.walkpath
-        for edge in wp.edges.viewvalues():
-            ax, ay = wp.points[edge.a]
-            bx, by = wp.points[edge.b]
-            if edge.counterpart:
-                draw.line(ax, ay, bx, by, colors=(0, 255, 0, 255, 0, 255, 0, 255))
-            else:
-                draw.line(ax, ay, bx, by, colors=(255, 0, 0, 255, 0, 0, 255, 255))
-        draw.set_color(1,0,0,1)
-        for point in wp.points.viewvalues():
-            draw.rect(point[0]-5, point[1]-5, point[0]+5, point[1]+5)
+        wp.draw()
         if self.selected_point:
             point = wp.points[self.selected_point]
             draw.set_color(1,1,0,1)

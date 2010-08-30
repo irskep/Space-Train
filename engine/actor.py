@@ -94,8 +94,16 @@ class Actor(object):
     def prepare_move(self, x, y):
         if self.blocking_actions == 0:
             # self.actions.append([(self.move_to, (x, y)), (self.demo_scaling, ())])
-            self.actions.append([(self.move_to, (x, y))])
-            self.next_action()
+            if self.walkpath_point:
+                final_dest_point, moves = self.scene.walkpath.move_sequence(self.walkpath_point, (x, y))
+                for move in moves:
+                    self.actions.append([(self.move_to, move[0])])  # move[1] is animation name, not used yet
+                self.walkpath_point = final_dest_point
+            else:        
+                print 'boring'
+                self.actions.append([(self.move_to, (x, y))])
+            return True
+        return False
     
     def move_to(self, x, y):
         interp = interpolator.Linear2DInterpolator(self.sprite, 'position', (x,y), speed=400.0, 

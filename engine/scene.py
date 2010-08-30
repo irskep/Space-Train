@@ -89,6 +89,7 @@ class Scene(object):
         self.camera.apply()
         self.env.draw()
         self.batch.draw()
+        self.walkpath.draw()
         self.camera.unapply()
     
     def __repr__(self):

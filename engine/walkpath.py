@@ -1,4 +1,5 @@
 import util, collections, dijkstra
+import draw
 
 class Edge(object):
     def __init__(self, a, b, anim=None, annotations=None):
@@ -88,10 +89,20 @@ class WalkPath(object):
     
     def move_sequence(self, src_point, dest_coords):
         # Add more logic here to choose a or b based on distance
-        dest_point = self.closest_edge_to_point(dest_coords).a
-        
-        # print dijkstar.single_source_shortest_paths()
-        print dijkstra.shortest_path(self.dijkstra_repr(), src_point, dest_point)
+        dest_edge = self.closest_edge_to_point(dest_coords)
+        dist_sq_to_a = util.dist_squared_between(dest_coords, self.points[dest_edge.a])
+        dist_sq_to_b = util.dist_squared_between(dest_coords, self.points[dest_edge.b])
+        if dist_sq_to_a < dist_sq_to_b:
+            dest_point = dest_edge.a
+        else:
+            dest_point = dest_edge.b
+        path = dijkstra.shortest_path(self.dijkstra_repr(), src_point, dest_point)
+        previous_identifier = path[0]
+        move_dests = []
+        for identifier in path[1:]:
+            move_dests.append((self.points[identifier], self.edges[(previous_identifier, identifier)].anim))
+            previous_identifier = identifier
+        return dest_point, move_dests
     
     def path_point_near_point(self, mouse):
         close = lambda a, b: abs(a-b) <= 5
@@ -116,5 +127,17 @@ class WalkPath(object):
     
     def closest_edge_point_to_point(self, edge, point):
         return util.closest_point_on_line(point, self.points[edge.a], self.points[edge.b])
+    
+    def draw(self):
+        for edge in self.edges.viewvalues():
+            ax, ay = self.points[edge.a]
+            bx, by = self.points[edge.b]
+            if edge.counterpart:
+                draw.line(ax, ay, bx, by, colors=(0, 255, 0, 255, 0, 255, 0, 255))
+            else:
+                draw.line(ax, ay, bx, by, colors=(255, 0, 0, 255, 0, 0, 255, 255))
+        draw.set_color(1,0,0,1)
+        for point in self.points.viewvalues():
+            draw.rect(point[0]-5, point[1]-5, point[0]+5, point[1]+5)
     
 
