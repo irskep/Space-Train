@@ -207,14 +207,18 @@ class EditorView(object):
             old_identifier = self.selected_point
             new_identifier = self.point_identifier_field.text
             if old_identifier != new_identifier:
+                self.selected_point = new_identifier
                 for edge in self.scene.walkpath.edges.viewvalues():
                     if edge.a == old_identifier:
                         edge.a = new_identifier
                     if edge.b == old_identifier:
                         edge.b = new_identifier
-            self.scene.walkpath.remove_point(self.selected_point)
+                for actor in self.scene.actors.viewvalues():
+                    if actor.walkpath_point == old_identifier:
+                        actor.walkpath_point = new_identifier
+            self.scene.walkpath.remove_point(old_identifier)
             self.scene.walkpath.add_point(int(self.point_x_field.text), int(self.point_y_field.text), 
-                                          self.point_identifier_field.text)
+                                          new_identifier)
     
     def update_inspector_from_camera_point(self, widget=None):
         self.cpoint_identifier_field.text = self.selected_cpoint.identifier
@@ -389,15 +393,15 @@ class EditorView(object):
             if symbol == pyglet.window.key.S:
                 self.scene.save_info()
                 return True
-        else:
-            actions = {
-                pyglet.window.key.E: self.new_edge,
-                pyglet.window.key.P: self.new_point,
-                pyglet.window.key.D: self.subdivide_edge,
-                pyglet.window.key.O: self.new_edge_from_point,
-            }
-            if actions.has_key(symbol):
-                actions[symbol]()
+        # else:
+        #     actions = {
+        #         pyglet.window.key.E: self.new_edge,
+        #         pyglet.window.key.P: self.new_point,
+        #         pyglet.window.key.D: self.subdivide_edge,
+        #         pyglet.window.key.O: self.new_edge_from_point,
+        #     }
+        #     if actions.has_key(symbol):
+        #         actions[symbol]()
     
     def on_mouse_press(self, x, y, button, modifiers):
         # hacky hack

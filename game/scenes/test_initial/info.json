@@ -13,63 +13,65 @@
             "name": "another_fist"
         }, 
         "main": {
-            "walkpath_point": "default_1", 
+            "walkpath_point": "lefter", 
             "name": "fist"
         }
     }, 
     "walkpath": {
         "points": {
-            "default_1": {
+            "lefter": {
                 "y": 78, 
-                "x": 209
+                "x": 208
             }, 
-            "default_2": {
+            "middle": {
                 "y": 75, 
                 "x": 708
             }, 
-            "point_2": {
-                "y": 75, 
-                "x": 1125
-            }, 
-            "point_1": {
+            "top": {
                 "y": 361, 
                 "x": 708
+            }, 
+            "right": {
+                "y": 75, 
+                "x": 1125
             }
         }, 
         "edges": [
             {
-                "a": "point_2", 
-                "b": "point_1"
+                "a": "right", 
+                "b": "middle"
             }, 
             {
-                "a": "default_2", 
-                "anim": "walk_left", 
-                "b": "default_1"
+                "a": "top", 
+                "b": "middle",
+                "anim": "walk_front"
             }, 
             {
-                "a": "default_1", 
+                "a": "middle", 
+                "b": "top",
+                "anim": "walk_back"
+            }, 
+            {
+                "a": "right", 
+                "b": "top"
+            }, 
+            {
+                "a": "lefter", 
                 "anim": "walk_right", 
-                "b": "default_2"
+                "b": "middle"
             }, 
             {
-                "a": "point_1", 
-                "b": "point_2"
+                "a": "middle", 
+                "b": "right"
             }, 
             {
-                "a": "default_2", 
-                "b": "point_1"
+                "a": "middle", 
+                "anim": "walk_left", 
+                "b": "lefter"
             }, 
             {
-                "a": "default_2", 
-                "b": "point_2"
-            }, 
-            {
-                "a": "point_2", 
-                "b": "default_2"
-            }, 
-            {
-                "a": "point_1", 
-                "b": "default_2"
+                "a": "top", 
+                "b": "right"
             }
         ]
     }

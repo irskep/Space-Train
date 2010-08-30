@@ -97,21 +97,24 @@ class Actor(object):
             if self.walkpath_point:
                 final_dest_point, moves = self.scene.walkpath.move_sequence(self.walkpath_point, (x, y))
                 for move in moves:
-                    self.actions.append([(self.move_to, move[0])])  # move[1] is animation name, not used yet
+                    args = (move[0][0], move[0][1], move[1])    # See move_to for what these args are  
+                    self.actions.append([(self.move_to, args)])
                 self.walkpath_point = final_dest_point
-            else:        
-                print 'boring'
+            else:
                 self.actions.append([(self.move_to, (x, y))])
             return True
         return False
     
-    def move_to(self, x, y):
+    def move_to(self, x, y, anim=None):
         interp = interpolator.Linear2DInterpolator(self.sprite, 'position', (x,y), speed=400.0, 
                                                    done_function=self.handle_action_completed)
-        if x > self.sprite.x:
-            self.update_state('walk_right')
+        if anim:
+            self.update_state(anim)
         else:
-            self.update_state('walk_left')
+            if x > self.sprite.x:
+                self.update_state('walk_right')
+            else:
+                self.update_state('walk_left')
         self.scene.add_interpolator(interp)
     
     def demo_scaling(self):
