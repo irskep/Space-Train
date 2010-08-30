@@ -108,7 +108,7 @@ class Actor(object):
     def move_to(self, x, y, anim=None):
         interp = interpolator.Linear2DInterpolator(self.sprite, 'position', (x,y), speed=400.0, 
                                                    done_function=self.handle_action_completed)
-        if anim:
+        if anim and Actor.images[self.name].has_key(anim):
             self.update_state(anim)
         else:
             if x > self.sprite.x:
