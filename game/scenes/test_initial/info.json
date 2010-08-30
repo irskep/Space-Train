@@ -8,8 +8,8 @@
     }, 
     "actors": {
         "another_fist_1": {
-            "y": 301, 
-            "x": 708, 
+            "y": 548, 
+            "x": 735, 
             "name": "another_fist"
         }, 
         "main": {
@@ -19,16 +19,28 @@
     }, 
     "walkpath": {
         "points": {
-            "default_2": {
-                "y": 100, 
-                "x": 1000
-            }, 
             "default_1": {
-                "y": 182, 
-                "x": 273
+                "y": 78, 
+                "x": 209
+            }, 
+            "default_2": {
+                "y": 75, 
+                "x": 708
+            }, 
+            "point_2": {
+                "y": 75, 
+                "x": 1125
+            }, 
+            "point_1": {
+                "y": 361, 
+                "x": 708
             }
         }, 
         "edges": [
+            {
+                "a": "point_2", 
+                "b": "point_1"
+            }, 
             {
                 "a": "default_2", 
                 "anim": "walk_left", 
@@ -37,6 +49,26 @@
             {
                 "a": "default_1", 
                 "anim": "walk_right", 
+                "b": "default_2"
+            }, 
+            {
+                "a": "point_1", 
+                "b": "point_2"
+            }, 
+            {
+                "a": "default_2", 
+                "b": "point_1"
+            }, 
+            {
+                "a": "default_2", 
+                "b": "point_2"
+            }, 
+            {
+                "a": "point_2", 
+                "b": "default_2"
+            }, 
+            {
+                "a": "point_1", 
                 "b": "default_2"
             }
         ]

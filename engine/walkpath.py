@@ -72,6 +72,9 @@ class WalkPath(object):
                 e.counterpart.counterpart = None
             del self.edges[(p1, p2)]
     
+    def move_sequence(self, src, dest):
+        pass
+    
     def path_point_near_point(self, mouse):
         close = lambda a, b: abs(a-b) <= 5
         for identifier, point in self.points.viewitems():
