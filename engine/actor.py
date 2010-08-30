@@ -98,9 +98,6 @@ class Actor(object):
             self.next_action()
     
     def move_to(self, x, y):
-        if self.walkpath_point:
-            path = self.scene.walkpath.move_sequence(src=self.sprite.position, dest=(x, y))
-            print path
         interp = interpolator.Linear2DInterpolator(self.sprite, 'position', (x,y), speed=400.0, 
                                                    done_function=self.handle_action_completed)
         if x > self.sprite.x:

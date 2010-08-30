@@ -9,6 +9,9 @@ def tuple_op(a, b, op=operator.sub):
 def length(v):
     return math.sqrt(v[0]*v[0] + v[1]*v[1])
 
+def dist_between(a, b):
+    return length(tuple_op(a, b, operator.sub))
+
 def dist_squared(v):
     return v[0]*v[0] + v[1]*v[1]
 

@@ -467,17 +467,7 @@ class EditorView(object):
             self.set_selected_cpoint(self.dragging_cpoint)
         if self.dragging_point is None and self.dragging_cpoint is None and self.dragging_actor is None:
             self.mouse = self.scene.camera.mouse_to_canvas(x, y)
-            closest_point = None
-            closest_dist = None
-            wp = self.scene.walkpath
-            for edge in wp.edges.viewvalues():
-                cp = self.scene.walkpath.closest_edge_point_to_point(edge, self.mouse)
-                test_dist = util.dist_squared((self.mouse[0]-cp[0], self.mouse[1]-cp[1]))
-                if closest_dist is None or test_dist < closest_dist:
-                    closest_point = cp
-                    self.closest_edge = edge
-                    closest_dist = test_dist
-            self.set_selected_edge(self.closest_edge)
+            self.set_selected_edge(self.scene.walkpath.closest_edge_to_point(self.mouse))
         self.dragging_cpoint = None
         self.dragging_point = None
         self.dragging_actor = None

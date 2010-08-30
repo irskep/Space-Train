@@ -1,4 +1,4 @@
-import util
+import util, collections, dijkstra
 
 class Edge(object):
     def __init__(self, a, b, anim=None, annotations=None):
@@ -36,6 +36,20 @@ class WalkPath(object):
                            for identifier, point in self.points.viewitems()},
                 'edges': [edge.dict_repr() for edge in self.edges.viewvalues()]}
     
+    def dijkstar_repr(self):
+        node_dict = {}
+        edge_dict = collectons.defaultdict(dict)
+        for edge in self.edges:
+            node_dict[edge.a][edge.b] = (edge.a, edge.b)
+            edge_dict[(edge.a, edge.b)] = (util.dist_between(self.points[edge.a], self.points[edge.b]),)
+        return {'nodes': node_dict, 'edges': edge_dict}
+    
+    def dijkstra_repr(self):
+        G = collections.defaultdict(dict)
+        for edge in self.edges.viewvalues():
+            G[edge.a][edge.b] = util.dist_between(self.points[edge.a], self.points[edge.b])
+        return G
+    
     def add_point(self, x, y, identifier=None):
         if self.points.has_key(identifier):
             return self.points[identifier]
@@ -72,8 +86,12 @@ class WalkPath(object):
                 e.counterpart.counterpart = None
             del self.edges[(p1, p2)]
     
-    def move_sequence(self, src, dest):
-        pass
+    def move_sequence(self, src_point, dest_coords):
+        # Add more logic here to choose a or b based on distance
+        dest_point = self.closest_edge_to_point(dest_coords).a
+        
+        # print dijkstar.single_source_shortest_paths()
+        print dijkstra.shortest_path(self.dijkstra_repr(), src_point, dest_point)
     
     def path_point_near_point(self, mouse):
         close = lambda a, b: abs(a-b) <= 5
@@ -81,6 +99,20 @@ class WalkPath(object):
             if close(point[0], mouse[0]) and close(point[1], mouse[1]):
                 return identifier
         return None
+    
+    def closest_edge_to_point(self, point):
+        # Optimize me! Use rectangles.
+        closest_point = None
+        closest_dist = None
+        closest_edge = None
+        for edge in self.edges.viewvalues():
+            cp = self.closest_edge_point_to_point(edge, point)
+            test_dist = util.dist_squared((point[0]-cp[0], point[1]-cp[1]))
+            if closest_dist is None or test_dist < closest_dist:
+                closest_point = cp
+                closest_edge = edge
+                closest_dist = test_dist
+        return closest_edge
     
     def closest_edge_point_to_point(self, edge, point):
         return util.closest_point_on_line(point, self.points[edge.a], self.points[edge.b])
