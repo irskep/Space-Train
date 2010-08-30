@@ -353,7 +353,11 @@ class EditorView(object):
         p2 = self.scene.walkpath.points[self.selected_edge.b]
         p1name = self.selected_edge.a
         p2name = self.selected_edge.b
-        midpoint = self.scene.walkpath.add_point((p1[0] + p2[0])/2, (p1[1] + p2[1])/2)
+        midpoint_coords = self.scene.walkpath.closest_edge_point_to_point(self.selected_edge, self.mouse)
+        if util.dist_squared(util.tuple_op(p1, midpoint_coords)) < 10 \
+        or util.dist_squared(util.tuple_op(p2, midpoint_coords)) < 10:
+            midpoint_coords = ((p1[0] + p2[0])/2, (p1[1] + p2[1])/2)
+        midpoint = self.scene.walkpath.add_point(*util.round_down(midpoint_coords))
         self.selected_edge.b = midpoint
         new_edge = self.scene.walkpath.add_edge(midpoint, p2name, anim=self.selected_edge.anim)
         if self.selected_edge.counterpart:

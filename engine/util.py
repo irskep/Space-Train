@@ -1,5 +1,8 @@
 import math, operator
 
+def round_down(v):
+    return (int(v[0]), int(v[1]))
+
 def tuple_op(a, b, op=operator.sub):
     return (op(a[0], b[0]), op(a[1], b[1]))
 
