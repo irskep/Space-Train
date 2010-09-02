@@ -61,7 +61,7 @@ class Actor(object):
                         Actor.images[self.name][state_name] = anim
     
     def resource_path(self, name):
-        return os.path.join('actors', self.name, name)
+        return '/'.join(['actors', self.name, name])
     
     def covers_point(self, x, y):
         min_x = self.sprite.x - self.sprite.image.anchor_x

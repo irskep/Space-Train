@@ -25,9 +25,11 @@ for location in resource_locations:
             pass
 
 pyglet.resource.path.append(settings.resources_path)
+pyglet.resource.path.append(os.getcwd())
 pyglet.resource.reindex()
 
+
 def nested_image(*args):
-    return pyglet.resource.image(os.path.join(*args))
+    return pyglet.resource.image('/'.join(args))
 
 pyglet.resource.nested_image = nested_image

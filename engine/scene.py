@@ -32,7 +32,7 @@ class Scene(object):
             self.module.scene_loaded()
     
     def resource_path(self, name):
-        return os.path.join('game', 'scenes', self.name, name)
+        return '/'.join(['game', 'scenes', self.name, name])
     
     def load_actors(self):
         for identifier, attrs in self.info['actors'].viewitems():
