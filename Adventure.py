@@ -18,8 +18,9 @@ class AdventureWindow(pyglet.window.Window):
         gamestate.main_window = self
         gamestate.init_scale()
         gamestate.init_keys()
-        
-        with pyglet.resource.file(os.path.join('game', 'info.json'), 'r') as game_info_file:
+		
+        print pyglet.resource.path
+        with pyglet.resource.file('/'.join(['game', 'info.json']), 'r') as game_info_file:
             game_info = json.load(game_info_file)
             self.set_caption(game_info["name"])
             self.game_handler = gamehandler.GameHandler(first_scene=game_info['first_scene'])
