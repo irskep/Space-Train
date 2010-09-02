@@ -15,6 +15,11 @@
         "main": {
             "walkpath_point": "lefter", 
             "name": "fist"
+        }, 
+        "fist_1": {
+            "y": 305, 
+            "x": 1078, 
+            "name": "fist"
         }
     }, 
     "walkpath": {
@@ -24,36 +29,49 @@
                 "x": 208
             }, 
             "middle": {
-                "y": 75, 
-                "x": 708
+                "y": 86, 
+                "x": 547
             }, 
             "top": {
-                "y": 361, 
-                "x": 708
+                "y": 365, 
+                "x": 641
             }, 
             "right": {
-                "y": 75, 
-                "x": 1125
+                "y": 124, 
+                "x": 978
+            }, 
+            "point_1": {
+                "y": 475, 
+                "x": 255
             }
         }, 
         "edges": [
             {
-                "a": "right", 
-                "b": "middle"
+                "a": "middle", 
+                "anim": "walk_left", 
+                "b": "lefter"
             }, 
             {
                 "a": "top", 
-                "b": "middle",
-                "anim": "walk_front"
+                "anim": "walk_front", 
+                "b": "middle"
             }, 
             {
                 "a": "middle", 
-                "b": "top",
-                "anim": "walk_back"
+                "anim": "walk_back", 
+                "b": "top"
             }, 
             {
                 "a": "right", 
                 "b": "top"
+            }, 
+            {
+                "a": "point_1", 
+                "b": "top"
+            }, 
+            {
+                "a": "middle", 
+                "b": "right"
             }, 
             {
                 "a": "lefter", 
@@ -61,13 +79,12 @@
                 "b": "middle"
             }, 
             {
-                "a": "middle", 
-                "b": "right"
+                "a": "top", 
+                "b": "point_1"
             }, 
             {
-                "a": "middle", 
-                "anim": "walk_left", 
-                "b": "lefter"
+                "a": "right", 
+                "b": "middle"
             }, 
             {
                 "a": "top", 
