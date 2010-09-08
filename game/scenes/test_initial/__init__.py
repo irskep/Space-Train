@@ -1,10 +1,10 @@
-from engine import actor, scenehandler
+from engine import actor
 
-scene_handler = None
+myscene = None
 
-def init(scene_obj, env):
+def init(scn, env):
     """Your opportunity to initialize a subclass of SceneHandler"""
     pass
 
 def scene_loaded():
-    print "I made a", scene_handler
+    print "I made a", myscene

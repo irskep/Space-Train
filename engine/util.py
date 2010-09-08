@@ -1,4 +1,5 @@
 import math, operator
+import pyglet
 
 def round_down(v):
     return (int(v[0]), int(v[1]))
@@ -52,7 +53,7 @@ def closest_point_on_line(point, a, b):
     # move from point a to the nearest point on the segment
     return tuple_op(a, v, operator.add)
 
-class ClipGroup(graphics.OrderedGroup): 
+class ClipGroup(pyglet.graphics.OrderedGroup): 
     def __init__(self, name="ClipGroup", order=0, parent=None): 
         super(ClipGroup, self).__init__(order, parent) 
         self.x, self.y, self.w, self.h = 0, 0, 256, 256 
