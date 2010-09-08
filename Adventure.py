@@ -34,6 +34,8 @@ class AdventureWindow(pyglet.window.Window):
             gamestate.scale()
         
         self.game_handler.draw()
+		
+		#UI drawing here?
         
         if gamestate.scale_factor != 1.0:
             gl.glPopMatrix()
