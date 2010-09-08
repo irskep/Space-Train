@@ -5,6 +5,8 @@ import camera, actor, gamestate, settings, walkpath
 import environment, scenehandler
 
 class Scene(object):
+    
+    # Initialization
     def __init__(self, name):
         self.name = name
         self.batch = pyglet.graphics.Batch()
@@ -22,13 +24,12 @@ class Scene(object):
         if gamestate.scripts_enabled:
             self.module = importlib.import_module(name)
             self.module.init(self, self.env)
-            if self.module.scene_handler is None:
-                self.module.scene_handler = scenehandler.SceneHandler(self, self.env)
+            if self.module.myscene is None:
+                self.module.myscene = self
         
         self.load_actors()
         
         if gamestate.scripts_enabled:
-            gamestate.main_window.push_handlers(self.module.scene_handler)
             self.module.scene_loaded()
     
     def resource_path(self, name):
@@ -66,6 +67,15 @@ class Scene(object):
         with pyglet.resource.file(self.resource_path('info.json'), 'w') as info_file:
             json.dump(self.dict_repr(), info_file, indent=4)
     
+    
+    # Events
+    def on_mouse_release(self, x, y, button, modifiers):
+        if self.actors.has_key("main"):
+            main = self.actors["main"]
+            if main.prepare_move(*self.camera.mouse_to_canvas(x, y)):
+                main.next_action()
+    
+    # Convenience
     def add_interpolator(self, i):
         self.interpolators.add(i)
     
@@ -74,6 +84,8 @@ class Scene(object):
             if act.covers_point(x, y):
                 return act
     
+    
+    # Standard stuff
     def update(self, dt=0):
         self.camera.update(dt)
         to_remove = set()
