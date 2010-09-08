@@ -51,3 +51,17 @@ def closest_point_on_line(point, a, b):
     
     # move from point a to the nearest point on the segment
     return tuple_op(a, v, operator.add)
+
+class ClipGroup(graphics.OrderedGroup): 
+    def __init__(self, name="ClipGroup", order=0, parent=None): 
+        super(ClipGroup, self).__init__(order, parent) 
+        self.x, self.y, self.w, self.h = 0, 0, 256, 256 
+        self.name=name 
+    
+    def set_state(self): 
+        gl.glScissor(self.x, self.y, self.w, self.h) 
+        gl.glEnable(gl.GL_SCISSOR_TEST) 
+    
+    def unset_state(self): 
+        gl.glDisable(gl.GL_SCISSOR_TEST)
+    
