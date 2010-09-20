@@ -13,7 +13,8 @@ class AdventureWindow(pyglet.window.Window):
         if settings.fullscreen:
             super(AdventureWindow,self).__init__(fullscreen=True, vsync=True)
         else:
-            super(AdventureWindow,self).__init__(width=gamestate.norm_w, height=gamestate.norm_h, vsync=True)
+            super(AdventureWindow,self).__init__(width=gamestate.norm_w, 
+                                                 height=gamestate.norm_h, vsync=True)
         
         gamestate.main_window = self
         gamestate.init_scale()

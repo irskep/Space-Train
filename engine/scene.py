@@ -69,6 +69,9 @@ class Scene(object):
     
     
     # Events
+    def fire_event(self, event, *args):
+        self.module.handle_event(event, *args)
+    
     def on_mouse_release(self, x, y, button, modifiers):
         if self.actors.has_key("main"):
             main = self.actors["main"]

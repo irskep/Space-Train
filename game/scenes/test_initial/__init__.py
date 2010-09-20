@@ -8,3 +8,6 @@ def init(scn, env):
 
 def scene_loaded():
     print "I made a", myscene
+
+def handle_event(event, *args):
+    print "Handled", event, "with", args

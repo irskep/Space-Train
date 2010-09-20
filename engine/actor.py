@@ -2,7 +2,7 @@ import os, json, collections
 
 import pyglet
 
-import interpolator
+import const, interpolator
 
 class Actor(object):
     
@@ -93,15 +93,27 @@ class Actor(object):
     
     def prepare_move(self, x, y):
         if self.blocking_actions == 0:
-            # self.actions.append([(self.move_to, (x, y)), (self.demo_scaling, ())])
             if self.walkpath_point:
-                final_dest_point, moves = self.scene.walkpath.move_sequence(self.walkpath_point, (x, y))
+                wp = self.scene.walkpath;
+                final_dest_point, moves = wp.move_sequence(self.walkpath_point, (x, y))
                 for move in moves:
-                    args = (move[0][0], move[0][1], move[1])    # See move_to for what these args are  
+                    # See move_to for what these args are
+                    args = (move[0][0], move[0][1], move[1])  
                     self.actions.append([(self.move_to, args)])
                 self.walkpath_point = final_dest_point
+                info = {
+                    'actor': self,
+                    'point': self.walkpath_point
+                }
+                event_args = (const.WALK_PATH_COMPLETED, info)
             else:
                 self.actions.append([(self.move_to, (x, y))])
+                info = {
+                    'actor': self,
+                    'point': (x, y)
+                }
+                event_args = (const.WALK_COMPLETED, info)
+            self.actions.append([(self.fire_event, event_args)])
             return True
         return False
     
@@ -117,12 +129,12 @@ class Actor(object):
                 self.update_state('walk_left')
         self.scene.add_interpolator(interp)
     
-    def demo_scaling(self):
-        interp = interpolator.LinearInterpolator(self.sprite, 'scale', start=0.0, end=1.0, duration=1.0, 
-                                                   done_function=self.handle_action_completed)
-        self.scene.add_interpolator(interp)
+    def fire_event(self, event, *args):
+        self.scene.fire_event(event, *args)
+        self.blocking_actions -= 1
+        self.next_action()
     
     def __repr__(self):
-        return 'Actor(name="%s", position=%s)' % (self.name, self.sprite.position)
+        return 'Actor(name="%s", identifier=%s)' % (self.name, self.identifier)
     
 

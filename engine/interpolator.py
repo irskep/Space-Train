@@ -16,7 +16,9 @@ class Interpolator(object):
         self.duration = duration
         self.fix_speed_and_duration()
         self.progress = 0.0
-        self.complete = lambda: abs(self.progress) >= self.duration
+    
+    def complete(self):
+        return abs(self.progress) >= self.duration
     
     def fix_speed_and_duration(self):
         if self.speed == 0.0:
