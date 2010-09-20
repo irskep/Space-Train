@@ -17,6 +17,10 @@ def length(v):
 
 def dist_squared(v):
     return v[0]*v[0] + v[1]*v[1]
+    
+def intersects(x, y, box_x, box_y, box_w, box_h):
+    return (x > box_x and x < box_x + box_w and
+            y > box_y and y < box_y + box_y)
 
 dist_between = op_between(length)
 dist_squared_between = op_between(dist_squared)
