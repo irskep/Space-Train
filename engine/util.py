@@ -8,6 +8,7 @@ def first(list_to_search, condition_to_satisfy):
     for item in list_to_search:
         if condition_to_satisfy(item):
             return item
+    return None
 
 # Conventions
 

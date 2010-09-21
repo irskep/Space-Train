@@ -14,6 +14,7 @@ class InterpolatorController(object):
         self.add_interpolator = self.interpolators.add
     
     def update_interpolators(self, dt=0):
+        """Update all interpolators and remove those that have completed"""
         to_remove = set()
         for i in self.interpolators:
             i.update(dt)
@@ -44,18 +45,25 @@ class Scene(InterpolatorController):
             self.load_script()
     
     def initialize_from_info(self):
+        """Initialize objects specified in info.json"""
         self.environment_name = self.info['environment']
         self.env = environment.Environment(self.environment_name)
         self.walkpath = walkpath.WalkPath(dict_repr = self.info['walkpath'])
         self.camera = camera.Camera(dict_repr=self.info['camera_points'])
     
     def load_actors(self):
+        """Initialize actors and update them with any values specified in the info dict"""
         for identifier, attrs in self.info['actors'].viewitems():
+            # Initialize and store
             new_actor = actor.Actor(name=attrs['name'], identifier=identifier, scene=self)
             self.actors[identifier] = new_actor
+            
+            # Update attributes
             for attr in ['x', 'y', 'scale', 'rotation']:
                 if attrs.has_key(attr):
                     setattr(new_actor.sprite, attr, attrs[attr])
+            
+            # Obey walk paths
             if attrs.has_key('walkpath_point'):
                 new_actor.walkpath_point = attrs['walkpath_point']
                 new_actor.sprite.position = self.walkpath.points[new_actor.walkpath_point]
@@ -82,6 +90,7 @@ class Scene(InterpolatorController):
     # Events
     
     def on_mouse_release(self, x, y, button, modifiers):
+        # Send main actor to click location according to actor's moving behavior
         if self.actors.has_key("main"):
             main = self.actors["main"]
             if main.prepare_move(*self.camera.mouse_to_canvas(x, y)):
