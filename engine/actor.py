@@ -2,7 +2,6 @@ import os, json, collections
 
 import pyglet
 
-
 import actionsequencer, const, interpolator, util
 
 class Actor(actionsequencer.ActionSequencer):
@@ -57,8 +56,6 @@ class Actor(actionsequencer.ActionSequencer):
         self.current_state = new_state
         self.set_image_if_exists(new_state)
     
-    
-
     # Possible actions to put in a sequence. Pay attention for parameter values.
     
     def move_to(self, pos, anim=None):
@@ -76,6 +73,12 @@ class Actor(actionsequencer.ActionSequencer):
         self.update_state(anim)
         self.scene.add_interpolator(interp)
     
+    def jump(self):
+        InterpClass = interpolator.JumpInterpolator # Gee golly this name is long
+        interp = InterpClass(self.sprite, 'y', 100, duration=0.3, done_function=self.next_action)
+        self.update_state('jump')
+        self.scene.add_interpolator(interp)
+        
     def fire_adv_event(self, event, *args):
         self.scene.fire_adv_event(event, *args)
         self.next_action()
@@ -124,6 +127,9 @@ class Actor(actionsequencer.ActionSequencer):
             (self.fire_adv_event, event_args)
         ])
     
+    def prepare_jump(self):
+        self.actions.append([(self.jump, [])])
+        self.actions.append([(self.update_state, ['stand_front'])])
     
     # Serialization
     
