@@ -47,7 +47,7 @@ class LinearInterpolator(Interpolator):
         self.update(0.0)
     
     def update(self, dt=0):
-        self.progress += dt
+        super(LinearInterpolator, self).update(dt)
         setattr(self.host_object, self.attr_name, self.start + self.progress*self.speed)
     
     def __repr__(self):
@@ -94,3 +94,16 @@ class Linear2DInterpolator(Interpolator):
                       str(self.start_tuple), str(self.end_tuple), self.duration)
     
 
+class JumpInterpolator(Interpolator):
+    """Cause the target to 'jump' using a sine wave"""
+    def __init__(self, host_object, attr_name, height, **kwargs):
+        self.base_y = getattr(host_object, attr_name)
+        self.height = height
+        super(JumpInterpolator, self).__init__(host_object, attr_name, 
+                                               start=0.0, end=math.PI, **kwargs)
+        self.update(0.0)
+    
+    def update(self, dt=0):
+        super(JumpInterpolator, self).update(dt)
+        setattr(self.host_object, self.attr_name, self.base_y + math.sin(self.progress))
+        

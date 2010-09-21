@@ -49,22 +49,7 @@ class AdventureWindow(pyglet.window.Window):
         # Draw really only needs 60 FPS, update can be faster.
         pyglet.clock.schedule_interval(self.on_draw, 1/60.0)
         pyglet.clock.schedule_interval(self.game_handler.update, 1/120.0)
-    
-<<<<<<< HEAD
-=======
-    def on_draw(self, dt=0):
-        if gamestate.scale_factor != 1.0:
-            gl.glPushMatrix()
-            gamestate.scale()
         
-        self.game_handler.draw()
-		
-		#UI drawing here?
-        
-        if gamestate.scale_factor != 1.0:
-            gl.glPopMatrix()
-    
->>>>>>> 55c503db3adf90dcf43fed5a3df82ab40166cd30
     def on_key_press(self, symbol, modifiers):
         # Override default behavior of escape key quitting
         if symbol == pyglet.window.key.ESCAPE:
