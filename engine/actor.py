@@ -42,6 +42,18 @@ class Actor(actionsequencer.ActionSequencer):
         max_y = self.sprite.y - self.sprite.image.anchor_y + self.sprite.image.height
         return min_x <= x <= max_x and min_y <= y <= max_y
     
+    # Convenience methods to tell the position, width, and height of the actor
+    def width(self):
+        return self.sprite.image.width
+    
+    def height(self):
+        return self.sprite.image.height
+        
+    def abs_position_x(self):
+        return self.sprite.x - self.sprite.image.anchor_x
+    
+    def abs_position_y(self):
+        return self.sprite.y - self.sprite.image.anchor_y
     
     # State changes
     

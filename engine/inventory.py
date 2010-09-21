@@ -52,10 +52,10 @@ class Inventory(object):
         self.sprites['open']['left'] = util.loadSprite(['ui', 'inventory_left.png'], gamestate.norm_w, gamestate.norm_h, self.batches['open'])
         x += self.sprites['open']['left'].width
         midsprite = util.loadSprite(['ui', 'inventory_mid.png'], gamestate.norm_w, gamestate.norm_h, self.batches['open'])
-        self.sprites['open']['mid'].append(copy.copy(midsprite))
+        self.sprites['open']['mid'].append(copy.deepcopy(midsprite))
         self.sprites['open']['mid'][-1].x += x
         x += self.sprites['open']['mid'][-1].width
-        self.sprites['open']['mid'].append(copy.copy(midsprite))
+        self.sprites['open']['mid'].append(copy.deepcopy(midsprite))
         self.sprites['open']['mid'][-1].x += x
         x += self.sprites['open']['mid'][-1].width
         self.sprites['open']['right'] = util.loadSprite(['ui', 'inventory_right.png'], gamestate.norm_w + x, gamestate.norm_h, self.batches['open'])

@@ -19,7 +19,7 @@ Contextual Action Menu Life Cycle:
         * Destroy the CAM instance?
 """
 
-import copy
+import copy, math
 import json, pyglet
 import gamestate, ui, util
 
@@ -31,42 +31,45 @@ sprites['action_background'] = util.loadSprite(['ui', 'cam_item.png'], 0, 0, spr
 class CAM(object):
     
     # Init
-    def __init__(self, ui, actions, x, y):
+    def __init__(self, actions, x, y, r = 0):
         self.visible = False
-        ui.cam = self
         self.actions = actions
         self.x = x
         self.y = y
+        if(r == 0):
+            self.r = len(actions) * (sprites['action_background'].height + 2)
+        else:
+            self.r = r
         self.visible = True
         gamestate.main_window.push_handlers(self)
         
         self.batch = pyglet.graphics.Batch()
         self.sprites = []
         self.labels = []
-        
-        sprites['action_background'].batch = self.batch
-        
+                
         # Turn each action entry into a menu item
         # TODO: turn this mess into a function/class
+        count = 1
         for action, callback in self.actions.items():
             # set up the background sprite
-            new_sprite = copy.copy(sprites['action_background'])
+            new_sprite = pyglet.sprite.Sprite(img = sprites['action_background'].image)
             new_sprite.batch = self.batch
-            new_sprite.x = x #??
-            new_sprite.y = y #??
+            theta = (180 / (len(actions)+1) ) * count
+            new_sprite.x = (self.r * math.sin(math.radians(theta))) + x
+            new_sprite.y = (self.r * math.cos(math.radians(theta))) + y - (new_sprite.height / 2) 
             self.sprites.append(new_sprite)
             
             # set up the label for the menu item
-            new_label = pyglet.text.Label(action, font_name = 'Times New Roman', font_size = 12, x = new_sprite.x + 5, y = new_sprite.y + 3, anchor_x = 'left', anchor_y = 'center', batch = self.batch)
+            new_label = pyglet.text.Label(action, font_name = 'Times New Roman', font_size = 14, anchor_x = 'left', anchor_y = 'center', batch = self.batch, color = (0, 0, 0, 255))
+            new_label.x = new_sprite.x + 5
+            new_label.y = (new_sprite.y + new_sprite.height) - (new_sprite.height / 2)
             self.labels.append(new_label)
+            count = count+1
             
     # Handle an event
     def on_mouse_release(self, x, y, button, modifiers):
-        print "Mouse press!"
         return False
     
     def draw(self):
-        print "HAI"
         if(self.visible):
-            print "Should be drawing"
             self.batch.draw()
