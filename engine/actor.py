@@ -2,9 +2,10 @@ import os, json, collections
 
 import pyglet
 
-import const, interpolator, util
 
-class Actor(object):
+import actionsequencer, const, interpolator, util
+
+class Actor(actionsequencer.ActionSequencer):
     """Any non-static object that the player can interact with"""
     
     # All actor information is static, so it is stored in class variables.
@@ -13,10 +14,10 @@ class Actor(object):
     images = None
     
     def __init__(self, identifier, name, scene, batch=None, x=0, y=0):
+        super(Actor, self).__init__()
         self.name = name
         self.scene = scene
-        self.actions = collections.deque()
-        self.blocking_actions = 0
+
         self.identifier = identifier
         self.walkpath_point = None
         self.resource_path = util.respath_func_with_base_path('actors', self.name)
@@ -57,32 +58,22 @@ class Actor(object):
         self.set_image_if_exists(new_state)
     
     
-    # Action sequences
-    
-    def next_action(self, ending_action=None):
-        """Completed one action, start another"""
-        if self.blocking_actions > 0:
-            self.blocking_actions -= 1
-        if len(self.actions) > 0:
-            action_list = self.actions.popleft()
-            for action in action_list:
-                self.blocking_actions += 1
-                action[0](*action[1])   # I bet you are so confused as to what this does :-D
-    
-    
-    # Possible actions to put in a sequence
+
+    # Possible actions to put in a sequence. Pay attention for parameter values.
     
     def move_to(self, pos, anim=None):
-        interp = interpolator.Linear2DInterpolator(self.sprite, 'position', pos, speed=400.0, 
-                                                   done_function=self.next_action)
+        """Set up an interpolator to move between this actor's current position and
+        the given position, choosing a walk animation automatically if non is provided"""
+        InterpClass = interpolator.Linear2DInterpolator # Gee golly this name is long
+        interp = InterpClass(self.sprite, 'position', pos, speed=400.0, 
+                             done_function=self.next_action)
         
-        if anim and Actor.images[self.name].has_key(anim):
-            self.update_state(anim)
-        else:
-            if pos[0] > self.sprite.x:
-                self.update_state('walk_right')
+        if not anim or not Actor.images[self.name].has_key(anim):
+            if pos[0] < self.sprite.x:
+                anim = 'walk_left'
             else:
-                self.update_state('walk_left')
+                anim = 'walk_right'
+        self.update_state(anim)
         self.scene.add_interpolator(interp)
     
     def fire_adv_event(self, event, *args):
@@ -100,7 +91,8 @@ class Actor(object):
             else:
                 self.prepare_direct_move(x, y)
             return True
-        return False
+        else:
+            return False
     
     def prepare_walkpath_move(self, x, y):
         wp = self.scene.walkpath;

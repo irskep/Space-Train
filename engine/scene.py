@@ -95,7 +95,7 @@ class Scene(InterpolatorController):
     def on_mouse_release(self, x, y, button, modifiers):
         # First check to see if we've received a hit over an object that can deploy a CAM
         gamehandler.ui.cam = cam.CAM(gamehandler.ui, {'Action': None}, x, y)
-
+        
         # Send main actor to click location according to actor's moving behavior
         if self.actors.has_key("main"):
             main = self.actors["main"]
