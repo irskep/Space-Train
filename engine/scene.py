@@ -4,13 +4,33 @@ import camera, actor, gamestate, settings, walkpath
 
 import environment, scenehandler
 
-class Scene(object):
+class InterpolatorController(object):
+    """Keeps track of the lifecycles of multiple interpolators"""
+    def __init__(self):
+        super(InterpolatorController, self).__init__()
+        self.interpolators = set()
+        
+        # Shortcut to add a new interpolator
+        self.add_interpolator = self.interpolators.add
+    
+    def update_interpolators(self, dt=0):
+        to_remove = set()
+        for i in self.interpolators:
+            i.update(dt)
+            if i.complete():
+                to_remove.add(i)
+        for i in to_remove:
+            i.done_function(i)
+        self.interpolators -= to_remove
+        
+
+class Scene(InterpolatorController):
     
     # Initialization
     def __init__(self, name):
+        super(Scene, self).__init__()
         self.name = name
         self.batch = pyglet.graphics.Batch()
-        self.interpolators = set()
         self.actors = {}
         self.camera_points = {}
         
@@ -78,10 +98,6 @@ class Scene(object):
             if main.prepare_move(*self.camera.mouse_to_canvas(x, y)):
                 main.next_action()
     
-    # Convenience
-    def add_interpolator(self, i):
-        self.interpolators.add(i)
-    
     def actor_under_point(self, x, y):
         for act in self.actors.viewvalues():
             if act.covers_point(x, y):
@@ -91,14 +107,7 @@ class Scene(object):
     # Standard stuff
     def update(self, dt=0):
         self.camera.update(dt)
-        to_remove = set()
-        for i in self.interpolators:
-            i.update(dt)
-            if i.complete():
-                to_remove.add(i)
-        for i in to_remove:
-            i.done_function(i)
-        self.interpolators -= to_remove
+        self.update_interpolators(dt)
     
     @camera.obey_camera
     def draw(self, dt=0):
