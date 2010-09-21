@@ -77,6 +77,9 @@ class Scene(InterpolatorController):
     
     # Access
     
+    def __repr__(self):
+        return 'Scene(name="%s")' % self.name
+    
     def actor_under_point(self, x, y):
         return util.first(self.actors.viewvalues(), lambda act:act.covers_point(x, y))
     
@@ -109,13 +112,11 @@ class Scene(InterpolatorController):
         self.batch.draw()
         self.walkpath.draw()
     
-    def __repr__(self):
-        return 'Scene(name="%s")' % self.name
-    
     
     # Serialization
     
     def dict_repr(self):
+        """Update and return all information necessary to recreate this Scene's current state"""
         self.info['actors'] = {i: act.dict_repr() for i, act in self.actors.viewitems()}
         self.info['walkpath'] = self.walkpath.dict_repr()
         self.info['camera_points'] = self.camera.dict_repr()
