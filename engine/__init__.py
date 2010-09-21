@@ -1,6 +1,6 @@
 import os, sys, pyglet
 
-import settings
+from util import settings
 
 #Bootstrap's bootstraps
 

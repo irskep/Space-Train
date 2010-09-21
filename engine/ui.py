@@ -1,6 +1,6 @@
 import json, pyglet
 
-import actor, cam, gamestate, inventory, settings, util
+import actor, cam, gamestate, inventory, util
 
 class UI(object):
 	

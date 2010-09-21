@@ -1,6 +1,6 @@
 import os, sys, shutil, json, importlib, pyglet
 
-import camera, actor, gamestate, settings, util
+import camera, actor, gamestate, util
 from util import walkpath
 
 import cam, environment, gamehandler, scenehandler
@@ -30,7 +30,7 @@ class Scene(InterpolatorController):
     
     # Initialization
     
-    def __init__(self, name, ui):
+    def __init__(self, name, ui=None):
         super(Scene, self).__init__()
         self.name = name
         self.batch = pyglet.graphics.Batch()

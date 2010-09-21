@@ -2,8 +2,7 @@ import os, pyglet, glydget, collections
 
 from engine import scene, actor
 from engine import gamestate, settings
-from engine import draw
-from engine.util import vector
+from engine.util import draw, vector
 
 class EditorView(object):
     def __init__(self, scene_name):

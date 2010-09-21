@@ -1,4 +1,4 @@
-import settings
+import gamestate
 
 import scene, scenehandler, ui
 
@@ -13,6 +13,8 @@ class GameHandler(object):
     # method to draw appropriate elements
     # unsure if this change is proper (i.e. calling draw() rather than assigning a function to draw()
     # in the constructor. these are equivalent?
+    
+    @gamestate.scaled
     def draw(self, dt=0):
         self.scene_handler.scene.draw()
         self.ui.draw()

@@ -1,6 +1,6 @@
 import os, pyglet, json
 
-import settings, gamestate, util
+import gamestate, util
 
 class Environment(object):
     def __init__(self, name):

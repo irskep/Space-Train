@@ -8,7 +8,7 @@ import copy
 
 import json, pyglet
 
-import gamestate, settings, util
+import gamestate, util
 
 class Inventory(object):
 

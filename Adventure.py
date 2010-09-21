@@ -44,7 +44,7 @@ class AdventureWindow(pyglet.window.Window):
         # scale/unscale the OpenGL context. If/when AdventureWindow grows its own
         # on_draw() method, you can just write '@gamestate.scaled' above the function
         # definition.
-        self.on_draw = gamestate.scaled(self.game_handler.draw)
+        self.on_draw = self.game_handler.draw
         
         # Schedule drawing and update functions.
         # Draw really only needs 60 FPS, update can be faster.
