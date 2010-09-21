@@ -6,6 +6,7 @@ class UI(object):
 	
     # Initialization
     def __init__(self):
+        self.cam = None
         self.batch = pyglet.graphics.Batch()
         self.sprites = []
         self.inventory = inventory.Inventory()
