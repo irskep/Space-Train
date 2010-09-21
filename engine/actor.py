@@ -78,7 +78,7 @@ class Actor(actionsequencer.ActionSequencer):
         interp = InterpClass(self.sprite, 'y', 100, duration=0.3, done_function=self.next_action)
         self.update_state('jump')
         self.scene.add_interpolator(interp)
-        
+
     def fire_adv_event(self, event, *args):
         self.scene.fire_adv_event(event, *args)
         self.next_action()

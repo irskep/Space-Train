@@ -11,9 +11,8 @@ import math, os, sys, json
 # pyglet.options['debug_gl'] = False
 
 import pyglet
-from pyglet import gl
 
-from engine import gamestate, settings
+from engine import gamestate, settings, util
 from engine import gamehandler
 
 class AdventureWindow(pyglet.window.Window):
@@ -34,7 +33,9 @@ class AdventureWindow(pyglet.window.Window):
         gamestate.init_keys()           # Set up some key event helpers
 		
         # Load default game scene. Probably belongs in GameHandler actually.
-        with pyglet.resource.file('/'.join(['game', 'info.json']), 'r') as game_info_file:
+
+        with pyglet.resource.file(util.respath('game', 'info.json'), 'r') as game_info_file:
+
             game_info = json.load(game_info_file)
             self.set_caption(game_info["name"])
             self.game_handler = gamehandler.GameHandler(first_scene=game_info['first_scene'])

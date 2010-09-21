@@ -100,10 +100,11 @@ class JumpInterpolator(Interpolator):
         self.base_y = getattr(host_object, attr_name)
         self.height = height
         super(JumpInterpolator, self).__init__(host_object, attr_name, 
-                                               start=0.0, end=math.PI, **kwargs)
+                                               start=0.0, end=math.pi, **kwargs)
         self.update(0.0)
     
     def update(self, dt=0):
         super(JumpInterpolator, self).update(dt)
-        setattr(self.host_object, self.attr_name, self.base_y + math.sin(self.progress))
+        setattr(self.host_object, self.attr_name, self.base_y + math.sin(self.progress*self.speed)*self.height)
+
         

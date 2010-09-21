@@ -7,7 +7,6 @@ import gamestate, actionsequencer
 class SceneHandler(actionsequencer.ActionSequencer):
     def __init__(self, scene_object):
         super(SceneHandler, self).__init__()
-
         self.scene = scene_object
         gamestate.main_window.push_handlers(self.scene)
     
