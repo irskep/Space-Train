@@ -7,7 +7,6 @@ class GameHandler(object):
     def __init__(self, first_scene):
         self.scene = scene.Scene(first_scene)
         self.scene_handler = scenehandler.SceneHandler(self.scene)
-        self.ui = ui.UI()
         self.update = self.scene_handler.scene.update
     
     # method to draw appropriate elements
@@ -15,4 +14,5 @@ class GameHandler(object):
     # in the constructor. these are equivalent?
     def draw(self):
         self.scene_handler.scene.draw()
-        self.ui.draw()
+        ui.UI.draw()
+        print ui.UI.cam

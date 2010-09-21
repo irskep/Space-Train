@@ -2,7 +2,7 @@ import os, sys, shutil, json, importlib, pyglet
 
 import camera, actor, gamestate, settings, walkpath
 
-import environment, scenehandler
+import cam, environment, gamehandler, scenehandler
 
 class Scene(object):
     
@@ -70,6 +70,8 @@ class Scene(object):
     
     # Events
     def on_mouse_release(self, x, y, button, modifiers):
+        # First check to see if we've received a hit over an object that can deploy a CAM
+        gamehandler.ui.cam = cam.CAM(gamehandler.ui, {'Action': None}, x, y)
         if self.actors.has_key("main"):
             main = self.actors["main"]
             if main.prepare_move(*self.camera.mouse_to_canvas(x, y)):

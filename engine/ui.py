@@ -1,6 +1,6 @@
 import json, pyglet
 
-import gamestate, inventory, settings
+import cam, gamestate, inventory, settings
 
 class UI(object):
 	
@@ -21,3 +21,5 @@ class UI(object):
     def draw(self):
         self.batch.draw()
         self.inventory.draw()
+        if(self.cam is not None):
+            self.cam.draw()

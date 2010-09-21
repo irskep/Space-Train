@@ -57,6 +57,11 @@ def closest_point_on_line(point, a, b):
     # move from point a to the nearest point on the segment
     return tuple_op(a, v, operator.add)
 
+# Simply consolidate the image loading and sprite creation process into one function  
+def loadSprite(path, x, y, batch):
+    loaded_image = pyglet.resource.nested_image(*path)
+    return pyglet.sprite.Sprite(img = loaded_image, x = x, y = y, batch = batch)
+    
 class ClipGroup(pyglet.graphics.OrderedGroup): 
     def __init__(self, name="ClipGroup", order=0, parent=None): 
         super(ClipGroup, self).__init__(order, parent) 

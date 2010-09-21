@@ -21,15 +21,15 @@ class Inventory(object):
         x = 0
         for sprite in self.sprites['closed']:
             x += sprite.width
-        self.sprites['closed'].append( self.loadSprite(['ui', 'inventory_left.png'], gamestate.norm_w + x, gamestate.norm_h, self.batches['closed']) )
+        self.sprites['closed'].append( util.loadSprite(['ui', 'inventory_left.png'], gamestate.norm_w + x, gamestate.norm_h, self.batches['closed']) )
         x = 0
         for sprite in self.sprites['closed']:
             x += sprite.width
-        self.sprites['closed'].append( self.loadSprite(['ui', 'inventory_mid.png'], gamestate.norm_w + x, gamestate.norm_h, self.batches['closed']) )
+        self.sprites['closed'].append( util.loadSprite(['ui', 'inventory_mid.png'], gamestate.norm_w + x, gamestate.norm_h, self.batches['closed']) )
         x = 0
         for sprite in self.sprites['closed']:
             x += sprite.width
-        self.sprites['closed'].append( self.loadSprite(['ui', 'inventory_right.png'], gamestate.norm_w + x, gamestate.norm_h, self.batches['closed']) )
+        self.sprites['closed'].append( util.loadSprite(['ui', 'inventory_right.png'], gamestate.norm_w + x, gamestate.norm_h, self.batches['closed']) )
                 
         # translate everything to where it needs to be
         x_trans = 0
@@ -49,16 +49,16 @@ class Inventory(object):
         self.sprites['open']['mid'] = []
         
         x = 0
-        self.sprites['open']['left'] = self.loadSprite(['ui', 'inventory_left.png'], gamestate.norm_w, gamestate.norm_h, self.batches['open'])
+        self.sprites['open']['left'] = util.loadSprite(['ui', 'inventory_left.png'], gamestate.norm_w, gamestate.norm_h, self.batches['open'])
         x += self.sprites['open']['left'].width
-        midsprite = self.loadSprite(['ui', 'inventory_mid.png'], gamestate.norm_w, gamestate.norm_h, self.batches['open'])
+        midsprite = util.loadSprite(['ui', 'inventory_mid.png'], gamestate.norm_w, gamestate.norm_h, self.batches['open'])
         self.sprites['open']['mid'].append(copy.copy(midsprite))
         self.sprites['open']['mid'][-1].x += x
         x += self.sprites['open']['mid'][-1].width
         self.sprites['open']['mid'].append(copy.copy(midsprite))
         self.sprites['open']['mid'][-1].x += x
         x += self.sprites['open']['mid'][-1].width
-        self.sprites['open']['right'] = self.loadSprite(['ui', 'inventory_right.png'], gamestate.norm_w + x, gamestate.norm_h, self.batches['open'])
+        self.sprites['open']['right'] = util.loadSprite(['ui', 'inventory_right.png'], gamestate.norm_w + x, gamestate.norm_h, self.batches['open'])
         x += self.sprites['open']['right'].width
         
         y = self.sprites['open']['left'].height
@@ -74,16 +74,14 @@ class Inventory(object):
         
         gamestate.main_window.push_handlers(self)
 		  
-    # Simply consolidate the image loading and sprite creation process into one function  
-    def loadSprite(self, path, x, y, batch):
-        loaded_image = pyglet.resource.nested_image(*path)
-        return pyglet.sprite.Sprite(img = loaded_image, x = x, y = y, batch = batch)
         
     def on_mouse_release(self, x, y, button, modifiers):
-        print "Mouse press!"
+        return False
         if self.intersectsActiveArea(x, y):
             self.toggle()
             return pyglet.event.EVENT_HANDLED
+        else:
+            return False
             
     
     def toggle(self):
