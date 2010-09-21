@@ -1,4 +1,4 @@
-import pyglet
+import pyglet, functools
 
 import gamestate
 
@@ -20,7 +20,9 @@ class Camera(object):
                        for identifier, d in dict_repr.viewitems()}
     
     def dict_repr(self):
-        return {identifier: {'x': p.position[0], 'y': p.position[1]} for identifier, p in self.points.viewitems()}
+        return {identifier: {'x': p.position[0], 
+                             'y': p.position[1]} 
+                for identifier, p in self.points.viewitems()}
     
     def constrain_point(self, x, y):
         x = min(max(x, self.min_bounds[0]), self.max_bounds[0])
@@ -75,7 +77,8 @@ class Camera(object):
     
     def apply(self):
         pyglet.gl.glPushMatrix()
-        pyglet.gl.glTranslatef(-self.position[0]+gamestate.norm_w//2, -self.position[1]+gamestate.norm_h//2,0)
+        pyglet.gl.glTranslatef(-self.position[0]+gamestate.norm_w//2, 
+                               -self.position[1]+gamestate.norm_h//2,0)
     
     def unapply(self):
         pyglet.gl.glPopMatrix()
@@ -85,3 +88,13 @@ class Camera(object):
                 y/gamestate.scale_factor + self.position[1]-gamestate.norm_h//2)
     
 
+def obey_camera(draw_function):
+    @functools.wraps(draw_function)
+    def draw_with_camera(*args, **kwargs):
+        # args[0] is the class instance
+        pyglet.gl.glPushMatrix()
+        pyglet.gl.glTranslatef(-args[0].camera.position[0]+gamestate.norm_w//2, 
+                               -args[0].camera.position[1]+gamestate.norm_h//2,0)
+        draw_function(*args, **kwargs)
+        pyglet.gl.glPopMatrix()
+    return draw_with_camera

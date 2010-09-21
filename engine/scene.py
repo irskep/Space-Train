@@ -100,12 +100,11 @@ class Scene(object):
             i.done_function(i)
         self.interpolators -= to_remove
     
+    @camera.obey_camera
     def draw(self, dt=0):
-        self.camera.apply()
         self.env.draw()
         self.batch.draw()
         self.walkpath.draw()
-        self.camera.unapply()
     
     def __repr__(self):
         return 'Scene(name="%s")' % self.name
