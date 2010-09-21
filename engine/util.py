@@ -35,6 +35,10 @@ def length(v):
 def length_squared(v):
     """Get the squared length of a 2D vector"""
     return v[0]*v[0] + v[1]*v[1]
+    
+def intersects(x, y, box_x, box_y, box_w, box_h):
+    return (x > box_x and x < box_x + box_w and
+            y > box_y and y < box_y + box_y)
 
 def op_between(func):
     """Apply a vector operaton on the vector between two 2D points"""
