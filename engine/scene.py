@@ -97,7 +97,7 @@ class Scene(InterpolatorController):
         if clicked_actor:
             # Should probably have something like 'ui.click_actor(clicked_actor)' here instead
             clicked_actor.prepare_jump()
-            main.next_action()
+            clicked_actor.next_action()
         elif self.actors.has_key("main"):
             # Send main actor to click location according to actor's moving behavior
             main = self.actors["main"]
