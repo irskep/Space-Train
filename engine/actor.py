@@ -16,6 +16,7 @@ class Actor(actionsequencer.ActionSequencer):
         super(Actor, self).__init__()
         self.name = name
         self.scene = scene
+
         self.identifier = identifier
         self.walkpath_point = None
         self.resource_path = util.respath_func_with_base_path('actors', self.name)
@@ -41,6 +42,18 @@ class Actor(actionsequencer.ActionSequencer):
         max_y = self.sprite.y - self.sprite.image.anchor_y + self.sprite.image.height
         return min_x <= x <= max_x and min_y <= y <= max_y
     
+    # Convenience methods to tell the position, width, and height of the actor
+    def width(self):
+        return self.sprite.image.width
+    
+    def height(self):
+        return self.sprite.image.height
+        
+    def abs_position_x(self):
+        return self.sprite.x - self.sprite.image.anchor_x
+    
+    def abs_position_y(self):
+        return self.sprite.y - self.sprite.image.anchor_y
     
     # State changes
     
@@ -54,7 +67,6 @@ class Actor(actionsequencer.ActionSequencer):
         changed even if animation is not changed so that scripts do not become confused."""
         self.current_state = new_state
         self.set_image_if_exists(new_state)
-    
     
     # Possible actions to put in a sequence. Pay attention for parameter values.
     
@@ -78,7 +90,7 @@ class Actor(actionsequencer.ActionSequencer):
         interp = InterpClass(self.sprite, 'y', 100, duration=0.3, done_function=self.next_action)
         self.update_state('jump')
         self.scene.add_interpolator(interp)
-    
+
     def fire_adv_event(self, event, *args):
         self.scene.fire_adv_event(event, *args)
         self.next_action()
@@ -130,7 +142,6 @@ class Actor(actionsequencer.ActionSequencer):
     def prepare_jump(self):
         self.actions.append([(self.jump, [])])
         self.actions.append([(self.update_state, ['stand_front'])])
-    
     
     # Serialization
     

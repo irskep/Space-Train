@@ -17,9 +17,9 @@ class Environment(object):
         background_sprites_dict = {}
         for x in range(self.background_tile_cols):
             for y in range(self.background_tile_rows):
-                img = pyglet.resource.nested_image('environments', 
-                                                   name, 
-                                                   '%d_%d.png' % (x, y))
+                img = pyglet.resource.image(util.respath('environments', 
+                                                         name, 
+                                                         '%d_%d.png' % (x, y)))
                 new_sprite = pyglet.sprite.Sprite(img, x=0, y=0, batch=self.background_batch)
                 self.background_sprites.append(new_sprite)
                 background_sprites_dict[(x, y)] = new_sprite

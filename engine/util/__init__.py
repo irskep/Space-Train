@@ -25,6 +25,10 @@ def respath(*args):
 def respath_func_with_base_path(*args):
     return functools.partial(respath, *args)
 
+def load_sprite(path, *args, **kwargs):
+    loaded_image = pyglet.resource.image(respath(*path))
+    return pyglet.sprite.Sprite(img=loaded_image, x=x, y=y, batch=batch)
+
 class ClipGroup(pyglet.graphics.OrderedGroup): 
     """Sprite group that clips to a rectangle"""
     def __init__(self, name="ClipGroup", order=0, parent=None): 

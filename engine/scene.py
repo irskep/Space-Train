@@ -3,7 +3,7 @@ import os, sys, shutil, json, importlib, pyglet
 import camera, actor, gamestate, settings, util
 from util import walkpath
 
-import environment, scenehandler
+import cam, environment, gamehandler, scenehandler
 
 class InterpolatorController(object):
     """Keeps track of the lifecycles of multiple interpolators"""
@@ -30,10 +30,11 @@ class Scene(InterpolatorController):
     
     # Initialization
     
-    def __init__(self, name):
+    def __init__(self, name, ui):
         super(Scene, self).__init__()
         self.name = name
         self.batch = pyglet.graphics.Batch()
+        self.ui = ui
         self.actors = {}
         self.camera_points = {}
         self.resource_path = util.respath_func_with_base_path('game', 'scenes', self.name)
@@ -96,7 +97,7 @@ class Scene(InterpolatorController):
     def on_mouse_release(self, x, y, button, modifiers):
         clicked_actor = self.actor_under_point(x, y)
         if clicked_actor:
-            # Should probably have something like 'ui.click_actor(clicked_actor)' here instead
+            self.ui.actor_clicked(clicked_actor)
             clicked_actor.prepare_jump()
             clicked_actor.next_action()
         elif self.actors.has_key("main"):
