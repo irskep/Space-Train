@@ -33,7 +33,6 @@ class CAM(object):
     # Init
     def __init__(self, ui, actions, x, y):
         self.visible = False
-        ui.cam = self
         self.actions = actions
         self.x = x
         self.y = y

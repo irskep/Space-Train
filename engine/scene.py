@@ -25,7 +25,7 @@ class InterpolatorController(object):
         self.interpolators -= to_remove
     
 
-class Scene(InterpolatorController):
+class Scene(InterpolatorController, ui):
     
     # Initialization
     
@@ -93,7 +93,8 @@ class Scene(InterpolatorController):
     # Events
     
     def on_mouse_release(self, x, y, button, modifiers):
-
+        self.ui.cam = cam.CAM(self, {'Action': None}, x, y)
+        
         clicked_actor = self.actor_under_point(x, y)
         if clicked_actor:
             # Should probably have something like 'ui.click_actor(clicked_actor)' here instead
