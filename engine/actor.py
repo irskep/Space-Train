@@ -113,7 +113,7 @@ class Actor(object):
                     'point': (x, y)
                 }
                 event_args = (const.WALK_COMPLETED, info)
-            self.actions.append([(self.fire_event, event_args)])
+            self.actions.append([(self.fire_adv_event, event_args)])
             return True
         return False
     
@@ -129,8 +129,8 @@ class Actor(object):
                 self.update_state('walk_left')
         self.scene.add_interpolator(interp)
     
-    def fire_event(self, event, *args):
-        self.scene.fire_event(event, *args)
+    def fire_adv_event(self, event, *args):
+        self.scene.fire_adv_event(event, *args)
         self.blocking_actions -= 1
         self.next_action()
     

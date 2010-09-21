@@ -118,7 +118,7 @@ class WalkPath(object):
         closest_edge = None
         for edge in self.edges.viewvalues():
             cp = self.closest_edge_point_to_point(edge, point)
-            test_dist = util.dist_squared((point[0]-cp[0], point[1]-cp[1]))
+            test_dist = util.length_squared((point[0]-cp[0], point[1]-cp[1]))
             if closest_dist is None or test_dist < closest_dist:
                 closest_point = cp
                 closest_edge = edge

@@ -1,6 +1,6 @@
 import os, sys, shutil, json, importlib, pyglet
 
-import camera, actor, gamestate, settings, walkpath
+import camera, actor, gamestate, settings, walkpath, util
 
 import environment, scenehandler
 
@@ -82,14 +82,9 @@ class Scene(InterpolatorController):
         self.actors[identifier] = new_actor
         return new_actor
     
-    def save_info(self):
-        shutil.copyfile(self.resource_path('info.json'), self.resource_path('info.json~'))
-        with pyglet.resource.file(self.resource_path('info.json'), 'w') as info_file:
-            json.dump(self.dict_repr(), info_file, indent=4)
-    
-    
     # Events
-    def fire_event(self, event, *args):
+    
+    def fire_adv_event(self, event, *args):
         self.module.handle_event(event, *args)
     
     def on_mouse_release(self, x, y, button, modifiers):
@@ -99,12 +94,10 @@ class Scene(InterpolatorController):
                 main.next_action()
     
     def actor_under_point(self, x, y):
-        for act in self.actors.viewvalues():
-            if act.covers_point(x, y):
-                return act
+        return util.first(self.actors.viewvalues(), lambda act:act.covers_point(x, y))
     
+    # Update/draw
     
-    # Standard stuff
     def update(self, dt=0):
         self.camera.update(dt)
         self.update_interpolators(dt)
@@ -117,4 +110,11 @@ class Scene(InterpolatorController):
     
     def __repr__(self):
         return 'Scene(name="%s")' % self.name
+    
+    # Editor methods    
+    
+    def save_info(self):
+        shutil.copyfile(self.resource_path('info.json'), self.resource_path('info.json~'))
+        with pyglet.resource.file(self.resource_path('info.json'), 'w') as info_file:
+            json.dump(self.dict_repr(), info_file, indent=4)
     
