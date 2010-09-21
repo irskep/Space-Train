@@ -27,7 +27,7 @@ def respath_func_with_base_path(*args):
 
 def load_sprite(path, *args, **kwargs):
     loaded_image = pyglet.resource.image(respath(*path))
-    return pyglet.sprite.Sprite(img=loaded_image, x=x, y=y, batch=batch)
+    return pyglet.sprite.Sprite(loaded_image, *args, **kwargs)
 
 class ClipGroup(pyglet.graphics.OrderedGroup): 
     """Sprite group that clips to a rectangle"""
@@ -42,3 +42,4 @@ class ClipGroup(pyglet.graphics.OrderedGroup):
     
     def unset_state(self): 
         gl.glDisable(gl.GL_SCISSOR_TEST)
+    
