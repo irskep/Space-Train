@@ -2,7 +2,7 @@ import os, json, collections
 
 import pyglet
 
-import const, interpolator
+import const, interpolator, util
 
 class Actor(object):
     
@@ -16,6 +16,7 @@ class Actor(object):
         self.blocking_actions = 0
         self.identifier = identifier or make_identifier.next()
         self.walkpath_point = None
+        self.resource_path = util.respath_func_with_base_path('actors', self.name)
         
         self.init_info()
         self.current_state = Actor.info[self.name]['start_state']
@@ -59,9 +60,6 @@ class Actor(object):
                         bin = pyglet.image.atlas.TextureBin()
                         anim = pyglet.image.Animation.from_image_sequence(images, 0.2);
                         Actor.images[self.name][state_name] = anim
-    
-    def resource_path(self, name):
-        return '/'.join(['actors', self.name, name])
     
     def covers_point(self, x, y):
         min_x = self.sprite.x - self.sprite.image.anchor_x

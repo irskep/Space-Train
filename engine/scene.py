@@ -22,38 +22,32 @@ class InterpolatorController(object):
         for i in to_remove:
             i.done_function(i)
         self.interpolators -= to_remove
-        
+    
 
 class Scene(InterpolatorController):
     
     # Initialization
+    
     def __init__(self, name):
         super(Scene, self).__init__()
         self.name = name
         self.batch = pyglet.graphics.Batch()
         self.actors = {}
         self.camera_points = {}
+        self.resource_path = util.respath_func_with_base_path('game', 'scenes', self.name)
         
-        with pyglet.resource.file(self.resource_path('info.json'), 'r') as info_file:
-            self.info = json.load(info_file)
+        self.load_info()
+        self.initialize_from_info()
+        self.load_actors()
+        
+        if gamestate.scripts_enabled:
+            self.load_script()
+    
+    def initialize_from_info(self):
         self.environment_name = self.info['environment']
         self.env = environment.Environment(self.environment_name)
         self.walkpath = walkpath.WalkPath(dict_repr = self.info['walkpath'])
         self.camera = camera.Camera(dict_repr=self.info['camera_points'])
-        
-        if gamestate.scripts_enabled:
-            self.module = importlib.import_module(name)
-            self.module.init(self, self.env)
-            if self.module.myscene is None:
-                self.module.myscene = self
-        
-        self.load_actors()
-        
-        if gamestate.scripts_enabled:
-            self.module.scene_loaded()
-    
-    def resource_path(self, name):
-        return '/'.join(['game', 'scenes', self.name, name])
     
     def load_actors(self):
         for identifier, attrs in self.info['actors'].viewitems():
@@ -66,26 +60,26 @@ class Scene(InterpolatorController):
                 new_actor.walkpath_point = attrs['walkpath_point']
                 new_actor.sprite.position = self.walkpath.points[new_actor.walkpath_point]
     
-    def dict_repr(self):
-        self.info['actors'] = {i: act.dict_repr() for i, act in self.actors.viewitems()}
-        self.info['walkpath'] = self.walkpath.dict_repr()
-        self.info['camera_points'] = self.camera.dict_repr()
-        return self.info
+    def load_script(self):
+        # Requires that game/scenes is in PYTHONPATH
+        self.module = importlib.import_module(self.name)
+        self.module.myscene = self
+        self.module.init()
     
-    def new_actor(self, actor_name, identifier=None, **kwargs):
-        if identifier is None:
-            next_identifier = 1
-            while self.actors.has_key("%s_%d" % (actor_name, next_identifier)):
-                next_identifier += 1
-            identifier = "%s_%d" % (actor_name, next_identifier)
-        new_actor = actor.Actor(identifier, actor_name, self, **kwargs)
-        self.actors[identifier] = new_actor
-        return new_actor
     
-    # Events
+    # Access
+    
+    def actor_under_point(self, x, y):
+        return util.first(self.actors.viewvalues(), lambda act:act.covers_point(x, y))
+    
+    
+    # Script interaction
     
     def fire_adv_event(self, event, *args):
         self.module.handle_event(event, *args)
+    
+    
+    # Events
     
     def on_mouse_release(self, x, y, button, modifiers):
         if self.actors.has_key("main"):
@@ -93,8 +87,6 @@ class Scene(InterpolatorController):
             if main.prepare_move(*self.camera.mouse_to_canvas(x, y)):
                 main.next_action()
     
-    def actor_under_point(self, x, y):
-        return util.first(self.actors.viewvalues(), lambda act:act.covers_point(x, y))
     
     # Update/draw
     
@@ -111,10 +103,34 @@ class Scene(InterpolatorController):
     def __repr__(self):
         return 'Scene(name="%s")' % self.name
     
-    # Editor methods    
+    
+    # Serialization
+    
+    def dict_repr(self):
+        self.info['actors'] = {i: act.dict_repr() for i, act in self.actors.viewitems()}
+        self.info['walkpath'] = self.walkpath.dict_repr()
+        self.info['camera_points'] = self.camera.dict_repr()
+        return self.info
+    
+    def load_info(self):
+        with pyglet.resource.file(self.resource_path('info.json'), 'r') as info_file:
+            self.info = json.load(info_file)
     
     def save_info(self):
         shutil.copyfile(self.resource_path('info.json'), self.resource_path('info.json~'))
         with pyglet.resource.file(self.resource_path('info.json'), 'w') as info_file:
             json.dump(self.dict_repr(), info_file, indent=4)
+    
+    
+    # Editor methods
+    
+    def new_actor(self, actor_name, identifier=None, **kwargs):
+        if identifier is None:
+            next_identifier = 1
+            while self.actors.has_key("%s_%d" % (actor_name, next_identifier)):
+                next_identifier += 1
+            identifier = "%s_%d" % (actor_name, next_identifier)
+        new_actor = actor.Actor(identifier, actor_name, self, **kwargs)
+        self.actors[identifier] = new_actor
+        return new_actor
     

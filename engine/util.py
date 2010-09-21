@@ -1,4 +1,4 @@
-import math, operator
+import math, operator, functools
 import pyglet
 
 # Functional
@@ -8,6 +8,14 @@ def first(list_to_search, condition_to_satisfy):
     for item in list_to_search:
         if condition_to_satisfy(item):
             return item
+
+# Conventions
+
+def respath(*args):
+    return '/'.join(args)
+
+def respath_func_with_base_path(*args):
+    return functools.partial(respath, *args)
 
 # Vector
 
