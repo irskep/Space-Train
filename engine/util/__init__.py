@@ -1,6 +1,7 @@
 import pyglet, functools
 
 # Easy access if you just import util
+import const
 import dijkstra
 import draw
 import settings

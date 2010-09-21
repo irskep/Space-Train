@@ -1,8 +1,4 @@
-import os, json, collections
-
-import pyglet
-
-import const, interpolator, util
+import collections
 
 class ActionSequencer(object):
     """
