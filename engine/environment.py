@@ -1,11 +1,12 @@
 import os, pyglet, json
 
-import settings, gamestate
+import settings, gamestate, util
 
 class Environment(object):
     def __init__(self, name):
         self.name = name
-        with open(os.path.join(settings.resources_path, 'environments', name, 'info.json'), 'r') as info_file:
+        info_path = util.respath('environments', name, 'info.json')
+        with pyglet.resource.file(info_path, 'r') as info_file:
             info = json.load(info_file)
             self.background_tile_rows = info['tile_rows']
             self.background_tile_cols = info['tile_columns']
