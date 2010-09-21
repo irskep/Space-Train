@@ -14,5 +14,5 @@ class GameHandler(object):
     # in the constructor. these are equivalent?
     def draw(self):
         self.scene_handler.scene.draw()
-        ui.UI.draw()
-        print ui.UI.cam
+        #ui.UI.draw()
+        #print ui.UI.cam

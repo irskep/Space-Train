@@ -2,9 +2,9 @@ from engine import actor
 
 myscene = None
 
-def init(scn, env):
-    """Your opportunity to initialize a subclass of SceneHandler"""
-    pass
+def init():
+    print "Initializing script for", myscene
+    print "Not changing anything, accepting defaults"
 
-def scene_loaded():
-    print "I made a", myscene
+def handle_event(event, *args):
+    print "Handled", event, "with", args

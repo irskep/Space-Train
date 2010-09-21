@@ -11,7 +11,9 @@ from editor import editorview
 class AdventureMakerWindow(pyglet.window.Window):
     def __init__(self):
         screen = pyglet.window.get_platform().get_default_display().get_default_screen()
-        super(AdventureMakerWindow,self).__init__(width=screen.width-20, height=screen.height-80, vsync=True)
+        super(AdventureMakerWindow,self).__init__(width=screen.width-20, 
+                                                  height=screen.height-80, 
+                                                  vsync=True)
         gamestate.main_window = self
         gamestate.scripts_enabled = False
         gamestate.init_scale()
