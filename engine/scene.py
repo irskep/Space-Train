@@ -100,7 +100,7 @@ class Scene(object):
             i.done_function(i)
         self.interpolators -= to_remove
     
-    def draw(self):
+    def draw(self, dt=0):
         self.camera.apply()
         self.env.draw()
         self.batch.draw()
