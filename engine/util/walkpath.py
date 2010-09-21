@@ -1,5 +1,5 @@
-import util, collections, dijkstra
-from util import draw, vector
+import collections
+import draw, vector, dijkstra
 
 class Edge(object):
     def __init__(self, a, b, anim=None, annotations=None):

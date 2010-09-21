@@ -1,6 +1,7 @@
 import os, sys, shutil, json, importlib, pyglet
 
-import camera, actor, gamestate, settings, walkpath, util
+import camera, actor, gamestate, settings, util
+from util import walkpath
 
 import environment, scenehandler
 

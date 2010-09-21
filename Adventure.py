@@ -12,7 +12,7 @@ import math, os, sys, json
 
 import pyglet
 
-from engine import gamestate, settings, util
+from engine import gamestate, util
 from engine import gamehandler
 
 class AdventureWindow(pyglet.window.Window):
@@ -20,7 +20,7 @@ class AdventureWindow(pyglet.window.Window):
     Basic customizations to Window, plus configuration.
     """
     def __init__(self):
-        if settings.fullscreen:
+        if util.settings.fullscreen:
             super(AdventureWindow,self).__init__(fullscreen=True, vsync=True)
         else:
             super(AdventureWindow,self).__init__(width=gamestate.norm_w, 

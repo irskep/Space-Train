@@ -1,5 +1,12 @@
 import pyglet, functools
 
+# Easy access if you just import util
+import dijkstra
+import draw
+import settings
+import vector
+import walkpath
+
 # Functional
 
 def first(list_to_search, condition_to_satisfy):
