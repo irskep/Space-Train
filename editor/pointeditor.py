@@ -82,7 +82,7 @@ class PointEditor(abstracteditor.AbstractEditor):
         def point_placer(x, y):
             world_point = self.scene.camera.mouse_to_canvas(x, y)
             self.set_selected_item(self.scene.walkpath.add_point(*world_point))
-            self.set_status_message('')
+            editorstate.set_status_message('')
         self.editor.click_actions.append(point_placer)
     
     def delete_point(self, button=None):

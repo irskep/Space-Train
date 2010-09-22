@@ -84,16 +84,16 @@ class EdgeEditor(abstracteditor.AbstractEditor):
         self.editor.click_actions.append(edge_finish)
     
     def delete_edge(self, button=None):
-        self.set_status_message('Click the source point')
+        editorstate.set_status_message('Click the source point')
         def edge_setup(x, y):
             world_point = self.scene.camera.mouse_to_canvas(x, y)
             self.point_1 = self.scene.walkpath.path_point_near_point(world_point)
             if self.point_1:
-                self.set_status_message('Click the destination point')
+                editorstate.set_status_message('Click the destination point')
             else:
                 # empty the queue, never mind
                 self.click_actions = collections.deque()
-                self.set_status_message('')
+                editorstate.set_status_message('')
         def edge_finish(x, y):
             world_point = self.scene.camera.mouse_to_canvas(x, y)
             self.point_2 = self.scene.walkpath.path_point_near_point(world_point)
