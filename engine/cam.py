@@ -44,8 +44,7 @@ class CAM(object):
         gamestate.main_window.push_handlers(self)
         
         self.batch = pyglet.graphics.Batch()
-        self.sprites = []
-        self.labels = []
+        self.buttons = []
                 
         # Turn each action entry into a menu item
         # TODO: turn this mess into a function/class
@@ -55,18 +54,13 @@ class CAM(object):
 
         for action, callback in self.actions.items():
             # set up the background sprite
-            new_sprite = pyglet.sprite.Sprite(img = sprites['action_background'].image)
-            new_sprite.batch = self.batch
+            _x = x + (self.calculate_indent_px(1, max_indent) - self.calculate_indent_px(count, max_indent))
+            _y = y + ((max_size)*(sprites['action_background'].height)) - (count * sprites['action_background'].height)
             
-            new_sprite.x = x + (self.calculate_indent_px(1, max_indent) - self.calculate_indent_px(count, max_indent))
-            new_sprite.y = y + ((max_size)*(new_sprite.height)) - (count * new_sprite.height)
-            self.sprites.append(new_sprite)
+            button = self.Button(_x, _y, self.batch, action, callback)
+            self.buttons.append(button)
             
             # set up the label for the menu item
-            new_label = pyglet.text.Label(action, font_name = 'Times New Roman', font_size = 14, anchor_x = 'left', anchor_y = 'center', batch = self.batch, color = (0, 0, 0, 255))
-            new_label.x = new_sprite.x + 5
-            new_label.y = (new_sprite.y + new_sprite.height) - (new_sprite.height / 2)
-            self.labels.append(new_label)
             count += 1
             
     def calculate_indent_px(self, indent, max_indent):
@@ -81,12 +75,43 @@ class CAM(object):
     
     # Handle an event
     def on_mouse_release(self, x, y, button, modifiers):
-        return False
+        if(self.visible):
+            self.visible = False
+            button = self.button_under(x,y)
+            if button is None:
+                # pass this even down to other handlers, clean up the CAM
+                return pyglet.event.EVENT_UNHANDLED
+            else:
+                # execute the click action and clean up the CAM
+                button.click()
+                return pyglet.event.EVENT_HANDLED
+    
+    # Determines which button is under the given point
+    # Note that this function's behaviour is undefined when buttons overlap
+    # this is intended but should later be changed to return the topmost button
+    def button_under(self, x, y):
+        for button in self.buttons:
+            if (x > button.x and x < button.x + button.width
+                and  y > button.y and y < button.y + button.height):
+                return button
+        return None
     
     def draw(self):
         if(self.visible):
             self.batch.draw()
             
-    """class Button(object):
+    # TODO: finish button class
+    class Button(object):
         def __init__(self, x, y, batch, action, callback):
-    """     
+            self.sprite = pyglet.sprite.Sprite(img = sprites['action_background'].image, x = x, y = y, batch = batch)
+            self.label = pyglet.text.Label(action, font_name = 'Times New Roman', font_size = 14, anchor_x = 'left', 
+                                           anchor_y = 'center', batch = batch, color = (0, 0, 0, 255),
+                                           x = self.sprite.x + 5, y = (self.sprite.y + self.sprite.height) - (self.sprite.height / 2))
+            self.x = x
+            self.y = y
+            self.width = self.sprite.width
+            self.height = self.sprite.height
+            self.callback = callback
+            
+        def click(self):
+            self.callback()

@@ -76,12 +76,12 @@ class Inventory(object):
             print "Sprite: %s x:%d y:%d b:%s" % (sprite, sprite.x, sprite.y, sprite.batch)
         
     def on_mouse_release(self, x, y, button, modifiers):
-        return False
+        return pyglet.event.EVENT_UNHANDLED
         if self.intersects_active_area(x, y):
             self.toggle()
             return pyglet.event.EVENT_HANDLED
         else:
-            return False
+            return pyglet.event.EVENT_UNHANDLED
             
     
     def toggle(self):
