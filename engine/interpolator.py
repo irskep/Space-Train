@@ -39,7 +39,7 @@ class Interpolator(object):
         self.progress = 0.0
     
     def complete(self):
-        return abs(self.progress) >= self.duration
+        return self.progress >= self.duration
     
     def fix_speed_and_duration(self):
         if self.speed == 0.0:
@@ -54,7 +54,7 @@ class Interpolator(object):
             self.speed = -self.speed
     
     def update(self, dt=0):
-        self.progress += dt
+        self.progress = min(self.progress+dt, self.duration)
     
     def __repr__(self):
         fmt = "Interpolator '%s' on %s.%s from %0.2f to %0.2f taking %0.2f seconds)"
