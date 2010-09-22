@@ -1,24 +1,4 @@
 import math, operator, functools
-import pyglet
-
-# Functional
-
-def first(list_to_search, condition_to_satisfy):
-    """Return first item in a list for which condition_to_satisfy(item) returns True"""
-    for item in list_to_search:
-        if condition_to_satisfy(item):
-            return item
-    return None
-
-# Conventions
-
-def respath(*args):
-    return '/'.join(args)
-
-def respath_func_with_base_path(*args):
-    return functools.partial(respath, *args)
-
-# Vector
 
 def round_down(v):
     """Round down both values of a 2-tuple to integers"""
@@ -35,6 +15,10 @@ def length(v):
 def length_squared(v):
     """Get the squared length of a 2D vector"""
     return v[0]*v[0] + v[1]*v[1]
+    
+def intersects(x, y, box_x, box_y, box_w, box_h):
+    return (x > box_x and x < box_x + box_w and
+            y > box_y and y < box_y + box_y)
 
 def op_between(func):
     """Apply a vector operaton on the vector between two 2D points"""
@@ -81,18 +65,3 @@ def closest_point_on_line(point, a, b):
     
     # move from point a to the nearest point on the segment
     return tuple_op(a, v, operator.add)
-
-class ClipGroup(pyglet.graphics.OrderedGroup): 
-    """Sprite group that clips to a rectangle"""
-    def __init__(self, name="ClipGroup", order=0, parent=None): 
-        super(ClipGroup, self).__init__(order, parent) 
-        self.x, self.y, self.w, self.h = 0, 0, 256, 256 
-        self.name=name 
-    
-    def set_state(self): 
-        gl.glScissor(self.x, self.y, self.w, self.h) 
-        gl.glEnable(gl.GL_SCISSOR_TEST) 
-    
-    def unset_state(self): 
-        gl.glDisable(gl.GL_SCISSOR_TEST)
-    

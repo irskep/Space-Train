@@ -1,5 +1,5 @@
-import util, collections, dijkstra
-import draw
+import collections
+import draw, vector, dijkstra
 
 class Edge(object):
     def __init__(self, a, b, anim=None, annotations=None):
@@ -37,18 +37,10 @@ class WalkPath(object):
                            for identifier, point in self.points.viewitems()},
                 'edges': [edge.dict_repr() for edge in self.edges.viewvalues()]}
     
-    def dijkstar_repr(self):
-        node_dict = {}
-        edge_dict = collectons.defaultdict(dict)
-        for edge in self.edges:
-            node_dict[edge.a][edge.b] = (edge.a, edge.b)
-            edge_dict[(edge.a, edge.b)] = (util.dist_between(self.points[edge.a], self.points[edge.b]),)
-        return {'nodes': node_dict, 'edges': edge_dict}
-    
     def dijkstra_repr(self):
         G = collections.defaultdict(dict)
         for edge in self.edges.viewvalues():
-            G[edge.a][edge.b] = util.dist_between(self.points[edge.a], self.points[edge.b])
+            G[edge.a][edge.b] = vector.dist_between(self.points[edge.a], self.points[edge.b])
         return G
     
     def add_point(self, x, y, identifier=None):
@@ -90,8 +82,8 @@ class WalkPath(object):
     def move_sequence(self, src_point, dest_coords):
         # Add more logic here to choose a or b based on distance
         dest_edge = self.closest_edge_to_point(dest_coords)
-        dist_sq_to_a = util.dist_squared_between(dest_coords, self.points[dest_edge.a])
-        dist_sq_to_b = util.dist_squared_between(dest_coords, self.points[dest_edge.b])
+        dist_sq_to_a = vector.dist_squared_between(dest_coords, self.points[dest_edge.a])
+        dist_sq_to_b = vector.dist_squared_between(dest_coords, self.points[dest_edge.b])
         if dist_sq_to_a < dist_sq_to_b:
             dest_point = dest_edge.a
         else:
@@ -118,7 +110,7 @@ class WalkPath(object):
         closest_edge = None
         for edge in self.edges.viewvalues():
             cp = self.closest_edge_point_to_point(edge, point)
-            test_dist = util.length_squared((point[0]-cp[0], point[1]-cp[1]))
+            test_dist = vector.length_squared((point[0]-cp[0], point[1]-cp[1]))
             if closest_dist is None or test_dist < closest_dist:
                 closest_point = cp
                 closest_edge = edge
@@ -126,7 +118,7 @@ class WalkPath(object):
         return closest_edge
     
     def closest_edge_point_to_point(self, edge, point):
-        return util.closest_point_on_line(point, self.points[edge.a], self.points[edge.b])
+        return vector.closest_point_on_line(point, self.points[edge.a], self.points[edge.b])
     
     def draw(self):
         for edge in self.edges.viewvalues():

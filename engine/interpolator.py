@@ -1,5 +1,26 @@
 import math
 
+class InterpolatorController(object):
+    """Keeps track of the lifecycles of multiple interpolators"""
+    def __init__(self):
+        super(InterpolatorController, self).__init__()
+        self.interpolators = set()
+        
+        # Shortcut to add a new interpolator
+        self.add_interpolator = self.interpolators.add
+    
+    def update_interpolators(self, dt=0):
+        """Update all interpolators and remove those that have completed"""
+        to_remove = set()
+        for i in self.interpolators:
+            i.update(dt)
+            if i.complete():
+                to_remove.add(i)
+        for i in to_remove:
+            i.done_function(i)
+        self.interpolators -= to_remove
+    
+
 class Interpolator(object):
     def __init__(self, host_object, attr_name, end, start=None, 
                  name="value", speed=0.0, duration=0.0,
@@ -18,7 +39,7 @@ class Interpolator(object):
         self.progress = 0.0
     
     def complete(self):
-        return abs(self.progress) >= self.duration
+        return self.progress >= self.duration
     
     def fix_speed_and_duration(self):
         if self.speed == 0.0:
@@ -33,7 +54,7 @@ class Interpolator(object):
             self.speed = -self.speed
     
     def update(self, dt=0):
-        self.progress += dt
+        self.progress = min(self.progress+dt, self.duration)
     
     def __repr__(self):
         fmt = "Interpolator '%s' on %s.%s from %0.2f to %0.2f taking %0.2f seconds)"
@@ -47,7 +68,7 @@ class LinearInterpolator(Interpolator):
         self.update(0.0)
     
     def update(self, dt=0):
-        self.progress += dt
+        super(LinearInterpolator, self).update(dt)
         setattr(self.host_object, self.attr_name, self.start + self.progress*self.speed)
     
     def __repr__(self):
@@ -94,3 +115,17 @@ class Linear2DInterpolator(Interpolator):
                       str(self.start_tuple), str(self.end_tuple), self.duration)
     
 
+class JumpInterpolator(Interpolator):
+    """Cause the target to 'jump' using a sine wave"""
+    def __init__(self, host_object, attr_name, height, **kwargs):
+        self.base_y = getattr(host_object, attr_name)
+        self.height = height
+        super(JumpInterpolator, self).__init__(host_object, attr_name, 
+                                               start=0.0, end=math.pi, **kwargs)
+        self.update(0.0)
+    
+    def update(self, dt=0):
+        super(JumpInterpolator, self).update(dt)
+        setattr(self.host_object, self.attr_name, self.base_y + math.sin(self.progress*self.speed)*self.height)
+
+        

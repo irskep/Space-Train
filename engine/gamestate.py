@@ -1,8 +1,8 @@
 import pyglet, math, functools
 
 main_window = None
-norm_w = 1024
-norm_h = 768
+norm_w = 1280
+norm_h = 720
 scale_factor = 1.0
 scripts_enabled = True
 

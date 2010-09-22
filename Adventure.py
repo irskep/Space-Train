@@ -11,9 +11,8 @@ import math, os, sys, json
 # pyglet.options['debug_gl'] = False
 
 import pyglet
-from pyglet import gl
 
-from engine import gamestate, settings
+from engine import gamestate, util
 from engine import gamehandler
 
 class AdventureWindow(pyglet.window.Window):
@@ -21,7 +20,7 @@ class AdventureWindow(pyglet.window.Window):
     Basic customizations to Window, plus configuration.
     """
     def __init__(self):
-        if settings.fullscreen:
+        if util.settings.fullscreen:
             super(AdventureWindow,self).__init__(fullscreen=True, vsync=True)
         else:
             super(AdventureWindow,self).__init__(width=gamestate.norm_w, 
@@ -34,7 +33,9 @@ class AdventureWindow(pyglet.window.Window):
         gamestate.init_keys()           # Set up some key event helpers
 		
         # Load default game scene. Probably belongs in GameHandler actually.
-        with pyglet.resource.file('/'.join(['game', 'info.json']), 'r') as game_info_file:
+
+        with pyglet.resource.file(util.respath('game', 'info.json'), 'r') as game_info_file:
+
             game_info = json.load(game_info_file)
             self.set_caption(game_info["name"])
             self.game_handler = gamehandler.GameHandler(first_scene=game_info['first_scene'])
@@ -43,13 +44,14 @@ class AdventureWindow(pyglet.window.Window):
         # scale/unscale the OpenGL context. If/when AdventureWindow grows its own
         # on_draw() method, you can just write '@gamestate.scaled' above the function
         # definition.
-        self.on_draw = gamestate.scaled(self.game_handler.draw)
+        self.on_draw = self.game_handler.draw
         
         # Schedule drawing and update functions.
         # Draw really only needs 60 FPS, update can be faster.
         pyglet.clock.schedule_interval(self.on_draw, 1/60.0)
         pyglet.clock.schedule_interval(self.game_handler.update, 1/120.0)
-    
+
+        
     def on_key_press(self, symbol, modifiers):
         # Override default behavior of escape key quitting
         if symbol == pyglet.window.key.ESCAPE:
