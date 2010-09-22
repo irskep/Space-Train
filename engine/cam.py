@@ -44,32 +44,74 @@ class CAM(object):
         gamestate.main_window.push_handlers(self)
         
         self.batch = pyglet.graphics.Batch()
-        self.sprites = []
-        self.labels = []
+        self.buttons = []
                 
         # Turn each action entry into a menu item
         # TODO: turn this mess into a function/class
         count = 1
+        max_size = len(self.actions) #defines the max size for CAMs. (should be odd)
+        max_indent = math.ceil(max_size / 2.0) + ( 1 if max_size % 2 == 0 else 0 )
+
         for action, callback in self.actions.items():
             # set up the background sprite
-            new_sprite = pyglet.sprite.Sprite(img = sprites['action_background'].image)
-            new_sprite.batch = self.batch
-            theta = (180 / (len(actions)+1) ) * count
-            new_sprite.x = (self.r * math.sin(math.radians(theta))) + x
-            new_sprite.y = (self.r * math.cos(math.radians(theta))) + y - (new_sprite.height / 2) 
-            self.sprites.append(new_sprite)
+            _x = x + (self.calculate_indent_px(1, max_indent) - self.calculate_indent_px(count, max_indent))
+            _y = y + ((max_size)*(sprites['action_background'].height)) - (count * sprites['action_background'].height)
+            
+            button = self.Button(_x, _y, self.batch, action, callback)
+            self.buttons.append(button)
             
             # set up the label for the menu item
-            new_label = pyglet.text.Label(action, font_name = 'Times New Roman', font_size = 14, anchor_x = 'left', anchor_y = 'center', batch = self.batch, color = (0, 0, 0, 255))
-            new_label.x = new_sprite.x + 5
-            new_label.y = (new_sprite.y + new_sprite.height) - (new_sprite.height / 2)
-            self.labels.append(new_label)
-            count = count+1
+            count += 1
             
+    def calculate_indent_px(self, indent, max_indent):
+        indent_px = 10
+        diff = math.fabs(max_indent - indent)
+        if(diff == 0):
+            return 0
+        while(diff > 1):
+            indent_px = math.floor(indent_px * 3)
+            diff -= 1
+        return indent_px
+    
     # Handle an event
     def on_mouse_release(self, x, y, button, modifiers):
-        return False
+        if(self.visible):
+            self.visible = False
+            button = self.button_under(x,y)
+            if button is None:
+                # pass this even down to other handlers, clean up the CAM
+                return pyglet.event.EVENT_UNHANDLED
+            else:
+                # execute the click action and clean up the CAM
+                button.click()
+                return pyglet.event.EVENT_HANDLED
+    
+    # Determines which button is under the given point
+    # Note that this function's behaviour is undefined when buttons overlap
+    # this is intended but should later be changed to return the topmost button
+    def button_under(self, x, y):
+        for button in self.buttons:
+            if (x > button.x and x < button.x + button.width
+                and  y > button.y and y < button.y + button.height):
+                return button
+        return None
     
     def draw(self):
         if(self.visible):
             self.batch.draw()
+            
+    # TODO: finish button class
+    class Button(object):
+        def __init__(self, x, y, batch, action, callback):
+            self.sprite = pyglet.sprite.Sprite(img = sprites['action_background'].image, x = x, y = y, batch = batch)
+            self.label = pyglet.text.Label(action, font_name = 'Times New Roman', font_size = 14, anchor_x = 'left', 
+                                           anchor_y = 'center', batch = batch, color = (0, 0, 0, 255),
+                                           x = self.sprite.x + 5, y = (self.sprite.y + self.sprite.height) - (self.sprite.height / 2))
+            self.x = x
+            self.y = y
+            self.width = self.sprite.width
+            self.height = self.sprite.height
+            self.callback = callback
+            
+        def click(self):
+            self.callback()
