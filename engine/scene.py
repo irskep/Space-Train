@@ -1,32 +1,11 @@
 import os, sys, shutil, json, importlib, pyglet
 
-import camera, actor, gamestate, util
+import camera, actor, gamestate, util, interpolator
 from util import walkpath
 
 import cam, environment, gamehandler, scenehandler
 
-class InterpolatorController(object):
-    """Keeps track of the lifecycles of multiple interpolators"""
-    def __init__(self):
-        super(InterpolatorController, self).__init__()
-        self.interpolators = set()
-        
-        # Shortcut to add a new interpolator
-        self.add_interpolator = self.interpolators.add
-    
-    def update_interpolators(self, dt=0):
-        """Update all interpolators and remove those that have completed"""
-        to_remove = set()
-        for i in self.interpolators:
-            i.update(dt)
-            if i.complete():
-                to_remove.add(i)
-        for i in to_remove:
-            i.done_function(i)
-        self.interpolators -= to_remove
-    
-
-class Scene(InterpolatorController):
+class Scene(interpolator.InterpolatorController):
     
     # Initialization
     
@@ -97,9 +76,9 @@ class Scene(InterpolatorController):
     def on_mouse_release(self, x, y, button, modifiers):
         clicked_actor = self.actor_under_point(x, y)
         if clicked_actor:
+            if hasattr(self.module, 'actor_clicked'):
+                self.module.actor_clicked(clicked_actor)
             self.ui.actor_clicked(clicked_actor)
-            clicked_actor.prepare_jump()
-            clicked_actor.next_action()
         elif self.actors.has_key("main"):
             # Send main actor to click location according to actor's moving behavior
             main = self.actors["main"]
