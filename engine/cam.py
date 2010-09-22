@@ -87,6 +87,6 @@ class CAM(object):
         if(self.visible):
             self.batch.draw()
             
-    class Button(object):
+    """class Button(object):
         def __init__(self, x, y, batch, action, callback):
-            
+    """     
