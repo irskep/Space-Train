@@ -1,9 +1,3 @@
-"""Dear Fred, 
-Please do not use camelCase. I have signficant butthurt about this issue. 
-
-Sincerely, 
-Steve."""
-
 import copy
 
 import json, pyglet
