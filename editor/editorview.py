@@ -40,6 +40,14 @@ class EditorView(object):
         
         self.scene.camera.update(1)
     
+    def empty_click_actions(self):
+        self.click_actions = collections.deque()
+    
+    def change_selection(self, new_ed_with_selection):
+        if self.ed_with_selection is not None and self.ed_with_selection != new_ed_with_selection:
+            self.ed_with_selection.set_selected_item(None)
+        self.ed_with_selection = new_ed_with_selection
+    
     
     # Other events
     def check_camera_keys(self):

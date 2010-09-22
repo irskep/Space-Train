@@ -81,6 +81,7 @@ class PointEditor(abstracteditor.AbstractEditor):
         editorstate.set_status_message("Click to place a point")
         def point_placer(x, y):
             world_point = self.scene.camera.mouse_to_canvas(x, y)
+            self.editor.change_selection(self)
             self.set_selected_item(self.scene.walkpath.add_point(*world_point))
             editorstate.set_status_message('')
         self.editor.click_actions.append(point_placer)
@@ -103,7 +104,9 @@ class PointEditor(abstracteditor.AbstractEditor):
             if not self.point_2:
                 self.point_2 = self.scene.walkpath.add_point(*world_point)
             if self.point_1 != self.point_2:
-                self.editor.edge_ed.set_selected_item(self.scene.walkpath.add_edge(self.point_1, self.point_2))
+                self.editor.change_selection(self.editor.edge_ed)
+                new_edge = self.scene.walkpath.add_edge(self.point_1, self.point_2)
+                self.editor.edge_ed.set_selected_item(new_edge)
             editorstate.set_status_message('')
         editorstate.set_status_message('Click to place the destination point')
         self.editor.click_actions.append(edge_finish)

@@ -72,12 +72,13 @@ class EdgeEditor(abstracteditor.AbstractEditor):
                 editorstate.set_status_message('Click the destination point')
             else:
                 # empty the queue, never mind
-                self.editor.click_actions = collections.deque()
+                self.editor.empty_click_actions()
                 editorstate.set_status_message('')
         def edge_finish(x, y):
             world_point = self.scene.camera.mouse_to_canvas(x, y)
             self.point_2 = self.scene.walkpath.path_point_near_point(world_point)
             if self.point_2 and self.point_1 != self.point_2:
+                self.editor.change_selection(self)
                 self.set_selected_item(self.scene.walkpath.add_edge(self.point_1, self.point_2))
             editorstate.set_status_message('')
         self.editor.click_actions.append(edge_setup)
@@ -98,6 +99,7 @@ class EdgeEditor(abstracteditor.AbstractEditor):
             world_point = self.scene.camera.mouse_to_canvas(x, y)
             self.point_2 = self.scene.walkpath.path_point_near_point(world_point)
             if self.point_2:
+                self.editor.change_selection(self)
                 self.set_selected_item(None)
                 self.scene.walkpath.remove_edge(self.point_1, self.point_2)
             editorstate.set_status_message('')
@@ -107,18 +109,23 @@ class EdgeEditor(abstracteditor.AbstractEditor):
     def subdivide_edge(self, button=None):
         if not self.selected_item:
             return
+            # self.editor.change_selection(self)
         p1 = self.scene.walkpath.points[self.selected_item.a]
         p2 = self.scene.walkpath.points[self.selected_item.b]
         p1name = self.selected_item.a
         p2name = self.selected_item.b
-        midpoint_coords = self.scene.walkpath.closest_edge_point_to_point(self.selected_item, self.editor.mouse)
+        closest_edge_point_to_point = self.scene.walkpath.closest_edge_point_to_point
+        midpoint_coords = closest_edge_point_to_point(self.selected_item, self.editor.mouse)
         if vector.length_squared(vector.tuple_op(p1, midpoint_coords)) < 10 \
         or vector.length_squared(vector.tuple_op(p2, midpoint_coords)) < 10:
             midpoint_coords = ((p1[0] + p2[0])/2, (p1[1] + p2[1])/2)
         midpoint = self.scene.walkpath.add_point(*vector.round_down(midpoint_coords))
-        self.selected_item.b = midpoint
+        new_item = self.selected_item
+        new_item.b = midpoint
+        self.set_selected_item(new_item)
         new_edge = self.scene.walkpath.add_edge(midpoint, p2name, anim=self.selected_item.anim)
         if self.selected_item.counterpart:
             self.selected_item.counterpart.a = midpoint
-            new_cp = self.scene.walkpath.add_edge(p2name, midpoint, anim=self.selected_item.counterpart.anim)
+            anim = self.selected_item.counterpart.anim
+            new_cp = self.scene.walkpath.add_edge(p2name, midpoint, anim=anim)
     

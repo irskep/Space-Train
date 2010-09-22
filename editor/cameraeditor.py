@@ -82,6 +82,7 @@ class CameraEditor(abstracteditor.AbstractEditor):
         editorstate.set_status_message("Click to place a camera point")
         def point_placer(x, y):
             world_point = self.scene.camera.mouse_to_canvas(x, y)
+            self.editor.change_selection(self)
             self.set_selected_item(self.scene.camera.add_point(*world_point))
             editorstate.set_status_message('')
         self.editor.click_actions.append(point_placer)
