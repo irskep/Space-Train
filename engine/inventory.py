@@ -44,13 +44,6 @@ class Inventory(object):
         
         self.isopen = False
         
-        
-        # Create the inventory open state now
-        self.sprites['open']['mid'] = []
-    
-        gamestate.main_window.push_handlers(self)
-    
-    def init_sprites(self):
         x = 0
         self.sprites['open']['left'] = util.load_sprite(['ui', 'inventory_left.png'], gamestate.norm_w, gamestate.norm_h, self.batches['open'])
         x += self.sprites['open']['left'].width
@@ -75,6 +68,11 @@ class Inventory(object):
             sprite.y -= y
             print "Sprite: %s x:%d y:%d b:%s" % (sprite, sprite.x, sprite.y, sprite.batch)
         
+        # Create the inventory open state now
+        self.sprites['open']['mid'] = []
+    
+        gamestate.main_window.push_handlers(self)
+            
     def on_mouse_release(self, x, y, button, modifiers):
         return pyglet.event.EVENT_UNHANDLED
         if self.intersects_active_area(x, y):
