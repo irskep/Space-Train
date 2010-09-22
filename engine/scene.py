@@ -74,15 +74,19 @@ class Scene(interpolator.InterpolatorController):
     # Events
     
     def on_mouse_release(self, x, y, button, modifiers):
+        print "Mouse event received"
         clicked_actor = self.actor_under_point(x, y)
         if clicked_actor:
+            self.ui.actor_clicked(clicked_actor)
             if hasattr(self.module, 'actor_clicked'):
                 self.module.actor_clicked(clicked_actor)
-            self.ui.actor_clicked(clicked_actor)
         elif self.actors.has_key("main"):
+            print "No clicked_actor. We have a main actor"
             # Send main actor to click location according to actor's moving behavior
             main = self.actors["main"]
+            print "Main actor blocking actions: %d" % main.blocking_actions
             if main.prepare_move(*self.camera.mouse_to_canvas(x, y)):
+                print "O hai!"
                 main.next_action()
     
     
