@@ -26,7 +26,7 @@ import gamestate, ui, util
 # Static resources, such as sprites for the CAM backgrounds
 sprites = {}
 sprite_batch = pyglet.graphics.Batch()
-sprites['action_background'] = util.loadSprite(['ui', 'cam_item.png'], 0, 0, sprite_batch)
+sprites['action_background'] = util.load_sprite(['ui', 'cam_item.png'], 0, 0, sprite_batch)
 
 class CAM(object):
     

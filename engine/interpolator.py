@@ -1,5 +1,26 @@
 import math
 
+class InterpolatorController(object):
+    """Keeps track of the lifecycles of multiple interpolators"""
+    def __init__(self):
+        super(InterpolatorController, self).__init__()
+        self.interpolators = set()
+        
+        # Shortcut to add a new interpolator
+        self.add_interpolator = self.interpolators.add
+    
+    def update_interpolators(self, dt=0):
+        """Update all interpolators and remove those that have completed"""
+        to_remove = set()
+        for i in self.interpolators:
+            i.update(dt)
+            if i.complete():
+                to_remove.add(i)
+        for i in to_remove:
+            i.done_function(i)
+        self.interpolators -= to_remove
+    
+
 class Interpolator(object):
     def __init__(self, host_object, attr_name, end, start=None, 
                  name="value", speed=0.0, duration=0.0,

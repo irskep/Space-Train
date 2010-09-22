@@ -1,6 +1,6 @@
 import os, sys, pyglet
 
-import settings
+from util import settings
 
 #Bootstrap's bootstraps
 
@@ -27,9 +27,3 @@ for location in resource_locations:
 pyglet.resource.path.append(settings.resources_path)
 pyglet.resource.path.append(os.getcwd())
 pyglet.resource.reindex()
-
-
-def nested_image(*args):
-    return pyglet.resource.image('/'.join(args))
-
-pyglet.resource.nested_image = nested_image
