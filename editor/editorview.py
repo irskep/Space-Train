@@ -1,8 +1,8 @@
 import os, pyglet, glydget, collections
 
 from engine import scene, actor
-from engine import gamestate, settings, util
-from engine import draw
+from engine import gamestate, settings
+from engine.util import draw, vector
 
 class EditorView(object):
     def __init__(self, scene_name):
@@ -357,10 +357,10 @@ class EditorView(object):
         p1name = self.selected_edge.a
         p2name = self.selected_edge.b
         midpoint_coords = self.scene.walkpath.closest_edge_point_to_point(self.selected_edge, self.mouse)
-        if util.length_squared(util.tuple_op(p1, midpoint_coords)) < 10 \
-        or util.length_squared(util.tuple_op(p2, midpoint_coords)) < 10:
+        if vector.length_squared(vector.tuple_op(p1, midpoint_coords)) < 10 \
+        or vector.length_squared(vector.tuple_op(p2, midpoint_coords)) < 10:
             midpoint_coords = ((p1[0] + p2[0])/2, (p1[1] + p2[1])/2)
-        midpoint = self.scene.walkpath.add_point(*util.round_down(midpoint_coords))
+        midpoint = self.scene.walkpath.add_point(*vector.round_down(midpoint_coords))
         self.selected_edge.b = midpoint
         new_edge = self.scene.walkpath.add_edge(midpoint, p2name, anim=self.selected_edge.anim)
         if self.selected_edge.counterpart:

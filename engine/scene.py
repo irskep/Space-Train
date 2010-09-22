@@ -1,38 +1,20 @@
 import os, sys, shutil, json, importlib, pyglet
 
-import camera, actor, gamestate, settings, walkpath, util
+import camera, actor, gamestate, util, interpolator
+from util import walkpath
 
 import cam, environment, gamehandler, scenehandler
 
-class InterpolatorController(object):
-    """Keeps track of the lifecycles of multiple interpolators"""
-    def __init__(self):
-        super(InterpolatorController, self).__init__()
-        self.interpolators = set()
-        
-        # Shortcut to add a new interpolator
-        self.add_interpolator = self.interpolators.add
-    
-    def update_interpolators(self, dt=0):
-        """Update all interpolators and remove those that have completed"""
-        to_remove = set()
-        for i in self.interpolators:
-            i.update(dt)
-            if i.complete():
-                to_remove.add(i)
-        for i in to_remove:
-            i.done_function(i)
-        self.interpolators -= to_remove
-    
 
-class Scene(InterpolatorController, ui):
+class Scene(interpolator.InterpolatorController):
     
     # Initialization
     
-    def __init__(self, name):
+    def __init__(self, name, ui=None):
         super(Scene, self).__init__()
         self.name = name
         self.batch = pyglet.graphics.Batch()
+        self.ui = ui
         self.actors = {}
         self.camera_points = {}
         self.resource_path = util.respath_func_with_base_path('game', 'scenes', self.name)
@@ -93,17 +75,21 @@ class Scene(InterpolatorController, ui):
     # Events
     
     def on_mouse_release(self, x, y, button, modifiers):
-        self.ui.cam = cam.CAM(self, {'Action': None}, x, y)
-        
+        print "Mouse event received"
         clicked_actor = self.actor_under_point(x, y)
         if clicked_actor:
-            # Should probably have something like 'ui.click_actor(clicked_actor)' here instead
-            clicked_actor.prepare_jump()
-            clicked_actor.next_action()
+            self.ui.actor_clicked(clicked_actor)
+            if hasattr(self.module, 'actor_clicked'):
+                self.module.actor_clicked(clicked_actor)
         elif self.actors.has_key("main"):
+            print "No clicked_actor. We have a main actor"
             # Send main actor to click location according to actor's moving behavior
             main = self.actors["main"]
+            print "Main actor blocking actions: %d" % main.blocking_actions
+            while(main.blocking_actions > 0):
+                main.next_action()
             if main.prepare_move(*self.camera.mouse_to_canvas(x, y)):
+                print "O hai!"
                 main.next_action()
     
     

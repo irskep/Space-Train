@@ -2,7 +2,7 @@ import os, json, collections
 
 import pyglet
 
-import actionsequencer, const, interpolator, util
+import actionsequencer, interpolator, util
 
 class Actor(actionsequencer.ActionSequencer):
     """Any non-static object that the player can interact with"""
@@ -42,6 +42,18 @@ class Actor(actionsequencer.ActionSequencer):
         max_y = self.sprite.y - self.sprite.image.anchor_y + self.sprite.image.height
         return min_x <= x <= max_x and min_y <= y <= max_y
     
+    # Convenience methods to tell the position, width, and height of the actor
+    def width(self):
+        return self.sprite.image.width
+    
+    def height(self):
+        return self.sprite.image.height
+        
+    def abs_position_x(self):
+        return self.sprite.x - self.sprite.image.anchor_x
+    
+    def abs_position_y(self):
+        return self.sprite.y - self.sprite.image.anchor_y
     
     # State changes
     
@@ -109,7 +121,7 @@ class Actor(actionsequencer.ActionSequencer):
                 'actor': self,
                 'point': self.walkpath_point
             }
-            event_args = (const.WALK_PATH_COMPLETED, info)
+            event_args = (util.const.WALK_PATH_COMPLETED, info)
             self.actions.append([
                 (self.update_state, ['stand_front']),   # Stand still at the end
                 (self.fire_adv_event, event_args)       # Send an event to the level script
@@ -121,7 +133,7 @@ class Actor(actionsequencer.ActionSequencer):
             'actor': self,
             'point': (x, y)
         }
-        event_args = (const.WALK_COMPLETED, info)
+        event_args = (util.const.WALK_COMPLETED, info)
         self.actions.append([
             (self.update_state, ['stand_front']),
             (self.fire_adv_event, event_args)

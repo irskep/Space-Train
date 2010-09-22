@@ -12,7 +12,7 @@ import math, os, sys, json
 
 import pyglet
 
-from engine import gamestate, settings, util
+from engine import gamestate, util
 from engine import gamehandler
 
 class AdventureWindow(pyglet.window.Window):
@@ -20,7 +20,7 @@ class AdventureWindow(pyglet.window.Window):
     Basic customizations to Window, plus configuration.
     """
     def __init__(self):
-        if settings.fullscreen:
+        if util.settings.fullscreen:
             super(AdventureWindow,self).__init__(fullscreen=True, vsync=True)
         else:
             super(AdventureWindow,self).__init__(width=gamestate.norm_w, 
@@ -44,7 +44,7 @@ class AdventureWindow(pyglet.window.Window):
         # scale/unscale the OpenGL context. If/when AdventureWindow grows its own
         # on_draw() method, you can just write '@gamestate.scaled' above the function
         # definition.
-        self.on_draw = gamestate.scaled(self.game_handler.draw)
+        self.on_draw = self.game_handler.draw
         
         # Schedule drawing and update functions.
         # Draw really only needs 60 FPS, update can be faster.
