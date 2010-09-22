@@ -1,7 +1,6 @@
 import glydget
 
-import abstracteditor
-import editorstate
+import abstracteditor, editorstate
 from engine import gamestate
 from engine.util import draw
 

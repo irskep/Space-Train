@@ -1,6 +1,6 @@
 import glydget
 
-import abstracteditor
+import abstracteditor, editorstate
 from engine import gamestate
 from engine.util import draw, vector
 
@@ -78,7 +78,7 @@ class EdgeEditor(abstracteditor.AbstractEditor):
             world_point = self.scene.camera.mouse_to_canvas(x, y)
             self.point_2 = self.scene.walkpath.path_point_near_point(world_point)
             if self.point_2 and self.point_1 != self.point_2:
-                editorstate.set_selected_item(self.scene.walkpath.add_edge(self.point_1, self.point_2))
+                self.set_selected_item(self.scene.walkpath.add_edge(self.point_1, self.point_2))
             editorstate.set_status_message('')
         self.editor.click_actions.append(edge_setup)
         self.editor.click_actions.append(edge_finish)

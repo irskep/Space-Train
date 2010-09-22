@@ -126,11 +126,6 @@ class EditorView(object):
             ed.draw()
         
         self.scene.camera.unapply()
-        
-        l = editorstate.status_label
-        if l.text:
-            draw.set_color(1,1,1,1)
-            draw.rect(l.x-l.content_width, l.y-l.content_height, l.x, l.y)
-            editorstate.status_label.draw()
+        editorstate.draw()
     
 
