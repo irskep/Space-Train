@@ -50,13 +50,16 @@ class CAM(object):
         # Turn each action entry into a menu item
         # TODO: turn this mess into a function/class
         count = 1
+        max_size = len(self.actions) #defines the max size for CAMs. (should be odd)
+        max_indent = math.ceil(max_size / 2.0) + ( 1 if max_size % 2 == 0 else 0 )
+
         for action, callback in self.actions.items():
             # set up the background sprite
             new_sprite = pyglet.sprite.Sprite(img = sprites['action_background'].image)
             new_sprite.batch = self.batch
-            theta = (180 / (len(actions)+1) ) * count
-            new_sprite.x = (self.r * math.sin(math.radians(theta))) + x
-            new_sprite.y = (self.r * math.cos(math.radians(theta))) + y - (new_sprite.height / 2) 
+            
+            new_sprite.x = x + (self.calculate_indent_px(1, max_indent) - self.calculate_indent_px(count, max_indent))
+            new_sprite.y = y + ((max_size)*(new_sprite.height)) - (count * new_sprite.height)
             self.sprites.append(new_sprite)
             
             # set up the label for the menu item
@@ -64,8 +67,18 @@ class CAM(object):
             new_label.x = new_sprite.x + 5
             new_label.y = (new_sprite.y + new_sprite.height) - (new_sprite.height / 2)
             self.labels.append(new_label)
-            count = count+1
+            count += 1
             
+    def calculate_indent_px(self, indent, max_indent):
+        indent_px = 10
+        diff = math.fabs(max_indent - indent)
+        if(diff == 0):
+            return 0
+        while(diff > 1):
+            indent_px = math.floor(indent_px * 3)
+            diff -= 1
+        return indent_px
+    
     # Handle an event
     def on_mouse_release(self, x, y, button, modifiers):
         return False
@@ -73,3 +86,7 @@ class CAM(object):
     def draw(self):
         if(self.visible):
             self.batch.draw()
+            
+    class Button(object):
+        def __init__(self, x, y, batch, action, callback):
+            
