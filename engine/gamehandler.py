@@ -10,6 +10,7 @@ class GameHandler(object):
 
         self.scene_handler = scenehandler.SceneHandler(self.scene)
         self.update = self.scene_handler.scene.update
+        self.scene_handler.scene_transition.begin()
     
     # method to draw appropriate elements
     # unsure if this change is proper (i.e. calling draw() rather than assigning a function to draw()
@@ -19,3 +20,4 @@ class GameHandler(object):
     def draw(self, dt=0):
         self.scene_handler.scene.draw()
         self.ui.draw()
+        self.scene_handler.scene_transition.draw()
