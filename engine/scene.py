@@ -137,3 +137,6 @@ class Scene(interpolator.InterpolatorController):
         self.actors[identifier] = new_actor
         return new_actor
     
+
+# Provides scene transitions, currently just a black screen that fades in/out
+class SceneTransition(interpolator.LinearInterpolator)
