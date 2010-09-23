@@ -24,6 +24,7 @@ class UI(object):
         self.cam = cam.CAM({'Action': lambda: sys.stdout.write("Action pressed\n"), 'Action2': lambda: sys.stdout.write("Action2 pressed\n"), 
                             'Action3': lambda: sys.stdout.write("Action3 pressed\n"), 'Action4': lambda: sys.stdout.write("Action4 pressed\n"), 'Action5': lambda: sys.stdout.write("Action5 pressed\n")}, 
                             x, y, 90)
+        return True
     
     # render the UI to the screen
     def draw(self):

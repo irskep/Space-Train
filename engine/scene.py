@@ -85,6 +85,8 @@ class Scene(interpolator.InterpolatorController):
             # Send main actor to click location according to actor's moving behavior
             main = self.actors["main"]
             print "Main actor blocking actions: %d" % main.blocking_actions
+            while(main.blocking_actions > 0):
+                main.next_action()
             if main.prepare_move(*self.camera.mouse_to_canvas(x, y)):
                 print "O hai!"
                 main.next_action()
