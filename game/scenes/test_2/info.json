@@ -1,0 +1,90 @@
+{
+    "environment": "test", 
+    "camera_points": {
+        "start": {
+            "y": 384, 
+            "x": 512
+        }
+    }, 
+    "actors": {
+        "main": {
+            "walkpath_point": "lefter", 
+            "name": "fist"
+        }, 
+        "fist_1": {
+            "y": 400, 
+            "x": 500, 
+            "name": "fist"
+        }
+    }, 
+    "walkpath": {
+        "points": {
+            "lefter": {
+                "y": 78, 
+                "x": 208
+            }, 
+            "middle": {
+                "y": 86, 
+                "x": 547
+            }, 
+            "top": {
+                "y": 365, 
+                "x": 641
+            }, 
+            "right": {
+                "y": 124, 
+                "x": 978
+            }, 
+            "point_1": {
+                "y": 475, 
+                "x": 255
+            }
+        }, 
+        "edges": [
+            {
+                "a": "middle", 
+                "anim": "walk_left", 
+                "b": "lefter"
+            }, 
+            {
+                "a": "top", 
+                "anim": "walk_front", 
+                "b": "middle"
+            }, 
+            {
+                "a": "middle", 
+                "anim": "walk_back", 
+                "b": "top"
+            }, 
+            {
+                "a": "right", 
+                "b": "top"
+            }, 
+            {
+                "a": "point_1", 
+                "b": "top"
+            }, 
+            {
+                "a": "middle", 
+                "b": "right"
+            }, 
+            {
+                "a": "lefter", 
+                "anim": "walk_right", 
+                "b": "middle"
+            }, 
+            {
+                "a": "top", 
+                "b": "point_1"
+            }, 
+            {
+                "a": "right", 
+                "b": "middle"
+            }, 
+            {
+                "a": "top", 
+                "b": "right"
+            }
+        ]
+    }
+}

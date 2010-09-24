@@ -39,6 +39,11 @@ class ActionSequencer(object):
         if self.blocking_actions > 0:
             self.blocking_actions -= 1
     
+    def simple_sequence(self, *args):
+        for func in args:
+            self.actions.append([(func, [])])
+        self.next_action()
+    
     def next_action(self, ending_action=None):
         """Start the next action in the queue"""
         self.unblock()
