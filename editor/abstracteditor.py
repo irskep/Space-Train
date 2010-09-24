@@ -41,6 +41,7 @@ class AbstractEditor(object):
         # will be hidden and therefore its fields will be inaccessible.
         old_obj = self.selected_item
         if old_obj is not None and new_obj is None:
+            print 'x'
             self.update_item_from_inspector()
             self.selected_item = new_obj
             self.inspector.hide()
@@ -52,6 +53,7 @@ class AbstractEditor(object):
                 self.update_inspector_from_item()
                 gamestate.main_window.push_handlers(self.inspector)
             elif new_obj != old_obj:
+                print 'y'
                 self.update_item_from_inspector()
             if old_obj:
                 self.selected_item = new_obj

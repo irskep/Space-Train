@@ -106,7 +106,7 @@ class EditorView(object):
         
         self.is_dragging_camera = False
         if self.ed_with_drag:
-            if self.ed_with_selection is not None:
+            if self.ed_with_selection is not None and self.ed_with_drag != self.ed_with_selection:
                 self.ed_with_selection.set_selected_item(None)
                 self.ed_with_selection = None
             world_point = self.scene.camera.mouse_to_canvas(x, y)
