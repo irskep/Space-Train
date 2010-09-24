@@ -27,7 +27,7 @@ class UI(object):
         return True
     
     # render the UI to the screen
-    def draw(self):
+    def draw(self, dt=0):
         self.batch.draw()
         self.inventory.draw()
         

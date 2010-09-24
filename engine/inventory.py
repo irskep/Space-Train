@@ -16,20 +16,22 @@ class Inventory(object):
         self.sprites['open'] = {}
         self.sprites['closed'] = []
         
+        self.width = 5
+        
         # Create the inventory closed state first
         # i know this is dirty, shut up!
         x = 0
         for sprite in self.sprites['closed']:
             x += sprite.width
-        self.sprites['closed'].append( util.load_sprite(['ui', 'inventory_left.png'], gamestate.norm_w + x, gamestate.norm_h, self.batches['closed']) )
+        self.sprites['closed'].append( util.load_sprite(['ui', 'inventory_left.png'], x = gamestate.norm_w + x, y = gamestate.norm_h,  batch = self.batches['closed']) )
         x = 0
         for sprite in self.sprites['closed']:
             x += sprite.width
-        self.sprites['closed'].append( util.load_sprite(['ui', 'inventory_mid.png'], gamestate.norm_w + x, gamestate.norm_h, self.batches['closed']) )
+        self.sprites['closed'].append( util.load_sprite(['ui', 'inventory_mid.png'], x = gamestate.norm_w + x, y = gamestate.norm_h, batch = self.batches['closed']) )
         x = 0
         for sprite in self.sprites['closed']:
             x += sprite.width
-        self.sprites['closed'].append( util.load_sprite(['ui', 'inventory_right.png'], gamestate.norm_w + x, gamestate.norm_h, self.batches['closed']) )
+        self.sprites['closed'].append( util.load_sprite(['ui', 'inventory_right.png'], x = gamestate.norm_w + x, y = gamestate.norm_h, batch = self.batches['closed']) )
                 
         # translate everything to where it needs to be
         x_trans = 0
@@ -41,25 +43,29 @@ class Inventory(object):
         for sprite in self.sprites['closed']:
             sprite.x -= x_trans
             sprite.y -= y_trans
+            print "Sprite at (%d, %d)" % (sprite.x, sprite.y)
         
         self.isopen = False
         
-        
-        
+        for sprite in self.sprites['closed']:
+            print sprite.batch
+      
+      
         # Create the inventory open state now
         self.sprites['open']['mid'] = []
         
         x = 0
-        self.sprites['open']['left'] = util.load_sprite(['ui', 'inventory_left.png'], gamestate.norm_w, gamestate.norm_h, self.batches['open'])
+        self.sprites['open']['left'] = util.load_sprite(['ui', 'inventory_left.png'], x = gamestate.norm_w, y = gamestate.norm_h, batch = self.batches['open'])
         x += self.sprites['open']['left'].width
-        midsprite = util.load_sprite(['ui', 'inventory_mid.png'], gamestate.norm_w, gamestate.norm_h, self.batches['open'])
-        self.sprites['open']['mid'].append(copy.deepcopy(midsprite))
+
+        self.sprites['open']['mid'].append( util.load_sprite(['ui', 'inventory_mid.png'], x = gamestate.norm_w, y = gamestate.norm_h, batch = self.batches['open']) )
         self.sprites['open']['mid'][-1].x += x
         x += self.sprites['open']['mid'][-1].width
-        self.sprites['open']['mid'].append(copy.deepcopy(midsprite))
+        self.sprites['open']['mid'].append( util.load_sprite(['ui', 'inventory_mid.png'], x = gamestate.norm_w, y = gamestate.norm_h, batch = self.batches['open']) )
         self.sprites['open']['mid'][-1].x += x
         x += self.sprites['open']['mid'][-1].width
-        self.sprites['open']['right'] = util.load_sprite(['ui', 'inventory_right.png'], gamestate.norm_w + x, gamestate.norm_h, self.batches['open'])
+        
+        self.sprites['open']['right'] = util.load_sprite(['ui', 'inventory_right.png'], x = gamestate.norm_w + x, y = gamestate.norm_h, batch = self.batches['open'])
         x += self.sprites['open']['right'].width
         
         y = self.sprites['open']['left'].height
@@ -71,12 +77,10 @@ class Inventory(object):
         for sprite in open_sprites:
             sprite.x -= x
             sprite.y -= y
-            print "Sprite: %s x:%d y:%d b:%s" % (sprite, sprite.x, sprite.y, sprite.batch)
     
         gamestate.main_window.push_handlers(self)
             
     def on_mouse_release(self, x, y, button, modifiers):
-        return pyglet.event.EVENT_UNHANDLED
         if self.intersects_active_area(x, y):
             self.toggle()
             return pyglet.event.EVENT_HANDLED
@@ -91,7 +95,7 @@ class Inventory(object):
         return True
         
     # Render the inventory in the UI
-    def draw(self):
+    def draw(self, dt=0):
         if(self.isopen is False):
             self.batches['closed'].draw()
         else:

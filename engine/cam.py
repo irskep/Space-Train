@@ -96,7 +96,7 @@ class CAM(object):
                 return button
         return None
     
-    def draw(self):
+    def draw(self, dt=0):
         if(self.visible):
             self.batch.draw()
             
