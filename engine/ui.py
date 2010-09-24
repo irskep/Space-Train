@@ -1,3 +1,18 @@
+"""
+File:           ui.py
+Author:         Fred Hatfull
+Description:    This class performs all UI-related management. It is responsible for drawing UI components and managing certain events fired elsewhere in the game engine.
+Notes: 
+
+UI Life Cycle:
+* Instantiation should happen as soon as possible at run time. There should only be one instance of a UI object at any given time as per the Singleton pattern (shudder)
+* Eventually the UI state should default to the main menu screen.
+* The UI should be responsible for all transitions to and from the main menu screen.
+* The UI will manage the player inventory.
+* The UI will manage the CAM.
+* The UI should /only/ be destroyed at exit-time.
+"""
+
 import json, pyglet
 
 import actor, cam, gamestate, inventory, util
@@ -21,7 +36,8 @@ class UI(object):
     def actor_clicked(self, actor):
         x = actor.abs_position_x() + actor.width()
         y = actor.abs_position_y() + (actor.height() / 2)
-        self.cam = cam.CAM({'Action':None, 'Action2':None, 'Action3':None, 'Action4':None, 'Action5':None, 'Action6':None, 'Action7':None, 'Action8':None, 'Action9':None, 'Action10':None, 'Action11':None, 'Action12':None}, x, y)
+        self.cam = cam.CAM({'Action':None, 'Action2': None, 'Action3':None, 'Action4':None, 'Action5':None, 'Action6':None}, 
+                            x, y)
     
     # render the UI to the screen
     def draw(self, dt=0):

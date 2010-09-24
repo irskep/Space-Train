@@ -46,7 +46,6 @@ class CAM(object):
         self.buttons = []
                 
         # Turn each action entry into a menu item
-        # TODO: turn this mess into a function/class
         count = 1
         max_size = len(self.actions) #defines the max size for CAMs. (should be odd)
         max_indent = math.ceil(max_size / 2.0) + ( 1 if max_size % 2 == 0 else 0 )
