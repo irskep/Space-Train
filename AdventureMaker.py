@@ -3,13 +3,23 @@ import math, os, sys, json
 
 import pyglet
 
-from engine import gamestate
+from engine import gamestate, util
 from editor import editorview
 
 # pyglet.options['debug_gl'] = False
 
 class AdventureMakerWindow(pyglet.window.Window):
     def __init__(self):
+        if len(sys.argv) < 2:
+            print "Usage: python AdventureMaker.py <name of scene to edit>"
+            sys.exit(1)
+        
+        # prf = pyglet.resource.file
+        # rp = util.respath
+        # with prf(rp('game', 'scenes', sys.argv[1], 'info.json'), 'r') as scene_info_file:
+        #     scene_info_file = json.load(scene_info_file)
+        #     with 
+        
         screen = pyglet.window.get_platform().get_default_display().get_default_screen()
         super(AdventureMakerWindow,self).__init__(width=screen.width-20, 
                                                   height=screen.height-80, 
@@ -22,10 +32,8 @@ class AdventureMakerWindow(pyglet.window.Window):
         pyglet.gl.glEnable(pyglet.gl.GL_BLEND)
         pyglet.gl.glBlendFunc(pyglet.gl.GL_SRC_ALPHA, pyglet.gl.GL_ONE_MINUS_SRC_ALPHA)
         
-        with pyglet.resource.file('/'.join(['game', 'info.json']), 'r') as game_info_file:
-            game_info = json.load(game_info_file)
-            self.set_caption("Scene Editor: %s" % sys.argv[1])
-            self.editorview = editorview.EditorView(sys.argv[1])
+        self.set_caption("Scene Editor: %s" % sys.argv[1])
+        self.editorview = editorview.EditorView(sys.argv[1])
         
         pyglet.clock.schedule_interval(self.on_draw, 1/60.0)
         pyglet.clock.schedule_interval(self.editorview.update, 1/120.0)

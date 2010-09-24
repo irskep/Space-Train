@@ -78,6 +78,7 @@ class ActorEditor(abstracteditor.AbstractEditor):
             self.inspector.batch.draw()
         
         if self.selected_item:
+            self.editor.scene.camera.apply()
             s = self.selected_item.sprite
             min_x = s.x - s.image.anchor_x
             min_y = s.y - s.image.anchor_y
@@ -85,6 +86,7 @@ class ActorEditor(abstracteditor.AbstractEditor):
             max_y = s.y - s.image.anchor_y + s.image.height
             draw.set_color(1, 0, 0, 1)
             draw.rect_outline(min_x, min_y, max_x, max_y)
+            self.editor.scene.camera.unapply()
     
     def actor_button_action(self, button):
         def actor_placer(x, y):

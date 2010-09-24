@@ -47,15 +47,20 @@ class CameraEditor(abstracteditor.AbstractEditor):
         self.is_dragging_item = False
         if self.dragging_item:
             self.set_selected_item(self.dragging_item)
-        self.dragging_item = False
+        self.dragging_item = None
     
     def update_item_from_inspector(self, widget=None):
         if self.selected_item:
-            self.scene.camera.remove_point(self.selected_item.identifier)
-            self.selected_item = self.scene.camera.add_point(
-                                        self.cpoint_identifier_field.text, 
-                                        int(self.cpoint_x_field.text), 
-                                        int(self.cpoint_y_field.text))
+            new_id = self.cpoint_identifier_field.text
+            if new_id != self.selected_item.identifier:
+                self.scene.camera.remove_point(self.selected_item.identifier)
+                new_point = self.scene.camera.add_point(int(self.cpoint_x_field.text), 
+                                                        int(self.cpoint_y_field.text),
+                                                        self.cpoint_identifier_field.text)
+                self.selected_item = new_point
+            else:
+                self.selected_item.position = (int(self.cpoint_x_field.text), 
+                                               int(self.cpoint_y_field.text))
     
     def update_inspector_from_item(self, widget=None):
         self.cpoint_identifier_field.text = self.selected_item.identifier
@@ -69,6 +74,7 @@ class CameraEditor(abstracteditor.AbstractEditor):
         if self.inspector.batch:
             self.inspector.batch.draw()
         
+        self.editor.scene.camera.apply()
         draw.set_color(1,0,1,1)
         for point in self.scene.camera.points.viewvalues():
             p = point.position
@@ -77,20 +83,19 @@ class CameraEditor(abstracteditor.AbstractEditor):
         if p:
             draw.rect_outline(p.position[0]-512, p.position[1]-384, 
                               p.position[0]+512, p.position[1]+384)
+        self.editor.scene.camera.unapply()
     
     def new_camera_point(self, button=None):
         editorstate.set_status_message("Click to place a camera point")
         def point_placer(x, y):
-            world_point = self.scene.camera.mouse_to_canvas(x, y)
             self.editor.change_selection(self)
-            self.set_selected_item(self.scene.camera.add_point(*world_point))
+            self.set_selected_item(self.scene.camera.add_point(x, y))
             editorstate.set_status_message('')
         self.editor.click_actions.append(point_placer)
     
     def delete_camera_point(self, button=None):
         def point_deleter(x, y):
-            world_point = self.scene.camera.mouse_to_canvas(x, y)
-            self.scene.camera.remove_point(self.scene.camera.camera_point_near_point(world_point))
+            self.scene.camera.remove_point(self.scene.camera.camera_point_near_point((x, y)))
             editorstate.set_status_message('')
         self.editor.click_actions.append(point_deleter)
         editorstate.set_status_message("Click a camera point to delete it")

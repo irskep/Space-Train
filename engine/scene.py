@@ -10,7 +10,7 @@ class Scene(interpolator.InterpolatorController):
     
     # Initialization
     
-    def __init__(self, name, scene_handler, ui=None):
+    def __init__(self, name, scene_handler=None, ui=None):
         super(Scene, self).__init__()
         self.name = name
         self.handler = scene_handler

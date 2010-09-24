@@ -95,7 +95,8 @@ class EditorView(object):
             self.scene.camera.set_position(self.drag_anchor[0] + (self.drag_start[0] - x),
                                            self.drag_anchor[1] + (self.drag_start[1] - y))
         elif self.ed_with_drag is not None:
-            self.ed_with_drag.continue_drag(x, y)
+            world_point = self.scene.camera.mouse_to_canvas(x, y)
+            self.ed_with_drag.continue_drag(*world_point)
     
     def on_mouse_release(self, x, y, button, modifiers):
         # hacky hack because glydget doesn't handle mouse events properly >:-(
@@ -103,11 +104,13 @@ class EditorView(object):
             if w._hit(x, y):
                 return True
         
+        self.is_dragging_camera = False
         if self.ed_with_drag:
             if self.ed_with_selection is not None:
                 self.ed_with_selection.set_selected_item(None)
                 self.ed_with_selection = None
-            self.ed_with_drag.end_drag(x, y)
+            world_point = self.scene.camera.mouse_to_canvas(x, y)
+            self.ed_with_drag.end_drag(*world_point)
             if self.ed_with_drag.selected_item is not None:
                 self.ed_with_selection = self.ed_with_drag
                 self.ed_with_drag = None
@@ -128,12 +131,9 @@ class EditorView(object):
     def draw(self):
         self.scene.draw()
         
-        self.scene.camera.apply()
-        
         for ed in self.editors:
             ed.draw()
         
-        self.scene.camera.unapply()
         editorstate.draw()
     
 

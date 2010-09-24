@@ -47,10 +47,12 @@ class EdgeEditor(abstracteditor.AbstractEditor):
             self.inspector.batch.draw()
         
         if self.selected_item:
+            self.editor.scene.camera.apply()
             p = self.editor.mouse
             cp = self.scene.walkpath.closest_edge_point_to_point(self.selected_item, p)
             draw.set_color(1,1,0,1)
             draw.rect(cp[0]-3, cp[1]-3, cp[0]+3, cp[1]+3)
+            self.editor.scene.camera.unapply()
     
     def update_item_from_inspector(self, widget=None):
         if self.selected_item:
