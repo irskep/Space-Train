@@ -40,14 +40,12 @@ class CAM(object):
             self.r = len(actions) * (sprites['action_background'].height + 2)
         else:
             self.r = r
-        self.visible = True
-        gamestate.main_window.push_handlers(self)
+        self.set_visible(True)
         
         self.batch = pyglet.graphics.Batch()
         self.buttons = []
                 
         # Turn each action entry into a menu item
-        # TODO: turn this mess into a function/class
         count = 1
         max_size = len(self.actions) #defines the max size for CAMs. (should be odd)
         max_indent = math.ceil(max_size / 2.0) + ( 1 if max_size % 2 == 0 else 0 )
@@ -62,6 +60,14 @@ class CAM(object):
             
             # set up the label for the menu item
             count += 1
+    
+    # Make this into a property instead. I can't remember how right now. --Steve
+    def set_visible(self, new_visible):
+        if new_visible:
+            gamestate.main_window.push_handlers(self)
+        else:
+            gamestate.main_window.pop_handlers()
+        self.visible = new_visible
             
     def calculate_indent_px(self, indent, max_indent):
         indent_px = 10
@@ -96,7 +102,7 @@ class CAM(object):
                 return button
         return None
     
-    def draw(self):
+    def draw(self, dt=0):
         if(self.visible):
             self.batch.draw()
             
@@ -115,3 +121,4 @@ class CAM(object):
             
         def click(self):
             self.callback()
+    

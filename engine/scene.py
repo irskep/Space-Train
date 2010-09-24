@@ -10,9 +10,10 @@ class Scene(interpolator.InterpolatorController):
     
     # Initialization
     
-    def __init__(self, name, ui=None):
+    def __init__(self, name, scene_handler, ui=None):
         super(Scene, self).__init__()
         self.name = name
+        self.handler = scene_handler
         self.batch = pyglet.graphics.Batch()
         self.ui = ui
         self.actors = {}
@@ -55,6 +56,12 @@ class Scene(interpolator.InterpolatorController):
         self.module = importlib.import_module(self.name)
         self.module.myscene = self
         self.module.init()
+        
+    # Cleanup
+    def exit(self):
+        for actor in self.actors.viewvalues():
+            actor.sprite.delete()
+        self.env.exit()
     
     
     # Access
@@ -71,25 +78,27 @@ class Scene(interpolator.InterpolatorController):
     def fire_adv_event(self, event, *args):
         self.module.handle_event(event, *args)
     
+    def call_if_available(self, func_name, *args, **kwargs):
+        if hasattr(self.module, func_name):
+            getattr(self.module, func_name)(*args, **kwargs)
     
     # Events
     
+    def transition_from(self, old_scene_name):
+        self.call_if_available('transition_from', old_scene_name)
+    
     def on_mouse_release(self, x, y, button, modifiers):
-        print "Mouse event received"
         clicked_actor = self.actor_under_point(x, y)
+        print self.name
         if clicked_actor:
             self.ui.actor_clicked(clicked_actor)
-            if hasattr(self.module, 'actor_clicked'):
-                self.module.actor_clicked(clicked_actor)
+            self.call_if_available('actor_clicked', clicked_actor)
         elif self.actors.has_key("main"):
-            print "No clicked_actor. We have a main actor"
             # Send main actor to click location according to actor's moving behavior
             main = self.actors["main"]
-            print "Main actor blocking actions: %d" % main.blocking_actions
             while(main.blocking_actions > 0):
                 main.next_action()
             if main.prepare_move(*self.camera.mouse_to_canvas(x, y)):
-                print "O hai!"
                 main.next_action()
     
     
@@ -136,4 +145,3 @@ class Scene(interpolator.InterpolatorController):
         new_actor = actor.Actor(identifier, actor_name, self, **kwargs)
         self.actors[identifier] = new_actor
         return new_actor
-    
