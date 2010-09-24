@@ -14,5 +14,5 @@ def handle_event(event, *args):
 
 def actor_clicked(clicked_actor):
     print "Clicked on %s" % clicked_actor.name
-    if clicked_actor.name == "logo":
+    if clicked_actor.identifier == "logo":
         myscene.handler.notify("test_initial")
