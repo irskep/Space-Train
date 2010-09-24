@@ -17,7 +17,8 @@ class InterpolatorController(object):
             if i.complete():
                 to_remove.add(i)
         for i in to_remove:
-            i.done_function(i)
+            if i.done_function:
+                i.done_function(i)
         self.interpolators -= to_remove
     
 

@@ -37,10 +37,6 @@ class SceneHandler(actionsequencer.ActionSequencer):
     def notify(self, next_scene):
         if self.handler.ui.cam is not None:
             self.handler.ui.cam.set_visible(False)
-        self.update()
-        
-        # Remove scene
-        self.save()
         
         if next_scene is None:
             # Notify game handler, we are exiting
@@ -62,6 +58,8 @@ class SceneHandler(actionsequencer.ActionSequencer):
             self.next_action()
         
         def fade_in(ending_action=None):
+            # Remove scene
+            self.save()
             self.scene.exit()
             new_scene = scene.Scene(next_scene, self, self.handler.ui)
             new_scene.transition_from(self.scene.name)

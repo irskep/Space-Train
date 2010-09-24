@@ -1,5 +1,5 @@
 from engine import actor
-from engine.interpolator import PulseInterpolator
+from engine.interpolator import PulseInterpolator, LinearInterpolator
 
 # myscene is set by scene.py
 myscene = None
@@ -16,3 +16,5 @@ def actor_clicked(clicked_actor):
     print "Clicked on %s" % clicked_actor.name
     if clicked_actor.identifier == "logo":
         myscene.handler.notify("test_initial")
+        interp = LinearInterpolator(clicked_actor.sprite, 'rotation', 0.0, 360, speed=500.0)
+        myscene.add_interpolator(interp)
