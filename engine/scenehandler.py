@@ -35,7 +35,7 @@ class SceneHandler(actionsequencer.ActionSequencer):
 
     # Called by a scene to load a new scene.
     def notify(self, next_scene):
-        self.exit()
+      #  self.end_scene()
         self.update()
         
         # Remove scene
@@ -49,7 +49,7 @@ class SceneHandler(actionsequencer.ActionSequencer):
         else:
             # Load scene
             self.scene = scene.Scene(next_scene, self.scene.ui)
-            self.begin_scene()
+         #   self.begin_scene()
     
     
     # Called when exiting a scene, fades to the transition image
