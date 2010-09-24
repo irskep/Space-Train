@@ -10,9 +10,10 @@ class Scene(interpolator.InterpolatorController):
     
     # Initialization
     
-    def __init__(self, name, ui=None):
+    def __init__(self, name, scene_handler, ui=None):
         super(Scene, self).__init__()
         self.name = name
+        self.handler = scene_handler
         self.batch = pyglet.graphics.Batch()
         self.ui = ui
         self.actors = {}
@@ -55,6 +56,12 @@ class Scene(interpolator.InterpolatorController):
         self.module = importlib.import_module(self.name)
         self.module.myscene = self
         self.module.init()
+        
+    # Cleanup
+    def exit(self):
+        for actor in self.actors.viewvalues():
+            actor.sprite.delete()
+        self.env.exit()
     
     
     # Access
