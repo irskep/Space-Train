@@ -19,7 +19,7 @@ class CameraEditor(abstracteditor.AbstractEditor):
         ])
         self.camera_pallet.show()
         self.camera_pallet.move(gamestate.main_window.width - 2 - self.camera_pallet.width, 
-                                gamestate.main_window.height - 232)
+                                gamestate.main_window.height - 162)
         gamestate.main_window.push_handlers(self.camera_pallet)
         
         self.cpoint_identifier_field = glydget.Entry('', on_change=self.update_item_from_inspector)

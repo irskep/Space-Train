@@ -43,18 +43,20 @@ class Actor(actionsequencer.ActionSequencer):
     # Access
     
     def covers_point(self, x, y):
-        min_x = self.sprite.x - self.sprite.image.anchor_x
-        min_y = self.sprite.y - self.sprite.image.anchor_y
-        max_x = self.sprite.x - self.sprite.image.anchor_x + self.sprite.image.width
-        max_y = self.sprite.y - self.sprite.image.anchor_y + self.sprite.image.height
+        ax = self.sprite.image.anchor_x*self.sprite.scale
+        ay = self.sprite.image.anchor_y*self.sprite.scale
+        min_x = self.sprite.x - ax
+        min_y = self.sprite.y - ay
+        max_x = self.sprite.x - ax + self.sprite.image.width*self.sprite.scale
+        max_y = self.sprite.y - ay + self.sprite.image.height*self.sprite.scale
         return min_x <= x <= max_x and min_y <= y <= max_y
     
     # Convenience methods to tell the position, width, and height of the actor
     def width(self):
-        return self.sprite.image.width
+        return self.sprite.image.width*self.sprite.scale
     
     def height(self):
-        return self.sprite.image.height
+        return self.sprite.image.height*self.sprite.scale
         
     def abs_position_x(self):
         return self.sprite.x - self.sprite.image.anchor_x
@@ -72,8 +74,9 @@ class Actor(actionsequencer.ActionSequencer):
     def update_state(self, new_state, *args):
         """Update self.current_state and update animation if possible. Variable is
         changed even if animation is not changed so that scripts do not become confused."""
-        self.current_state = new_state
-        self.set_image_if_exists(new_state)
+        if new_state != self.current_state:
+            self.current_state = new_state
+            self.set_image_if_exists(new_state)
     
     # Possible actions to put in a sequence. Pay attention for parameter values.
     
@@ -196,6 +199,8 @@ class Actor(actionsequencer.ActionSequencer):
             dict_repr['x'] = int(self.sprite.x)
             dict_repr['y'] = int(self.sprite.y)
         dict_repr['start_state'] = self.current_state
+        if self.sprite.scale != 1.0:
+            dict_repr['scale'] = self.sprite.scale
         return dict_repr
     
 

@@ -20,7 +20,7 @@ class EdgeEditor(abstracteditor.AbstractEditor):
         ])
         self.edge_pallet.show()
         self.edge_pallet.move(gamestate.main_window.width - 2 - self.edge_pallet.width, 
-                              gamestate.main_window.height - 97)
+                              gamestate.main_window.height - 22)
         gamestate.main_window.push_handlers(self.edge_pallet)
         
         self.edge_a_field = glydget.Entry('', on_change=self.update_item_from_inspector)

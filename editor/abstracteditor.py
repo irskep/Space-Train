@@ -52,7 +52,6 @@ class AbstractEditor(object):
                 self.update_inspector_from_item()
                 gamestate.main_window.push_handlers(self.inspector)
             elif new_obj != old_obj:
-                print 'y'
                 self.update_item_from_inspector()
             if old_obj:
                 self.selected_item = new_obj
