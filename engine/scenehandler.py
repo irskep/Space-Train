@@ -36,7 +36,7 @@ class SceneHandler(actionsequencer.ActionSequencer):
     # Called by a scene to load a new scene.
     def notify(self, next_scene):
         if self.handler.ui.cam is not None:
-            self.handler.ui.cam.visible = False
+            self.handler.ui.cam.set_visible(False)
         self.update()
         
         # Remove scene
@@ -49,7 +49,7 @@ class SceneHandler(actionsequencer.ActionSequencer):
             self.fade_to(next_scene)
     
     def fade_to(self, next_scene):
-        new_scene = scene.Scene(next_scene, self.handler.ui)
+        new_scene = scene.Scene(next_scene, self, self.handler.ui)
         
         InterpClass = interpolator.LinearInterpolator
         def fade_out(ending_action=None):

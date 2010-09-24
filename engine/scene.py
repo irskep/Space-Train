@@ -90,6 +90,7 @@ class Scene(interpolator.InterpolatorController):
     def on_mouse_release(self, x, y, button, modifiers):
         print "Mouse event received"
         clicked_actor = self.actor_under_point(x, y)
+        print self.name
         if clicked_actor:
             self.ui.actor_clicked(clicked_actor)
             self.call_if_available('actor_clicked', clicked_actor)
