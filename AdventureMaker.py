@@ -14,12 +14,6 @@ class AdventureMakerWindow(pyglet.window.Window):
             print "Usage: python AdventureMaker.py <name of scene to edit>"
             sys.exit(1)
         
-        # prf = pyglet.resource.file
-        # rp = util.respath
-        # with prf(rp('game', 'scenes', sys.argv[1], 'info.json'), 'r') as scene_info_file:
-        #     scene_info_file = json.load(scene_info_file)
-        #     with 
-        
         screen = pyglet.window.get_platform().get_default_display().get_default_screen()
         super(AdventureMakerWindow,self).__init__(width=screen.width-20, 
                                                   height=screen.height-80, 

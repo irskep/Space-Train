@@ -38,13 +38,9 @@ class Scene(interpolator.InterpolatorController):
         """Initialize actors and update them with any values specified in the info dict"""
         for identifier, attrs in self.info['actors'].viewitems():
             # Initialize and store
-            new_actor = actor.Actor(name=attrs['name'], identifier=identifier, scene=self)
+            new_actor = actor.Actor(name=attrs['name'], identifier=identifier, 
+                                    scene=self, attrs=attrs)
             self.actors[identifier] = new_actor
-            
-            # Update attributes
-            for attr in ['x', 'y', 'scale', 'rotation']:
-                if attrs.has_key(attr):
-                    setattr(new_actor.sprite, attr, attrs[attr])
             
             # Obey walk paths
             if attrs.has_key('walkpath_point'):
@@ -64,6 +60,7 @@ class Scene(interpolator.InterpolatorController):
         self.env.exit()
     
     
+    
     # Access
     
     def __repr__(self):
@@ -81,6 +78,7 @@ class Scene(interpolator.InterpolatorController):
     def call_if_available(self, func_name, *args, **kwargs):
         if hasattr(self.module, func_name):
             getattr(self.module, func_name)(*args, **kwargs)
+    
     
     # Events
     
@@ -145,3 +143,4 @@ class Scene(interpolator.InterpolatorController):
         new_actor = actor.Actor(identifier, actor_name, self, **kwargs)
         self.actors[identifier] = new_actor
         return new_actor
+    

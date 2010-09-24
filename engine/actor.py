@@ -12,8 +12,9 @@ class Actor(actionsequencer.ActionSequencer):
     info = None
     images = None
     
-    def __init__(self, identifier, name, scene, batch=None, x=0, y=0):
+    def __init__(self, identifier, name, scene, batch=None, attrs=None):
         super(Actor, self).__init__()
+        attrs = attrs or None
         self.name = name
         self.scene = scene
 
@@ -24,10 +25,16 @@ class Actor(actionsequencer.ActionSequencer):
         self.update_static_info()
         self.current_state = Actor.info[self.name]['start_state']
         
+        if attrs.has_key('start_state'):
+            self.current_state = attrs['start_state']
+        
         if self.scene and batch is None:
             batch = self.scene.batch
-        self.sprite = pyglet.sprite.Sprite(Actor.images[self.name][self.current_state], 
-                                           x=x, y=y, batch=batch)
+        self.sprite = pyglet.sprite.Sprite(Actor.images[self.name][self.current_state], batch=batch)
+        # Update attributes
+        for attr in ['x', 'y', 'scale', 'rotation']:
+            if attrs.has_key(attr):
+                setattr(self.sprite, attr, attrs[attr])
     
     def __repr__(self):
         return 'Actor(name="%s", identifier=%s)' % (self.name, self.identifier)
@@ -188,6 +195,7 @@ class Actor(actionsequencer.ActionSequencer):
         else:
             dict_repr['x'] = int(self.sprite.x)
             dict_repr['y'] = int(self.sprite.y)
+        dict_repr['start_state'] = self.current_state
         return dict_repr
     
 

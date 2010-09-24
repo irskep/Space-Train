@@ -78,7 +78,8 @@ class EditorView(object):
             self.drag_anchor = self.scene.camera.position
             self.is_dragging_camera = True
         elif len(self.click_actions) > 0:
-            self.click_actions.popleft()(x, y)
+            world_point = self.scene.camera.mouse_to_canvas(x, y)
+            self.click_actions.popleft()(*world_point)
         else:
             world_point = self.scene.camera.mouse_to_canvas(x, y)
             for ed in self.editors:
@@ -129,6 +130,8 @@ class EditorView(object):
         self.check_camera_keys()
     
     def draw(self):
+        draw.set_color(0,0,0,1)
+        draw.rect(0,0,gamestate.norm_w,gamestate.norm_h)
         self.scene.draw()
         
         for ed in self.editors:

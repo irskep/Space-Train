@@ -41,7 +41,6 @@ class AbstractEditor(object):
         # will be hidden and therefore its fields will be inaccessible.
         old_obj = self.selected_item
         if old_obj is not None and new_obj is None:
-            print 'x'
             self.update_item_from_inspector()
             self.selected_item = new_obj
             self.inspector.hide()

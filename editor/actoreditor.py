@@ -91,7 +91,8 @@ class ActorEditor(abstracteditor.AbstractEditor):
     def actor_button_action(self, button):
         def actor_placer(x, y):
             world_point = self.scene.camera.mouse_to_canvas(x, y)
-            self.dragging_item = self.scene.new_actor(button.text, x=world_point[0], y=world_point[1])
+            self.dragging_item = self.scene.new_actor(button.text,
+                                                      attrs = {'x': x, 'y': y})
             editorstate.set_status_message('')
         self.editor.click_actions.append(actor_placer)
         editorstate.set_status_message("Click to place %s" % button.text)

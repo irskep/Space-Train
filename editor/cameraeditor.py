@@ -4,6 +4,11 @@ import abstracteditor, editorstate
 from engine import gamestate
 from engine.util import draw
 
+w = 1280
+h = 720
+hw = w//2
+hh = h//2
+
 class CameraEditor(abstracteditor.AbstractEditor):
     def __init__(self, ed):
         super(CameraEditor, self).__init__(ed)
@@ -39,8 +44,8 @@ class CameraEditor(abstracteditor.AbstractEditor):
         self.is_dragging_item = True
         new_point = (self.drag_anchor[0] - (self.drag_start[0] - x),
                      self.drag_anchor[1] - (self.drag_start[1] - y))
-        new_point = (min(max(new_point[0], 512), self.scene.env.width-512),
-                     min(max(new_point[1], 384), self.scene.env.height-384))
+        new_point = (min(max(new_point[0], hw), self.scene.env.width-hw),
+                     min(max(new_point[1], hh), self.scene.env.height-hh))
         self.dragging_item.position = new_point
     
     def end_drag(self, x, y):
@@ -81,8 +86,8 @@ class CameraEditor(abstracteditor.AbstractEditor):
             draw.rect(p[0]-5, p[1]-5, p[0]+5, p[1]+5)
         p = self.dragging_item or self.selected_item
         if p:
-            draw.rect_outline(p.position[0]-512, p.position[1]-384, 
-                              p.position[0]+512, p.position[1]+384)
+            draw.rect_outline(p.position[0]-hw, p.position[1]-hh, 
+                              p.position[0]+hw, p.position[1]+hh)
         self.editor.scene.camera.unapply()
     
     def new_camera_point(self, button=None):
