@@ -4,7 +4,7 @@ Description:    Handles game loading, saving, and initilization.
 Notes:
 """
 
-import gamestate
+import gamestate, sys
 
 import scene, scenehandler, ui
 
@@ -18,7 +18,8 @@ class GameHandler(object):
         
     # Called by scenehandler when the user is exiting the game, should prompt for a save
     def notify(self):
-        pass
+        # Quit
+        sys.exit(0)
     
     # method to draw appropriate elements
     # unsure if this change is proper (i.e. calling draw() rather than assigning a function to draw()

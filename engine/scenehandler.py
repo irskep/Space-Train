@@ -35,43 +35,45 @@ class SceneHandler(actionsequencer.ActionSequencer):
 
     # Called by a scene to load a new scene.
     def notify(self, next_scene):
-      #  self.end_scene()
+        if self.handler.ui.cam is not None:
+            self.handler.ui.cam.visible = False
         self.update()
         
         # Remove scene
         self.save()
-        self.scene.exit()
         
         if next_scene is None:
             # Notify game handler, we are exiting
-            self.exit()
             self.handler.notify()
         else:
-            # Load scene
-            self.scene = scene.Scene(next_scene, self.scene.ui)
-         #   self.begin_scene()
+            self.fade_to(next_scene)
     
-    
-    # Called when exiting a scene, fades to the transition image
-    def end_scene(self):
-        """ Setup an interpolator for the opacity, fade from 0 to 255. """
+    def fade_to(self, next_scene):
+        new_scene = scene.Scene(next_scene, self.handler.ui)
+        
         InterpClass = interpolator.LinearInterpolator
-        interp = InterpClass(self.sprite, 'opacity', end = 255, start = 0, 
-                             duration=self.fade_time)
-        self.controller.add_interpolator(interp)
-    
-    # Called when entering a scene, fades into the new scene
-    def begin_scene(self):
-        InterpClass = interpolator.LinearInterpolator
-        interp = InterpClass(self.sprite, 'opacity', end = 0, duration = self.fade_time)
-        self.controller.add_interpolator(interp)
+        def fade_out(ending_action=None):
+            gamestate.main_window.pop_handlers()
+            interp = InterpClass(self.sprite, 'opacity', end=255, start=0, duration=self.fade_time,
+                                done_function=self.next_action)
+            self.controller.add_interpolator(interp)
+        
+        def complete_transition(ending_action=None):
+            gamestate.main_window.push_handlers(self.scene)
+            self.next_action()
+        
+        def fade_in(ending_action=None):
+            self.scene.exit()
+            self.scene = new_scene
+            interp = InterpClass(self.sprite, 'opacity', end=0, start=255, duration=self.fade_time,
+                                done_function=complete_transition)
+            self.controller.add_interpolator(interp)
+        
+        self.simple_sequence(fade_out, fade_in)
     
     # Initiates an autosave
     def save(self):
         pass
-    
-    def exit(self):
-        self.sprite.delete()
     
     def update(self, dt=0):
         self.controller.update_interpolators(dt)
@@ -79,3 +81,4 @@ class SceneHandler(actionsequencer.ActionSequencer):
     
     def draw(self):
         self.batch.draw()
+    
