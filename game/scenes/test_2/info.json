@@ -2,8 +2,8 @@
     "environment": "test", 
     "camera_points": {
         "start": {
-            "y": 384, 
-            "x": 512
+            "y": 360, 
+            "x": 640
         }
     }, 
     "actors": {
