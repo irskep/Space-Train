@@ -64,34 +64,38 @@ class Inventory(object):
         
       
         # Create the inventory open state now
-        self.sprites['open']['mid'] = []
-        
-        x = 0
-        self.sprites['open']['left'] = util.load_sprite(['ui', 'inventory_left.png'], x = gamestate.norm_w, y = gamestate.norm_h, batch = self.batches['open'])
-        x += self.sprites['open']['left'].width
-
-        self.sprites['open']['mid'].append( util.load_sprite(['ui', 'inventory_mid.png'], x = gamestate.norm_w, y = gamestate.norm_h, batch = self.batches['open']) )
-        self.sprites['open']['mid'][-1].x += x
-        x += self.sprites['open']['mid'][-1].width
-        self.sprites['open']['mid'].append( util.load_sprite(['ui', 'inventory_mid.png'], x = gamestate.norm_w, y = gamestate.norm_h, batch = self.batches['open']) )
-        self.sprites['open']['mid'][-1].x += x
-        x += self.sprites['open']['mid'][-1].width
-        
-        self.sprites['open']['right'] = util.load_sprite(['ui', 'inventory_right.png'], x = gamestate.norm_w + x, y = gamestate.norm_h, batch = self.batches['open'])
-        x += self.sprites['open']['right'].width
-        
-        y = self.sprites['open']['left'].height
-        
-        open_sprites = []
-        open_sprites.append(self.sprites['open']['left'])
-        open_sprites.append(self.sprites['open']['right'])
-        open_sprites.extend( self.sprites['open']['mid'] )
-        for sprite in open_sprites:
-            sprite.x -= x
-            sprite.y -= y
+        self.set_inventory_ui_width(5)
     
         gamestate.main_window.push_handlers(self)
             
+    # used for (re)sizing the inventory UI open state. right now takes width as a number of intermediate middle sections to show; when real gfx are in it should be in px
+    def set_inventory_ui_width(self, width):
+        sprites = {}
+        sprites['mid'] = []
+        
+        x = 0
+        sprites['left'] = util.load_sprite(['ui', 'inventory_left.png'], x = gamestate.norm_w, y = gamestate.norm_h, batch = self.batches['open'])
+        x += sprites['left'].width
+
+        while(width > 0):
+            sprites['mid'].append( util.load_sprite(['ui', 'inventory_mid.png'], x = gamestate.norm_w, y = gamestate.norm_h, batch = self.batches['open']) )
+            sprites['mid'][-1].x += x
+            x += sprites['mid'][-1].width
+            width -= 1
+        
+        sprites['right'] = util.load_sprite(['ui', 'inventory_right.png'], x = gamestate.norm_w + x, y = gamestate.norm_h, batch = self.batches['open'])
+        x += sprites['right'].width
+        
+        y = sprites['left'].height
+        
+        self.sprites['open'] = []
+        self.sprites['open'].append(sprites['left'])
+        self.sprites['open'].append(sprites['right'])
+        self.sprites['open'].extend(sprites['mid'] )
+        for sprite in self.sprites['open']:
+            sprite.x -= x
+            sprite.y -= y
+    
     def on_mouse_release(self, x, y, button, modifiers):
         if self.intersects_active_area(x, y):
             self.toggle()
@@ -109,10 +113,11 @@ class Inventory(object):
             if(x > sprite.x and x < sprite.x + sprite.width and
                y > sprite.y and y < sprite.y + sprite.height):
                 return True
-        return False
+        return False 
         
     # Render the inventory in the UI
     def draw(self, dt=0):
+        #print self.isopen
         if(self.isopen is False):
             self.batches['closed'].draw()
         else:
