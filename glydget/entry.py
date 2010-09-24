@@ -158,7 +158,8 @@ class Entry(Widget):
         content_height = self.height-padding[0]-padding[1]
         label = self._label
         layout = self._layout
-        if label:
+        # Dear Glydget, I do not want you to fuck up my content strings. Sincerely, Steve.
+        if label and False:
             # Ellipsize text if necessary
             if label.content_width > content_width:
                 n,m = 1, len(text)
