@@ -17,7 +17,7 @@ class Actor(actionsequencer.ActionSequencer):
         attrs = attrs or None
         self.name = name
         self.scene = scene
-
+        
         self.identifier = identifier
         self.walkpath_point = None
         self.resource_path = util.respath_func_with_base_path('actors', self.name)
@@ -104,6 +104,7 @@ class Actor(actionsequencer.ActionSequencer):
     def fire_adv_event(self, event, *args):
         self.scene.fire_adv_event(event, *args)
         self.next_action()
+    
     
     
     # Convenience methods for preparing standard action sequences

@@ -51,7 +51,7 @@ class Scene(interpolator.InterpolatorController):
         # Requires that game/scenes is in PYTHONPATH
         self.module = importlib.import_module(self.name)
         self.module.myscene = self
-        self.module.init()
+        self.call_if_available('init')
         
     # Cleanup
     def exit(self):
