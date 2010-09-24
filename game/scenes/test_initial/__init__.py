@@ -18,3 +18,6 @@ def actor_clicked(clicked_actor):
     else:
         clicked_actor.prepare_jump()
         clicked_actor.next_action()
+
+def transition_from(last_scene):
+    print "transitioned from", last_scene

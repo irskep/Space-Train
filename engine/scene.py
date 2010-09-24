@@ -78,16 +78,21 @@ class Scene(interpolator.InterpolatorController):
     def fire_adv_event(self, event, *args):
         self.module.handle_event(event, *args)
     
+    def call_if_available(self, func_name, *args, **kwargs):
+        if hasattr(self.module, func_name):
+            getattr(self.module, func_name)(*args, **kwargs)
     
     # Events
+    
+    def transition_from(self, old_scene_name):
+        self.call_if_available('transition_from', old_scene_name)
     
     def on_mouse_release(self, x, y, button, modifiers):
         print "Mouse event received"
         clicked_actor = self.actor_under_point(x, y)
         if clicked_actor:
             self.ui.actor_clicked(clicked_actor)
-            if hasattr(self.module, 'actor_clicked'):
-                self.module.actor_clicked(clicked_actor)
+            self.call_if_available('actor_clicked', clicked_actor)
         elif self.actors.has_key("main"):
             print "No clicked_actor. We have a main actor"
             # Send main actor to click location according to actor's moving behavior

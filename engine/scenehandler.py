@@ -64,6 +64,7 @@ class SceneHandler(actionsequencer.ActionSequencer):
         
         def fade_in(ending_action=None):
             self.scene.exit()
+            new_scene.transition_from(self.scene.name)
             self.scene = new_scene
             interp = InterpClass(self.sprite, 'opacity', end=0, start=255, duration=self.fade_time,
                                 done_function=complete_transition)
