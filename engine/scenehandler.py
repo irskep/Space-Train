@@ -1,6 +1,5 @@
 """
 File:           scenehandler.py
-Author:         Tyler Goeringer
 Description:    Handles scene loading, saving, and transitions.
 Notes: A scenehandler object has a save() method which will save all data for the scene in the autosave folder. Whenever a plot element is completed (task completed, item acquired, etc.) the save() method should be called.
 
@@ -14,48 +13,48 @@ import pyglet
 import gamestate, actionsequencer, util, interpolator
 
 class SceneHandler(actionsequencer.ActionSequencer):
-    def __init__(self, scene_object):
+    def __init__(self, scene_object, game_handler, fade = 1.5):
         super(SceneHandler, self).__init__()
         self.scene = scene_object
+        self.handler = game_handler
         self.save_path = util.respath('saves', 'autosave', self.scene.name)
         
-        self.scene_transition_img = pyglet.resource.image(util.respath('environments', 'transitions', 'test.png'))
-        self.scene_transition = SceneTransition(img = self.scene_transition_img)
+        self.controller = interpolator.InterpolatorController()
+        self.fade_time = fade
+        self.batch = pyglet.graphics.Batch()
+        
+        # Build transition sprite(s)
+        scene_transition_img = pyglet.resource.image(util.respath('environments', 'transitions', 'test.png'))
+        self.sprite = pyglet.sprite.Sprite(scene_transition_img, x = 0, y = 0, batch=self.batch)
+        self.sprite.opacity = 0
         
         gamestate.main_window.push_handlers(self.scene)
     
     def __repr__(self):
         return "SceneHandler(scene_object=%s)" % str(self.scene)
-      
+
     # Called by a scene to load a new scene.
-    def notify(next_scene):
-        return 0
+    def notify(self, next_scene):
+        self.exit()
+        self.update()
         
-class SceneTransition(object):
-    """ Provides transitions between scenes. Currently only a fade in image. """
-    def __init__(self, img, fade_time = 5.0, batch=None):
-        self.controller = interpolator.InterpolatorController()
-        self.fade = fade_time
-        if batch is None:
-            batch = pyglet.graphics.Batch()
-        self.batch = batch
-        self.sprite = pyglet.sprite.Sprite(img, x = 0, y = 0, batch=self.batch)
-        self.sprite.opacity = 255
-        print "Initializing transition."
-        print "Opacity: %d Visible: %s X: %d Y: %d" % (self.sprite.opacity, self.sprite.visible, 
-                                                       self.sprite.x, self.sprite.y)
-        print self.sprite.image
-        
-    def begin(self):
-        print "Beginning!"
+    # Called when exiting a scene, fades to the transition image
+    def exit(self):
         """ Setup an interpolator for the opacity, fade from 0 to 255. """
         InterpClass = interpolator.LinearInterpolator
         interp = InterpClass(self.sprite, 'opacity', end = 255, start = 0, 
-                             duration=self.fade, done_function=self.notify)
+                             duration=self.fade_time, done_function=self.update) # Should be a no-op for now
         self.controller.add_interpolator(interp)
-                             
-    def notify(self):
-        self.sprite.opacity = 0;
+        
+    def enter(self):
+        InterpClass = interpolator.LinearInterpolator
+        interp = InterpClass(self.sprite, 'opacity', end = 0, start = 255,
+                             duration = self.fade_time, done_function=self.update)
+        self.controller.add_interpolator(interp)
+    
+    def update(self, dt=0):
+        self.controller.update_interpolators(dt)
+        self.scene.update(dt)
     
     def draw(self):
-        self.sprite.draw()
+        self.batch.draw()
