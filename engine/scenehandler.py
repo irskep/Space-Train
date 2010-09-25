@@ -13,21 +13,22 @@ import pyglet
 import gamestate, actionsequencer, util, interpolator, scene
 
 class SceneHandler(actionsequencer.ActionSequencer):
-    def __init__(self, scene_name, game_handler, fade = 1.0):
+    def __init__(self, game_handler):
         super(SceneHandler, self).__init__()
-        self.scene = scene.Scene(scene_name, self, game_handler.ui)
+        self.scene = None
         self.handler = game_handler
-        self.save_path = util.respath('saves', 'autosave', self.scene.name)
         
         self.controller = interpolator.InterpolatorController()
-        self.fade_time = fade
+        self.fade_time = 1.0
         self.batch = pyglet.graphics.Batch()
         
         # Build transition sprite(s)
         scene_transition_img = pyglet.resource.image(util.respath('environments', 'transitions', 'test.png'))
         self.sprite = pyglet.sprite.Sprite(scene_transition_img, x = 0, y = 0, batch=self.batch)
         self.sprite.opacity = 0
-        
+    
+    def set_first_scene(self, scn):
+        self.scene = scn
         gamestate.main_window.push_handlers(self.scene)
     
     def __repr__(self):
@@ -39,8 +40,7 @@ class SceneHandler(actionsequencer.ActionSequencer):
             self.handler.ui.cam.set_visible(False)
         
         if next_scene is None:
-            # Notify game handler, we are exiting
-            self.handler.notify()
+            self.handler.prompt_save_and_quit()
         else:
             self.fade_to(next_scene)
     
@@ -59,7 +59,7 @@ class SceneHandler(actionsequencer.ActionSequencer):
         
         def fade_in(ending_action=None):
             # Remove scene
-            self.save()
+            self.handler.save()
             self.scene.exit()
             new_scene = scene.Scene(next_scene, self, self.handler.ui)
             new_scene.transition_from(self.scene.name)
@@ -70,13 +70,10 @@ class SceneHandler(actionsequencer.ActionSequencer):
         
         self.simple_sequence(fade_out, fade_in)
     
-    # Initiates an autosave
-    def save(self):
-        pass
-    
     def update(self, dt=0):
         self.controller.update_interpolators(dt)
-        self.scene.update(dt)
+        if self.scene:
+            self.scene.update(dt)
     
     def draw(self):
         self.batch.draw()

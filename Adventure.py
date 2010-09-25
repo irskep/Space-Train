@@ -38,7 +38,7 @@ class AdventureWindow(pyglet.window.Window):
 
             game_info = json.load(game_info_file)
             self.set_caption(game_info["name"])
-            self.game_handler = gamehandler.GameHandler(first_scene=game_info['first_scene'])
+            self.game_handler = gamehandler.GameHandler(**game_info)
         
         # gamestate.scaled is a decorator that wraps the given function in calls to
         # scale/unscale the OpenGL context. If/when AdventureWindow grows its own
@@ -56,6 +56,9 @@ class AdventureWindow(pyglet.window.Window):
         # Override default behavior of escape key quitting
         if symbol == pyglet.window.key.ESCAPE:
             return pyglet.event.EVENT_HANDLED
+    
+    def on_close(self):
+        self.game_handler.prompt_save_and_quit()
     
 
 def run_game():

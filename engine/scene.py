@@ -10,7 +10,7 @@ class Scene(interpolator.InterpolatorController):
     
     # Initialization
     
-    def __init__(self, name, scene_handler=None, ui=None):
+    def __init__(self, name, scene_handler=None, ui=None, load_path=None):
         super(Scene, self).__init__()
         self.name = name
         self.handler = scene_handler
@@ -20,7 +20,7 @@ class Scene(interpolator.InterpolatorController):
         self.camera_points = {}
         self.resource_path = util.respath_func_with_base_path('game', 'scenes', self.name)
         
-        self.load_info()
+        self.load_info(load_path)
         self.initialize_from_info()
         self.load_actors()
         
@@ -122,9 +122,12 @@ class Scene(interpolator.InterpolatorController):
         self.info['camera_points'] = self.camera.dict_repr()
         return self.info
     
-    def load_info(self):
-        with pyglet.resource.file(self.resource_path('info.json'), 'r') as info_file:
-            self.info = json.load(info_file)
+    def load_info(self, load_path=None):
+        if load_path is None:
+            with pyglet.resource.file(self.resource_path('info.json'), 'r') as info_file:
+                self.info = json.load(info_file)
+        else:
+            self.info = util.load_json(load_path)
     
     def save_info(self):
         shutil.copyfile(self.resource_path('info.json'), self.resource_path('info.json~'))
