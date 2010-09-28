@@ -16,7 +16,7 @@ class AdventureMakerWindow(pyglet.window.Window):
         
         screen = pyglet.window.get_platform().get_default_display().get_default_screen()
         super(AdventureMakerWindow,self).__init__(width=screen.width-20, 
-                                                  height=screen.height-80, 
+                                                  height=gamestate.norm_h, 
                                                   vsync=True)
         gamestate.main_window = self
         gamestate.scripts_enabled = False
@@ -42,7 +42,7 @@ class AdventureMakerWindow(pyglet.window.Window):
     
 
 def run_game():
-    sys.path.append('/'.join([os.path.dirname(__file__), 'game', 'scenes']))
+    sys.path.append('/'.join([os.path.dirname(__file__), 'game']))
     main_window = AdventureMakerWindow()
     pyglet.app.run()
 

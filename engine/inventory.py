@@ -28,73 +28,34 @@ class Inventory(object):
         self.batches = {}
         self.batches['open'] = pyglet.graphics.Batch()
         self.batches['closed'] = pyglet.graphics.Batch()
-        self.sprites['open'] = {}
+        self.sprites['open'] = []
         self.sprites['closed'] = []
         
         self.width = 5
+                
+        self.isopen = False
         
         # Create the inventory closed state first
-        # i know this is dirty, shut up!
-        x = 0
-        for sprite in self.sprites['closed']:
-            x += sprite.width
-        self.sprites['closed'].append( util.load_sprite(['ui', 'inventory_left.png'], x = gamestate.norm_w + x, y = gamestate.norm_h,  batch = self.batches['closed']) )
-        x = 0
-        for sprite in self.sprites['closed']:
-            x += sprite.width
-        self.sprites['closed'].append( util.load_sprite(['ui', 'inventory_mid.png'], x = gamestate.norm_w + x, y = gamestate.norm_h, batch = self.batches['closed']) )
-        x = 0
-        for sprite in self.sprites['closed']:
-            x += sprite.width
-        self.sprites['closed'].append( util.load_sprite(['ui', 'inventory_right.png'], x = gamestate.norm_w + x, y = gamestate.norm_h, batch = self.batches['closed']) )
-                
+        self.sprites['closed'].append( util.load_sprite(['ui', 'purse.png'], x = gamestate.norm_w, y = gamestate.norm_h, batch = self.batches['closed']) )
+        self.translate_bottomleft_to_topright(self.sprites['closed'])
+                      
+        # Create the inventory open state now
+        self.sprites['open'].append( util.load_sprite(['ui', 'purseopen.png'], x = gamestate.norm_w, y = gamestate.norm_h, batch = self.batches['open']) )
+        self.translate_bottomleft_to_topright(self.sprites['open'])
+    
+        gamestate.main_window.push_handlers(self)
+    
+    #needs to go in util sometime
+    def translate_bottomleft_to_topright(self, sprites):
         # translate everything to where it needs to be
         x_trans = 0
         y_trans = 0
-        for sprite in self.sprites['closed']:
+        for sprite in sprites:
             x_trans += sprite.width
             y_trans = sprite.height
-
-        for sprite in self.sprites['closed']:
+        for sprite in sprites:
             sprite.x -= x_trans
             sprite.y -= y_trans
-            print "Sprite at (%d, %d)" % (sprite.x, sprite.y)
-        
-        self.isopen = False
-        
-      
-        # Create the inventory open state now
-        self.set_inventory_ui_width(5)
-    
-        gamestate.main_window.push_handlers(self)
-            
-    # used for (re)sizing the inventory UI open state. right now takes width as a number of intermediate middle sections to show; when real gfx are in it should be in px
-    def set_inventory_ui_width(self, width):
-        sprites = {}
-        sprites['mid'] = []
-        
-        x = 0
-        sprites['left'] = util.load_sprite(['ui', 'inventory_left.png'], x = gamestate.norm_w, y = gamestate.norm_h, batch = self.batches['open'])
-        x += sprites['left'].width
-
-        while(width > 0):
-            sprites['mid'].append( util.load_sprite(['ui', 'inventory_mid.png'], x = gamestate.norm_w, y = gamestate.norm_h, batch = self.batches['open']) )
-            sprites['mid'][-1].x += x
-            x += sprites['mid'][-1].width
-            width -= 1
-        
-        sprites['right'] = util.load_sprite(['ui', 'inventory_right.png'], x = gamestate.norm_w + x, y = gamestate.norm_h, batch = self.batches['open'])
-        x += sprites['right'].width
-        
-        y = sprites['left'].height
-        
-        self.sprites['open'] = []
-        self.sprites['open'].append(sprites['left'])
-        self.sprites['open'].append(sprites['right'])
-        self.sprites['open'].extend(sprites['mid'] )
-        for sprite in self.sprites['open']:
-            sprite.x -= x
-            sprite.y -= y
     
     def on_mouse_release(self, x, y, button, modifiers):
         if self.intersects_active_area(x, y):

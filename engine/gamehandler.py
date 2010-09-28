@@ -2,7 +2,7 @@
 Handles game loading, saving, and initialization.
 """
 
-import os, sys, json
+import os, sys, json, shutil
 import pyglet
 
 import gamestate, util
@@ -10,13 +10,19 @@ import scene, scenehandler, ui
 
 class GameHandler(object):
     """This class will be useful when scene transitions are implemented."""
-    def __init__(self, first_scene, name="Adventure"):
+    def __init__(self, first_scene="title_screen", name="Adventure", reset_save=False):
         self.ui = ui.UI()
         
         self.name = name
         
         self.save_path = pyglet.resource.get_settings_path(self.name)
         util.mkdir_if_absent(self.save_path)
+        
+        if reset_save:
+            try:
+                shutil.rmtree(os.path.join(self.save_path, "autosave"))
+            except OSError:
+                pass    # Directory didn't exist but we don't care
         
         self.scene_handler = scenehandler.SceneHandler(self)
         scn = self.load() or scene.Scene(first_scene, self.scene_handler, self.ui)
