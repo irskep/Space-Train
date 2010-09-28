@@ -1,6 +1,6 @@
 import os, sys, shutil, json, importlib, pyglet
 
-import camera, actor, gamestate, util, interpolator
+import camera, actor, gamestate, util, interpolator, dialogue
 from util import walkpath
 
 import cam, environment, gamehandler, scenehandler
@@ -17,7 +17,7 @@ class Scene(interpolator.InterpolatorController):
         self.actors = {}
         self.camera_points = {}
         self.resource_path = util.respath_func_with_base_path('game', 'scenes', self.name)
-        
+        self.dialogue = dialogue
         self.load_info()
         self.initialize_from_info()
         self.load_actors()
@@ -31,6 +31,7 @@ class Scene(interpolator.InterpolatorController):
         self.env = environment.Environment(self.environment_name)
         self.walkpath = walkpath.WalkPath(dict_repr = self.info['walkpath'])
         self.camera = camera.Camera(dict_repr=self.info['camera_points'])
+
     
     def load_actors(self):
         """Initialize actors and update them with any values specified in the info dict"""
@@ -48,6 +49,10 @@ class Scene(interpolator.InterpolatorController):
             if attrs.has_key('walkpath_point'):
                 new_actor.walkpath_point = attrs['walkpath_point']
                 new_actor.sprite.position = self.walkpath.points[new_actor.walkpath_point]
+                
+        #Thrown in here randomly until it finds its real home
+        self.dialogue = dialogue.Dialogue(self.actors["main"], self.actors["fist_1"])
+
     
     def load_script(self):
         # Requires that game/scenes is in PYTHONPATH
@@ -74,7 +79,7 @@ class Scene(interpolator.InterpolatorController):
     # Events
     
     def on_mouse_release(self, x, y, button, modifiers):
-        clicked_actor = self.actor_under_point(x, y)
+        clicked_actor = self.actor_under_point(*self.camera.mouse_to_canvas(x, y))
         if clicked_actor:
             if hasattr(self.module, 'actor_clicked'):
                 self.module.actor_clicked(clicked_actor)
@@ -89,14 +94,19 @@ class Scene(interpolator.InterpolatorController):
     # Update/draw
     
     def update(self, dt=0):
-        self.camera.update(dt)
+        #update the cameras written by Sean
+        self.camera.set_target(self.actors["main"].sprite.x, self.actors["main"].sprite.y)
+        self.camera.update(1)
         self.update_interpolators(dt)
+        self.dialogue.update();
     
     @camera.obey_camera
     def draw(self, dt=0):
         self.env.draw()
         self.batch.draw()
-        self.walkpath.draw()
+	self.walkpath.draw()
+	#draw the dialogue written by Sean
+	self.dialogue.draw()
     
     
     # Serialization
