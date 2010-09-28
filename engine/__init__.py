@@ -9,6 +9,7 @@ resource_locations = [
     r"C:\Users\Fred\Documents\My Dropbox\resources",
     r"/Users/stephen/Dropbox/resources",
     r"C:\Users\Tyler\Documents\My Dropbox\resources"
+    r"C:\Users\Merfie\Documents\My Dropbox\resources"
 ]
 
 for location in resource_locations:

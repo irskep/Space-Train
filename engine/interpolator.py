@@ -131,6 +131,13 @@ class JumpInterpolator(Interpolator):
         setattr(self.host_object, self.attr_name, 
                 self.base_y + math.sin(self.progress*self.speed)*self.height)
     
+    def complete(self):
+        if super(JumpInterpolator, self).complete():
+            setattr(self.host_object, self.attr_name, self.base_y)
+            return True
+        else:
+            return False
+    
 
 class PulseInterpolator(Interpolator):
     """Pulse on a sine wave"""

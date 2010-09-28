@@ -9,7 +9,7 @@ class CameraPoint(object):
     
 
 class Camera(object):
-    def __init__(self, min_bounds=None, max_bounds=None, speed=100.0, dict_repr=None):
+    def __init__(self, min_bounds=None, max_bounds=None, speed=50000.0, dict_repr=None):
         self.min_bounds = min_bounds or gamestate.camera_min
         self.max_bounds = max_bounds or gamestate.camera_max
         self.speed = speed

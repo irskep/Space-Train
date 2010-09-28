@@ -35,6 +35,9 @@ class Actor(actionsequencer.ActionSequencer):
         for attr in ['x', 'y', 'scale', 'rotation']:
             if attrs.has_key(attr):
                 setattr(self.sprite, attr, attrs[attr])
+        
+        self.anchor_x = Actor.info[self.name]['anchor_x']
+        self.anchor_y = Actor.info[self.name]['anchor_y']
     
     def __repr__(self):
         return 'Actor(name="%s", identifier=%s)' % (self.name, self.identifier)
@@ -76,7 +79,7 @@ class Actor(actionsequencer.ActionSequencer):
         if Actor.images[self.name].has_key(image_name):
             self.sprite.image = Actor.images[self.name][image_name]
     
-    def update_state(self, new_state, *args):
+    def update_state(self, new_state):
         """Update self.current_state and update animation if possible. Variable is
         changed even if animation is not changed so that scripts do not become confused."""
         if new_state != self.current_state:

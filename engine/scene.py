@@ -1,4 +1,4 @@
-import os, sys, shutil, json, importlib, pyglet
+import os, sys, shutil, json, importlib, pyglet, functools
 
 import camera, actor, gamestate, util, interpolator
 from util import walkpath
@@ -6,6 +6,7 @@ from util import walkpath
 import cam, environment, gamehandler, scenehandler
 
 
+update_t = 1/60.0
 class Scene(interpolator.InterpolatorController):
     
     # Initialization
@@ -18,6 +19,16 @@ class Scene(interpolator.InterpolatorController):
         self.ui = ui
         self.actors = {}
         self.camera_points = {}
+        
+        self.game_time = 0.0
+        self.accum_time = 0.0
+        self.clock = pyglet.clock.Clock(time_function=lambda: self.game_time) 
+        self.paused = False
+        self.convo_name = None
+        self.convo_info = None
+        self.convo_label = pyglet.text.Label("", color = (0,255,0,255), 
+                                             font_size=12, anchor_x='center')
+        
         self.resource_path = util.respath_func_with_base_path('game', self.name)
         
         self.load_info(load_path)
@@ -86,8 +97,7 @@ class Scene(interpolator.InterpolatorController):
         self.call_if_available('transition_from', old_scene_name)
     
     def on_mouse_release(self, x, y, button, modifiers):
-        clicked_actor = self.actor_under_point(x, y)
-        print self.name
+        clicked_actor = self.actor_under_point(*self.camera.mouse_to_canvas(x, y))
         if clicked_actor:
             self.ui.actor_clicked(clicked_actor)
             self.call_if_available('actor_clicked', clicked_actor)
@@ -100,9 +110,69 @@ class Scene(interpolator.InterpolatorController):
                 main.next_action()
     
     
+    # Dialogue
+    
+    def begin_conversation(self, convo_name):
+        # TODO: Instead of scheduling all at once, keep a convo line list
+        # and schedule new one at end of old. Provides ability to skip by
+        # clicking. Always a good thing.
+        
+        # Optimization: preload conversations in initializer
+        self.convo_name = convo_name
+        with pyglet.resource.file(self.resource_path("%s.convo" % convo_name), 'r') as f:
+            self.convo_info = json.load(f)
+        
+        this_time = 0.0
+        for line in self.convo_info['dialogue']:
+            actor_id = line[0]
+            text = line[1]
+            # Maybe more options
+            self.clock.schedule_once(functools.partial(self.speak, *line), this_time)
+            this_time += max(len(text)*0.04, 2.0)
+        self.clock.schedule_once(self.stop_speaking, this_time)
+    
+    def speak(self, actor_id, text, *args):
+        if len(args) == 2:
+            self.convo_info = args[0]
+        for identifier, new_state in self.convo_info['at_rest'].viewitems():
+            if identifier != actor_id:
+                self.actors[identifier].update_state(new_state)
+        act = self.actors[actor_id]
+        act.update_state(self.convo_info['speaking'][actor_id])
+        self.convo_label.begin_update()
+        self.convo_label.x = act.sprite.x
+        self.convo_label.y = act.sprite.y + 20 + \
+                             act.current_image().height - act.current_image().anchor_y
+        self.convo_label.text = text
+        self.convo_label.end_update()
+    
+    def stop_speaking(self, dt=0):
+        self.convo_label.begin_update()
+        self.convo_label.text = ""
+        self.convo_label.end_update()
+        cn = self.convo_name
+        self.convo_name = None  # Order matters here in case the script starts a new conversation
+        self.convo_info = None
+        self.call_if_available('end_conversation', cn)
+    
+    
     # Update/draw
     
     def update(self, dt=0):
+        if self.paused: 
+            return
+        
+        # Align updates to fixed timestep 
+        self.accum_time += dt 
+        if self.accum_time > update_t * 3: 
+            self.accum_time = update_t 
+        while self.accum_time >= update_t: 
+            self.game_time += update_t
+            self.clock.tick() 
+            self.accum_time -= update_t
+        
+        if self.actors.has_key('main'):
+            self.camera.set_target(self.actors["main"].sprite.x, self.actors["main"].sprite.y)
         self.camera.update(dt)
         self.update_interpolators(dt)
     
@@ -111,6 +181,7 @@ class Scene(interpolator.InterpolatorController):
         self.env.draw()
         self.batch.draw()
         self.env.draw_overlay()
+        self.convo_label.draw()
     
     
     # Serialization
