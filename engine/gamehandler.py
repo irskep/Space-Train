@@ -19,7 +19,10 @@ class GameHandler(object):
         util.mkdir_if_absent(self.save_path)
         
         if reset_save:
-            shutil.rmtree(os.path.join(self.save_path, "autosave"))
+            try:
+                shutil.rmtree(os.path.join(self.save_path, "autosave"))
+            except OSError:
+                pass    # Directory didn't exist but we don't care
         
         self.scene_handler = scenehandler.SceneHandler(self)
         scn = self.load() or scene.Scene(first_scene, self.scene_handler, self.ui)

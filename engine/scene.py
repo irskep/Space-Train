@@ -18,7 +18,7 @@ class Scene(interpolator.InterpolatorController):
         self.ui = ui
         self.actors = {}
         self.camera_points = {}
-        self.resource_path = util.respath_func_with_base_path('game', 'scenes', self.name)
+        self.resource_path = util.respath_func_with_base_path('game', self.name)
         
         self.load_info(load_path)
         self.initialize_from_info()

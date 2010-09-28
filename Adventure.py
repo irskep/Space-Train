@@ -62,7 +62,7 @@ class AdventureWindow(pyglet.window.Window):
     
 
 def run_game():
-    sys.path.append(os.path.join(os.path.dirname(__file__), 'game', 'scenes'))
+    sys.path.append(os.path.join(os.path.dirname(__file__), 'game'))
     if len(sys.argv) == 2 and sys.argv[1] == 'newgame':
         main_window = AdventureWindow(True)
     else:

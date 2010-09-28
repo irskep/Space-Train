@@ -42,7 +42,7 @@ class AdventureMakerWindow(pyglet.window.Window):
     
 
 def run_game():
-    sys.path.append('/'.join([os.path.dirname(__file__), 'game', 'scenes']))
+    sys.path.append('/'.join([os.path.dirname(__file__), 'game']))
     main_window = AdventureMakerWindow()
     pyglet.app.run()
 
