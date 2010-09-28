@@ -1,10 +1,10 @@
 {
-    "environment": "test", 
+    "environment": "pan_test", 
     "camera_points": {
-        "start": {
-            "y": 1000, 
+        "384": {
+            "y": 512, 
             "x": 1375
-        }
+        }, 
     }, 
     "actors": {
         "another_fist_1": {
