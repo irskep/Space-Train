@@ -7,18 +7,13 @@
         }
     }, 
     "actors": {
-        "another_fist_1": {
-            "y": 548, 
-            "x": 735, 
-            "name": "another_fist"
-        }, 
         "main": {
             "walkpath_point": "lefter", 
             "name": "fist"
         }, 
         "fist_1": {
-            "y": 305, 
-            "x": 1078, 
+            "y": 400, 
+            "x": 500, 
             "name": "fist"
         }
     }, 

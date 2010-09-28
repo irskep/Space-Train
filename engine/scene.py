@@ -5,20 +5,22 @@ from util import walkpath
 
 import cam, environment, gamehandler, scenehandler
 
+
 class Scene(interpolator.InterpolatorController):
     
     # Initialization
     
-    def __init__(self, name, ui=None):
+    def __init__(self, name, scene_handler=None, ui=None, load_path=None):
         super(Scene, self).__init__()
         self.name = name
+        self.handler = scene_handler
         self.batch = pyglet.graphics.Batch()
         self.ui = ui
         self.actors = {}
         self.camera_points = {}
         self.resource_path = util.respath_func_with_base_path('game', 'scenes', self.name)
         
-        self.load_info()
+        self.load_info(load_path)
         self.initialize_from_info()
         self.load_actors()
         
@@ -36,13 +38,9 @@ class Scene(interpolator.InterpolatorController):
         """Initialize actors and update them with any values specified in the info dict"""
         for identifier, attrs in self.info['actors'].viewitems():
             # Initialize and store
-            new_actor = actor.Actor(name=attrs['name'], identifier=identifier, scene=self)
+            new_actor = actor.Actor(name=attrs['name'], identifier=identifier, 
+                                    scene=self, attrs=attrs)
             self.actors[identifier] = new_actor
-            
-            # Update attributes
-            for attr in ['x', 'y', 'scale', 'rotation']:
-                if attrs.has_key(attr):
-                    setattr(new_actor.sprite, attr, attrs[attr])
             
             # Obey walk paths
             if attrs.has_key('walkpath_point'):
@@ -53,7 +51,14 @@ class Scene(interpolator.InterpolatorController):
         # Requires that game/scenes is in PYTHONPATH
         self.module = importlib.import_module(self.name)
         self.module.myscene = self
-        self.module.init()
+        self.call_if_available('init')
+        
+    # Cleanup
+    def exit(self):
+        for actor in self.actors.viewvalues():
+            actor.sprite.delete()
+        self.env.exit()
+    
     
     
     # Access
@@ -70,25 +75,28 @@ class Scene(interpolator.InterpolatorController):
     def fire_adv_event(self, event, *args):
         self.module.handle_event(event, *args)
     
+    def call_if_available(self, func_name, *args, **kwargs):
+        if hasattr(self.module, func_name):
+            getattr(self.module, func_name)(*args, **kwargs)
+    
     
     # Events
     
+    def transition_from(self, old_scene_name):
+        self.call_if_available('transition_from', old_scene_name)
+    
     def on_mouse_release(self, x, y, button, modifiers):
-        print "Mouse event received"
         clicked_actor = self.actor_under_point(x, y)
+        print self.name
         if clicked_actor:
             self.ui.actor_clicked(clicked_actor)
-            if hasattr(self.module, 'actor_clicked'):
-                self.module.actor_clicked(clicked_actor)
+            self.call_if_available('actor_clicked', clicked_actor)
         elif self.actors.has_key("main"):
-            print "No clicked_actor. We have a main actor"
             # Send main actor to click location according to actor's moving behavior
             main = self.actors["main"]
-            print "Main actor blocking actions: %d" % main.blocking_actions
             while(main.blocking_actions > 0):
                 main.next_action()
             if main.prepare_move(*self.camera.mouse_to_canvas(x, y)):
-                print "O hai!"
                 main.next_action()
     
     
@@ -114,9 +122,12 @@ class Scene(interpolator.InterpolatorController):
         self.info['camera_points'] = self.camera.dict_repr()
         return self.info
     
-    def load_info(self):
-        with pyglet.resource.file(self.resource_path('info.json'), 'r') as info_file:
-            self.info = json.load(info_file)
+    def load_info(self, load_path=None):
+        if load_path is None:
+            with pyglet.resource.file(self.resource_path('info.json'), 'r') as info_file:
+                self.info = json.load(info_file)
+        else:
+            self.info = util.load_json(load_path)
     
     def save_info(self):
         shutil.copyfile(self.resource_path('info.json'), self.resource_path('info.json~'))
