@@ -23,22 +23,6 @@ import copy, math
 import json, pyglet
 import gamestate, ui, util
 
-# Static resources, such as sprites for the CAM backgrounds
-sprites = {}
-sprite_batch = pyglet.graphics.Batch()
-sprites[1] = util.load_sprite(['ui', 'cam_1.png'], 0, 0, sprite_batch)
-sprites[2] = util.load_sprite(['ui', 'cam_2.png'], 0, 0, sprite_batch)
-sprites[3] = util.load_sprite(['ui', 'cam_3.png'], 0, 0, sprite_batch)
-sprites[4] = util.load_sprite(['ui', 'cam_4.png'], 0, 0, sprite_batch)
-sprites[5] = util.load_sprite(['ui', 'cam_5.png'], 0, 0, sprite_batch)
-
-positioning = {}
-positioning[1] = (0,0)
-positioning[2] = (0,0)
-positioning[3] = (0,0)
-positioning[4] = (0,0)
-positioning[5] = (0,0)
-
 class CAM(object):
     
     # Init
@@ -48,7 +32,21 @@ class CAM(object):
         self.x = x
         self.y = y
 
-        self.set_visible(True)
+        # Static resources, such as sprites for the CAM backgrounds
+        sprites = {}
+        sprite_batch = pyglet.graphics.Batch()
+        sprites[1] = util.load_sprite(['ui', 'cam_1.png'], batch = sprite_batch)
+        sprites[2] = util.load_sprite(['ui', 'cam_2.png'], batch = sprite_batch)
+        sprites[3] = util.load_sprite(['ui', 'cam_3.png'], batch = sprite_batch)
+        sprites[4] = util.load_sprite(['ui', 'cam_4.png'], batch = sprite_batch)
+        sprites[5] = util.load_sprite(['ui', 'cam_5.png'], batch = sprite_batch)
+
+        positioning = {}
+        positioning[1] = (0,0)
+        positioning[2] = (0,0)
+        positioning[3] = (0,0)
+        positioning[4] = (0,0)
+        positioning[5] = (0,0)
         
         self.batch = pyglet.graphics.Batch()
         self.buttons = []
@@ -57,12 +55,16 @@ class CAM(object):
         count = 1
 
         for action, callback in self.actions.items():      
-            button = self.Button(positioning[count][0], positioning[count][1], sprites[count], self.batch, action, callback)
+            button = self.Button(positioning[count][0], positioning[count][1], sprites[count], action, callback)
             self.buttons.append(button)
             count += 1
             
         for button in self.buttons:
             print button.sprite
+            
+        
+        self.set_visible(True)
+        
     
     # Make this into a property instead. I can't remember how right now. --Steve
     def set_visible(self, new_visible):
@@ -101,13 +103,12 @@ class CAM(object):
             
     # TODO: finish button class
     class Button(object):
-        def __init__(self, x, y, sprite, batch, action, callback):
+        def __init__(self, x, y, sprite, action, callback):
             self.sprite = sprite
             self.sprite.x = x
             self.sprite.y = y
-            self.sprite.batch = batch
             self.label = pyglet.text.Label(action, font_name = 'Times New Roman', font_size = 14, anchor_x = 'left', 
-                                           anchor_y = 'center', batch = batch, color = (0, 0, 0, 255),
+                                           anchor_y = 'center', batch = self.sprite.batch, color = (0, 0, 0, 255),
                                            x = self.sprite.x + 5, y = (self.sprite.y + self.sprite.height) - (self.sprite.height / 2))
             self.x = x
             self.y = y
