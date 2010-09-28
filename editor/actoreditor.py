@@ -11,6 +11,7 @@ class ActorEditor(abstracteditor.AbstractEditor):
         self.actor_pallet = glydget.Window("Make Actor", [
             glydget.Button(actor_name, self.actor_button_action) \
             for actor_name in os.listdir(os.path.join(settings.resources_path, 'actors'))
+            if actor_name != '.DS_Store'
         ])
         self.actor_pallet.show()
         self.actor_pallet.move(gamestate.main_window.width - 2 - self.actor_pallet.width, 
@@ -89,12 +90,13 @@ class ActorEditor(abstracteditor.AbstractEditor):
         if self.selected_item:
             self.editor.scene.camera.apply()
             s = self.selected_item.sprite
-            ax = self.selected_item.sprite.image.anchor_x*self.selected_item.sprite.scale
-            ay = self.selected_item.sprite.image.anchor_y*self.selected_item.sprite.scale
+            img = self.selected_item.current_image()
+            ax = img.anchor_x*self.selected_item.sprite.scale
+            ay = img.anchor_y*self.selected_item.sprite.scale
             min_x = s.x - ax
             min_y = s.y - ay
-            max_x = s.x - ax + s.image.width*self.selected_item.sprite.scale
-            max_y = s.y - ay + s.image.height*self.selected_item.sprite.scale
+            max_x = s.x - ax + img.width*self.selected_item.sprite.scale
+            max_y = s.y - ay + img.height*self.selected_item.sprite.scale
             draw.set_color(1, 0, 0, 1)
             draw.rect_outline(min_x, min_y, max_x, max_y)
             self.editor.scene.camera.unapply()
