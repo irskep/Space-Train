@@ -24,6 +24,7 @@ class Scene(interpolator.InterpolatorController):
         self.accum_time = 0.0
         self.clock = pyglet.clock.Clock(time_function=lambda: self.game_time) 
         self.paused = False
+        self.convo_name = None
         self.convo_label = pyglet.text.Label("", color = (0,255,0,255), 
                                              font_size=12, anchor_x='center')
         
@@ -112,25 +113,25 @@ class Scene(interpolator.InterpolatorController):
     
     def begin_conversation(self, convo_name):
         # Optimization: preload conversations in initializer
+        self.convo_name = convo_name
         with pyglet.resource.file(self.resource_path("%s.convo" % convo_name), 'r') as f:
             convo = json.load(f)
-            print convo
         
         this_time = 0.0
         for line in convo:
             actor_id = line[0]
             text = line[1]
             # Maybe more options
-            pyglet.clock.schedule_once(functools.partial(self.speak, actor_id, text), this_time)
+            self.clock.schedule_once(functools.partial(self.speak, actor_id, text), this_time)
             this_time += max(len(text)*0.04, 2.0)
-        pyglet.clock.schedule_once(self.stop_speaking, this_time)
+        self.clock.schedule_once(self.stop_speaking, this_time)
     
     def speak(self, actor_id, text, dt=0):
         act = self.actors[actor_id]
         self.convo_label.begin_update()
         self.convo_label.x = act.sprite.x
         self.convo_label.y = act.sprite.y + 20 + \
-                             act.current_image().height*(1.0-act.anchor_y)
+                             act.current_image().height - act.current_image().anchor_y
         self.convo_label.text = text
         self.convo_label.end_update()
     
@@ -138,6 +139,8 @@ class Scene(interpolator.InterpolatorController):
         self.convo_label.begin_update()
         self.convo_label.text = ""
         self.convo_label.end_update()
+        self.call_if_available('end_conversation', self.convo_name)
+        self.convo_name = None
     
     
     # Update/draw

@@ -1,3 +1,5 @@
+import functools
+
 from engine import actor
 from engine.interpolator import PulseInterpolator, LinearInterpolator
 from engine.util.const import WALK_PATH_COMPLETED
@@ -20,7 +22,14 @@ def cart_lady_walk(actor, point):
 
 def inga_walk(actor, point):
     if point == 'inga_walk_middle':
-        myscene.begin_conversation('beans')
+        myscene.begin_conversation('beans_1')
+        bean_salesman = myscene.actors['bean_salesman']
+
+def end_conversation(convo_name):
+    if convo_name == 'beans_1':
+        bean_salesman = myscene.actors['bean_salesman']
+        bean_salesman.jump()
+        myscene.begin_conversation('beans_2')
 
 walk_handlers = {
     'cart_lady': cart_lady_walk,
