@@ -18,7 +18,7 @@ class Scene(interpolator.InterpolatorController):
         self.ui = ui
         self.actors = {}
         self.camera_points = {}
-        self.resource_path = util.respath_func_with_base_path('game', 'scenes', self.name)
+        self.resource_path = util.respath_func_with_base_path('game', self.name)
         
         self.load_info(load_path)
         self.initialize_from_info()
@@ -110,7 +110,7 @@ class Scene(interpolator.InterpolatorController):
     def draw(self, dt=0):
         self.env.draw()
         self.batch.draw()
-        self.walkpath.draw()
+        self.env.draw_overlay()
     
     
     # Serialization
@@ -146,4 +146,8 @@ class Scene(interpolator.InterpolatorController):
         new_actor = actor.Actor(identifier, actor_name, self, **kwargs)
         self.actors[identifier] = new_actor
         return new_actor
+    
+    def remove_actor(self, identifier):
+        self.actors[identifier].sprite.delete()
+        del self.actors[identifier]
     
