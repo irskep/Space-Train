@@ -79,15 +79,17 @@ class WalkPath(object):
                 e.counterpart.counterpart = None
             del self.edges[(p1, p2)]
     
-    def move_sequence(self, src_point, dest_coords):
-        # Add more logic here to choose a or b based on distance
+    def point_near(self, x, y):
+        dest_coords = (x, y)
         dest_edge = self.closest_edge_to_point(dest_coords)
         dist_sq_to_a = vector.dist_squared_between(dest_coords, self.points[dest_edge.a])
         dist_sq_to_b = vector.dist_squared_between(dest_coords, self.points[dest_edge.b])
         if dist_sq_to_a < dist_sq_to_b:
-            dest_point = dest_edge.a
+            return dest_edge.a
         else:
-            dest_point = dest_edge.b
+            return dest_edge.b
+    
+    def move_sequence_between(self, src_point, dest_point):
         path = dijkstra.shortest_path(self.dijkstra_repr(), src_point, dest_point)
         previous_identifier = path[0]
         move_dests = []

@@ -53,11 +53,11 @@ class Actor(actionsequencer.ActionSequencer):
     
     # Convenience methods to tell the position, width, and height of the actor
     def width(self):
-        return self.sprite.image.width*self.sprite.scale
+        return self.current_image().width*self.sprite.scale
     
     def height(self):
-        return self.sprite.image.height*self.sprite.scale
-        
+        return self.current_image().height*self.sprite.scale
+    
     def abs_position_x(self):
         return self.sprite.x - self.sprite.image.anchor_x
     
@@ -107,7 +107,7 @@ class Actor(actionsequencer.ActionSequencer):
         interp = InterpClass(self.sprite, 'y', 100, duration=0.3, done_function=self.next_action)
         self.update_state('jump')
         self.scene.add_interpolator(interp)
-
+    
     def fire_adv_event(self, event, *args):
         self.scene.fire_adv_event(event, *args)
         self.next_action()
@@ -120,16 +120,17 @@ class Actor(actionsequencer.ActionSequencer):
         """Move toward (x, y) either straight or via walk path"""
         if self.blocking_actions == 0:
             if self.walkpath_point:
-                self.prepare_walkpath_move(x, y)
+                dest_point = self.scene.walkpath.point_near(x, y)
+                self.prepare_walkpath_move(dest_point)
             else:
                 self.prepare_direct_move(x, y)
             return True
         else:
             return False
     
-    def prepare_walkpath_move(self, x, y):
-        wp = self.scene.walkpath;
-        final_dest_point, moves = wp.move_sequence(self.walkpath_point, (x, y))
+    def prepare_walkpath_move(self, dest_point):
+        wp = self.scene.walkpath
+        final_dest_point, moves = wp.move_sequence_between(self.walkpath_point, dest_point)
         if moves:
             for move in moves:
                 # See move_to for what these args are
@@ -187,7 +188,13 @@ class Actor(actionsequencer.ActionSequencer):
             ax, ay = my_info['anchor_x'], my_info['anchor_y']
             Actor.info[self.name] = my_info
             Actor.images[self.name] = {}
-            for state_name, num_frames in my_info['states'].viewitems():
+            for state_name, state_info in my_info['states'].viewitems():
+                if isinstance(state_info, list):
+                    num_frames = state_info[0]
+                    time_per_frame = state_info[1]
+                else:
+                    num_frames = state_info
+                    time_per_frame = 0.2
                 if num_frames == 1:
                     img = self.image_named(state_name, ax, ay)
                     Actor.images[self.name][state_name] = img
@@ -195,7 +202,7 @@ class Actor(actionsequencer.ActionSequencer):
                     make_img = lambda i: self.image_named("%s_%d" % (state_name, i), ax, ay)
                     images = [make_img(i) for i in range(1, num_frames+1)]
                     # It may make sense to add this animation to its own texture bin later
-                    anim = pyglet.image.Animation.from_image_sequence(images, 0.2);
+                    anim = pyglet.image.Animation.from_image_sequence(images, time_per_frame);
                     Actor.images[self.name][state_name] = anim
     
     def dict_repr(self):
