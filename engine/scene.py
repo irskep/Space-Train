@@ -97,7 +97,9 @@ class Scene(interpolator.InterpolatorController):
         self.call_if_available('transition_from', old_scene_name)
     
     def on_mouse_release(self, x, y, button, modifiers):
+
         clicked_actor = self.actor_under_point(*self.camera.mouse_to_canvas(x, y))
+
         if clicked_actor:
             self.ui.actor_clicked(clicked_actor)
             self.call_if_available('actor_clicked', clicked_actor)
@@ -180,9 +182,10 @@ class Scene(interpolator.InterpolatorController):
     def draw(self, dt=0):
         self.env.draw()
         self.batch.draw()
+
         self.env.draw_overlay()
         self.convo_label.draw()
-    
+
     
     # Serialization
     
