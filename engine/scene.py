@@ -113,6 +113,10 @@ class Scene(interpolator.InterpolatorController):
     # Dialogue
     
     def begin_conversation(self, convo_name):
+        # TODO: Instead of scheduling all at once, keep a convo line list
+        # and schedule new one at end of old. Provides ability to skip by
+        # clicking. Always a good thing.
+        
         # Optimization: preload conversations in initializer
         self.convo_name = convo_name
         with pyglet.resource.file(self.resource_path("%s.convo" % convo_name), 'r') as f:
