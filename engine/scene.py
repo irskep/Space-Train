@@ -134,6 +134,7 @@ class Scene(interpolator.InterpolatorController):
                                      act.current_image().height*(1.0-act.anchor_y)
                 self.convo_label.text = text
                 self.convo_label.end_update()
+            print this_time
             self.clock.schedule_once(speak, this_time)
             this_time += len(text)*0.04
         
