@@ -12,6 +12,12 @@
             "name": "cart_lady", 
             "start_state": "walk_right"
         }, 
+        "bean_salesman": {
+            "y": 144, 
+            "x": 1438, 
+            "name": "hobo", 
+            "start_state": "stand_front"
+        }, 
         "main": {
             "walkpath_point": "inga_walk_left", 
             "name": "inga", 
@@ -28,6 +34,10 @@
                 "y": 143, 
                 "x": 1956
             }, 
+            "cart_lady_left": {
+                "y": 60, 
+                "x": -300
+            }, 
             "cart_lady_right": {
                 "y": 60, 
                 "x": 2860
@@ -35,10 +45,6 @@
             "inga_walk_left": {
                 "y": 143, 
                 "x": 569
-            }, 
-            "cart_lady_left": {
-                "y": 60, 
-                "x": -300
             }
         }, 
         "edges": [
@@ -47,7 +53,7 @@
                 "b": "cart_lady_left"
             }, 
             {
-                "a": "inga_walk_left", 
+                "a": "inga_walk_right", 
                 "b": "inga_walk_middle"
             }, 
             {
@@ -56,15 +62,15 @@
             }, 
             {
                 "a": "inga_walk_middle", 
-                "b": "inga_walk_left"
-            }, 
-            {
-                "a": "inga_walk_middle", 
                 "b": "inga_walk_right"
             }, 
             {
-                "a": "inga_walk_right", 
+                "a": "inga_walk_left", 
                 "b": "inga_walk_middle"
+            }, 
+            {
+                "a": "inga_walk_middle", 
+                "b": "inga_walk_left"
             }
         ]
     }

@@ -35,6 +35,9 @@ class Actor(actionsequencer.ActionSequencer):
         for attr in ['x', 'y', 'scale', 'rotation']:
             if attrs.has_key(attr):
                 setattr(self.sprite, attr, attrs[attr])
+        
+        self.anchor_x = Actor.info[self.name]['anchor_x']
+        self.anchor_y = Actor.info[self.name]['anchor_y']
     
     def __repr__(self):
         return 'Actor(name="%s", identifier=%s)' % (self.name, self.identifier)

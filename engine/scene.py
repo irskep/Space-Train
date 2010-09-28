@@ -6,6 +6,7 @@ from util import walkpath
 import cam, environment, gamehandler, scenehandler
 
 
+update_t = 1/60.0
 class Scene(interpolator.InterpolatorController):
     
     # Initialization
@@ -18,6 +19,13 @@ class Scene(interpolator.InterpolatorController):
         self.ui = ui
         self.actors = {}
         self.camera_points = {}
+        
+        self.game_time = 0.0
+        self.accum_time = 0.0
+        self.clock = pyglet.clock.Clock(time_function=lambda: self.game_time) 
+        self.paused = False
+        self.convo_label = pyglet.text.Label("", color = (0,255,0,255), 
+                                             font_size=12, anchor_x='center')
         
         self.resource_path = util.respath_func_with_base_path('game', self.name)
         
@@ -34,7 +42,6 @@ class Scene(interpolator.InterpolatorController):
         self.env = environment.Environment(self.environment_name)
         self.walkpath = walkpath.WalkPath(dict_repr = self.info['walkpath'])
         self.camera = camera.Camera(dict_repr=self.info['camera_points'])
-    
     
     def load_actors(self):
         """Initialize actors and update them with any values specified in the info dict"""
@@ -54,7 +61,6 @@ class Scene(interpolator.InterpolatorController):
             self.dialogue = dialogue.Dialogue(self.actors["main"], self.actors["fist_1"])
         else:
             self.dialogue = None
-
     
     def load_script(self):
         # Requires that game/scenes is in PYTHONPATH
@@ -108,9 +114,51 @@ class Scene(interpolator.InterpolatorController):
                 main.next_action()
     
     
+    # Dialogue
+    
+    def begin_conversation(self, convo_name):
+        # Optimization: preload conversations in initializer
+        with pyglet.resource.file(self.resource_path("%s.convo" % convo_name), 'r') as f:
+            convo = json.load(f)
+        
+        this_time = 0.0
+        for line in convo:
+            actor_id = line[0]
+            text = line[1]
+            # Maybe more options
+            def speak(dt=0):
+                act = self.actors[actor_id]
+                self.convo_label.begin_update()
+                self.convo_label.x = act.sprite.x
+                self.convo_label.y = act.sprite.y + 20 + \
+                                     act.current_image().height*(1.0-act.anchor_y)
+                self.convo_label.text = text
+                self.convo_label.end_update()
+            self.clock.schedule_once(speak, this_time)
+            this_time += len(text)*0.04
+        
+        def stop_speaking(dt=0):
+            self.convo_label.begin_update()
+            self.convo_label.text = ""
+            self.convo_label.end_update()
+        self.clock.schedule_once(stop_speaking, this_time)
+    
+    
     # Update/draw
     
     def update(self, dt=0):
+        if self.paused: 
+            return
+        
+        # Align updates to fixed timestep 
+        self.accum_time += dt 
+        if self.accum_time > update_t * 3: 
+            self.accum_time = update_t 
+        while self.accum_time >= update_t: 
+            self.game_time += update_t 
+            self.clock.tick() 
+            self.accum_time -= update_t
+        
         if self.actors.has_key('main'):
             self.camera.set_target(self.actors["main"].sprite.x, self.actors["main"].sprite.y)
         self.camera.update(dt)
@@ -123,8 +171,7 @@ class Scene(interpolator.InterpolatorController):
         self.env.draw()
         self.batch.draw()
         self.env.draw_overlay()
-        if self.dialogue:
-            self.dialogue.draw()
+        self.convo_label.draw()
     
     
     # Serialization
