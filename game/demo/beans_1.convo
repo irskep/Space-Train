@@ -1,7 +1,17 @@
-[
-    ["main", "I say old chap, you wouldn't happen to have any beans, would you?"],
-    ["bean_salesman", "Why yes ma'am, in fact I happen to be a bean salesman!"],
-    ["main", "Could you spare this old woman a can of beans?"],
-    ["bean_salesman", "You got money?"],
-    ["main", "No..."]
-]
+{
+    "at_rest": {
+        "main": "stand_right",
+        "bean_salesman": "stand_front"
+    },
+    "speaking": {
+        "main": "talk_right",
+        "bean_salesman": "stand_front"
+    },
+    "dialogue": [
+        ["main", "I say old chap, you wouldn't happen to have any beans, would you?"],
+        ["bean_salesman", "Why yes ma'am, in fact I happen to be a bean salesman!"],
+        ["main", "Could you spare this old woman a can of beans?"],
+        ["bean_salesman", "You got money?"],
+        ["main", "No..."]
+    ]
+}

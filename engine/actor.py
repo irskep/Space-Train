@@ -79,7 +79,7 @@ class Actor(actionsequencer.ActionSequencer):
         if Actor.images[self.name].has_key(image_name):
             self.sprite.image = Actor.images[self.name][image_name]
     
-    def update_state(self, new_state, *args):
+    def update_state(self, new_state):
         """Update self.current_state and update animation if possible. Variable is
         changed even if animation is not changed so that scripts do not become confused."""
         if new_state != self.current_state:

@@ -25,6 +25,7 @@ class Scene(interpolator.InterpolatorController):
         self.clock = pyglet.clock.Clock(time_function=lambda: self.game_time) 
         self.paused = False
         self.convo_name = None
+        self.convo_info = None
         self.convo_label = pyglet.text.Label("", color = (0,255,0,255), 
                                              font_size=12, anchor_x='center')
         
@@ -115,19 +116,25 @@ class Scene(interpolator.InterpolatorController):
         # Optimization: preload conversations in initializer
         self.convo_name = convo_name
         with pyglet.resource.file(self.resource_path("%s.convo" % convo_name), 'r') as f:
-            convo = json.load(f)
+            self.convo_info = json.load(f)
         
         this_time = 0.0
-        for line in convo:
+        for line in self.convo_info['dialogue']:
             actor_id = line[0]
             text = line[1]
             # Maybe more options
-            self.clock.schedule_once(functools.partial(self.speak, actor_id, text), this_time)
+            self.clock.schedule_once(functools.partial(self.speak, *line), this_time)
             this_time += max(len(text)*0.04, 2.0)
         self.clock.schedule_once(self.stop_speaking, this_time)
     
-    def speak(self, actor_id, text, dt=0):
+    def speak(self, actor_id, text, *args):
+        if len(args) == 2:
+            self.convo_info = args[0]
+        for identifier, new_state in self.convo_info['at_rest'].viewitems():
+            if identifier != actor_id:
+                self.actors[identifier].update_state(new_state)
         act = self.actors[actor_id]
+        act.update_state(self.convo_info['speaking'][actor_id])
         self.convo_label.begin_update()
         self.convo_label.x = act.sprite.x
         self.convo_label.y = act.sprite.y + 20 + \
@@ -139,8 +146,10 @@ class Scene(interpolator.InterpolatorController):
         self.convo_label.begin_update()
         self.convo_label.text = ""
         self.convo_label.end_update()
-        self.call_if_available('end_conversation', self.convo_name)
-        self.convo_name = None
+        cn = self.convo_name
+        self.convo_name = None  # Order matters here in case the script starts a new conversation
+        self.convo_info = None
+        self.call_if_available('end_conversation', cn)
     
     
     # Update/draw
