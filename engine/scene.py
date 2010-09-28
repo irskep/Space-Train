@@ -34,7 +34,7 @@ class Scene(interpolator.InterpolatorController):
         self.env = environment.Environment(self.environment_name)
         self.walkpath = walkpath.WalkPath(dict_repr = self.info['walkpath'])
         self.camera = camera.Camera(dict_repr=self.info['camera_points'])
-
+    
     
     def load_actors(self):
         """Initialize actors and update them with any values specified in the info dict"""
