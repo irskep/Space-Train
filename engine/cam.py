@@ -120,5 +120,6 @@ class CAM(object):
             self.callback = callback
             
         def click(self):
-            self.callback()
+            if(self.callback is not None):
+				self.callback()
     
