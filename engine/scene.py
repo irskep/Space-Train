@@ -1,6 +1,6 @@
-import os, sys, shutil, json, importlib, pyglet
+import os, sys, shutil, json, importlib, pyglet, functools
 
-import camera, actor, gamestate, util, interpolator, dialogue
+import camera, actor, gamestate, util, interpolator
 from util import walkpath
 
 import cam, environment, gamehandler, scenehandler
@@ -55,12 +55,6 @@ class Scene(interpolator.InterpolatorController):
             if attrs.has_key('walkpath_point'):
                 new_actor.walkpath_point = attrs['walkpath_point']
                 new_actor.sprite.position = self.walkpath.points[new_actor.walkpath_point]
-                
-        #Thrown in here randomly until it finds its real home
-        if self.actors.has_key('main') and self.actors.has_key('fist_1'):
-            self.dialogue = dialogue.Dialogue(self.actors["main"], self.actors["fist_1"])
-        else:
-            self.dialogue = None
     
     def load_script(self):
         # Requires that game/scenes is in PYTHONPATH
@@ -120,29 +114,30 @@ class Scene(interpolator.InterpolatorController):
         # Optimization: preload conversations in initializer
         with pyglet.resource.file(self.resource_path("%s.convo" % convo_name), 'r') as f:
             convo = json.load(f)
+            print convo
         
         this_time = 0.0
         for line in convo:
             actor_id = line[0]
             text = line[1]
             # Maybe more options
-            def speak(dt=0):
-                act = self.actors[actor_id]
-                self.convo_label.begin_update()
-                self.convo_label.x = act.sprite.x
-                self.convo_label.y = act.sprite.y + 20 + \
-                                     act.current_image().height*(1.0-act.anchor_y)
-                self.convo_label.text = text
-                self.convo_label.end_update()
-            print this_time
-            self.clock.schedule_once(speak, this_time)
-            this_time += len(text)*0.04
-        
-        def stop_speaking(dt=0):
-            self.convo_label.begin_update()
-            self.convo_label.text = ""
-            self.convo_label.end_update()
-        self.clock.schedule_once(stop_speaking, this_time)
+            pyglet.clock.schedule_once(functools.partial(self.speak, actor_id, text), this_time)
+            this_time += max(len(text)*0.04, 2.0)
+        pyglet.clock.schedule_once(self.stop_speaking, this_time)
+    
+    def speak(self, actor_id, text, dt=0):
+        act = self.actors[actor_id]
+        self.convo_label.begin_update()
+        self.convo_label.x = act.sprite.x
+        self.convo_label.y = act.sprite.y + 20 + \
+                             act.current_image().height*(1.0-act.anchor_y)
+        self.convo_label.text = text
+        self.convo_label.end_update()
+    
+    def stop_speaking(self, dt=0):
+        self.convo_label.begin_update()
+        self.convo_label.text = ""
+        self.convo_label.end_update()
     
     
     # Update/draw
@@ -156,7 +151,7 @@ class Scene(interpolator.InterpolatorController):
         if self.accum_time > update_t * 3: 
             self.accum_time = update_t 
         while self.accum_time >= update_t: 
-            self.game_time += update_t 
+            self.game_time += update_t
             self.clock.tick() 
             self.accum_time -= update_t
         
@@ -164,8 +159,6 @@ class Scene(interpolator.InterpolatorController):
             self.camera.set_target(self.actors["main"].sprite.x, self.actors["main"].sprite.y)
         self.camera.update(dt)
         self.update_interpolators(dt)
-        if self.dialogue:
-            self.dialogue.update();
     
     @camera.obey_camera
     def draw(self, dt=0):
