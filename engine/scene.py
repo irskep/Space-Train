@@ -147,3 +147,7 @@ class Scene(interpolator.InterpolatorController):
         self.actors[identifier] = new_actor
         return new_actor
     
+    def remove_actor(self, identifier):
+        self.actors[identifier].sprite.delete()
+        del self.actors[identifier]
+    

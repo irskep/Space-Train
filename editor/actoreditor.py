@@ -31,6 +31,7 @@ class ActorEditor(abstracteditor.AbstractEditor):
             glydget.HBox([glydget.Label('x'), self.x_field], True),
             glydget.HBox([glydget.Label('y'), self.y_field], True),
             glydget.HBox([glydget.Label('Walkpath point'), self.wp_field], True),
+            glydget.Button('Delete', self.delete_selected_actor)
         ])
         self.inspector.move(2, gamestate.main_window.height-2)
     
@@ -101,7 +102,7 @@ class ActorEditor(abstracteditor.AbstractEditor):
             draw.rect_outline(min_x, min_y, max_x, max_y)
             self.editor.scene.camera.unapply()
     
-    def actor_button_action(self, button):
+    def actor_button_action(self, button=None):
         def actor_placer(x, y):
             world_point = self.scene.camera.mouse_to_canvas(x, y)
             self.dragging_item = self.scene.new_actor(button.text,
@@ -109,4 +110,9 @@ class ActorEditor(abstracteditor.AbstractEditor):
             editorstate.set_status_message('')
         self.editor.click_actions.append(actor_placer)
         editorstate.set_status_message("Click to place %s" % button.text)
+    
+    def delete_selected_actor(self, button=None):
+        actor_to_delete = self.selected_item
+        self.set_selected_item(None)
+        self.scene.remove_actor(actor_to_delete.identifier)
     
