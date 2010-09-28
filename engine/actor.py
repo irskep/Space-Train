@@ -43,12 +43,10 @@ class Actor(actionsequencer.ActionSequencer):
     # Access
     
     def covers_point(self, x, y):
-        img = self.current_image()
-        ax, ay = img.anchor_x, img.anchor_y
-        min_x = self.sprite.x - ax
-        min_y = self.sprite.y - ay
-        max_x = self.sprite.x - ax + img.width*self.sprite.scale
-        max_y = self.sprite.y - ay + img.height*self.sprite.scale
+        min_x = self.abs_position_x()
+        min_y = self.abs_position_y()
+        max_x = self.abs_position_x() + self.width()
+        max_y = self.abs_position_y() + self.height()
         return min_x <= x <= max_x and min_y <= y <= max_y
     
     # Convenience methods to tell the position, width, and height of the actor
@@ -59,10 +57,10 @@ class Actor(actionsequencer.ActionSequencer):
         return self.current_image().height*self.sprite.scale
     
     def abs_position_x(self):
-        return self.sprite.x - self.sprite.image.anchor_x
+        return self.sprite.x - self.current_image().anchor_x
     
     def abs_position_y(self):
-        return self.sprite.y - self.sprite.image.anchor_y
+        return self.sprite.y - self.current_image().anchor_y
     
     def current_image(self):
         try:

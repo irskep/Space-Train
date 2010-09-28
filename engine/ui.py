@@ -36,7 +36,7 @@ class UI(object):
     def actor_clicked(self, actor):
         x = actor.abs_position_x() + actor.width()
         y = actor.abs_position_y() + (actor.height() / 2)
-        self.cam = cam.CAM({'Action':None, 'Action2': None, 'Action3':None, 'Action4':None, 'Action5':None, 'Action6':None}, 
+        self.cam = cam.CAM({'Action':None, 'Action2': None, 'Action3':None, 'Action4':None, 'Action5':None}, 
                             x, y)
     
     # render the UI to the screen
