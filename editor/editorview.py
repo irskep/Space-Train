@@ -68,6 +68,7 @@ class EditorView(object):
         if modifiers & (pyglet.window.key.MOD_ACCEL):
             if symbol == pyglet.window.key.S:
                 self.scene.save_info()
+                print "Saving"
                 return True
     
     def on_mouse_press(self, x, y, button, modifiers):

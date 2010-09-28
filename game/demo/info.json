@@ -11,6 +11,30 @@
             "walkpath_point": "cart_lady_left", 
             "name": "cart_lady", 
             "start_state": "walk_right"
+        }, 
+        "kidnapper_1": {
+            "y": 134, 
+            "x": 1517, 
+            "name": "kidnapper", 
+            "start_state": "walk_left"
+        }, 
+        "inga_1": {
+            "y": 218, 
+            "x": 947, 
+            "name": "inga", 
+            "start_state": "stand_front"
+        }, 
+        "hobo_1": {
+            "y": 126, 
+            "x": 333, 
+            "name": "hobo", 
+            "start_state": "stand_front"
+        }, 
+        "hold_steady_fat_man_1": {
+            "y": 221, 
+            "x": 741, 
+            "name": "hold_steady_fat_man", 
+            "start_state": "stand_front"
         }
     }, 
     "walkpath": {
