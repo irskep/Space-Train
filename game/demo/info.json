@@ -1,0 +1,38 @@
+{
+    "environment": "height_test", 
+    "camera_points": {
+        "start": {
+            "y": 360, 
+            "x": 640
+        }
+    }, 
+    "actors": {
+        "cart_lady": {
+            "walkpath_point": "cart_lady_left", 
+            "name": "cart_lady", 
+            "start_state": "walk_right"
+        }
+    }, 
+    "walkpath": {
+        "points": {
+            "cart_lady_left": {
+                "y": 60, 
+                "x": -300
+            }, 
+            "cart_lady_right": {
+                "y": 60, 
+                "x": 2860
+            }
+        }, 
+        "edges": [
+            {
+                "a": "cart_lady_left", 
+                "b": "cart_lady_right"
+            }, 
+            {
+                "a": "cart_lady_right", 
+                "b": "cart_lady_left"
+            }
+        ]
+    }
+}

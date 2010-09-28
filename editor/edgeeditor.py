@@ -20,7 +20,7 @@ class EdgeEditor(abstracteditor.AbstractEditor):
         ])
         self.edge_pallet.show()
         self.edge_pallet.move(gamestate.main_window.width - 2 - self.edge_pallet.width, 
-                              gamestate.main_window.height - 97)
+                              gamestate.main_window.height - 22)
         gamestate.main_window.push_handlers(self.edge_pallet)
         
         self.edge_a_field = glydget.Entry('', on_change=self.update_item_from_inspector)
@@ -29,7 +29,9 @@ class EdgeEditor(abstracteditor.AbstractEditor):
         self.inspector = glydget.Window("Edge Inspector", [
             glydget.HBox([glydget.Label('a'), self.edge_a_field], True),
             glydget.HBox([glydget.Label('b'), self.edge_b_field], True),
-            glydget.Button('Subdivide (d)', self.subdivide_edge),
+            glydget.HBox([glydget.Label('Animation'), self.edge_anim_field], True),
+            glydget.Button('Subdivide', self.subdivide_edge),
+            glydget.Button('Make counterpart', self.make_counterpart),
         ])
         self.inspector.move(2, gamestate.main_window.height-2)
     
@@ -38,7 +40,13 @@ class EdgeEditor(abstracteditor.AbstractEditor):
     
     def end_drag(self, x, y):
         world_point = self.scene.camera.mouse_to_canvas(x, y)
-        self.set_selected_item(self.scene.walkpath.closest_edge_to_point(world_point))
+        old_selection = self.selected_item
+        new_selection = self.scene.walkpath.closest_edge_to_point(world_point)
+        
+        if new_selection is not None and old_selection == new_selection \
+                and new_selection.counterpart:
+            new_selection = new_selection.counterpart
+        self.set_selected_item(new_selection)
     
     def draw(self, dt=0):
         if self.edge_pallet.batch:
@@ -47,10 +55,12 @@ class EdgeEditor(abstracteditor.AbstractEditor):
             self.inspector.batch.draw()
         
         if self.selected_item:
+            self.editor.scene.camera.apply()
             p = self.editor.mouse
             cp = self.scene.walkpath.closest_edge_point_to_point(self.selected_item, p)
             draw.set_color(1,1,0,1)
             draw.rect(cp[0]-3, cp[1]-3, cp[0]+3, cp[1]+3)
+            self.editor.scene.camera.unapply()
     
     def update_item_from_inspector(self, widget=None):
         if self.selected_item:
@@ -128,4 +138,11 @@ class EdgeEditor(abstracteditor.AbstractEditor):
             self.selected_item.counterpart.a = midpoint
             anim = self.selected_item.counterpart.anim
             new_cp = self.scene.walkpath.add_edge(p2name, midpoint, anim=anim)
+    
+    def make_counterpart(self, button=None):
+        if not self.selected_item.counterpart:
+            self.editor.change_selection(self)
+            p1 = self.selected_item.a
+            p2 = self.selected_item.b
+            self.set_selected_item(self.scene.walkpath.add_edge(p2, p1))
     

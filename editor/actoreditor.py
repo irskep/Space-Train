@@ -11,21 +11,27 @@ class ActorEditor(abstracteditor.AbstractEditor):
         self.actor_pallet = glydget.Window("Make Actor", [
             glydget.Button(actor_name, self.actor_button_action) \
             for actor_name in os.listdir(os.path.join(settings.resources_path, 'actors'))
+            if actor_name != '.DS_Store'
         ])
         self.actor_pallet.show()
         self.actor_pallet.move(gamestate.main_window.width - 2 - self.actor_pallet.width, 
-                               gamestate.main_window.height - 22)
+                               gamestate.main_window.height - 242)
         gamestate.main_window.push_handlers(self.actor_pallet)
         
-        self.actor_identifier_field = glydget.Entry('', on_change=self.update_item_from_inspector)
-        self.actor_x_field = glydget.Entry('', on_change=self.update_item_from_inspector)
-        self.actor_y_field = glydget.Entry('', on_change=self.update_item_from_inspector)
-        self.actor_walkpoint_field = glydget.Entry('', on_change=self.update_item_from_inspector)
+        self.id_field = glydget.Entry('', on_change=self.update_item_from_inspector)
+        self.state_field = glydget.Entry('', on_change=self.update_item_from_inspector)
+        self.scale_field = glydget.Entry('', on_change=self.update_item_from_inspector)
+        self.x_field = glydget.Entry('', on_change=self.update_item_from_inspector)
+        self.y_field = glydget.Entry('', on_change=self.update_item_from_inspector)
+        self.wp_field = glydget.Entry('', on_change=self.update_item_from_inspector)
         self.inspector = glydget.Window("Actor Inspector", [
-            glydget.HBox([glydget.Label('Identifier'), self.actor_identifier_field], True),
-            glydget.HBox([glydget.Label('x'), self.actor_x_field], True),
-            glydget.HBox([glydget.Label('y'), self.actor_y_field], True),
-            glydget.HBox([glydget.Label('Walkpath point'), self.actor_walkpoint_field], True),
+            glydget.HBox([glydget.Label('Identifier'), self.id_field], True),
+            glydget.HBox([glydget.Label('Start state'), self.state_field], True),
+            glydget.HBox([glydget.Label('Scale'), self.scale_field], True),
+            glydget.HBox([glydget.Label('x'), self.x_field], True),
+            glydget.HBox([glydget.Label('y'), self.y_field], True),
+            glydget.HBox([glydget.Label('Walkpath point'), self.wp_field], True),
+            glydget.Button('Delete', self.delete_selected_actor)
         ])
         self.inspector.move(2, gamestate.main_window.height-2)
     
@@ -47,29 +53,34 @@ class ActorEditor(abstracteditor.AbstractEditor):
     def update_item_from_inspector(self, widget=None):
         if self.selected_item:
             del self.scene.actors[self.selected_item.identifier]
-            self.selected_item.identifier = self.actor_identifier_field.text
+            self.selected_item.identifier = self.id_field.text
             self.scene.actors[self.selected_item.identifier] = self.selected_item
             
-            wp = self.actor_walkpoint_field.text
+            self.selected_item.update_state(self.state_field.text)
+            self.selected_item.sprite.scale = float(self.scale_field.text)
+            
+            wp = self.wp_field.text
             if wp and self.scene.walkpath.points.has_key(wp):
                 self.selected_item.walkpath_point = wp
                 self.selected_item.sprite.position = self.scene.walkpath.points[wp]
             else:
-                self.actor_walkpoint_field.text = ''
+                self.wp_field.text = ''
                 self.selected_item.walkpath_point = None
-                self.selected_item.sprite.x = int(self.actor_x_field.text)
-                self.selected_item.sprite.y = int(self.actor_y_field.text)
+                self.selected_item.sprite.x = int(self.x_field.text)
+                self.selected_item.sprite.y = int(self.y_field.text)
     
     def update_inspector_from_item(self, widget=None):
-        self.actor_identifier_field.text = self.selected_item.identifier
+        self.id_field.text = self.selected_item.identifier
+        self.state_field.text = self.selected_item.current_state
         wp = self.selected_item.walkpath_point
         if wp and self.scene.walkpath.points.has_key(wp):
-            self.actor_walkpoint_field.text = wp
+            self.wp_field.text = wp
         else:
-            self.actor_walkpoint_field.text = ''
+            self.wp_field.text = ''
             self.selected_item.walkpath_point = None
-        self.actor_x_field.text = str(int(self.selected_item.sprite.x))
-        self.actor_y_field.text = str(int(self.selected_item.sprite.y))
+        self.x_field.text = str(int(self.selected_item.sprite.x))
+        self.y_field.text = str(int(self.selected_item.sprite.y))
+        self.scale_field.text = str(float(self.selected_item.sprite.scale))
     
     def draw(self, dt=0):
         if self.actor_pallet.batch:
@@ -78,19 +89,30 @@ class ActorEditor(abstracteditor.AbstractEditor):
             self.inspector.batch.draw()
         
         if self.selected_item:
+            self.editor.scene.camera.apply()
             s = self.selected_item.sprite
-            min_x = s.x - s.image.anchor_x
-            min_y = s.y - s.image.anchor_y
-            max_x = s.x - s.image.anchor_x + s.image.width
-            max_y = s.y - s.image.anchor_y + s.image.height
+            img = self.selected_item.current_image()
+            ax = img.anchor_x*self.selected_item.sprite.scale
+            ay = img.anchor_y*self.selected_item.sprite.scale
+            min_x = s.x - ax
+            min_y = s.y - ay
+            max_x = s.x - ax + img.width*self.selected_item.sprite.scale
+            max_y = s.y - ay + img.height*self.selected_item.sprite.scale
             draw.set_color(1, 0, 0, 1)
             draw.rect_outline(min_x, min_y, max_x, max_y)
+            self.editor.scene.camera.unapply()
     
-    def actor_button_action(self, button):
+    def actor_button_action(self, button=None):
         def actor_placer(x, y):
             world_point = self.scene.camera.mouse_to_canvas(x, y)
-            self.dragging_item = self.scene.new_actor(button.text, x=world_point[0], y=world_point[1])
+            self.dragging_item = self.scene.new_actor(button.text,
+                                                      attrs = {'x': x, 'y': y})
             editorstate.set_status_message('')
         self.editor.click_actions.append(actor_placer)
         editorstate.set_status_message("Click to place %s" % button.text)
+    
+    def delete_selected_actor(self, button=None):
+        actor_to_delete = self.selected_item
+        self.set_selected_item(None)
+        self.scene.remove_actor(actor_to_delete.identifier)
     

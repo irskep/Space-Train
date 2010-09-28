@@ -57,7 +57,7 @@ class Camera(object):
             identifier = point.identifier
         else:
             # We were probably passed the identifier string
-            identifier= point
+            identifier = point
         try:
             del self.points[identifier]
         except KeyError:

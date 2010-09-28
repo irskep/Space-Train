@@ -19,7 +19,7 @@ class AdventureWindow(pyglet.window.Window):
     """
     Basic customizations to Window, plus configuration.
     """
-    def __init__(self):
+    def __init__(self, reset_save=False):
         if util.settings.fullscreen:
             super(AdventureWindow,self).__init__(fullscreen=True, vsync=True)
         else:
@@ -35,10 +35,10 @@ class AdventureWindow(pyglet.window.Window):
         # Load default game scene. Probably belongs in GameHandler actually.
 
         with pyglet.resource.file(util.respath('game', 'info.json'), 'r') as game_info_file:
-
             game_info = json.load(game_info_file)
+            game_info['reset_save'] = reset_save
             self.set_caption(game_info["name"])
-            self.game_handler = gamehandler.GameHandler(first_scene=game_info['first_scene'])
+            self.game_handler = gamehandler.GameHandler(**game_info)
         
         # gamestate.scaled is a decorator that wraps the given function in calls to
         # scale/unscale the OpenGL context. If/when AdventureWindow grows its own
@@ -57,10 +57,16 @@ class AdventureWindow(pyglet.window.Window):
         if symbol == pyglet.window.key.ESCAPE:
             return pyglet.event.EVENT_HANDLED
     
+    def on_close(self):
+        self.game_handler.prompt_save_and_quit()
+    
 
 def run_game():
-    sys.path.append(os.path.join(os.path.dirname(__file__), 'game', 'scenes'))
-    main_window = AdventureWindow()
+    sys.path.append(os.path.join(os.path.dirname(__file__), 'game'))
+    if len(sys.argv) == 2 and sys.argv[1] == 'newgame':
+        main_window = AdventureWindow(True)
+    else:
+        main_window = AdventureWindow(False)
     pyglet.app.run()
 
 if __name__ == '__main__':

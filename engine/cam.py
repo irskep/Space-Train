@@ -23,44 +23,48 @@ import copy, math
 import json, pyglet
 import gamestate, ui, util
 
-# Static resources, such as sprites for the CAM backgrounds
-sprites = {}
-sprite_batch = pyglet.graphics.Batch()
-sprites['action_background'] = util.load_sprite(['ui', 'cam_item.png'], 0, 0, sprite_batch)
-
 class CAM(object):
     
     # Init
-    def __init__(self, actions, x, y, r = 0):
+    def __init__(self, actions, x, y):
         self.visible = False
         self.actions = actions
         self.x = x
         self.y = y
-        if(r == 0):
-            self.r = len(actions) * (sprites['action_background'].height + 2)
-        else:
-            self.r = r
-        self.set_visible(True)
+
+        # Static resources, such as sprites for the CAM backgrounds
+        sprites = {}
+        sprite_batch = pyglet.graphics.Batch()
+        sprites[1] = util.load_sprite(['ui', 'cam_1.png'], batch = sprite_batch)
+        sprites[2] = util.load_sprite(['ui', 'cam_2.png'], batch = sprite_batch)
+        sprites[3] = util.load_sprite(['ui', 'cam_3.png'], batch = sprite_batch)
+        sprites[4] = util.load_sprite(['ui', 'cam_4.png'], batch = sprite_batch)
+        sprites[5] = util.load_sprite(['ui', 'cam_5.png'], batch = sprite_batch)
+
+        positioning = {}
+        positioning[1] = (0,0)
+        positioning[2] = (0,0)
+        positioning[3] = (0,0)
+        positioning[4] = (0,0)
+        positioning[5] = (0,0)
         
         self.batch = pyglet.graphics.Batch()
         self.buttons = []
                 
         # Turn each action entry into a menu item
-        # TODO: turn this mess into a function/class
         count = 1
-        max_size = len(self.actions) #defines the max size for CAMs. (should be odd)
-        max_indent = math.ceil(max_size / 2.0) + ( 1 if max_size % 2 == 0 else 0 )
 
-        for action, callback in self.actions.items():
-            # set up the background sprite
-            _x = x + (self.calculate_indent_px(1, max_indent) - self.calculate_indent_px(count, max_indent))
-            _y = y + ((max_size)*(sprites['action_background'].height)) - (count * sprites['action_background'].height)
-            
-            button = self.Button(_x, _y, self.batch, action, callback)
+        for action, callback in self.actions.items():      
+            button = self.Button(positioning[count][0], positioning[count][1], sprites[count], action, callback)
             self.buttons.append(button)
-            
-            # set up the label for the menu item
             count += 1
+            
+        for button in self.buttons:
+            print button.sprite
+            
+        
+        self.set_visible(True)
+        
     
     # Make this into a property instead. I can't remember how right now. --Steve
     def set_visible(self, new_visible):
@@ -69,16 +73,6 @@ class CAM(object):
         else:
             gamestate.main_window.pop_handlers()
         self.visible = new_visible
-            
-    def calculate_indent_px(self, indent, max_indent):
-        indent_px = 10
-        diff = math.fabs(max_indent - indent)
-        if(diff == 0):
-            return 0
-        while(diff > 1):
-            indent_px = math.floor(indent_px * 3)
-            diff -= 1
-        return indent_px
     
     # Handle an event
     def on_mouse_release(self, x, y, button, modifiers):
@@ -103,16 +97,18 @@ class CAM(object):
                 return button
         return None
     
-    def draw(self):
+    def draw(self, dt=0):
         if(self.visible):
             self.batch.draw()
             
     # TODO: finish button class
     class Button(object):
-        def __init__(self, x, y, batch, action, callback):
-            self.sprite = pyglet.sprite.Sprite(img = sprites['action_background'].image, x = x, y = y, batch = batch)
+        def __init__(self, x, y, sprite, action, callback):
+            self.sprite = sprite
+            self.sprite.x = x
+            self.sprite.y = y
             self.label = pyglet.text.Label(action, font_name = 'Times New Roman', font_size = 14, anchor_x = 'left', 
-                                           anchor_y = 'center', batch = batch, color = (0, 0, 0, 255),
+                                           anchor_y = 'center', batch = self.sprite.batch, color = (0, 0, 0, 255),
                                            x = self.sprite.x + 5, y = (self.sprite.y + self.sprite.height) - (self.sprite.height / 2))
             self.x = x
             self.y = y
@@ -121,5 +117,6 @@ class CAM(object):
             self.callback = callback
             
         def click(self):
-            self.callback()
+            if(self.callback is not None):
+                self.callback()
     
