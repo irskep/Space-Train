@@ -41,7 +41,9 @@ class EdgeEditor(abstracteditor.AbstractEditor):
         world_point = self.scene.camera.mouse_to_canvas(x, y)
         old_selection = self.selected_item
         new_selection = self.scene.walkpath.closest_edge_to_point(world_point)
-        if old_selection == new_selection and new_selection.counterpart:
+        
+        if new_selection is not None and old_selection == new_selection \
+                and new_selection.counterpart:
             new_selection = new_selection.counterpart
         self.set_selected_item(new_selection)
     
