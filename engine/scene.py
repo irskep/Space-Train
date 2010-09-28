@@ -110,6 +110,7 @@ class Scene(interpolator.InterpolatorController):
     def draw(self, dt=0):
         self.env.draw()
         self.batch.draw()
+        self.env.draw_overlay()
     
     
     # Serialization
