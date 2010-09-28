@@ -18,7 +18,6 @@ class Scene(interpolator.InterpolatorController):
         self.ui = ui
         self.actors = {}
         self.camera_points = {}
-        self.dialogue = dialogue
         
         self.resource_path = util.respath_func_with_base_path('game', self.name)
         
@@ -51,7 +50,10 @@ class Scene(interpolator.InterpolatorController):
                 new_actor.sprite.position = self.walkpath.points[new_actor.walkpath_point]
                 
         #Thrown in here randomly until it finds its real home
-        self.dialogue = dialogue.Dialogue(self.actors["main"], self.actors["fist_1"])
+        if self.actors.has_key('main') and self.actors.has_key('fist_1'):
+            self.dialogue = dialogue.Dialogue(self.actors["main"], self.actors["fist_1"])
+        else:
+            self.dialogue = None
 
     
     def load_script(self):
@@ -93,12 +95,7 @@ class Scene(interpolator.InterpolatorController):
         self.call_if_available('transition_from', old_scene_name)
     
     def on_mouse_release(self, x, y, button, modifiers):
-<<<<<<< HEAD
         clicked_actor = self.actor_under_point(*self.camera.mouse_to_canvas(x, y))
-=======
-        clicked_actor = self.actor_under_point(x, y)
-        print self.name
->>>>>>> master
         if clicked_actor:
             self.ui.actor_clicked(clicked_actor)
             self.call_if_available('actor_clicked', clicked_actor)
@@ -114,23 +111,20 @@ class Scene(interpolator.InterpolatorController):
     # Update/draw
     
     def update(self, dt=0):
-        #update the cameras written by Sean
-        self.camera.set_target(self.actors["main"].sprite.x, self.actors["main"].sprite.y)
-        self.camera.update(1)
+        if self.actors.has_key('main'):
+            self.camera.set_target(self.actors["main"].sprite.x, self.actors["main"].sprite.y)
+        self.camera.update(dt)
         self.update_interpolators(dt)
-        self.dialogue.update();
+        if self.dialogue:
+            self.dialogue.update();
     
     @camera.obey_camera
     def draw(self, dt=0):
         self.env.draw()
         self.batch.draw()
-<<<<<<< HEAD
-	self.walkpath.draw()
-	#draw the dialogue
-	self.dialogue.draw()
-=======
         self.env.draw_overlay()
->>>>>>> master
+        if self.dialogue:
+            self.dialogue.draw()
     
     
     # Serialization
