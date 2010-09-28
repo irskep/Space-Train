@@ -1,0 +1,15 @@
+{
+    "environment": "height_test", 
+    "camera_points": {
+        "start": {
+            "y": 360, 
+            "x": 640
+        }
+    }, 
+    "actors": {
+    }, 
+    "walkpath": {
+        "points": {}, 
+        "edges": []
+    }
+}
