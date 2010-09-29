@@ -86,7 +86,11 @@ class Camera(object):
     def mouse_to_canvas(self, x, y):
         return (x/gamestate.scale_factor + self.position[0]-gamestate.norm_w//2, 
                 y/gamestate.scale_factor + self.position[1]-gamestate.norm_h//2)
-    
+
+    # returns a position on the screen based on a point in the game world (i.e. where a point is relative to the camera)
+    def world_to_screen_position(self, x, y):
+        return ( (x/gamestate.scale_factor) - (self.position[0]-gamestate.norm_w//2), 
+                (y/gamestate.scale_factor) - (self.position[1]-gamestate.norm_h//2))
 
 def obey_camera(draw_function):
     @functools.wraps(draw_function)

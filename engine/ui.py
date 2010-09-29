@@ -33,11 +33,11 @@ class UI(object):
         self.sprites.append(sprite)
 	
     # handle an actor being clicked
-    def actor_clicked(self, actor):
+    def actor_clicked(self, actor, camera):
         x = actor.abs_position_x() - 180
         y = actor.abs_position_y() + (actor.height() / 2)
         self.cam = cam.CAM({'Action':None, 'Action2': None, 'Action3':None, 'Action4':None, 'Action5':None}, 
-                            x, y)
+                            camera.world_to_screen_position(x, y)[0], camera.world_to_screen_position(x, y)[1])
     
     # render the UI to the screen
     def draw(self, dt=0):

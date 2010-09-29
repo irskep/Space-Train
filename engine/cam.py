@@ -27,6 +27,7 @@ class CAM(object):
     
     # Init
     def __init__(self, actions, x, y):
+        print "Drawing CAM at (%d, %d)" % (x, y)
         self.visible = False
         self.actions = actions
         self.x = x

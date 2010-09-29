@@ -101,7 +101,7 @@ class Scene(interpolator.InterpolatorController):
         clicked_actor = self.actor_under_point(*self.camera.mouse_to_canvas(x, y))
 
         if clicked_actor:
-            self.ui.actor_clicked(clicked_actor)
+            self.ui.actor_clicked(clicked_actor, self.camera)
             self.call_if_available('actor_clicked', clicked_actor)
         elif self.actors.has_key("main"):
             # Send main actor to click location according to actor's moving behavior
