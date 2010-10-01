@@ -45,3 +45,4 @@ class UI(object):
         
         if(self.cam is not None):
             self.cam.draw()
+    
