@@ -31,13 +31,12 @@ class UI(object):
         img_h = img_data.height
         sprite = pyglet.sprite.Sprite(img, x = gamestate.norm_w, y = gamestate.norm_h - img_h, batch=self.batch)
         self.sprites.append(sprite)
-	
-    # handle an actor being clicked
-    def actor_clicked(self, actor, camera):
-        x = actor.abs_position_x() - 180
-        y = actor.abs_position_y() + (actor.height() / 2)
-        self.cam = cam.CAM({'Action':None, 'Action2': None, 'Action3':None, 'Action4':None, 'Action5':None}, 
-                            camera.world_to_screen_position(x, y)[0], camera.world_to_screen_position(x, y)[1])
+    
+    def show_cam(self, actor, actions):
+        ax = actor.abs_position_x() - 180
+        ay = actor.abs_position_y() + (actor.height() / 2)
+        px, py = actor.scene.camera.world_to_screen_position(ax, ay)
+        self.cam = cam.CAM(actions, px, py)
     
     # render the UI to the screen
     def draw(self, dt=0):
