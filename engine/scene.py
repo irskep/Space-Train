@@ -97,17 +97,18 @@ class Scene(interpolator.InterpolatorController):
         self.call_if_available('transition_from', old_scene_name)
     
     def on_mouse_release(self, x, y, button, modifiers):
-        clicked_actor = self.actor_under_point(*self.camera.mouse_to_canvas(x, y))
+        if self.convo_name is None:
+            clicked_actor = self.actor_under_point(*self.camera.mouse_to_canvas(x, y))
         
-        if clicked_actor:
-            self.call_if_available('actor_clicked', clicked_actor)
-        elif self.actors.has_key("main"):
-            # Send main actor to click location according to actor's moving behavior
-            main = self.actors["main"]
-            while(main.blocking_actions > 0):
-                main.next_action()
-            if main.prepare_move(*self.camera.mouse_to_canvas(x, y)):
-                main.next_action()
+            if clicked_actor:
+                self.call_if_available('actor_clicked', clicked_actor)
+            elif self.actors.has_key("main"):
+                # Send main actor to click location according to actor's moving behavior
+                main = self.actors["main"]
+                while(main.blocking_actions > 0):
+                    main.next_action()
+                if main.prepare_move(*self.camera.mouse_to_canvas(x, y)):
+                    main.next_action()
     
     
     # Dialogue
