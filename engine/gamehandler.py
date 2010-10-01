@@ -29,7 +29,7 @@ class GameHandler(object):
         self.scene_handler.set_first_scene(scn)
         self.update = self.scene_handler.update
     
-    @gamestate.scaled
+    #@gamestate.scaled
     def draw(self, dt=0):
         self.scene_handler.scene.draw()
         self.ui.draw()
