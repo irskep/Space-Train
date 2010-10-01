@@ -26,6 +26,7 @@ class Scene(interpolator.InterpolatorController):
         self.paused = False
         self.convo_name = None
         self.convo_info = None
+        self.remaining_convo_lines = None
         self.convo_label = pyglet.text.Label("", color = (0,255,0,255), 
                                              font_size=12, anchor_x='center')
         
@@ -109,6 +110,9 @@ class Scene(interpolator.InterpolatorController):
                     main.next_action()
                 if main.prepare_move(*self.camera.mouse_to_canvas(x, y)):
                     main.next_action()
+        else:
+            pyglet.clock.unschedule(self.speak)
+            self.speak()
     
     
     # Dialogue
@@ -123,29 +127,33 @@ class Scene(interpolator.InterpolatorController):
         with pyglet.resource.file(self.resource_path("%s.convo" % convo_name), 'r') as f:
             self.convo_info = json.load(f)
         
-        this_time = 0.0
-        for line in self.convo_info['dialogue']:
+        self.remaining_convo_lines = self.convo_info['dialogue']
+        self.speak()
+    
+    def speak(self, dt=0):
+        if len(self.remaining_convo_lines) == 0:
+            self.stop_speaking()
+        else:
+            line = self.remaining_convo_lines[0]
+            self.remaining_convo_lines = self.remaining_convo_lines[1:]
+        
             actor_id = line[0]
             text = line[1]
-            # Maybe more options
-            self.clock.schedule_once(functools.partial(self.speak, *line), this_time)
-            this_time += max(len(text)*0.04, 2.0)
-        self.clock.schedule_once(self.stop_speaking, this_time)
-    
-    def speak(self, actor_id, text, *args):
-        if len(args) == 2:
-            self.convo_info = args[0]
-        for identifier, new_state in self.convo_info['at_rest'].viewitems():
-            if identifier != actor_id:
-                self.actors[identifier].update_state(new_state)
-        act = self.actors[actor_id]
-        act.update_state(self.convo_info['speaking'][actor_id])
-        self.convo_label.begin_update()
-        self.convo_label.x = act.sprite.x
-        self.convo_label.y = act.sprite.y + 20 + \
-                             act.current_image().height - act.current_image().anchor_y
-        self.convo_label.text = text
-        self.convo_label.end_update()
+            if len(line) == 3:
+                self.convo_info = line[2]
+            for identifier, new_state in self.convo_info['at_rest'].viewitems():
+                if identifier != actor_id:
+                    self.actors[identifier].update_state(new_state)
+            act = self.actors[actor_id]
+            act.update_state(self.convo_info['speaking'][actor_id])
+            self.convo_label.begin_update()
+            self.convo_label.x = act.sprite.x
+            self.convo_label.y = act.sprite.y + 20 + \
+                                 act.current_image().height - act.current_image().anchor_y
+            self.convo_label.text = text
+            self.convo_label.end_update()
+        
+            self.clock.schedule_once(self.speak, max(len(text)*0.04, 2.0))
     
     def stop_speaking(self, dt=0):
         self.convo_label.begin_update()
