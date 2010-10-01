@@ -4,6 +4,8 @@ from engine import actor
 from engine.interpolator import PulseInterpolator, LinearInterpolator
 from engine.util.const import WALK_PATH_COMPLETED
 
+import inga_actions
+
 # myscene is set by scene.py
 myscene = None
 
@@ -47,5 +49,12 @@ def handle_event(event, *args):
             walk_handlers[actor.identifier](actor, point)
     print "Handled", event, "with", args
 
-def actor_clicked(clicked_actor):
+def actor_clicked(clicked_actor):    
     print "Clicked on %s" % clicked_actor.name
+    if clicked_actor.identifier == 'main':
+        actions = {
+            'Eat': inga_actions.eat,
+            'Pray': inga_actions.pray,
+            'Love': inga_actions.love
+        }
+        myscene.ui.show_cam(clicked_actor, actions)
