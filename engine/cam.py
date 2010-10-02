@@ -103,7 +103,9 @@ class CAM(object):
     # this is intended but should later be changed to return the topmost button
     def button_under(self, x, y):
         for button in self.buttons:
-            if util.image_alpha_at_point(button.sprite.image, x-button.x, y-button.y) > 0:
+            if button.x <= x <= button.x + button.sprite.width \
+            and button.y <= y <= button.y + button.sprite.height \
+            and util.image_alpha_at_point(button.sprite.image, x-button.x, y-button.y) > 0:
                 return button
         return None
     
