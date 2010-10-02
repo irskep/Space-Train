@@ -55,6 +55,9 @@ def actor_clicked(clicked_actor):
         actions = {
             'Eat': inga_actions.eat,
             'Pray': inga_actions.pray,
-            'Love': inga_actions.love
+            'Love': inga_actions.love,
+            'Fuck': inga_actions.fuck,
+            'Shit': inga_actions.shit,
+            'Kill': inga_actions.kill
         }
         myscene.ui.show_cam(clicked_actor, actions)

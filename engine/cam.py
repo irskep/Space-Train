@@ -39,24 +39,25 @@ class CAM(object):
         # Static resources, such as sprites for the CAM backgrounds
         sprites = {}
         sprite_batch = pyglet.graphics.Batch()
-        sprites[1] = util.load_sprite(['ui', 'cam_1.png'], batch = self.batch)
-        sprites[2] = util.load_sprite(['ui', 'cam_2.png'], batch = self.batch)
-        sprites[3] = util.load_sprite(['ui', 'cam_3.png'], batch = self.batch)
-        sprites[4] = util.load_sprite(['ui', 'cam_4.png'], batch = self.batch)
-        sprites[5] = util.load_sprite(['ui', 'cam_5.png'], batch = self.batch)
+        sprites = {i: util.load_sprite(['ui', 'new_cam_%d.png' % i], batch = self.batch)
+                    for i in xrange(1,7)}
 
         positioning = {}
-        positioning[1] = (67,160)
-        positioning[2] = (45,127)
-        positioning[3] = (25,89)
-        positioning[4] = (11,50)
-        positioning[5] = (0,0)
+        positioning[1] = (90,187)
+        positioning[2] = (80,155)
+        positioning[3] = (70,120)
+        positioning[4] = (70,84)
+        positioning[5] = (80,48)
+        positioning[6] = (90,17)
+        
+        y -= sprites[1].height/2
                 
         # Turn each action entry into a menu item
         count = 1
 
         for action, callback in self.actions.items():      
-            button = self.Button(x + positioning[count][0], y +  positioning[count][1], sprites[count], action, callback)
+            button = self.Button(x, y, positioning[count][0], positioning[count][1],
+                                 sprites[count], action, callback)
             self.buttons.append(button)
             count += 1
         
@@ -102,8 +103,7 @@ class CAM(object):
     # this is intended but should later be changed to return the topmost button
     def button_under(self, x, y):
         for button in self.buttons:
-            if (x > button.x and x < button.x + button.width
-                and  y > button.y and y < button.y + button.height):
+            if util.image_alpha_at_point(button.sprite.image, x-button.x, y-button.y) > 0:
                 return button
         return None
     
@@ -113,15 +113,16 @@ class CAM(object):
             
     # TODO: finish button class
     class Button(object):
-        def __init__(self, x, y, sprite, action, callback):
+        def __init__(self, x, y, text_x, text_y, sprite, action, callback):
             self.sprite = sprite
             self.sprite.x = x
             self.sprite.y = y
-            self.label = pyglet.text.Label(action, font_name = 'Times New Roman', font_size = 14, anchor_x = 'center', 
-                                           anchor_y = 'center', batch = self.sprite.batch, color = (0, 0, 0, 255),
-                                           x = self.sprite.x + 5, y = (self.sprite.y + self.sprite.height) - (self.sprite.height / 2) - 5)
-            # right-align
-            self.label.x = self.sprite.x + ((self.sprite.width - 10) / 2)
+            self.label = pyglet.text.Label(action, font_name = 'Times New Roman', 
+                                           font_size = 14, anchor_x = 'center', 
+                                           anchor_y = 'center', batch = self.sprite.batch, 
+                                           color = (0, 0, 0, 255),
+                                           x = self.sprite.x + text_x, 
+                                           y = self.sprite.y + text_y)
             
             self.x = x
             self.y = y
