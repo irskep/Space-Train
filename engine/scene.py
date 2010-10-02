@@ -70,6 +70,7 @@ class Scene(interpolator.InterpolatorController):
         self.module.myscene = self
         self.call_if_available('init')
     
+    
     # Cleanup
     def exit(self):
         for actor in self.actors.viewvalues():

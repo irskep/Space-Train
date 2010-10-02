@@ -1,5 +1,7 @@
 import pyglet, json
 
+from util import draw
+
 class Conversation(object):
     def __init__(self, scn):
         super(Conversation, self).__init__()
@@ -8,7 +10,7 @@ class Conversation(object):
         self.convo_name = None
         self.convo_info = None
         self.remaining_convo_lines = None
-        self.convo_label = pyglet.text.Label("", color = (0,255,0,255), 
+        self.convo_label = pyglet.text.Label("", color = (0,0,0,255), 
                                              font_size=12, anchor_x='center')
     
     def active(self):
@@ -20,7 +22,16 @@ class Conversation(object):
             self.speak()
     
     def draw(self):
-        self.convo_label.draw()
+        if self.convo_label.text:
+            draw.set_color(1,1,1,1)
+            rect_args = (self.convo_label.x - self.convo_label.content_width/2 - 5, 
+                         self.convo_label.y - 8,
+                         self.convo_label.x + self.convo_label.content_width/2 + 10,
+                         self.convo_label.y + self.convo_label.content_height + 3)
+            draw.rect(*rect_args)
+            draw.set_color(0,0,0,1)
+            draw.rect_outline(*rect_args)
+            self.convo_label.draw()
     
     def begin_conversation(self, convo_name):
         # Optimization: preload conversations in initializer
@@ -64,4 +75,4 @@ class Conversation(object):
         self.convo_name = None  # Order matters here in case the script starts a new conversation
         self.convo_info = None
         self.scene.call_if_available('end_conversation', cn)
-        
+    
