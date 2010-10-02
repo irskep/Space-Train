@@ -77,7 +77,6 @@ class Scene(interpolator.InterpolatorController):
         self.env.exit()
     
     
-    
     # Access
     
     def __repr__(self):
