@@ -38,9 +38,20 @@ def save_json(data, path):
     with open("%s.json" % path, 'w') as f:
         json.dump(data, f, indent=4)
 
+# Convenience and global use
+
 def load_sprite(path, *args, **kwargs):
     loaded_image = pyglet.resource.image(respath(*path))
     return pyglet.sprite.Sprite(loaded_image, *args, **kwargs)
+
+def image_alpha_at_point(img, x, y):
+    x, y = int(x), int(y)
+    # pixel_data = map(ord, list(img.get_image_data().get_data('RGBA',img.width*4)))
+    pixel_data = img.get_image_data().get_data('RGBA',img.width*4)
+    pos = y * img.width * 4 + x * 4
+    return pixel_data[pos+3]/255.0
+
+# Other
 
 class ClipGroup(pyglet.graphics.OrderedGroup): 
     """Sprite group that clips to a rectangle"""
