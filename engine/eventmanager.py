@@ -31,8 +31,8 @@ class EventManager(object):
         #here is where the order of event handlers is determined
         self.add_handlers(pyglet.window.key.KeyStateHandler())
         self.add_handlers(self.scene)
-        self.add_handlers(self.inventory)
         self.add_handlers(self.cam)
+        self.add_handlers(self.inventory)
     
     # methods to set certain objects
     # will rebuild the stack when called
