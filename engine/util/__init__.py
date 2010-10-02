@@ -46,7 +46,6 @@ def load_sprite(path, *args, **kwargs):
 
 def image_alpha_at_point(img, x, y):
     x, y = int(x), int(y)
-    # pixel_data = map(ord, list(img.get_image_data().get_data('RGBA',img.width*4)))
     pixel_data = img.get_image_data().get_data('RGBA',img.width*4)
     pos = y * img.width * 4 + x * 4
     return pixel_data[pos+3]/255.0
