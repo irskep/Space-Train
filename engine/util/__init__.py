@@ -1,4 +1,4 @@
-import pyglet, functools
+import pyglet, functools, json, os
 
 # Easy access if you just import util
 import const
@@ -24,6 +24,19 @@ def respath(*args):
 
 def respath_func_with_base_path(*args):
     return functools.partial(respath, *args)
+
+def mkdir_if_absent(path):
+    if not os.path.exists(path):
+        os.mkdir(path)
+
+def load_json(path):
+    with open('%s.json' % path, 'r') as f:
+        return json.load(f)
+
+def save_json(data, path):
+    """Save data to path. Appends .json automatically."""
+    with open("%s.json" % path, 'w') as f:
+        json.dump(data, f, indent=4)
 
 def load_sprite(path, *args, **kwargs):
     loaded_image = pyglet.resource.image(respath(*path))

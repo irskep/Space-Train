@@ -1,0 +1,28 @@
+{
+    "environment": "the_vast_emptiness_of_space", 
+    "camera_points": {
+        "start": {
+            "y": 360, 
+            "x": 640
+        }
+    }, 
+    "actors": {
+        "logo": {
+            "y": 402, 
+            "x": 995, 
+            "scale": 0.8, 
+            "name": "a_train_in_spain", 
+            "start_state": "logo"
+        }, 
+        "title": {
+            "y": 453, 
+            "x": 370, 
+            "name": "a_train_in_spain", 
+            "start_state": "title"
+        }
+    }, 
+    "walkpath": {
+        "points": {}, 
+        "edges": []
+    }
+}

@@ -1,5 +1,6 @@
 from engine import actor
 
+# myscene is set by scene.py
 myscene = None
 
 def init():
@@ -12,3 +13,6 @@ def handle_event(event, *args):
 def actor_clicked(clicked_actor):
     clicked_actor.prepare_jump()
     clicked_actor.next_action()
+
+def transition_from(last_scene):
+    print "transitioned from", last_scene

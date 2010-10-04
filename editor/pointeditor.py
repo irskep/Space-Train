@@ -70,12 +70,14 @@ class PointEditor(abstracteditor.AbstractEditor):
         if self.inspector.batch:
             self.inspector.batch.draw()
         
+        self.editor.scene.camera.apply()
         wp = self.scene.walkpath
         wp.draw()
         if self.selected_item:
             point = wp.points[self.selected_item]
             draw.set_color(1,1,0,1)
             draw.rect(point[0]-2, point[1]-2, point[0]+2, point[1]+2)
+        self.editor.scene.camera.unapply()
     
     def new_point(self, button=None):
         editorstate.set_status_message("Click to place a point")
