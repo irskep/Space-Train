@@ -50,7 +50,8 @@ class Actor(actionsequencer.ActionSequencer):
         min_y = self.abs_position_y()
         max_x = self.abs_position_x() + self.width()
         max_y = self.abs_position_y() + self.height()
-        return min_x <= x <= max_x and min_y <= y <= max_y
+        if min_x <= x <= max_x and min_y <= y <= max_y:
+            return (util.image_alpha_at_point(self.current_image(),  x-min_x, y-min_y))
     
     # Convenience methods to tell the position, width, and height of the actor
     def width(self):

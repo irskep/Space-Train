@@ -1,6 +1,6 @@
 import os, sys, shutil, json, importlib, pyglet, functools
 
-import camera, actor, gamestate, util, interpolator
+import camera, actor, gamestate, util, interpolator, convo
 from util import walkpath
 
 import cam, environment, gamehandler, scenehandler
@@ -24,10 +24,8 @@ class Scene(interpolator.InterpolatorController):
         self.accum_time = 0.0
         self.clock = pyglet.clock.Clock(time_function=lambda: self.game_time) 
         self.paused = False
-        self.convo_name = None
-        self.convo_info = None
-        self.convo_label = pyglet.text.Label("", color = (0,255,0,255), 
-                                             font_size=12, anchor_x='center')
+        
+        self.convo = convo.Conversation(self)
         
         self.resource_path = util.respath_func_with_base_path('game', self.name)
         
@@ -63,13 +61,13 @@ class Scene(interpolator.InterpolatorController):
         self.module = importlib.import_module(self.name)
         self.module.myscene = self
         self.call_if_available('init')
-        
+    
+    
     # Cleanup
     def exit(self):
         for actor in self.actors.viewvalues():
             actor.sprite.delete()
         self.env.exit()
-    
     
     
     # Access
@@ -97,64 +95,17 @@ class Scene(interpolator.InterpolatorController):
         self.call_if_available('transition_from', old_scene_name)
     
     def on_mouse_release(self, x, y, button, modifiers):
-        if self.convo_name is None:
-            clicked_actor = self.actor_under_point(*self.camera.mouse_to_canvas(x, y))
+        clicked_actor = self.actor_under_point(*self.camera.mouse_to_canvas(x, y))
         
-            if clicked_actor:
-                self.call_if_available('actor_clicked', clicked_actor)
-            elif self.actors.has_key("main"):
-                # Send main actor to click location according to actor's moving behavior
-                main = self.actors["main"]
-                while(main.blocking_actions > 0):
-                    main.next_action()
-                if main.prepare_move(*self.camera.mouse_to_canvas(x, y)):
-                    main.next_action()
-    
-    
-    # Dialogue
-    
-    def begin_conversation(self, convo_name):
-        # TODO: Instead of scheduling all at once, keep a convo line list
-        # and schedule new one at end of old. Provides ability to skip by
-        # clicking. Always a good thing.
-        
-        # Optimization: preload conversations in initializer
-        self.convo_name = convo_name
-        with pyglet.resource.file(self.resource_path("%s.convo" % convo_name), 'r') as f:
-            self.convo_info = json.load(f)
-        
-        this_time = 0.0
-        for line in self.convo_info['dialogue']:
-            actor_id = line[0]
-            text = line[1]
-            # Maybe more options
-            self.clock.schedule_once(functools.partial(self.speak, *line), this_time)
-            this_time += max(len(text)*0.04, 2.0)
-        self.clock.schedule_once(self.stop_speaking, this_time)
-    
-    def speak(self, actor_id, text, *args):
-        if len(args) == 2:
-            self.convo_info = args[0]
-        for identifier, new_state in self.convo_info['at_rest'].viewitems():
-            if identifier != actor_id:
-                self.actors[identifier].update_state(new_state)
-        act = self.actors[actor_id]
-        act.update_state(self.convo_info['speaking'][actor_id])
-        self.convo_label.begin_update()
-        self.convo_label.x = act.sprite.x
-        self.convo_label.y = act.sprite.y + 20 + \
-                             act.current_image().height - act.current_image().anchor_y
-        self.convo_label.text = text
-        self.convo_label.end_update()
-    
-    def stop_speaking(self, dt=0):
-        self.convo_label.begin_update()
-        self.convo_label.text = ""
-        self.convo_label.end_update()
-        cn = self.convo_name
-        self.convo_name = None  # Order matters here in case the script starts a new conversation
-        self.convo_info = None
-        self.call_if_available('end_conversation', cn)
+        if clicked_actor:
+            self.call_if_available('actor_clicked', clicked_actor)
+        elif self.actors.has_key("main"):
+            # Send main actor to click location according to actor's moving behavior
+            main = self.actors["main"]
+            while(main.blocking_actions > 0):
+                main.next_action()
+            if main.prepare_move(*self.camera.mouse_to_canvas(x, y)):
+                main.next_action()
     
     
     # Update/draw
@@ -181,10 +132,10 @@ class Scene(interpolator.InterpolatorController):
     def draw(self, dt=0):
         self.env.draw()
         self.batch.draw()
-
+        
         self.env.draw_overlay()
-        self.convo_label.draw()
-
+        self.convo.draw()
+    
     
     # Serialization
     

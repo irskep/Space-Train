@@ -45,10 +45,10 @@ class SceneHandler(actionsequencer.ActionSequencer):
             self.fade_to(next_scene)
     
     def fade_to(self, next_scene):
-        
         InterpClass = interpolator.LinearInterpolator
         def fade_out(ending_action=None):
-            gamestate.main_window.pop_handlers()
+            
+            gamestate.event_manager.set_scene(None)
             interp = InterpClass(self.sprite, 'opacity', end=255, start=0, duration=self.fade_time,
                                 done_function=self.next_action)
             self.controller.add_interpolator(interp)

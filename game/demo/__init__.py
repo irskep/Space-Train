@@ -24,14 +24,14 @@ def cart_lady_walk(actor, point):
 
 def inga_walk(actor, point):
     if point == 'inga_walk_middle':
-        myscene.begin_conversation('beans_1')
+        myscene.convo.begin_conversation('beans_1')
         bean_salesman = myscene.actors['bean_salesman']
 
 def end_conversation(convo_name):
     if convo_name == 'beans_1':
         bean_salesman = myscene.actors['bean_salesman']
         bean_salesman.jump()
-        myscene.begin_conversation('beans_2')
+        myscene.convo.begin_conversation('beans_2')
     elif convo_name == 'beans_2':
         myscene.actors['main'].update_state('stand_front')
 
@@ -55,6 +55,9 @@ def actor_clicked(clicked_actor):
         actions = {
             'Eat': inga_actions.eat,
             'Pray': inga_actions.pray,
-            'Love': inga_actions.love
+            'Love': inga_actions.love,
+            'Fuck': inga_actions.fuck,
+            'Shit': inga_actions.shit,
+            'Kill': inga_actions.kill
         }
         myscene.ui.show_cam(clicked_actor, actions)
