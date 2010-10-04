@@ -23,6 +23,7 @@ import copy, math
 import json, pyglet
 import gamestate, ui, util
 from pyglet.window import key
+
 class CAM(object):
     
     # Init
@@ -65,12 +66,12 @@ class CAM(object):
         
     
     # Make this into a property instead. I can't remember how right now. --Steve
-    def set_visible(self, new_visible):
-        if new_visible:
-            gamestate.main_window.push_handlers(self)
+    def set_visible(self, visible):
+        if visible:
+            gamestate.event_manager.set_cam(self)
         else:
-            gamestate.main_window.pop_handlers()
-        self.visible = new_visible
+            gamestate.event_manager.set_cam(None)
+        self.visible = visible
     
     # Handle an event
     def on_mouse_release(self, x, y, button, modifiers):

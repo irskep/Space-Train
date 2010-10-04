@@ -1,4 +1,5 @@
 import pyglet, math, functools
+import eventmanager
 
 main_window = None
 norm_w = 1280
@@ -9,12 +10,9 @@ scripts_enabled = True
 camera_min = (norm_w//2, norm_h//2)
 camera_max = (norm_w, norm_h)
 
-keys = None
+event_manager = None
 
-def init_keys():
-    global keys
-    keys = pyglet.window.key.KeyStateHandler()
-    main_window.push_handlers(keys)
+keys = None
 
 def init_scale():
     global norm_w, norm_h, scale_factor, camera_min, camera_max

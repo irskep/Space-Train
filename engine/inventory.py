@@ -42,8 +42,8 @@ class Inventory(object):
         # Create the inventory open state now
         self.sprites['open'].append( util.load_sprite(['ui', 'purseopen.png'], x = gamestate.norm_w, y = gamestate.norm_h, batch = self.batches['open']) )
         self.translate_bottomleft_to_topright(self.sprites['open'])
-    
-        gamestate.main_window.push_handlers(self)
+
+        gamestate.event_manager.set_inventory(self)
     
     #needs to go in util sometime
     def translate_bottomleft_to_topright(self, sprites):

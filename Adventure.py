@@ -13,7 +13,7 @@ import math, os, sys, json
 import pyglet
 
 from engine import gamestate, util
-from engine import gamehandler
+from engine import gamehandler, eventmanager
 
 class AdventureWindow(pyglet.window.Window):
     """
@@ -30,7 +30,7 @@ class AdventureWindow(pyglet.window.Window):
                                         #   Necessary for convenient event juggling.
         gamestate.init_scale()          # Set up scaling transformations to have
                                         #   a consistent window size
-        gamestate.init_keys()           # Set up some key event helpers
+        gamestate.event_manager = eventmanager.EventManager()
 		
         # Load default game scene. Probably belongs in GameHandler actually.
 

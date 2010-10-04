@@ -36,14 +36,6 @@ class Scene(interpolator.InterpolatorController):
         if gamestate.scripts_enabled:
             self.load_script()
     
-    def push_handlers(self):
-        gamestate.main_window.push_handlers(self)
-        gamestate.main_window.push_handlers(self.convo)
-    
-    def pop_handlers(self):
-        gamestate.main_window.pop_handlers()
-        gamestate.main_window.pop_handlers()
-    
     def initialize_from_info(self):
         """Initialize objects specified in info.json"""
         self.environment_name = self.info['environment']
