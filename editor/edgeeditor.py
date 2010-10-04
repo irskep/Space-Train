@@ -30,7 +30,8 @@ class EdgeEditor(abstracteditor.AbstractEditor):
             glydget.HBox([glydget.Label('a'), self.edge_a_field], True),
             glydget.HBox([glydget.Label('b'), self.edge_b_field], True),
             glydget.HBox([glydget.Label('Animation'), self.edge_anim_field], True),
-            glydget.Button('Subdivide (d)', self.subdivide_edge),
+            glydget.Button('Subdivide', self.subdivide_edge),
+            glydget.Button('Make counterpart', self.make_counterpart),
         ])
         self.inspector.move(2, gamestate.main_window.height-2)
     
@@ -41,7 +42,9 @@ class EdgeEditor(abstracteditor.AbstractEditor):
         world_point = self.scene.camera.mouse_to_canvas(x, y)
         old_selection = self.selected_item
         new_selection = self.scene.walkpath.closest_edge_to_point(world_point)
-        if old_selection == new_selection and new_selection.counterpart:
+        
+        if new_selection is not None and old_selection == new_selection \
+                and new_selection.counterpart:
             new_selection = new_selection.counterpart
         self.set_selected_item(new_selection)
     
@@ -135,4 +138,11 @@ class EdgeEditor(abstracteditor.AbstractEditor):
             self.selected_item.counterpart.a = midpoint
             anim = self.selected_item.counterpart.anim
             new_cp = self.scene.walkpath.add_edge(p2name, midpoint, anim=anim)
+    
+    def make_counterpart(self, button=None):
+        if not self.selected_item.counterpart:
+            self.editor.change_selection(self)
+            p1 = self.selected_item.a
+            p2 = self.selected_item.b
+            self.set_selected_item(self.scene.walkpath.add_edge(p2, p1))
     

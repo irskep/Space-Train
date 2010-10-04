@@ -1,11 +1,12 @@
-import os, sys, shutil, json, importlib, pyglet
+import os, sys, shutil, json, importlib, pyglet, functools
 
-import camera, actor, gamestate, util, interpolator, dialogue
+import camera, actor, gamestate, util, interpolator, convo
 from util import walkpath
 
 import cam, environment, gamehandler, scenehandler
 
 
+update_t = 1/60.0
 class Scene(interpolator.InterpolatorController):
     
     # Initialization
@@ -18,6 +19,13 @@ class Scene(interpolator.InterpolatorController):
         self.ui = ui
         self.actors = {}
         self.camera_points = {}
+        self.game_time = 0.0
+        self.accum_time = 0.0
+        self.clock = pyglet.clock.Clock(time_function=lambda: self.game_time) 
+        self.paused = False
+        
+        self.convo = convo.Conversation(self)
+        
         self.resource_path = util.respath_func_with_base_path('game', self.name)
         
         self.load_info(load_path)
@@ -27,13 +35,20 @@ class Scene(interpolator.InterpolatorController):
         if gamestate.scripts_enabled:
             self.load_script()
     
+    def push_handlers(self):
+        gamestate.main_window.push_handlers(self)
+        gamestate.main_window.push_handlers(self.convo)
+    
+    def pop_handlers(self):
+        gamestate.main_window.pop_handlers()
+        gamestate.main_window.pop_handlers()
+    
     def initialize_from_info(self):
         """Initialize objects specified in info.json"""
         self.environment_name = self.info['environment']
         self.env = environment.Environment(self.environment_name)
         self.walkpath = walkpath.WalkPath(dict_repr = self.info['walkpath'])
         self.camera = camera.Camera(dict_repr=self.info['camera_points'])
-
     
     def load_actors(self):
         """Initialize actors and update them with any values specified in the info dict"""
@@ -47,7 +62,6 @@ class Scene(interpolator.InterpolatorController):
             if attrs.has_key('walkpath_point'):
                 new_actor.walkpath_point = attrs['walkpath_point']
                 new_actor.sprite.position = self.walkpath.points[new_actor.walkpath_point]
-                
 
     
     def load_script(self):
@@ -55,13 +69,13 @@ class Scene(interpolator.InterpolatorController):
         self.module = importlib.import_module(self.name)
         self.module.myscene = self
         self.call_if_available('init')
-        
+    
+    
     # Cleanup
     def exit(self):
         for actor in self.actors.viewvalues():
             actor.sprite.delete()
         self.env.exit()
-    
     
     
     # Access
@@ -89,10 +103,10 @@ class Scene(interpolator.InterpolatorController):
         self.call_if_available('transition_from', old_scene_name)
     
     def on_mouse_release(self, x, y, button, modifiers):
-        clicked_actor = self.actor_under_point(x, y)
-        print self.name
+
+        clicked_actor = self.actor_under_point(*self.camera.mouse_to_canvas(x, y))
+        
         if clicked_actor:
-            self.ui.actor_clicked(clicked_actor)
             self.call_if_available('actor_clicked', clicked_actor)
         elif self.actors.has_key("main"):
             # Send main actor to click location according to actor's moving behavior
@@ -106,14 +120,30 @@ class Scene(interpolator.InterpolatorController):
     # Update/draw
     
     def update(self, dt=0):
-        self.camera.update(1)
+        if self.paused: 
+            return
+        
+        # Align updates to fixed timestep 
+        self.accum_time += dt 
+        if self.accum_time > update_t * 3: 
+            self.accum_time = update_t 
+        while self.accum_time >= update_t: 
+            self.game_time += update_t
+            self.clock.tick() 
+            self.accum_time -= update_t
+        
+        if self.actors.has_key('main'):
+            self.camera.set_target(self.actors["main"].sprite.x, self.actors["main"].sprite.y)
+        self.camera.update(dt)
         self.update_interpolators(dt)
     
     @camera.obey_camera
     def draw(self, dt=0):
         self.env.draw()
         self.batch.draw()
-	self.walkpath.draw()
+        
+        self.env.draw_overlay()
+        self.convo.draw()
     
     
     # Serialization
@@ -149,4 +179,8 @@ class Scene(interpolator.InterpolatorController):
         new_actor = actor.Actor(identifier, actor_name, self, **kwargs)
         self.actors[identifier] = new_actor
         return new_actor
+    
+    def remove_actor(self, identifier):
+        self.actors[identifier].sprite.delete()
+        del self.actors[identifier]
     

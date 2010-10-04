@@ -22,44 +22,47 @@ Contextual Action Menu Life Cycle:
 import copy, math
 import json, pyglet
 import gamestate, ui, util
-
-# Static resources, such as sprites for the CAM backgrounds
-sprites = {}
-sprite_batch = pyglet.graphics.Batch()
-sprites['action_background'] = util.load_sprite(['ui', 'cam_item.png'], 0, 0, sprite_batch)
-
+from pyglet.window import key
 class CAM(object):
     
     # Init
-    def __init__(self, actions, x, y, r = 0):
+    def __init__(self, actions, x, y):
+        print "Drawing CAM at (%d, %d)" % (x, y)
         self.visible = False
         self.actions = actions
         self.x = x
         self.y = y
-        if(r == 0):
-            self.r = len(actions) * (sprites['action_background'].height + 2)
-        else:
-            self.r = r
-        self.set_visible(True)
-        
+
         self.batch = pyglet.graphics.Batch()
         self.buttons = []
+        
+        # Static resources, such as sprites for the CAM backgrounds
+        sprites = {}
+        sprite_batch = pyglet.graphics.Batch()
+        sprites = {i: util.load_sprite(['ui', 'new_cam_%d.png' % i], batch = self.batch)
+                    for i in xrange(1,7)}
+
+        positioning = {}
+        positioning[1] = (90,187)
+        positioning[2] = (80,155)
+        positioning[3] = (70,120)
+        positioning[4] = (70,84)
+        positioning[5] = (80,48)
+        positioning[6] = (90,17)
+        
+        y -= sprites[1].height/2
                 
         # Turn each action entry into a menu item
         count = 1
-        max_size = len(self.actions) #defines the max size for CAMs. (should be odd)
-        max_indent = math.ceil(max_size / 2.0) + ( 1 if max_size % 2 == 0 else 0 )
 
-        for action, callback in self.actions.items():
-            # set up the background sprite
-            _x = x + (self.calculate_indent_px(1, max_indent) - self.calculate_indent_px(count, max_indent))
-            _y = y + ((max_size)*(sprites['action_background'].height)) - (count * sprites['action_background'].height)
-            
-            button = self.Button(_x, _y, self.batch, action, callback)
+        for action, callback in self.actions.items():      
+            button = self.Button(x, y, positioning[count][0], positioning[count][1],
+                                 sprites[count], action, callback)
             self.buttons.append(button)
-            
-            # set up the label for the menu item
             count += 1
+        
+        self.set_visible(True)
+        
     
     # Make this into a property instead. I can't remember how right now. --Steve
     def set_visible(self, new_visible):
@@ -68,16 +71,6 @@ class CAM(object):
         else:
             gamestate.main_window.pop_handlers()
         self.visible = new_visible
-            
-    def calculate_indent_px(self, indent, max_indent):
-        indent_px = 10
-        diff = math.fabs(max_indent - indent)
-        if(diff == 0):
-            return 0
-        while(diff > 1):
-            indent_px = math.floor(indent_px * 3)
-            diff -= 1
-        return indent_px
     
     # Handle an event
     def on_mouse_release(self, x, y, button, modifiers):
@@ -92,13 +85,27 @@ class CAM(object):
                 button.click()
                 return pyglet.event.EVENT_HANDLED
     
+    def on_key_press(self, symbol, modifiers):
+        button = 0
+        if symbol == key.LEFT:
+            self.buttons[button].set_x(self.buttons[button].x - 1)
+        elif symbol == key.RIGHT:
+            self.buttons[button].set_x(self.buttons[button].x + 1)
+        elif symbol == key.UP:
+            self.buttons[button].set_y(self.buttons[button].y + 1)
+        elif symbol == key.DOWN:
+            self.buttons[button].set_y(self.buttons[button].y - 1)
+            
+        print "Button %d: (%d, %d)" % (button, self.buttons[button].x, self.buttons[button].y)
+    
     # Determines which button is under the given point
     # Note that this function's behaviour is undefined when buttons overlap
     # this is intended but should later be changed to return the topmost button
     def button_under(self, x, y):
         for button in self.buttons:
-            if (x > button.x and x < button.x + button.width
-                and  y > button.y and y < button.y + button.height):
+            if button.x <= x <= button.x + button.sprite.width \
+            and button.y <= y <= button.y + button.sprite.height \
+            and util.image_alpha_at_point(button.sprite.image, x-button.x, y-button.y) > 0:
                 return button
         return None
     
@@ -108,11 +115,17 @@ class CAM(object):
             
     # TODO: finish button class
     class Button(object):
-        def __init__(self, x, y, batch, action, callback):
-            self.sprite = pyglet.sprite.Sprite(img = sprites['action_background'].image, x = x, y = y, batch = batch)
-            self.label = pyglet.text.Label(action, font_name = 'Times New Roman', font_size = 14, anchor_x = 'left', 
-                                           anchor_y = 'center', batch = batch, color = (0, 0, 0, 255),
-                                           x = self.sprite.x + 5, y = (self.sprite.y + self.sprite.height) - (self.sprite.height / 2))
+        def __init__(self, x, y, text_x, text_y, sprite, action, callback):
+            self.sprite = sprite
+            self.sprite.x = x
+            self.sprite.y = y
+            self.label = pyglet.text.Label(action, font_name = 'Times New Roman', 
+                                           font_size = 14, anchor_x = 'center', 
+                                           anchor_y = 'center', batch = self.sprite.batch, 
+                                           color = (0, 0, 0, 255),
+                                           x = self.sprite.x + text_x, 
+                                           y = self.sprite.y + text_y)
+            
             self.x = x
             self.y = y
             self.width = self.sprite.width
@@ -120,4 +133,15 @@ class CAM(object):
             self.callback = callback
             
         def click(self):
-            self.callback()
+            if(self.callback is not None):
+				self.callback()
+    
+        def set_x(self, x):
+            self.sprite.x = x
+            self.label.x = self.sprite.x + ((self.sprite.width - 10) / 2)
+            self.x = x
+            
+        def set_y(self, y):
+            self.sprite.y = y
+            self.label.y = (self.sprite.y + self.sprite.height) - (self.sprite.height / 2) - 5
+            self.y = y

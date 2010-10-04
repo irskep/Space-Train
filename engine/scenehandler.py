@@ -29,7 +29,7 @@ class SceneHandler(actionsequencer.ActionSequencer):
     
     def set_first_scene(self, scn):
         self.scene = scn
-        gamestate.main_window.push_handlers(self.scene)
+        self.scene.push_handlers()
     
     def __repr__(self):
         return "SceneHandler(scene_object=%s)" % str(self.scene)
@@ -45,16 +45,15 @@ class SceneHandler(actionsequencer.ActionSequencer):
             self.fade_to(next_scene)
     
     def fade_to(self, next_scene):
-        
         InterpClass = interpolator.LinearInterpolator
         def fade_out(ending_action=None):
-            gamestate.main_window.pop_handlers()
+            self.scene.pop_handlers()
             interp = InterpClass(self.sprite, 'opacity', end=255, start=0, duration=self.fade_time,
                                 done_function=self.next_action)
             self.controller.add_interpolator(interp)
         
         def complete_transition(ending_action=None):
-            gamestate.main_window.push_handlers(self.scene)
+            self.scene.push_handlers()
             self.next_action()
         
         def fade_in(ending_action=None):

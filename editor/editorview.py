@@ -38,6 +38,9 @@ class EditorView(object):
         
         editorstate.init()
         
+        self.scene.camera.min_bounds = (0, 0)
+        mb = self.scene.camera.max_bounds
+        self.scene.camera.max_bounds = (mb[0] + gamestate.norm_w//2, mb[1] + gamestate.norm_h//2)
         self.scene.camera.update(1)
     
     def empty_click_actions(self):
@@ -65,6 +68,7 @@ class EditorView(object):
         if modifiers & (pyglet.window.key.MOD_ACCEL):
             if symbol == pyglet.window.key.S:
                 self.scene.save_info()
+                print "Saving"
                 return True
     
     def on_mouse_press(self, x, y, button, modifiers):
