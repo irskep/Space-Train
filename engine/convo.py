@@ -52,7 +52,11 @@ class Conversation(object):
             actor_id = line[0]
             text = line[1]
             if len(line) == 3:
-                self.convo_info = line[2]
+                temp_info = line[2]
+                self.convo_info.update(temp_info)
+            else:
+                temp_info = None
+            
             for identifier, new_state in self.convo_info['at_rest'].viewitems():
                 if identifier != actor_id:
                     self.scene.actors[identifier].update_state(new_state)
@@ -64,6 +68,10 @@ class Conversation(object):
                                  act.current_image().height - act.current_image().anchor_y
             self.convo_label.text = text
             self.convo_label.end_update()
+            
+            if temp_info:
+                if temp_info.has_key('action'):
+                    getattr(act, temp_info['action'])()
         
             self.scene.clock.schedule_once(self.speak, max(len(text)*0.04, 2.0))
     

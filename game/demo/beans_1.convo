@@ -12,6 +12,7 @@
         ["bean_salesman", "Why yes ma'am, in fact I happen to be a bean salesman!"],
         ["main", "Could you spare this old woman a can of beans?"],
         ["bean_salesman", "You got money?"],
-        ["main", "No..."]
+        ["main", "No..."],
+        ["bean_salesman", "Then beat it!", {"action":"jump"}]
     ]
 }
