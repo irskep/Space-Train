@@ -1,0 +1,36 @@
+{
+    "environment": "the_vast_emptiness_of_space", 
+    "camera_points": {
+        "start": {
+            "y": 360, 
+            "x": 640
+        }
+    }, 
+    "actors": {
+        "pause": {
+            "y": 453, 
+            "x": 370, 
+            "name": "paused", 
+            "start_state": "paused"
+        },
+
+	"exit": {
+            "y": 200, 
+            "x": 370, 
+            "name": "paused", 
+            "start_state": "exit"
+        },
+
+	"continue": {
+            "y": 300, 
+            "x": 370, 
+            "name": "paused", 
+            "start_state": "continue"
+	}
+    }, 
+ 
+    "walkpath": {
+        "points": {}, 
+        "edges": []
+    }
+}
