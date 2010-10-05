@@ -30,6 +30,10 @@ class Inventory(object):
         self.batches['closed'] = pyglet.graphics.Batch()
         self.sprites['open'] = []
         self.sprites['closed'] = []
+
+        self.batches['items'] = pyglet.graphics.Batch()
+        
+        self.items = {}
         
         self.width = 5
                 
@@ -44,6 +48,19 @@ class Inventory(object):
         self.translate_bottomleft_to_topright(self.sprites['open'])
 
         gamestate.event_manager.set_inventory(self)
+    
+    # inventory item interaction methods
+    def put_item(self, actor):
+        self.items[actor.identifier] = actor
+
+    def get_item(self, identifier):
+        ret = self.items[identifier]
+        del self.items[identifier]
+        return ret
+        
+    def update_ui(self):
+        for item in self.items:
+            
     
     #needs to go in util sometime
     def translate_bottomleft_to_topright(self, sprites):
