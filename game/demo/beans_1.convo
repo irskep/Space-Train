@@ -7,12 +7,29 @@
         "main": "talk_right",
         "bean_salesman": "stand_front"
     },
-    "dialogue": [
+    "start": [
         ["main", "I say old chap, you wouldn't happen to have any beans, would you?"],
         ["bean_salesman", "Why yes ma'am, in fact I happen to be a bean salesman!"],
+        ["goto", "main_choice"]
+    ],
+    "main_choice": [["choice", {
+        "Can I have some beans?": "hide_after_use goto:ask_for_beans",
+        "Why would I want beans?": "discuss_beans",
+        "I hate bean salesmen!": "hide_after_use set_local:bean_hate goto:rejected"
+    }]],
+    "discuss_beans": [
+        ["bean_salesman", "I would be happy to tell you about the merits of beans!"],
+        ["bean_salesman", "Blah blah blah blah beans blah blah blah. Beans! Beans blah."],
+        ["goto", "main_choice"]
+    ],
+    "ask_for_beans": [
         ["main", "Could you spare this old woman a can of beans?"],
         ["bean_salesman", "You got money?"],
-        ["main", "No..."],
+        ["choice", {
+            "No...": "hide_after_use goto:rejected"
+        }]
+    ],
+    "rejected": [
         ["bean_salesman", "Then beat it!", {"action":"jump"}]
     ]
 }

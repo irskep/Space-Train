@@ -1,5 +1,7 @@
 import pyglet, json
 
+import cam
+
 from util import draw
 
 class Conversation(object):
@@ -9,6 +11,7 @@ class Conversation(object):
         
         self.convo_name = None
         self.convo_info = None
+        self.animations = None
         self.remaining_convo_lines = None
         self.convo_label = pyglet.text.Label("", color = (0,0,0,255), 
                                              font_size=12, anchor_x='center')
@@ -18,8 +21,8 @@ class Conversation(object):
     
     def on_mouse_release(self, x, y, button, modifiers):
         if self.active():
-            self.scene.clock.unschedule(self.speak)
-            self.speak()
+            self.scene.clock.unschedule(self.next_line)
+            self.next_line()
     
     def draw(self):
         if self.convo_label.text:
@@ -38,49 +41,72 @@ class Conversation(object):
         self.convo_name = convo_name
         with pyglet.resource.file(self.scene.resource_path("%s.convo" % convo_name), 'r') as f:
             self.convo_info = json.load(f)
-        
-        self.remaining_convo_lines = self.convo_info['dialogue']
-        self.speak()
+            self.animations = self.convo_info
+            
+            self.remaining_convo_lines = self.convo_info['start']
+            self.next_line()
     
-    def speak(self, dt=0):
+    def next_line(self, dt=0):
         if len(self.remaining_convo_lines) == 0:
             self.stop_speaking()
         else:
-            line = self.remaining_convo_lines[0]
-            self.remaining_convo_lines = self.remaining_convo_lines[1:]
-        
-            actor_id = line[0]
-            text = line[1]
-            if len(line) == 3:
-                temp_info = line[2]
-                self.convo_info.update(temp_info)
+            command_or_actor = self.remaining_convo_lines[0][0]
+            arg = self.remaining_convo_lines[0][1]
+            if command_or_actor == 'goto':
+                self.remaining_convo_lines = self.convo_info[arg]
+                self.next_line()
+            elif command_or_actor == 'choice':
+                self.clear_speech_bubble()
+                def decision_maker(goto):
+                    def decision():
+                        self.remaining_lines = self.convo_info[goto]
+                        self.next_line()
+                    return decision
+                
+                self.scene.ui.show_cam(self.scene.actors['main'], 
+                                       {k: decision_maker(v) for k, v in arg.viewitems()})
             else:
-                temp_info = None
-            
-            for identifier, new_state in self.convo_info['at_rest'].viewitems():
-                if identifier != actor_id:
-                    self.scene.actors[identifier].update_state(new_state)
-            act = self.scene.actors[actor_id]
-            act.update_state(self.convo_info['speaking'][actor_id])
-            self.convo_label.begin_update()
-            self.convo_label.x = act.sprite.x
-            self.convo_label.y = act.sprite.y + 20 + \
-                                 act.current_image().height - act.current_image().anchor_y
-            self.convo_label.text = text
-            self.convo_label.end_update()
-            
-            if temp_info:
-                if temp_info.has_key('action'):
-                    getattr(act, temp_info['action'])()
-        
-            self.scene.clock.schedule_once(self.speak, max(len(text)*0.04, 2.0))
+                self.speak()
     
-    def stop_speaking(self, dt=0):
+    def speak(self, dt=0):
+        line = self.remaining_convo_lines[0]
+        self.remaining_convo_lines = self.remaining_convo_lines[1:]
+    
+        actor_id = line[0]
+        text = line[1]
+        if len(line) == 3:
+            temp_info = line[2]
+            self.animations.update(temp_info)
+        else:
+            temp_info = None
+        
+        for identifier, new_state in self.animations['at_rest'].viewitems():
+            if identifier != actor_id:
+                self.scene.actors[identifier].update_state(new_state)
+        act = self.scene.actors[actor_id]
+        act.update_state(self.animations['speaking'][actor_id])
+        self.convo_label.begin_update()
+        self.convo_label.x = act.sprite.x
+        self.convo_label.y = act.sprite.y + 20 + \
+                             act.current_image().height - act.current_image().anchor_y
+        self.convo_label.text = text
+        self.convo_label.end_update()
+        
+        if temp_info:
+            if temp_info.has_key('action'):
+                getattr(act, temp_info['action'])()
+    
+        self.scene.clock.schedule_once(self.next_line, max(len(text)*0.04, 2.0))
+    
+    def clear_speech_bubble(self):
         self.convo_label.begin_update()
         self.convo_label.text = ""
         self.convo_label.end_update()
+    
+    def stop_speaking(self, dt=0):
         cn = self.convo_name
         self.convo_name = None  # Order matters here in case the script starts a new conversation
         self.convo_info = None
+        self.animations = None
         self.scene.call_if_available('end_conversation', cn)
     
