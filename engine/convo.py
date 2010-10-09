@@ -108,14 +108,13 @@ class Conversation(object):
         else:
             line = self.convo_lines[self.convo_position]
             self.convo_position += 1
-            command_or_actor, arg = line[:2]
-            if command_or_actor == 'command':
-                self._parse_command_dict(nonedict(arg))
-            elif command_or_actor == 'choice':
+            if isinstance(line[0], dict):
+                self._parse_command_dict(nonedict(line[0]))
+            elif line[0] == 'choice':
                 self.clear_speech_bubble()
                 
-                temp_choices = self._enforce_choice_requirements(arg)
-                choice_mappings = {k: self._make_choice_callback(k, arg, v) for k, v
+                temp_choices = self._enforce_choice_requirements(line[1])
+                choice_mappings = {k: self._make_choice_callback(k, line[1], v) for k, v
                                    in temp_choices.viewitems()}
                 self.scene.ui.show_cam(self.scene.actors['main'], choice_mappings)
             else:
@@ -135,7 +134,7 @@ class Conversation(object):
         if temp_info:
             if temp_info.has_key('action'):
                 getattr(act, temp_info['action'])()
-    
+        
         self.scene.clock.schedule_once(self.next_line, max(len(text)*0.04, 2.0))
     
     def clear_speech_bubble(self):
