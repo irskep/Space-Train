@@ -14,7 +14,8 @@ class Conversation(object):
         self.convo_name = None
         self.convo_info = None
         self.animations = None
-        self.remaining_convo_lines = None
+        self.convo_lines = None
+        self.convo_position = 0
         self.convo_label = pyglet.text.Label("", color = (0,0,0,255), 
                                              font_size=12, anchor_x='center')
     
@@ -40,15 +41,29 @@ class Conversation(object):
             draw.rect_outline(*rect_args)
             self.convo_label.draw()
     
+    def _update_anim_dict(self, newdict):
+        for k in ['at_rest', 'speaking']:
+            if newdict.has_key(k):
+                self.animations[k].update(newdict[k])
+    
     def begin_conversation(self, convo_name):
         # Optimization: preload conversations in initializer
         self.convo_name = convo_name
         with pyglet.resource.file(self.scene.resource_path("%s.convo" % convo_name), 'r') as f:
             self.convo_info = json.load(f)
             self.convo_info['variables'] = nonedict(self.convo_info['variables'])
-            self.animations = self.convo_info
+            self.animations = {
+                'at_rest': {
+                    'main': 'stand_right'
+                },
+                'speaking': {
+                    'main': 'talk_right'
+                }
+            }
+            self._update_anim_dict(self.convo_info)
             
-            self.remaining_convo_lines = self.convo_info['start']
+            self.convo_lines = self.convo_info['start']
+            self.convo_position = 0
             self.next_line()
     
     def _parse_command_dict(self, tags):
@@ -56,11 +71,15 @@ class Conversation(object):
             items = tags['set_local'].split(':')
             var, val = items[0], json.loads(items[1])
             self.convo_info['variables'][var] = val
+        if tags['update_animations']:
+            self._update_anim_dict(tags['update_animations'])
+            self._reset_at_rest()
         if tags['goto']:
-            self.remaining_convo_lines = self.convo_info[tags['goto']]
+            self.convo_position = 0
+            self.convo_lines = self.convo_info[tags['goto']]
             if self.scene.ui.cam:
                 self.scene.ui.cam.set_visible(False)
-            self.next_line()
+        self.next_line()
     
     def _make_choice_callback(self, choice, choice_dict, tag_dict):
         def decision():
@@ -78,11 +97,18 @@ class Conversation(object):
                     del temp_choices[choice]
         return temp_choices
     
+    def _reset_at_rest(self, exclude=None):
+        for identifier, new_state in self.animations['at_rest'].viewitems():
+            if identifier != exclude:
+                self.scene.actors[identifier].update_state(new_state)
+    
     def next_line(self, dt=0):
-        if len(self.remaining_convo_lines) == 0:
+        if self.convo_position >= len(self.convo_lines):
             self.stop_speaking()
         else:
-            command_or_actor, arg = self.remaining_convo_lines[0][:2]
+            line = self.convo_lines[self.convo_position]
+            self.convo_position += 1
+            command_or_actor, arg = line[:2]
             if command_or_actor == 'command':
                 self._parse_command_dict(nonedict(arg))
             elif command_or_actor == 'choice':
@@ -93,23 +119,10 @@ class Conversation(object):
                                    in temp_choices.viewitems()}
                 self.scene.ui.show_cam(self.scene.actors['main'], choice_mappings)
             else:
-                self.speak()
+                self.speak(*line)
     
-    def speak(self, dt=0):
-        line = self.remaining_convo_lines[0]
-        self.remaining_convo_lines = self.remaining_convo_lines[1:]
-    
-        actor_id = line[0]
-        text = line[1]
-        if len(line) == 3:
-            temp_info = line[2]
-            self.animations.update(temp_info)
-        else:
-            temp_info = None
-        
-        for identifier, new_state in self.animations['at_rest'].viewitems():
-            if identifier != actor_id:
-                self.scene.actors[identifier].update_state(new_state)
+    def speak(self, actor_id, text, temp_info=None):
+        self._reset_at_rest(exclude=actor_id)
         act = self.scene.actors[actor_id]
         act.update_state(self.animations['speaking'][actor_id])
         self.convo_label.begin_update()
