@@ -1,4 +1,4 @@
-import pyglet, json, collections, functools
+import pyglet, yaml, collections, functools
 
 import cam
 
@@ -55,7 +55,7 @@ class Conversation(object):
         # Optimization: preload conversations in initializer
         self.convo_name = convo_name
         with pyglet.resource.file(self.scene.resource_path("%s.convo" % convo_name), 'r') as f:
-            self.convo_info = json.load(f)
+            self.convo_info = yaml.load(f)
             self.convo_info['variables'] = nonedict(self.convo_info['variables'])
             self.animations = {
                 'at_rest': {
@@ -74,7 +74,7 @@ class Conversation(object):
     def _parse_command_dict(self, tags):
         if tags['set_local']:
             items = tags['set_local'].split(':')
-            var, val = items[0], json.loads(items[1])
+            var, val = items[0], yaml.load(items[1])
             self.convo_info['variables'][var] = val
         if tags['update_animations']:
             self._update_anim_dict(tags['update_animations'])
