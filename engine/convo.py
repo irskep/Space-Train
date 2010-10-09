@@ -73,9 +73,7 @@ class Conversation(object):
     
     def _parse_command_dict(self, tags):
         if tags['set_local']:
-            items = tags['set_local'].split(':')
-            var, val = items[0], yaml.load(items[1])
-            self.convo_info['variables'][var] = val
+            self.convo_info['variables'].update(tags['set_local'])
         if tags['update_animations']:
             self._update_anim_dict(tags['update_animations'])
             self._reset_at_rest()
