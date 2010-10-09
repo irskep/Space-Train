@@ -1,8 +1,10 @@
-import pyglet, json
+import pyglet, json, collections, functools
 
 import cam
 
 from util import draw
+
+nonedict = functools.partial(collections.defaultdict, lambda: None)
 
 class Conversation(object):
     def __init__(self, scn):
@@ -27,10 +29,12 @@ class Conversation(object):
     def draw(self):
         if self.convo_label.text:
             draw.set_color(1,1,1,1)
-            rect_args = (self.convo_label.x - self.convo_label.content_width/2 - 5, 
-                         self.convo_label.y - 8,
-                         self.convo_label.x + self.convo_label.content_width/2 + 10,
-                         self.convo_label.y + self.convo_label.content_height + 3)
+            x = self.convo_label.x
+            y = self.convo_label.y
+            w = self.convo_label.content_width
+            h = self.convo_label.content_height
+            rect_args = (x - w/2 - 5,  y     - 8,
+                         x + w/2 + 10, y + h + 3)
             draw.rect(*rect_args)
             draw.set_color(0,0,0,1)
             draw.rect_outline(*rect_args)
@@ -41,6 +45,7 @@ class Conversation(object):
         self.convo_name = convo_name
         with pyglet.resource.file(self.scene.resource_path("%s.convo" % convo_name), 'r') as f:
             self.convo_info = json.load(f)
+            self.convo_info['variables'] = nonedict(self.convo_info['variables'])
             self.animations = self.convo_info
             
             self.remaining_convo_lines = self.convo_info['start']
@@ -50,31 +55,36 @@ class Conversation(object):
         if len(self.remaining_convo_lines) == 0:
             self.stop_speaking()
         else:
-            command_or_actor = self.remaining_convo_lines[0][0]
-            arg = self.remaining_convo_lines[0][1]
+            command_or_actor, arg = self.remaining_convo_lines[0][:2]
             if command_or_actor == 'goto':
                 self.remaining_convo_lines = self.convo_info[arg]
                 self.next_line()
             elif command_or_actor == 'choice':
                 self.clear_speech_bubble()
-                def decision_maker(choice, tag_string):
+                def decision_maker(choice, tag_dict):
                     def decision():
-                        tags = tag_string.split()
-                        tag_values = {v[0]: v[1] for v in [t.split(':') for t in tags if ':' in t]}
-                        simple_tags = set([t for t in tags if not tag_values.has_key(t)])
+                        tags = nonedict(tag_dict)
                         
-                        if 'hide_after_use' in simple_tags:
+                        if tags['hide_after_use']:
                             del arg[choice]
-                        if tag_values.has_key('set_local'):
-                            self.convo_info['variables'][tag_values['set_local']] = True
-                        if tag_values.has_key('goto'):
-                            self.remaining_convo_lines = self.convo_info[tag_values['goto']]
+                        if tags['set_local']:
+                            items = tags['set_local'].split(':')
+                            var, val = items[0], json.loads(items[1])
+                            self.convo_info['variables'][var] = val
+                        if tags['goto']:
+                            self.remaining_convo_lines = self.convo_info[tags['goto']]
                             self.scene.ui.cam.set_visible(False)
                             self.next_line()
                     return decision
                 
+                temp_choices = arg.copy()
+                for choice, tags in arg.viewitems():
+                    if tags.has_key('require'):
+                        if not self.convo_info['variables'][tags['require']]:
+                            del temp_choices[choice]
                 self.scene.ui.show_cam(self.scene.actors['main'], 
-                                       {k: decision_maker(k, v) for k, v in arg.viewitems()})
+                                       {k: decision_maker(k, v) for k, v
+                                       in temp_choices.viewitems()})
             else:
                 self.speak()
     
@@ -115,8 +125,10 @@ class Conversation(object):
     
     def stop_speaking(self, dt=0):
         self.clear_speech_bubble()
+        
+        # Order matters here in case the script starts a new conversation
         cn = self.convo_name
-        self.convo_name = None  # Order matters here in case the script starts a new conversation
+        self.convo_name = None
         self.convo_info = None
         self.animations = None
         self.scene.call_if_available('end_conversation', cn)

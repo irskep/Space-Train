@@ -16,9 +16,24 @@
         ["goto", "main_choice"]
     ],
     "main_choice": [["choice", {
-        "Can I have some beans?": "hide_after_use goto:ask_for_beans",
-        "Why would I want beans?": "hide_after_use goto:discuss_beans",
-        "I hate bean salesmen!": "hide_after_use set_local:bean_hate goto:rejected"
+        "Can I have some beans?": {
+            "hide_after_use": true,
+            "goto": "ask_for_beans"
+        },
+        "I hate bean salesmen!": {
+            "hide_after_use": true,
+            "set_local": "bean_hate:true",
+            "goto":"rejected"
+        },
+        "Why would I want beans?": {
+            "hide_after_use": true,
+            "set_local": "bean_interest:true",
+            "goto": "discuss_beans"
+        },
+        "Tell me more about beans!": {
+            "require": "bean_interest",
+            "goto": "discuss_beans"
+        }
     }]],
     "discuss_beans": [
         ["bean_salesman", "I would be happy to tell you about the merits of beans!"],
@@ -29,11 +44,14 @@
         ["main", "Could you spare this old woman a can of beans?"],
         ["bean_salesman", "You got money?"],
         ["choice", {
-            "No...": "hide_after_use goto:rejected"
+            "No...": {
+                "hide_after_use": true,
+                "goto": "rejected"
+            }
         }]
     ],
     "rejected": [
-        ["main": "I'm afraid not..."]
+        ["main", "I'm afraid not..."],
         ["bean_salesman", "Then beat it!", {"action":"jump"}]
     ]
 }
