@@ -57,14 +57,24 @@ class Conversation(object):
                 self.next_line()
             elif command_or_actor == 'choice':
                 self.clear_speech_bubble()
-                def decision_maker(goto):
+                def decision_maker(choice, tag_string):
                     def decision():
-                        self.remaining_lines = self.convo_info[goto]
-                        self.next_line()
+                        tags = tag_string.split()
+                        tag_values = {v[0]: v[1] for v in [t.split(':') for t in tags if ':' in t]}
+                        simple_tags = set([t for t in tags if not tag_values.has_key(t)])
+                        
+                        if 'hide_after_use' in simple_tags:
+                            del arg[choice]
+                        if tag_values.has_key('set_local'):
+                            self.convo_info['variables'][tag_values['set_local']] = True
+                        if tag_values.has_key('goto'):
+                            self.remaining_convo_lines = self.convo_info[tag_values['goto']]
+                            self.scene.ui.cam.set_visible(False)
+                            self.next_line()
                     return decision
                 
                 self.scene.ui.show_cam(self.scene.actors['main'], 
-                                       {k: decision_maker(v) for k, v in arg.viewitems()})
+                                       {k: decision_maker(k, v) for k, v in arg.viewitems()})
             else:
                 self.speak()
     
@@ -104,6 +114,7 @@ class Conversation(object):
         self.convo_label.end_update()
     
     def stop_speaking(self, dt=0):
+        self.clear_speech_bubble()
         cn = self.convo_name
         self.convo_name = None  # Order matters here in case the script starts a new conversation
         self.convo_info = None
