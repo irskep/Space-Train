@@ -46,6 +46,11 @@ class Conversation(object):
             if newdict.has_key(k):
                 self.animations[k].update(newdict[k])
     
+    def _reset_at_rest(self, exclude=None):
+        for identifier, new_state in self.animations['at_rest'].viewitems():
+            if identifier != exclude:
+                self.scene.actors[identifier].update_state(new_state)
+    
     def begin_conversation(self, convo_name):
         # Optimization: preload conversations in initializer
         self.convo_name = convo_name
@@ -96,11 +101,6 @@ class Conversation(object):
                 if not self.convo_info['variables'][tags['require']]:
                     del temp_choices[choice]
         return temp_choices
-    
-    def _reset_at_rest(self, exclude=None):
-        for identifier, new_state in self.animations['at_rest'].viewitems():
-            if identifier != exclude:
-                self.scene.actors[identifier].update_state(new_state)
     
     def next_line(self, dt=0):
         if self.convo_position >= len(self.convo_lines):
