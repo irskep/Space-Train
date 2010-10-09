@@ -13,7 +13,9 @@
     "start": [
         ["main", "I say old chap, you wouldn't happen to have any beans, would you?"],
         ["bean_salesman", "Why yes ma'am, in fact I happen to be a bean salesman!"],
-        ["goto", "main_choice"]
+        ["command", {
+            "goto": "main_choice"
+        }]
     ],
     "main_choice": [["choice", {
         "Can I have some beans?": {
@@ -38,7 +40,9 @@
     "discuss_beans": [
         ["bean_salesman", "I would be happy to tell you about the merits of beans!"],
         ["bean_salesman", "Blah blah blah blah beans blah blah blah. Beans! Beans blah."],
-        ["goto", "main_choice"]
+        ["command", {
+            "goto": "main_choice"
+        }]
     ],
     "ask_for_beans": [
         ["main", "Could you spare this old woman a can of beans?"],

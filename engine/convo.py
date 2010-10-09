@@ -51,30 +51,32 @@ class Conversation(object):
             self.remaining_convo_lines = self.convo_info['start']
             self.next_line()
     
+    def _parse_command_dict(self, tags):
+        if tags['set_local']:
+            items = tags['set_local'].split(':')
+            var, val = items[0], json.loads(items[1])
+            self.convo_info['variables'][var] = val
+        if tags['goto']:
+            self.remaining_convo_lines = self.convo_info[tags['goto']]
+            if self.scene.ui.cam:
+                self.scene.ui.cam.set_visible(False)
+            self.next_line()
+    
     def next_line(self, dt=0):
         if len(self.remaining_convo_lines) == 0:
             self.stop_speaking()
         else:
             command_or_actor, arg = self.remaining_convo_lines[0][:2]
-            if command_or_actor == 'goto':
-                self.remaining_convo_lines = self.convo_info[arg]
-                self.next_line()
+            if command_or_actor == 'command':
+                self._parse_command_dict(nonedict(arg))
             elif command_or_actor == 'choice':
                 self.clear_speech_bubble()
                 def decision_maker(choice, tag_dict):
                     def decision():
                         tags = nonedict(tag_dict)
-                        
                         if tags['hide_after_use']:
                             del arg[choice]
-                        if tags['set_local']:
-                            items = tags['set_local'].split(':')
-                            var, val = items[0], json.loads(items[1])
-                            self.convo_info['variables'][var] = val
-                        if tags['goto']:
-                            self.remaining_convo_lines = self.convo_info[tags['goto']]
-                            self.scene.ui.cam.set_visible(False)
-                            self.next_line()
+                        self._parse_command_dict(tags)
                     return decision
                 
                 temp_choices = arg.copy()
