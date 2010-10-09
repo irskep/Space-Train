@@ -43,8 +43,7 @@ discuss_beans:
       - Go on...
     - - bean_salesman
       - Blah blah blah blah beans blah blah blah. Beans! Beans blah.
-    - - command
-      - update_animations:
+    - - update_animations:
           speaking:
             main: stand_front
     - - main
