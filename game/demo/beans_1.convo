@@ -14,7 +14,7 @@ start:
       - I say old chap, you wouldn't happen to have any beans, would you?
     - - bean_salesman
       - Why yes ma'am, in fact I happen to be a bean salesman!
-    - - goto: main_choice
+    - goto: main_choice
 
 main_choice:
     - - update_animations: 
@@ -49,7 +49,7 @@ discuss_beans:
             main: stand_front
     - - main
       - What an odd fellow.
-    - - goto: main_choice
+    - goto: main_choice
 
 ask_for_beans:
     - - main

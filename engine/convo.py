@@ -108,7 +108,9 @@ class Conversation(object):
         else:
             line = self.convo_lines[self.convo_position]
             self.convo_position += 1
-            if isinstance(line[0], dict):
+            if isinstance(line, dict):
+                self._parse_command_dict(nonedict(line))
+            elif isinstance(line[0], dict):
                 self._parse_command_dict(nonedict(line[0]))
             elif line[0] == 'choice':
                 self.clear_speech_bubble()
