@@ -8,6 +8,7 @@ speaking:
 
 variables:
     bean_hate: false
+    bean_interest: false
 
 start:
     - - main
@@ -17,9 +18,9 @@ start:
     - goto: main_choice
 
 main_choice:
-    - - update_animations: 
-          speaking:
-            main: talk_right
+    - update_animations: 
+        speaking:
+          main: talk_right
     - - choice
       - Can I have some beans?:
           hide_after_use: true
@@ -43,9 +44,9 @@ discuss_beans:
       - Go on...
     - - bean_salesman
       - Blah blah blah blah beans blah blah blah. Beans! Beans blah.
-    - - update_animations:
-          speaking:
-            main: stand_front
+    - update_animations:
+        speaking:
+          main: stand_front
     - - main
       - What an odd fellow.
     - goto: main_choice
