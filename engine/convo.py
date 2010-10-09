@@ -62,6 +62,22 @@ class Conversation(object):
                 self.scene.ui.cam.set_visible(False)
             self.next_line()
     
+    def _make_choice_callback(self, choice, choice_dict, tag_dict):
+        def decision():
+            tags = nonedict(tag_dict)
+            if tags['hide_after_use']:
+                del choice_dict[choice]
+            self._parse_command_dict(tags)
+        return decision
+    
+    def _enforce_choice_requirements(self, choices):
+        temp_choices = choices.copy()
+        for choice, tags in choices.viewitems():
+            if tags.has_key('require'):
+                if not self.convo_info['variables'][tags['require']]:
+                    del temp_choices[choice]
+        return temp_choices
+    
     def next_line(self, dt=0):
         if len(self.remaining_convo_lines) == 0:
             self.stop_speaking()
@@ -71,22 +87,11 @@ class Conversation(object):
                 self._parse_command_dict(nonedict(arg))
             elif command_or_actor == 'choice':
                 self.clear_speech_bubble()
-                def decision_maker(choice, tag_dict):
-                    def decision():
-                        tags = nonedict(tag_dict)
-                        if tags['hide_after_use']:
-                            del arg[choice]
-                        self._parse_command_dict(tags)
-                    return decision
                 
-                temp_choices = arg.copy()
-                for choice, tags in arg.viewitems():
-                    if tags.has_key('require'):
-                        if not self.convo_info['variables'][tags['require']]:
-                            del temp_choices[choice]
-                self.scene.ui.show_cam(self.scene.actors['main'], 
-                                       {k: decision_maker(k, v) for k, v
-                                       in temp_choices.viewitems()})
+                temp_choices = self._enforce_choice_requirements(arg)
+                choice_mappings = {k: self._make_choice_callback(k, arg, v) for k, v
+                                   in temp_choices.viewitems()}
+                self.scene.ui.show_cam(self.scene.actors['main'], choice_mappings)
             else:
                 self.speak()
     

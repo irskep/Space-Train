@@ -25,7 +25,7 @@
         "I hate bean salesmen!": {
             "hide_after_use": true,
             "set_local": "bean_hate:true",
-            "goto":"rejected"
+            "goto":"insult"
         },
         "Why would I want beans?": {
             "hide_after_use": true,
@@ -57,5 +57,9 @@
     "rejected": [
         ["main", "I'm afraid not..."],
         ["bean_salesman", "Then beat it!", {"action":"jump"}]
+    ],
+    "insult": [
+        ["main", "You're a poopy pants!"],
+        ["bean_salesman", "I don't sell to big meanies like you!", {"action":"jump"}]
     ]
 }
