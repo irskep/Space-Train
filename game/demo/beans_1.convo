@@ -1,3 +1,5 @@
+# Initialization
+
 at_rest:
     main: stand_right
     bean_salesman: stand_front
@@ -9,6 +11,8 @@ speaking:
 variables:
     bean_hate: false
     bean_interest: false
+
+# States
 
 start:
     - - main
