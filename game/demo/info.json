@@ -49,8 +49,12 @@
                 "x": 1956
             }, 
             "point_1": {
-                "y": 145, 
-                "x": 937
+                "y": 137, 
+                "x": 202
+            }, 
+            "point_2": {
+                "y": 143.0, 
+                "x": 884.0
             }, 
             "inga_walk_left": {
                 "y": 143, 
@@ -61,6 +65,10 @@
             {
                 "a": "cart_lady_right", 
                 "b": "cart_lady_left"
+            }, 
+            {
+                "a": "point_2", 
+                "b": "inga_walk_middle"
             }, 
             {
                 "a": "inga_walk_right", 
@@ -76,10 +84,18 @@
             }, 
             {
                 "a": "inga_walk_left", 
-                "b": "inga_walk_middle"
+                "b": "point_2"
+            }, 
+            {
+                "a": "inga_walk_left", 
+                "b": "point_2"
             }, 
             {
                 "a": "inga_walk_middle", 
+                "b": "point_2"
+            }, 
+            {
+                "a": "point_2", 
                 "b": "inga_walk_left"
             }
         ]

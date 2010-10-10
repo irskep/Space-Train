@@ -53,6 +53,10 @@ def image_alpha_at_point(img, x, y):
     except TypeError:
         return ord(pixel_data[pos+3])/255.0
 
+# caution - broken. doesn't account for anchors
+def intersects_sprite(x, y, sprite):
+    return x > sprite.x and y > sprite.y and x < sprite.x + sprite.width and y < sprite.y + sprite.height
+        
 # Other
 
 class ClipGroup(pyglet.graphics.OrderedGroup): 

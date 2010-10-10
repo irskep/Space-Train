@@ -58,7 +58,7 @@ def actor_clicked(clicked_actor):
         myscene.ui.show_cam(clicked_actor, actions)
     if clicked_actor.identifier == 'key_1':
         actions = {
-            'Pick Up': None,
+            'Pick Up': lambda: clicked_actor.scene.ui.inventory.put_item(clicked_actor),
             'Destroy': None,
             'Throw': None
         }

@@ -50,6 +50,13 @@ class Actor(actionsequencer.ActionSequencer):
         min_y = self.abs_position_y()
         max_x = self.abs_position_x() + self.width()
         max_y = self.abs_position_y() + self.height()
+        return min_x <= x <= max_x and min_y <= y <= max_y
+            
+    def covers_visible_point(self, x, y):
+        min_x = self.abs_position_x()
+        min_y = self.abs_position_y()
+        max_x = self.abs_position_x() + self.width()
+        max_y = self.abs_position_y() + self.height()
         if min_x <= x <= max_x and min_y <= y <= max_y:
             return (util.image_alpha_at_point(self.current_image(),  x-min_x, y-min_y))
     
