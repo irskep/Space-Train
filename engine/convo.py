@@ -1,12 +1,93 @@
-import pyglet, yaml, collections, functools
+"""
+Cutscenes, mostly just 1-on-1 dialogue. This stuff is complicated, read carefully.
+"""
 
-import cam
+import pyglet, yaml, collections, functools
 
 from util import draw
 
+# Convenience function for creating defaultdicts that return None if key not present
 nonedict = functools.partial(collections.defaultdict, lambda: None)
 
 class Conversation(object):
+    """
+    Starts, runs, and stops cutscenes.
+    
+    The file format is JSON/YAML. Either syntax can be used, but YAML is easier on the eyes.
+    
+    A conversation file should reside in its scene's data folder and have the extension ".convo".
+    At the top level, it is a dictionary with a few required keys and as many non-required keys
+    as you desire.
+    
+    Required keys:
+    
+        # Animations
+        at_rest:    # actor ID: image to show when actor is not speaking
+            main: stand_right
+            bean_salesman: stand_front
+        
+        speaking:   # actor ID: image to show when actor is speaking
+            main: talk_right
+            bean_salesman: stand_front
+        
+        variables:  # Variable name: initial value (can be updated with update_locals)
+            bean_hate: false
+            bean_interest: false
+        
+        # Dialogue entry point
+        start:
+            [action list]
+    
+    Action list format:
+        - command: argument
+        - command: argument
+        - ...
+    
+    Commands:
+        goto: <label>
+            Start executing the action list under the top-level label <label>
+            
+            EXAMPLE: goto start
+        
+        actor_id: <text>
+            Make an actor speak a phrase. Delay the next action.
+            
+            EXAMPLE:
+                bean_salesman: What a nice day it is today!
+        
+        actor_id: <dictionary>
+            Perform actions on one actor. Currently only accepts one key:
+                action: <action_name>
+                    Calls actor.action_name()
+            
+            EXAMPLE:
+                bean_salesman:
+                    action: jump
+        
+        update_locals:
+            name: value
+            name: value
+            ...
+            
+            Set/update the values of any conversation-local variables
+        
+        choice:
+            <choice text>:
+                [action list]
+            <another choice>:
+                [action list]
+            
+            Present a contextual action menu to the user with dialogue options.
+            
+            The action list accepts two extra commands:
+                hide_after_use: true
+                    Do not show this choice again in this conversation.
+                require: <local>
+                    Require that the conversation variable <local> be set to some true value
+            
+            (hide_after_use is somewhat redundant to update_locals+require, but it's convenient.)
+    
+    """
     def __init__(self, scn):
         super(Conversation, self).__init__()
         self.scene = scn
@@ -19,11 +100,10 @@ class Conversation(object):
         self.convo_label = pyglet.text.Label("", color = (0,0,0,255), 
                                              font_size=12, anchor_x='center')
     
-    def active(self):
-        return self.convo_name is not None
+    active = property(lambda self: self.convo_name is not None)
     
     def on_mouse_release(self, x, y, button, modifiers):
-        if self.active():
+        if self.active:
             self.scene.clock.unschedule(self.next_line)
             self.next_line()
     
@@ -71,29 +151,39 @@ class Conversation(object):
             self.convo_position = 0
             self.next_line()
     
-    def _parse_command_dict(self, tags):
-        needs_schedule = False
-        if tags['set_local']:
-            self.convo_info['variables'].update(tags['set_local'])
-            needs_schedule = True
-        if tags['update_animations']:
-            self._update_anim_dict(tags['update_animations'])
-            self._reset_at_rest()
-            needs_schedule = True
-        if tags['goto']:
-            self.convo_position = 0
-            self.convo_lines = self.convo_info[tags['goto']]
-            if self.scene.ui.cam:
-                self.scene.ui.cam.set_visible(False)
-            needs_schedule = True
-        if tags['choice']:
-            self.clear_speech_bubble()
-            
-            temp_choices = self._enforce_choice_requirements(tags['choice'])
-            choice_mappings = {k: self._make_choice_callback(k, tags['choice'], v) for k, v
-                               in temp_choices.viewitems()}
-            self.scene.ui.show_cam(self.scene.actors['main'], choice_mappings)
-            needs_schedule = False
+    def _update_locals(self, val):
+        self.convo_info['variables'].update(val)
+        return True
+    
+    def _update_animations(self, val):
+        self._update_anim_dict(val)
+        self._reset_at_rest()
+        return True
+    
+    def _goto(self, val):
+        self.convo_position = 0
+        self.convo_lines = self.convo_info[val]
+        if self.scene.ui.cam:
+            self.scene.ui.cam.set_visible(False)
+        return True
+    
+    def _choice(self, val):
+        self.clear_speech_bubble()
+        
+        temp_choices = self._enforce_choice_requirements(val)
+        choice_mappings = {k: self._make_choice_callback(k, val, v) for k, v
+                           in temp_choices.viewitems()}
+        self.scene.ui.show_cam(self.scene.actors['main'], choice_mappings)
+        return False
+    
+    def _parse_command_dict(self, cmd_dict):
+        needs_schedule = True
+        for cmd, arg in cmd_dict.viewitems():
+            try:
+                result = getattr(self, '_%s' % cmd)(arg)
+                needs_schedule = needs_schedule and result
+            except AttributeError:
+                pass    # Don't care, it's probably a spoken line
         return needs_schedule
     
     def _make_choice_callback(self, choice, choice_dict, tag_dict):

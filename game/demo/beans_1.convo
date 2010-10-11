@@ -29,12 +29,12 @@ main_choice:
           goto: ask_for_beans
         I hate bean salesmen!:
           hide_after_use: true
-          set_local: 
+          update_locals: 
             bean_hate: true
           goto: insult
         Why would I want beans?:
           hide_after_use: true
-          set_local: 
+          update_locals: 
             bean_interest: true
           goto: discuss_beans
         Tell me more about beans!:
