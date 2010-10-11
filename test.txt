@@ -1,8 +1,0 @@
-other
-hey
-main
-look
-other
-I can display
-main
-text
