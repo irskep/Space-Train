@@ -4,7 +4,7 @@ from engine import actor
 from engine.interpolator import PulseInterpolator, LinearInterpolator
 from engine.util.const import WALK_PATH_COMPLETED
 
-import inga_actions
+import text, inga_actions
 
 # myscene is set by scene.py
 myscene = None
@@ -13,6 +13,7 @@ def init():
     cart_lady = myscene.actors['cart_lady']
     cart_lady.prepare_walkpath_move('cart_lady_right')
     cart_lady.next_action()
+    text.init(myscene)
 
 def cart_lady_walk(actor, point):
     if point == 'cart_lady_left':
@@ -55,4 +56,5 @@ def actor_clicked(clicked_actor):
             'Shit': inga_actions.shit,
             'Kill': inga_actions.kill
         }
-        myscene.ui.show_cam(clicked_actor, actions)
+        # myscene.ui.show_cam(clicked_actor, actions)
+        text.advance()
