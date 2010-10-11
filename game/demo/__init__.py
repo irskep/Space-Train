@@ -52,9 +52,7 @@ def actor_clicked(clicked_actor):
             'Eat': inga_actions.eat,
             'Pray': inga_actions.pray,
             'Love': inga_actions.love,
-            'Fuck': inga_actions.fuck,
-            'Shit': inga_actions.shit,
-            'Kill': inga_actions.kill
+            'Kill': inga_actions.kill,
+            'Next slide': text.advance
         }
-        # myscene.ui.show_cam(clicked_actor, actions)
-        text.advance()
+        myscene.ui.show_cam(clicked_actor, actions)
