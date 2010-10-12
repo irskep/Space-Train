@@ -35,6 +35,7 @@ class EventManager(object):
             self.add_handlers(self.scene.convo)
         self.add_handlers(self.inventory)
         self.add_handlers(self.cam)
+        self.add_handlers(self.inventory)
     
     # methods to set certain objects
     # will rebuild the stack when called

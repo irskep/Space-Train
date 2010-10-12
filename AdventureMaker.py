@@ -21,7 +21,8 @@ class AdventureMakerWindow(pyglet.window.Window):
         gamestate.main_window = self
         gamestate.scripts_enabled = False
         gamestate.init_scale()
-        gamestate.init_keys()
+        gamestate.keys = pyglet.window.key.KeyStateHandler()
+        gamestate.main_window.push_handlers(gamestate.keys)
         
         pyglet.gl.glEnable(pyglet.gl.GL_BLEND)
         pyglet.gl.glBlendFunc(pyglet.gl.GL_SRC_ALPHA, pyglet.gl.GL_ONE_MINUS_SRC_ALPHA)
