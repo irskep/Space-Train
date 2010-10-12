@@ -58,6 +58,7 @@ class Inventory(object):
         self.items[actor.identifier].icon.batch = self.batches['items']
         self.items[actor.identifier].sprite.batch = None
         self.update_item_positions()
+        self.isopen = True
 
     def get_item(self, identifier):
         #self.items[identifier].sprite.batch = self.items[identifier].scene.batch
