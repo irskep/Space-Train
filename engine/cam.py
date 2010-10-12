@@ -53,14 +53,21 @@ class CAM(object):
         
         y -= sprites[1].height/2
                 
+        #defines the generic order in which CAM backrounds are used
+        generic_item_order = [3, 4, 2, 5, 1, 6]
+        
+        used_items = []
+        for action, callback in self.actions.items():
+            used_items.append(generic_item_order.pop(0))
+            
+        used_items.sort()
+                
         # Turn each action entry into a menu item
-        count = 1
-
-        for action, callback in self.actions.items():      
+        for action, callback in self.actions.items():  
+            count = used_items.pop(0)
             button = self.Button(x, y, positioning[count][0], positioning[count][1],
                                  sprites[count], action, callback)
             self.buttons.append(button)
-            count += 1
         
         self.set_visible(True)
         

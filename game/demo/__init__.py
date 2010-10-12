@@ -56,3 +56,11 @@ def actor_clicked(clicked_actor):
             'Next slide': text.advance
         }
         myscene.ui.show_cam(clicked_actor, actions)
+    if clicked_actor.identifier == 'key_1':
+        actions = {
+            'Pick Up': None,
+            'Destroy': None,
+            'Throw': None
+        }
+        myscene.ui.show_cam(clicked_actor, actions)
+        
