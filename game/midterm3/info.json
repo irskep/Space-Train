@@ -12,22 +12,16 @@
             "name": "cart_lady", 
             "start_state": "walk_right"
         }, 
-        "bean_salesman": {
+        "kidnapper": {
             "y": 144, 
             "x": 1438, 
-            "name": "hobo", 
+            "name": "sneaky_bastard", 
             "start_state": "stand_front"
         }, 
         "main": {
             "walkpath_point": "inga_walk_left", 
             "name": "inga", 
             "start_state": "stand_front"
-        }, 
-        "key_1": {
-            "y": 180, 
-            "x": 936, 
-            "name": "key", 
-            "start_state": "key"
         }
     }, 
     "walkpath": {
@@ -36,13 +30,17 @@
                 "y": 143, 
                 "x": 1294
             }, 
-            "inga_walk_left": {
+            "point_3": {
                 "y": 143, 
-                "x": 569
+                "x": 2105
             }, 
             "cart_lady_left": {
                 "y": 60, 
                 "x": -300
+            }, 
+            "inga_walk_way_left": {
+                "y": 110, 
+                "x": 22
             }, 
             "inga_walk_right": {
                 "y": 95, 
@@ -56,9 +54,9 @@
                 "y": 143, 
                 "x": 884
             }, 
-            "point_3": {
-                "y": 143.0, 
-                "x": 2105.0
+            "inga_walk_left": {
+                "y": 143, 
+                "x": 569
             }
         }, 
         "edges": [
@@ -71,16 +69,16 @@
                 "b": "inga_walk_middle"
             }, 
             {
-                "a": "inga_walk_right", 
-                "b": "point_3"
+                "a": "inga_walk_left", 
+                "b": "inga_walk_way_left"
             }, 
             {
                 "a": "cart_lady_left", 
                 "b": "cart_lady_right"
             }, 
             {
-                "a": "point_3", 
-                "b": "inga_walk_right"
+                "a": "inga_walk_way_left", 
+                "b": "inga_walk_left"
             }, 
             {
                 "a": "point_3", 
@@ -99,16 +97,16 @@
                 "b": "point_2"
             }, 
             {
-                "a": "inga_walk_middle", 
-                "b": "point_3"
+                "a": "point_3", 
+                "b": "inga_walk_middle"
             }, 
             {
                 "a": "inga_walk_middle", 
                 "b": "point_2"
             }, 
             {
-                "a": "point_3", 
-                "b": "inga_walk_middle"
+                "a": "inga_walk_middle", 
+                "b": "point_3"
             }
         ]
     }
