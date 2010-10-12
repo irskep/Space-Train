@@ -21,6 +21,13 @@
             "name": "posters", 
             "start_state": "zeppelin"
         },
+        "baron_poster": {
+            "x": 365,
+            "y": -720,  
+            "scale": 1.0, 
+            "name": "posters", 
+            "start_state": "wanted"
+        },
         "stanislov": {
             "x": 1280,
             "y": 432,  
