@@ -21,6 +21,5 @@ def handle_event(event, *args):
     print "Handled", event, "with", args
 
 def actor_clicked(clicked_actor):
-    if clicked_actor.identifier == 'next_slide':
-        text.advance()
+    text.advance()
     # myscene.ui.show_cam(clicked_actor, actions)
