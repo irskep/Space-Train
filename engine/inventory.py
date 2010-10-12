@@ -30,7 +30,6 @@ class Inventory(object):
         self.batches['closed'] = pyglet.graphics.Batch()
         self.sprites['open'] = []
         self.sprites['closed'] = []
-
         self.batches['items'] = pyglet.graphics.Batch()
         
         self.items = {}

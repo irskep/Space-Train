@@ -1,0 +1,50 @@
+{
+    "environment": "the_vast_emptiness_of_space", 
+    "camera_points": {
+        "start": {
+            "y": 360, 
+            "x": 640
+        }
+    }, 
+    "actors": {
+        "train_poster": {
+            "x": 0,
+            "y": 360,  
+            "scale": 1.0, 
+            "name": "posters", 
+            "start_state": "train"
+        },
+        "zeppelin_poster": {
+            "x": 0,
+            "y": 360,  
+            "scale": 1.0, 
+            "name": "posters", 
+            "start_state": "zeppelin"
+        },
+        "baron_poster": {
+            "x": 365,
+            "y": -720,  
+            "scale": 1.0, 
+            "name": "posters", 
+            "start_state": "wanted"
+        },
+        "stanislov": {
+            "x": 1280,
+            "y": 432,  
+            "scale": 0.8, 
+            "name": "posters", 
+            "start_state": "stanislov"
+        },
+        "next_slide": {
+            "x": 1215,
+            "y": 55, 
+            "scale": 1.0, 
+            "name": "slide_click", 
+            "start_state": "normal"
+        }
+    }, 
+    "walkpath": {
+        "points": {}, 
+        "edges": []
+    }
+}

@@ -53,6 +53,8 @@ class Actor(actionsequencer.ActionSequencer):
     # Access
     
     def covers_point(self, x, y):
+        if not self.sprite.visible:
+            return False
         min_x = self.abs_position_x()
         min_y = self.abs_position_y()
         max_x = self.abs_position_x() + self.width()

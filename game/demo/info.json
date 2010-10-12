@@ -1,5 +1,5 @@
 {
-    "environment": "height_test", 
+    "environment": "basic", 
     "camera_points": {
         "start": {
             "y": 360, 
