@@ -67,4 +67,8 @@ def actor_clicked(clicked_actor):
 #return True when the actor can accept the item, and take the appropriate action for having been given that item
 #otherwise return False    
 def give_actor(actor, item):
-    return actor.identifier == 'main'
+    if actor.identifier == 'bean_salesman':
+        myscene.convo.begin_conversation('key_accept')
+        return True
+    else:
+        return False
