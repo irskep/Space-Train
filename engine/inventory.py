@@ -35,7 +35,7 @@ class Inventory(object):
         
         self.items = {}
         
-        self.width = 5
+        self.held_item = None
                 
         self.isopen = False
         
@@ -46,17 +46,21 @@ class Inventory(object):
         # Create the inventory open state now
         self.sprites['open'].append( util.load_sprite(['ui', 'purseopen.png'], x = gamestate.norm_w, y = gamestate.norm_h, batch = self.batches['open']) )
         self.translate_bottomleft_to_topright(self.sprites['open'])
+        
+        self.height = self.sprites['open'][0].height
 
         gamestate.event_manager.set_inventory(self)
     
     # inventory item interaction methods
     def put_item(self, actor):
         self.items[actor.identifier] = actor
-        self.items[actor.identifier].sprite.batch = self.batches['items']
+        self.items[actor.identifier].icon.batch = self.batches['items']
+        self.items[actor.identifier].sprite.batch = None
         self.update_item_positions()
 
     def get_item(self, identifier):
         self.items[identifier].sprite.batch = self.items[identifier].scene.batch
+        self.items[identifier].icon.batch = None
         ret = self.items[identifier]
         del self.items[identifier]
         self.update_item_positions()
@@ -67,14 +71,14 @@ class Inventory(object):
         inventory_height = self.sprites['open'][0].height
         inventory_y = self.sprites['open'][0].y
         for ident, item in self.items.iteritems():
-            sprite = item.sprite
+            sprite = item.icon
             # place the sprite appropriately
             sprite.x = leftmost_x - sprite.width
             sprite.y = inventory_y
             print "Sprite %s dimensions (%d, %d) position (%d, %d)" % (ident, sprite.width, sprite.height, sprite.x, sprite.y)
             leftmost_x -= sprite.width
     
-    #needs to go in util sometime
+    #needs to go in util sometime?
     def translate_bottomleft_to_topright(self, sprites):
         # translate everything to where it needs to be
         x_trans = 0
@@ -89,7 +93,7 @@ class Inventory(object):
     def on_mouse_release(self, x, y, button, modifiers):
         print "Inventory handling click at (%d, %d)" % (x, y)
         if self.intersects_active_area(x, y):
-            print "clix"
+            
             if(util.intersects_sprite(x, y, self.sprites['closed'][0])):
                 self.toggle()
             return pyglet.event.EVENT_HANDLED
