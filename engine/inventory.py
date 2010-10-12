@@ -32,6 +32,8 @@ class Inventory(object):
         self.sprites['closed'] = []
         self.batches['items'] = pyglet.graphics.Batch()
         
+        self.visible = True
+        
         self.items = {}
         
         self.held_item = None
@@ -90,7 +92,7 @@ class Inventory(object):
             sprite.y -= y_trans
     
     def on_mouse_release(self, x, y, button, modifiers):
-        if self.intersects_active_area(x, y):
+        if self.intersects_active_area(x, y) and self.visible:
             print "Inventory handling click at (%d, %d)" % (x, y)
             if(self.held_item is not None):
                 self.put_item(self.held_item)
@@ -108,6 +110,9 @@ class Inventory(object):
     
     def toggle(self):
         self.isopen = not self.isopen
+    
+    def set_visibility(self, visibile):
+        self.visibile = visibile
     
     def item_under_point(self, x, y):
         for id, item in self.items.iteritems():
@@ -133,8 +138,9 @@ class Inventory(object):
     # Render the inventory in the UI
     def draw(self, dt=0):
         #print self.isopen
-        if(self.isopen is False):
-            self.batches['closed'].draw()
-        else:
-            self.batches['open'].draw()
-            self.batches['items'].draw()
+        if(self.visible):
+            if(self.isopen is False):
+                self.batches['closed'].draw()
+            else:
+                self.batches['open'].draw()
+                self.batches['items'].draw()

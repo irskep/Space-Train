@@ -102,8 +102,9 @@ class Scene(interpolator.InterpolatorController):
         if clicked_actor:
             if(self.ui.inventory.held_item is not None):
                 if self.call_if_available('give_actor', clicked_actor, self.ui.inventory.held_item) is False:
-                    self.ui.inventory.put_item(self.held_item)
-                    self.ui.inventory.held_item = None
+                    print "Doing a thing"
+                    self.ui.inventory.put_item(self.ui.inventory.held_item)
+                self.ui.inventory.held_item = None
             else:
                 self.call_if_available('actor_clicked', clicked_actor)
         elif self.actors.has_key("main"):
