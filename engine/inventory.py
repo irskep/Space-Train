@@ -90,8 +90,8 @@ class Inventory(object):
             sprite.y -= y_trans
     
     def on_mouse_release(self, x, y, button, modifiers):
-        print "Inventory handling click at (%d, %d)" % (x, y)
         if self.intersects_active_area(x, y):
+            print "Inventory handling click at (%d, %d)" % (x, y)
             if(self.held_item is not None):
                 self.put_item(self.held_item)
                 self.held_item = None
