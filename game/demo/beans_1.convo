@@ -15,28 +15,26 @@ variables:
 # States
 
 start:
-    - - main
-      - I say old chap, you wouldn't happen to have any beans, would you?
-    - - bean_salesman
-      - Why yes ma'am, in fact I happen to be a bean salesman!
+    - main: I say old chap, you wouldn't happen to have any beans, would you?
+    - bean_salesman: Why yes ma'am, in fact I happen to be a bean salesman!
     - goto: main_choice
 
 main_choice:
     - update_animations: 
         speaking:
           main: talk_right
-    - - choice
-      - Can I have some beans?:
+    - choice:
+        Can I have some beans?:
           hide_after_use: true
           goto: ask_for_beans
         I hate bean salesmen!:
           hide_after_use: true
-          set_local: 
+          update_locals: 
             bean_hate: true
           goto: insult
         Why would I want beans?:
           hide_after_use: true
-          set_local: 
+          update_locals: 
             bean_interest: true
           goto: discuss_beans
         Tell me more about beans!:
@@ -44,39 +42,31 @@ main_choice:
           goto: discuss_beans
 
 discuss_beans:
-    - - bean_salesman
-      - I would be happy to tell you about the merits of beans!
-    - - main
-      - Go on...
-    - - bean_salesman
-      - Blah blah blah blah beans blah blah blah. Beans! Beans blah.
+    - bean_salesman: I would be happy to tell you about the merits of beans!
+    - main: Go on...
+    - bean_salesman: Blah blah blah blah beans blah blah blah. Beans! Beans blah.
     - update_animations:
         speaking:
           main: stand_front
-    - - main
-      - What an odd fellow.
+    - main: What an odd fellow.
     - goto: main_choice
 
 ask_for_beans:
-    - - main
-      - Could you spare this old woman a can of beans?
-    - - bean_salesman
-      - You got money?
-    - - choice
-      - No...:
+    - main: Could you spare this old woman a can of beans?
+    - bean_salesman: You got money?
+    - choice:
+        No...:
           hide_after_use: true
           goto: rejected
 
 rejected:
-    - - main
-      - I'm afraid not...
-    - - bean_salesman
-      - Then beat it!
-      - action: jump
+    - main: I'm afraid not...
+    - bean_salesman:
+        action: jump
+    - bean_salesman: Then beat it!
 
 insult:
-    - - main
-      - You're a poopy pants!
-    - - bean_salesman
-      - I don't sell to big meanies like you!
-      - action: jump
+    - main: You're a poopy pants!
+    - bean_salesman:
+        action: jump
+    - bean_salesman: I don't sell to big meanies like you!
