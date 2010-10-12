@@ -37,7 +37,9 @@
   title_text: WAS IST SPACE TRAIN?
   body_text: |
     • Point-and-click adventure
+    
     • Focus on storytelling, puzzle solving, humor
+    
     • Inspired by classic games such as Zork, 
         Monkey Island, and Myst
 
@@ -48,8 +50,10 @@
     • Train between Space Russia and Space 
         France is hijacked by German Space 
         Pirates led by Baron von Sniffmienschorts
+    
     • Kidnap of famous Russian poet Stanislov 
         Slavinsky
+    
     • Inga Borga, a spunky senior citizen, will 
         save the poet and Mother Russia
 
@@ -58,10 +62,13 @@
   title_text: Environment
   body_text: |
     • Futuristic (of course!)
+    
     • “Democratic USSR” - Cold War propaganda 
         style but for democracy
+    
     • New game areas unlocked by getting into
         train cars closer to the front
+    
 
 - title_pos: [0.1, 0.8]
   body_pos: [0.1, 0.7]

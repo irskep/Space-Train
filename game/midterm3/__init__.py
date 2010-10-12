@@ -69,6 +69,8 @@ def actor_clicked(clicked_actor):
         myscene.ui.show_cam(clicked_actor, {
             'Inquire about intentions': be_curious
         })
+    if clicked_actor.identifier == 'next_slide':
+        myscene.handler.notify('midterm4')
     
 #return True when the actor can accept the item, and take the appropriate action for having been given that item
 #otherwise return False    

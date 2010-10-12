@@ -28,6 +28,13 @@
             "x": 936, 
             "name": "key", 
             "start_state": "key"
+        },
+        "next_slide": {
+            "x": 2495,
+            "y": 55, 
+            "scale": 1.0, 
+            "name": "slide_click", 
+            "start_state": "normal"
         }
     }, 
     "walkpath": {

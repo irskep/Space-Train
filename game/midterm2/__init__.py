@@ -10,6 +10,7 @@ import text, inga_actions
 myscene = None
 
 def init():
+    myscene.ui.inventory.visible = True
     cart_lady = myscene.actors['cart_lady']
     cart_lady.prepare_walkpath_move('cart_lady_right')
     cart_lady.next_action()
