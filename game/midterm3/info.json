@@ -22,6 +22,12 @@
             "walkpath_point": "inga_walk_left", 
             "name": "inga", 
             "start_state": "stand_front"
+        },
+        "key_1": {
+            "y": 180, 
+            "x": 936, 
+            "name": "key", 
+            "start_state": "key"
         }
     }, 
     "walkpath": {

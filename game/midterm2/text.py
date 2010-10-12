@@ -6,16 +6,19 @@ l1 = None
 t1 = u"""Environment
   • Background/overlay
   • Scripted NPCs (cart lady)
-  • Walking on paths
-  
-  
-  
-  
-  
-                          Inventory ->"""
+  • Walking on paths"""
 
 l2 = None
-t2 = u"""Conversations"""
+t2 = u"""Interactions
+• Any object can display a 
+    contextual action menu
+• Objects can also pass into 
+    inventory
+• Objects in inventory can 
+    be 'given' to another 
+    object
+    
+        Follow the cart lady ->"""
 
 
 def init(myscene):

@@ -3,20 +3,25 @@
 import pyglet, yaml
 
 l1 = None
-t1 = u"""Environment
-  • Background/overlay
-  • Scripted NPCs (cart lady)
-  • Walking on paths
-  
-  
-  
-  
-  
-                          Inventory ->"""
+t1 = u"""Dialogue
+  • Characters can enter into
+      scripted conversations
+  • Plot, silliness, gaining
+      access to new areas
+  • Player can make 
+      decisions about what to
+      say"""
 
 l2 = None
-t2 = u"""Conversations"""
-
+t2 = u"""Backend
+  • Object placement is 
+      done via a graphical 
+      editor
+  • Animation sets, 
+      environments defined in
+      JSON text files
+  • This level script is ~90
+      lines of code"""
 
 def init(myscene):
     global l1
