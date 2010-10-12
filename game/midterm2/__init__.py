@@ -67,5 +67,4 @@ def actor_clicked(clicked_actor):
 #return True when the actor can accept the item, and take the appropriate action for having been given that item
 #otherwise return False    
 def give_actor(actor, item):
-    pass
-        
+    return actor.identifier == 'main'
