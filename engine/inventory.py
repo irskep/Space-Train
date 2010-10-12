@@ -32,6 +32,8 @@ class Inventory(object):
         self.sprites['closed'] = []
         self.batches['items'] = pyglet.graphics.Batch()
         
+        self.visible = True
+        
         self.items = {}
         
         self.held_item = None
@@ -109,6 +111,9 @@ class Inventory(object):
     def toggle(self):
         self.isopen = not self.isopen
     
+    def set_visibility(self, visibile):
+        self.visibile = visibile
+    
     def item_under_point(self, x, y):
         for id, item in self.items.iteritems():
             if item.icon_covers_point(x, y):
@@ -133,8 +138,9 @@ class Inventory(object):
     # Render the inventory in the UI
     def draw(self, dt=0):
         #print self.isopen
-        if(self.isopen is False):
-            self.batches['closed'].draw()
-        else:
-            self.batches['open'].draw()
-            self.batches['items'].draw()
+        if(self.visible):
+            if(self.isopen is False):
+                self.batches['closed'].draw()
+            else:
+                self.batches['open'].draw()
+                self.batches['items'].draw()
