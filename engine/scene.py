@@ -140,6 +140,9 @@ class Scene(interpolator.InterpolatorController):
         self.env.draw()
         self.batch.draw()
         
+        if self.actors.has_key('cart_lady'):
+            self.actors['cart_lady'].sprite.draw()
+        
         self.env.draw_overlay()
         self.convo.draw()
     
