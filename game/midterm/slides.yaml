@@ -1,0 +1,68 @@
+- title_pos: [0.55, 0.8]
+  body_pos: [0.55, 0.7]
+  title_text: Space Train
+  body_text: |
+
+- title_pos: [0.1, 0.8]
+  body_pos: [0.1, 0.7]
+  title_text: Team Space Train
+  call: hide_baron_show_stanislov
+  body_text: |
+    Artists:
+    • Kelsey Bass
+    • Drew Carrow
+    • Dylan Carrow
+    • Liz Keegan
+    • Susie Kim
+    • Vincent Pizarski
+
+- title_pos: [0.1, 0.8]
+  body_pos: [0.1, 0.7]
+  title_text: Team Space Train
+  body_text: |
+    Programmers:
+    • Steve Johnson
+    • Fred Hatfull
+    • Tyler Goeringer
+    • Sean Murphy
+
+- title_pos: [0.2, 0.8]
+  body_pos: [0.1, 0.7]
+  call: make_stanislov_big
+  title_text: WAS IST SPACE TRAIN?
+
+- title_pos: [0.2, 0.8]
+  body_pos: [0.1, 0.7]
+  call: hide_stanislov_again
+  title_text: WAS IST SPACE TRAIN?
+  body_text: |
+    • Point-and-click adventure
+    • Focus on storytelling, puzzle solving, humor
+    • Inspired by classic games such as Zork, 
+        Monkey Island, and Myst
+
+- title_pos: [0.1, 0.8]
+  body_pos: [0.1, 0.7]
+  title_text: Backstory
+  body_text: |
+    • Train between Space Russia and Space 
+      France is hijacked by German Space 
+      Pirates led by Baron von Sniffmienschorts
+    • Kidnap of famous Russian poet Stanislov 
+      Slavinsky
+    • Inga Borga, a spunky senior citizen, will 
+      save the poet and Mother Russia
+
+- title_pos: [0.1, 0.8]
+  body_pos: [0.1, 0.7]
+  title_text: Environment
+  body_text: |
+    • Futuristic (of course!)
+    • “Democratic USSR” - Cold War propaganda 
+      style but for democracy
+    • New game areas unlocked by getting into
+      train cars closer to the front
+
+- title_pos: [0.1, 0.8]
+  body_pos: [0.1, 0.7]
+  call: the_zeppelin

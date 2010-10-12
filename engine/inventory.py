@@ -30,6 +30,7 @@ class Inventory(object):
         self.batches['closed'] = pyglet.graphics.Batch()
         self.sprites['open'] = []
         self.sprites['closed'] = []
+        self.visible = True
         
         self.width = 5
                 
@@ -79,7 +80,8 @@ class Inventory(object):
     # Render the inventory in the UI
     def draw(self, dt=0):
         #print self.isopen
-        if(self.isopen is False):
-            self.batches['closed'].draw()
-        else:
-            self.batches['open'].draw()
+        if self.visible:
+            if(self.isopen is False):
+                self.batches['closed'].draw()
+            else:
+                self.batches['open'].draw()
