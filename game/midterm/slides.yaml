@@ -70,3 +70,12 @@
 - title_pos: [0.1, 0.8]
   body_pos: [0.1, 0.7]
   call: the_baron
+
+- title_pos: [0.2, 0.8]
+  body_pos: [0.1, 0.7]
+  call: hide_baron
+  title_text: DEMO TIME
+
+- title_pos: [0.1, 0.8]
+  body_pos: [0.1, 0.7]
+  call: go_to_demo

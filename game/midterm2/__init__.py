@@ -27,6 +27,8 @@ def inga_walk(actor, point):
     if point == 'inga_walk_middle':
         myscene.convo.begin_conversation('beans_1')
         bean_salesman = myscene.actors['bean_salesman']
+    elif point == 'inga_walk_right':
+        myscene.handler.notify('midterm3')
 
 def end_conversation(convo_name):
     myscene.actors['main'].update_state('stand_front')
@@ -52,8 +54,7 @@ def actor_clicked(clicked_actor):
             'Eat': inga_actions.eat,
             'Pray': inga_actions.pray,
             'Love': inga_actions.love,
-            'Kill': inga_actions.kill,
-            'Next slide': text.advance
+            'Jump': clicked_actor.jump
         }
         myscene.ui.show_cam(clicked_actor, actions)
     if clicked_actor.identifier == 'key_1':

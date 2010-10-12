@@ -89,3 +89,11 @@ def the_baron():
     baron = myscene.actors['baron_poster']
     interp = Linear2DInterpolator(baron.sprite, 'position', (baron.sprite.x, 360), duration=1.0)
     myscene.add_interpolator(interp)
+
+def hide_baron():
+    interp = LinearInterpolator(myscene.actors['baron_poster'].sprite, 
+                                'opacity', end=0, start=255, duration=1.0)
+    myscene.add_interpolator(interp)
+
+def go_to_demo():
+    myscene.handler.notify('midterm2')

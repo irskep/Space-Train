@@ -1,17 +1,11 @@
 import pyglet, yaml
 
-l = None
-slides = []
-slide_number = 0
+l1 = None
+t1 = """Backgrounds"""
+
 
 def init(myscene):
-    global l, slides
-    slides = yaml.load(pyglet.resource.file(myscene.resource_path('slides.yaml'), 'r'))
-    l = pyglet.text.Label(text=slides[0], x=200, y=520, width=880, height=320, 
-                          font_name="Gill Sans", font_size=36, color=(255,0,255,255),
+    global l1
+    l1 = pyglet.text.Label(text=t1, x=350, y=675, width=600, height=5500, 
+                          font_name="Helvetica", font_size=36, color=(0,0,0,255),
                           multiline=True, batch=myscene.batch)
-
-def advance():
-    global slide_number
-    slide_number = (slide_number + 1) % len(slides)
-    l.text = slides[slide_number]
