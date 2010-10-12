@@ -145,6 +145,7 @@ class PulseInterpolator(Interpolator):
     def __init__(self, host_object, attr_name, inner, outer, **kwargs):
         self.inner = inner
         self.spread = outer - inner
+        self.stop = False
         super(PulseInterpolator, self).__init__(host_object, attr_name, 
                                                start=0.0, end=math.pi*2, **kwargs)
         self.update(0.0)
@@ -155,5 +156,5 @@ class PulseInterpolator(Interpolator):
                 self.inner + math.sin(self.progress*self.speed)*self.spread)
     
     def complete(self):
-        return False
+        return self.stop
     

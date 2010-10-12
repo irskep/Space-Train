@@ -1,4 +1,4 @@
-- title_pos: [0.55, 0.8]
+- title_pos: [0.35, 0.08]
   body_pos: [0.55, 0.7]
   title_text: Space Train
   body_text: |
@@ -59,6 +59,7 @@
 
 - title_pos: [0.1, 0.8]
   body_pos: [0.1, 0.7]
+  call: kidnap
   title_text: Environment
   body_text: |
     • Futuristic (of course!)
