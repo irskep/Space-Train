@@ -57,8 +57,8 @@ def advance():
     if this_slide.has_key('call'):
         globals()[this_slide['call']]()
 
-def hide_baron_show_stanislov():
-    myscene.actors['baron_poster'].sprite.visible = False
+def hide_poster_show_stanislov():
+    myscene.actors['train_poster'].sprite.visible = False
     
     stan = myscene.actors['stanislov']
     interp = Linear2DInterpolator(stan.sprite, 'position', (1000, stan.sprite.y), speed=400.0)

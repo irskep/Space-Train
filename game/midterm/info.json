@@ -7,12 +7,12 @@
         }
     }, 
     "actors": {
-        "baron_poster": {
+        "train_poster": {
             "x": 0,
             "y": 360,  
             "scale": 1.0, 
             "name": "posters", 
-            "start_state": "wanted"
+            "start_state": "train"
         },
         "zeppelin_poster": {
             "x": 0,

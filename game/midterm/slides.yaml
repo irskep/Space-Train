@@ -6,7 +6,7 @@
 - title_pos: [0.1, 0.8]
   body_pos: [0.1, 0.7]
   title_text: Team Space Train
-  call: hide_baron_show_stanislov
+  call: hide_poster_show_stanislov
   body_text: |
     Artists:
     • Kelsey Bass
