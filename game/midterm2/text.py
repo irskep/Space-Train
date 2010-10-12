@@ -1,13 +1,21 @@
+ # -*- coding: utf-8 -*-
+
 import pyglet, yaml
 
 l1 = None
-t1 = """Environment
-  • Background
+t1 = u"""Environment
+  • Background/overlay
   • Scripted NPCs (cart lady)
-  • Walking"""
+  • Walking on paths
+  
+  
+  
+  
+  
+                          Inventory ->"""
 
 l2 = None
-t2 = """Conversations"""
+t2 = u"""Conversations"""
 
 
 def init(myscene):
