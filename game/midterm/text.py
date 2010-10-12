@@ -32,7 +32,7 @@ def advance():
     slide_number = (slide_number + 1) % len(slides)
     this_slide = slides[slide_number]
     
-    print slide_number
+    print 'slide', slide_number
     
     if this_slide.has_key('title_pos'):
         tx, ty = this_slide['title_pos']
@@ -83,6 +83,9 @@ def the_zeppelin():
     myscene.actors['zeppelin_poster'].sprite.visible = True
 
 def the_baron():
+    interp = LinearInterpolator(myscene.actors['zeppelin_poster'].sprite, 
+                                'opacity', end=0, start=255, duration=1.0)
+    myscene.add_interpolator(interp)
     baron = myscene.actors['baron_poster']
-    interp = Linear2DInterpolator(baron.sprite, 'position', (baron.sprite.x, 0), duration=1.0)
+    interp = Linear2DInterpolator(baron.sprite, 'position', (baron.sprite.x, 360), duration=1.0)
     myscene.add_interpolator(interp)
