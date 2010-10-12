@@ -59,7 +59,7 @@ class Inventory(object):
         self.update_item_positions()
 
     def get_item(self, identifier):
-        self.items[identifier].sprite.batch = self.items[identifier].scene.batch
+        #self.items[identifier].sprite.batch = self.items[identifier].scene.batch
         self.items[identifier].icon.batch = None
         ret = self.items[identifier]
         del self.items[identifier]
@@ -93,9 +93,15 @@ class Inventory(object):
     def on_mouse_release(self, x, y, button, modifiers):
         print "Inventory handling click at (%d, %d)" % (x, y)
         if self.intersects_active_area(x, y):
-            
-            if(util.intersects_sprite(x, y, self.sprites['closed'][0])):
-                self.toggle()
+            if(self.held_item is not None):
+                self.put_item(self.held_item)
+                self.held_item = None
+            else:
+                clicked_item = self.item_under_point(x, y)
+                if(clicked_item is not None):
+                    self.held_item = self.get_item(clicked_item.identifier)
+                if(util.intersects_sprite(x, y, self.sprites['closed'][0])):
+                    self.toggle()
             return pyglet.event.EVENT_HANDLED
         else:
             return pyglet.event.EVENT_UNHANDLED
@@ -103,7 +109,13 @@ class Inventory(object):
     
     def toggle(self):
         self.isopen = not self.isopen
-        
+    
+    def item_under_point(self, x, y):
+        for id, item in self.items.iteritems():
+            if item.icon_covers_point(x, y):
+                    return item
+        return None
+    
     def intersects_active_area(self, x, y):
         sprite_list = []
         sprites = (self.sprites['open'] if self.isopen else self.sprites['closed'])
@@ -114,9 +126,9 @@ class Inventory(object):
                 return True
                 
         if self.isopen:
-            for id, item in self.items.iteritems():
-                if item.covers_point(x, y):
-                    return True
+            if(self.item_under_point(x, y) is not None):
+                return True
+                
         return False 
         
     # Render the inventory in the UI

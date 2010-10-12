@@ -63,4 +63,9 @@ def actor_clicked(clicked_actor):
             'Throw': None
         }
         myscene.ui.show_cam(clicked_actor, actions)
+    
+#return True when the actor can accept the item, and take the appropriate action for having been given that item
+#otherwise return False    
+def give_actor(actor, item):
+    pass
         
