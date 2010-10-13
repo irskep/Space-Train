@@ -20,7 +20,7 @@ for location in resource_locations:
     else:
         try:
             from Carbon import File
-            fs, _, _ = File.ResolveAliasFile('resources',1)
+            fs, _, _ = File.ResolveAliasFile('location',1)
             settings.resources_path = fs.as_pathname()
             break
         except:
