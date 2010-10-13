@@ -5,7 +5,8 @@ from util import settings
 #Bootstrap's bootstraps
 
 resource_locations = [
-    os.path.join(os.path.dirname(__file__), r"resources"),   # the 'r' turns off escape sequences
+    os.path.join(os.path.dirname(__file__), r"resources"),
+    os.path.join(os.path.dirname(__file__), r"resources_repo"),
     r"C:\Users\Fred\Documents\My Dropbox\resources",
     r"/Users/stephen/Dropbox/resources",
     r"C:\Users\Tyler\Documents\My Dropbox\resources",
