@@ -26,7 +26,7 @@ def cart_lady_walk(actor, point):
 
 def inga_walk(actor, point):
     if point == 'inga_walk_right':
-        myscene.handler.notify('midterm3')
+        myscene.handler.notify('midterm3', 2)
 
 def ask_about_beans():
     myscene.convo.begin_conversation('beans_1')
