@@ -62,6 +62,20 @@ class Interpolator(object):
         return fmt % (self.name, str(self.host_object), self.attr_name, 
                       self.start, self.end, self.duration)
     
+class GroupInterpolator(object):
+    def __init__(self, done_function=None, *args):
+        self.interpolators = list()
+        for interp in args:
+            self.interpolators.append(interp)
+            
+    def complete(self):
+        for interp in self.interpolators:
+            if(interp.progress < interp.duration):
+                return False
+        
+    def update(self, dt=0):
+        for interp in self.interpolators:
+            interp.update(dt)
 
 class LinearInterpolator(Interpolator):
     def __init__(self, *args, **kwargs):
@@ -76,7 +90,6 @@ class LinearInterpolator(Interpolator):
         fmt = "LinearInterpolator '%s' on %s.%s from %0.2f to %0.2f taking %0.2f seconds)"
         return fmt % (self.name, str(self.host_object), self.attr_name, 
                       self.start, self.end, self.duration)
-    
 
 class Linear2DInterpolator(Interpolator):
     def __init__(self, host_object, attr_name, end_tuple, name="position", 
