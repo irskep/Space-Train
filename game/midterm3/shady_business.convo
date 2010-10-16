@@ -1,0 +1,26 @@
+# Initialization
+
+at_rest:
+    main: stand_right
+    kidnapper: stand_front
+
+speaking:
+    main: talk_right
+    kidnapper: stand_front
+
+variables:
+    bean_hate: false
+    bean_interest: false
+
+# States
+
+start:
+    - main: Hi there! What are you doing on this train?
+    - kidnapper: I am...tourist. Yes, I see the sights.
+    - main: How interesting! What sights will you see?
+    - kidnapper: I wish to see...ice cream shops. Yes, ice cream shops.
+    - main: How interesting!
+    - update_animations:
+        speaking:
+          main: stand_front
+    - main: I don't think he's telling me the truth...

@@ -36,29 +36,29 @@
                 "y": 143, 
                 "x": 1294
             }, 
-            "cart_lady_right": {
-                "y": 60, 
-                "x": 2860
+            "inga_walk_left": {
+                "y": 143, 
+                "x": 569
             }, 
             "cart_lady_left": {
                 "y": 60, 
                 "x": -300
             }, 
             "inga_walk_right": {
-                "y": 143, 
-                "x": 1956
+                "y": 95, 
+                "x": 2542
             }, 
-            "point_1": {
-                "y": 137, 
-                "x": 202
+            "cart_lady_right": {
+                "y": 60, 
+                "x": 2860
             }, 
             "point_2": {
-                "y": 143.0, 
-                "x": 884.0
-            }, 
-            "inga_walk_left": {
                 "y": 143, 
-                "x": 569
+                "x": 884
+            }, 
+            "point_3": {
+                "y": 143.0, 
+                "x": 2105.0
             }
         }, 
         "edges": [
@@ -72,31 +72,43 @@
             }, 
             {
                 "a": "inga_walk_right", 
-                "b": "inga_walk_middle"
+                "b": "point_3"
             }, 
             {
                 "a": "cart_lady_left", 
                 "b": "cart_lady_right"
             }, 
             {
-                "a": "inga_walk_middle", 
+                "a": "point_3", 
                 "b": "inga_walk_right"
             }, 
             {
-                "a": "inga_walk_left", 
-                "b": "point_2"
-            }, 
-            {
-                "a": "inga_walk_left", 
-                "b": "point_2"
-            }, 
-            {
-                "a": "inga_walk_middle", 
-                "b": "point_2"
+                "a": "point_3", 
+                "b": "inga_walk_right"
             }, 
             {
                 "a": "point_2", 
                 "b": "inga_walk_left"
+            }, 
+            {
+                "a": "inga_walk_right", 
+                "b": "point_3"
+            }, 
+            {
+                "a": "inga_walk_left", 
+                "b": "point_2"
+            }, 
+            {
+                "a": "inga_walk_middle", 
+                "b": "point_3"
+            }, 
+            {
+                "a": "inga_walk_middle", 
+                "b": "point_2"
+            }, 
+            {
+                "a": "point_3", 
+                "b": "inga_walk_middle"
             }
         ]
     }

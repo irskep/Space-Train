@@ -1,0 +1,13 @@
+at_rest:
+    main: stand_right
+    kidnapper: stand_front
+
+speaking:
+    main: talk_right
+    kidnapper: stand_front
+
+variables:
+    dummy: true
+    
+start:
+    - kidnapper: Thank you. I will use this for my tourism.

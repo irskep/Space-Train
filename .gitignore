@@ -6,3 +6,9 @@ coder_art/
 *.tmproj
 *~
 
+yaml/
+build/
+copyresources.sh
+dist/
+resources_repo
+

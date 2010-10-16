@@ -19,7 +19,8 @@ class AdventureWindow(pyglet.window.Window):
     """
     Basic customizations to Window, plus configuration.
     """
-    def __init__(self, reset_save=False):
+    def __init__(self, reset_save=False, reset_at_scene=None):
+        reset_save = reset_save or reset_at_scene
         if util.settings.fullscreen:
             super(AdventureWindow,self).__init__(fullscreen=True, vsync=True)
         else:
@@ -37,6 +38,8 @@ class AdventureWindow(pyglet.window.Window):
         with pyglet.resource.file(util.respath('game', 'info.json'), 'r') as game_info_file:
             game_info = json.load(game_info_file)
             game_info['reset_save'] = reset_save
+            if reset_at_scene:
+                game_info['first_scene'] = reset_at_scene
             self.set_caption(game_info["name"])
             self.game_handler = gamehandler.GameHandler(**game_info)
         
@@ -63,8 +66,11 @@ class AdventureWindow(pyglet.window.Window):
 
 def run_game():
     sys.path.append(os.path.join(os.path.dirname(__file__), 'game'))
-    if len(sys.argv) == 2 and sys.argv[1] == 'newgame':
-        main_window = AdventureWindow(True)
+    if len(sys.argv) == 2:
+        if sys.argv[1] == 'newgame':
+            main_window = AdventureWindow(True)
+        else:
+            main_window = AdventureWindow(True, sys.argv[1])
     else:
         main_window = AdventureWindow(False)
     pyglet.app.run()

@@ -42,25 +42,41 @@ class CAM(object):
         sprite_batch = pyglet.graphics.Batch()
         sprites = {i: util.load_sprite(['ui', 'new_cam_%d.png' % i], batch = self.batch)
                     for i in xrange(1,7)}
+        for s in sprites.viewvalues():
+            s.anchor_x = s.width
 
         positioning = {}
-        positioning[1] = (90,187)
-        positioning[2] = (80,155)
-        positioning[3] = (70,120)
-        positioning[4] = (70,84)
-        positioning[5] = (80,48)
-        positioning[6] = (90,17)
+        # positioning[1] = (150,187)
+        # positioning[2] = (140,155)
+        # positioning[3] = (130,120)
+        # positioning[4] = (130,84)
+        # positioning[5] = (140,48)
+        # positioning[6] = (150,17)
+        positioning[1] = (280,187)
+        positioning[2] = (265,155)
+        positioning[3] = (260,120)
+        positioning[4] = (260,84)
+        positioning[5] = (265,48)
+        positioning[6] = (280,17)
         
         y -= sprites[1].height/2
                 
+        #defines the generic order in which CAM backrounds are used
+        generic_item_order = [3, 4, 2, 5, 1, 6]
+        
+        used_items = []
+        for action, callback in self.actions.items():
+            used_items.append(generic_item_order.pop(0))
+            
+        used_items.sort()
+                
         # Turn each action entry into a menu item
-        count = 1
-
-        for action, callback in self.actions.items():      
-            button = self.Button(x, y, positioning[count][0], positioning[count][1],
+        for action, callback in self.actions.items():  
+            count = used_items.pop(0)
+            button = self.Button(x-sprites[1].width/3, y, 
+                                 positioning[count][0], positioning[count][1],
                                  sprites[count], action, callback)
             self.buttons.append(button)
-            count += 1
         
         self.set_visible(True)
         
@@ -121,7 +137,7 @@ class CAM(object):
             self.sprite.x = x
             self.sprite.y = y
             self.label = pyglet.text.Label(action, font_name = 'Times New Roman', 
-                                           font_size = 14, anchor_x = 'center', 
+                                           font_size = 14, anchor_x = 'right', 
                                            anchor_y = 'center', batch = self.sprite.batch, 
                                            color = (0, 0, 0, 255),
                                            x = self.sprite.x + text_x, 

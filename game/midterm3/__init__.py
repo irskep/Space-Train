@@ -24,9 +24,12 @@ def cart_lady_walk(actor, point):
         print 'unknown cart lady event'
 
 def inga_walk(actor, point):
-    if point == 'inga_walk_middle':
-        myscene.convo.begin_conversation('beans_1')
-        bean_salesman = myscene.actors['bean_salesman']
+    if point == 'inga_walk_way_left':
+        myscene.handler.notify('midterm2')
+
+def be_curious():
+    myscene.convo.begin_conversation('shady_business')
+    kidnapper = myscene.actors['kidnapper']
 
 def end_conversation(convo_name):
     myscene.actors['main'].update_state('stand_front')
@@ -52,8 +55,7 @@ def actor_clicked(clicked_actor):
             'Eat': inga_actions.eat,
             'Pray': inga_actions.pray,
             'Love': inga_actions.love,
-            'Kill': inga_actions.kill,
-            'Next slide': text.advance
+            'Jump': clicked_actor.jump
         }
         myscene.ui.show_cam(clicked_actor, actions)
     if clicked_actor.identifier == 'key_1':
@@ -63,8 +65,18 @@ def actor_clicked(clicked_actor):
             'Throw': None
         }
         myscene.ui.show_cam(clicked_actor, actions)
+    if clicked_actor.identifier == 'kidnapper':
+        myscene.ui.show_cam(clicked_actor, {
+            'Inquire about intentions': be_curious
+        })
+    if clicked_actor.identifier == 'next_slide':
+        myscene.handler.notify('midterm4')
     
 #return True when the actor can accept the item, and take the appropriate action for having been given that item
 #otherwise return False    
 def give_actor(actor, item):
-    return actor.identifier == 'main'
+    if actor.identifier == 'kidnapper':
+        myscene.convo.begin_conversation('key_accept')
+        return True
+    else:
+        return False

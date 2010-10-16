@@ -10,6 +10,7 @@ import text, inga_actions
 myscene = None
 
 def init():
+    myscene.ui.inventory.visible = True
     cart_lady = myscene.actors['cart_lady']
     cart_lady.prepare_walkpath_move('cart_lady_right')
     cart_lady.next_action()
@@ -24,9 +25,12 @@ def cart_lady_walk(actor, point):
         print 'unknown cart lady event'
 
 def inga_walk(actor, point):
-    if point == 'inga_walk_middle':
-        myscene.convo.begin_conversation('beans_1')
-        bean_salesman = myscene.actors['bean_salesman']
+    if point == 'inga_walk_right':
+        myscene.handler.notify('midterm3')
+
+def ask_about_beans():
+    myscene.convo.begin_conversation('beans_1')
+    bean_salesman = myscene.actors['bean_salesman']
 
 def end_conversation(convo_name):
     myscene.actors['main'].update_state('stand_front')
@@ -52,8 +56,7 @@ def actor_clicked(clicked_actor):
             'Eat': inga_actions.eat,
             'Pray': inga_actions.pray,
             'Love': inga_actions.love,
-            'Kill': inga_actions.kill,
-            'Next slide': text.advance
+            'Jump': clicked_actor.jump
         }
         myscene.ui.show_cam(clicked_actor, actions)
     if clicked_actor.identifier == 'key_1':
@@ -63,8 +66,16 @@ def actor_clicked(clicked_actor):
             'Throw': None
         }
         myscene.ui.show_cam(clicked_actor, actions)
+    if clicked_actor.identifier == 'bean_salesman':
+        myscene.ui.show_cam(clicked_actor, {
+            'Ask about beans': ask_about_beans
+        })
     
 #return True when the actor can accept the item, and take the appropriate action for having been given that item
 #otherwise return False    
 def give_actor(actor, item):
-    return actor.identifier == 'main'
+    if actor.identifier == 'bean_salesman':
+        myscene.convo.begin_conversation('key_accept')
+        return True
+    else:
+        return False
