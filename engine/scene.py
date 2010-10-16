@@ -11,7 +11,7 @@ class Scene(interpolator.InterpolatorController):
     
     # Initialization
     
-    def __init__(self, name, scene_handler=None, ui=None, load_path=None, paused=False):
+    def __init__(self, name, scene_handler=None, ui=None, load_path=None):
         super(Scene, self).__init__()
         self.name = name
         self.handler = scene_handler
@@ -22,8 +22,8 @@ class Scene(interpolator.InterpolatorController):
         
         self.game_time = 0.0
         self.accum_time = 0.0
-        self.clock = pyglet.clock.Clock(time_function=lambda: self.game_time) 
-        self.paused = paused
+        self.clock = pyglet.clock.Clock(time_function=lambda: self.game_time)
+        self.paused = False
         self.highest_group = 0
         self.groups = []
         self.x_offset = 0.0
@@ -166,6 +166,10 @@ class Scene(interpolator.InterpolatorController):
                 main.next_action()
             if main.prepare_move(*self.camera.mouse_to_canvas(x, y)):
                 main.next_action()
+                
+    def pause(self):
+        self.paused = True
+        print "%s is paused." % self.name
     
     
     # Update/draw
@@ -190,7 +194,7 @@ class Scene(interpolator.InterpolatorController):
     
     @camera.obey_camera
     def draw(self, dt=0):
-        pyglet.gl.glTranslatef(x_offset, y_offset, 0)
+        pyglet.gl.glTranslatef(self.x_offset, self.y_offset, 0)
         for act in self.actors.viewvalues():
             if act.__above and act.__above.sprite.y > act.sprite.y:
                 self.swap_actor_up(act)
