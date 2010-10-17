@@ -12,6 +12,7 @@ import pyglet
 
 import gamestate, actionsequencer, util, interpolator, scene
 
+FADE = 0
 UP = 1
 RIGHT = 2
 DOWN = 3
@@ -50,17 +51,17 @@ class SceneHandler(actionsequencer.ActionSequencer):
 
     # Called by a scene to load a new scene.
     # If dir is specified a sliding transition is used
-    def notify(self, next_scene, dir=0):
+    def notify(self, next_scene, direction=FADE):
         if self.handler.ui.cam is not None:
             self.handler.ui.cam.set_visible(False)
         
         if next_scene is None:
             self.handler.prompt_save_and_quit()
         else:
-            if(dir == 0):
+            if direction == FADE:
                 self.fade_to(next_scene)
             else:
-                self.slide_to(next_scene, dir)
+                self.slide_to(next_scene, direction)
             
     # For direction 1 is up, 2 is right, 3 is down, 4 is left
     def slide_to(self, next_scene, direction=RIGHT):
@@ -70,13 +71,13 @@ class SceneHandler(actionsequencer.ActionSequencer):
         slide_scene.pause()
         self.set_scenes(self.scene, slide_scene)
         # Determine offset
-        if(direction == UP):
+        if direction == UP:
             slide_scene.y_offset = gamestate.norm_h
-        elif(direction == RIGHT):
+        elif direction == RIGHT:
             slide_scene.x_offset = gamestate.norm_w
-        elif(direction == DOWN):
+        elif direction == DOWN:
             slide_scene.y_offset = -gamestate.norm_h
-        elif(direction == LEFT):
+        elif direction == LEFT:
             slide_scene.x_offset = -gamestate.norm_w
         
         def slide(ending_action=None):
