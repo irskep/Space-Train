@@ -36,7 +36,6 @@ class Scene(object):
         self.ui = ui
         self.actors = {}
         self.camera_points = {}
-        self.interp = interpolator.InterpolatorController()
         
         self.paused = False
         self.x_offset = 0.0
@@ -44,10 +43,11 @@ class Scene(object):
         
         self.resource_path = util.respath_func_with_base_path('game', self.name)
         
-        self.init_convenience_bindings()
         self.init_clock()
         self.init_zenforcer()
+        self.interp = interpolator.InterpolatorController()
         self.convo = convo.Conversation(self)
+        self.init_convenience_bindings()
         
         self.load_info(load_path)
         self.initialize_from_info()
@@ -120,7 +120,7 @@ class Scene(object):
             
         self.module.handle_event(event, *args)
     
-    def call_if_available(self, func_name, *args, **kwargs):            
+    def call_if_available(self, func_name, *args, **kwargs):
         if hasattr(self.module, func_name):
             return getattr(self.module, func_name)(*args, **kwargs)
         else:
@@ -206,6 +206,7 @@ class Scene(object):
             self.game_time += update_t
             self.clock.tick() 
             self.accum_time -= update_t
+    
     
     # Serialization
     
