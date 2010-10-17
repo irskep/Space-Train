@@ -5,7 +5,7 @@ from util import walkpath
 
 import cam, environment, gamehandler, scenehandler
 
-update_t = 1/60.0
+update_t = 1/120.0
 
 class ClipGroup(pyglet.graphics.OrderedGroup): 
     """Sprite group that clips to a rectangle"""
@@ -13,6 +13,7 @@ class ClipGroup(pyglet.graphics.OrderedGroup):
                  x=0, y=0, w=gamestate.norm_w, h=gamestate.norm_h):
         super(ClipGroup, self).__init__(order, parent)
         self.x, self.y, self.w, self.h = x, y, w, h
+        # Some kind of weird ctypes issue here, need to re-cast
         self.x, self.y, self.w, self.h = [int(i) for i in (self.x, self.y, self.w, self.h)]
     
     def set_state(self):
@@ -22,7 +23,7 @@ class ClipGroup(pyglet.graphics.OrderedGroup):
     def unset_state(self): 
         pyglet.gl.glDisable(pyglet.gl.GL_SCISSOR_TEST)
 
-class Scene(interpolator.InterpolatorController):
+class Scene(object):
     
     # Initialization
     
@@ -35,10 +36,8 @@ class Scene(interpolator.InterpolatorController):
         self.ui = ui
         self.actors = {}
         self.camera_points = {}
+        self.interp = interpolator.InterpolatorController()
         
-        self.game_time = 0.0
-        self.accum_time = 0.0
-        self.clock = pyglet.clock.Clock(time_function=lambda: self.game_time)
         self.paused = False
         self.highest_group = 0
         self.groups = []
@@ -49,6 +48,9 @@ class Scene(interpolator.InterpolatorController):
         
         self.resource_path = util.respath_func_with_base_path('game', self.name)
         
+        self.init_convenience_bindings()
+        self.init_clock()
+        
         self.load_info(load_path)
         self.initialize_from_info()
         self.load_actors()
@@ -56,6 +58,9 @@ class Scene(interpolator.InterpolatorController):
         
         if gamestate.scripts_enabled:
             self.load_script()
+    
+    def init_convenience_bindings(self):
+        self.add_interpolator = self.interp.add_interpolator
     
     def initialize_from_info(self):
         """Initialize objects specified in info.json"""
@@ -203,19 +208,12 @@ class Scene(interpolator.InterpolatorController):
         if self.paused: 
             return
         
-        # Align updates to fixed timestep 
-        self.accum_time += dt 
-        if self.accum_time > update_t * 3: 
-            self.accum_time = update_t 
-        while self.accum_time >= update_t: 
-            self.game_time += update_t
-            self.clock.tick() 
-            self.accum_time -= update_t
+        self.update_clock(dt)
         
         if self.actors.has_key('main'):
             self.camera.set_target(self.actors["main"].sprite.x, self.actors["main"].sprite.y)
         self.camera.update(dt)
-        self.update_interpolators(dt)
+        self.interp.update_interpolators(dt)
     
     @camera.obey_camera
     def draw(self, dt=0):
@@ -234,6 +232,24 @@ class Scene(interpolator.InterpolatorController):
         self.convo.draw()
         
         pyglet.gl.glPopMatrix()
+    
+    
+    # Clock
+    
+    def init_clock(self):
+        self.game_time = 0.0
+        self.accum_time = 0.0
+        self.clock = pyglet.clock.Clock(time_function=lambda: self.game_time)
+    
+    def update_clock(self, dt=0):
+        # Align updates to fixed timestep 
+        self.accum_time += dt 
+        if self.accum_time > update_t * 3: 
+            self.accum_time = update_t 
+        while self.accum_time >= update_t: 
+            self.game_time += update_t
+            self.clock.tick() 
+            self.accum_time -= update_t
     
     # Serialization
     
