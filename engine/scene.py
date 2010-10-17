@@ -135,9 +135,12 @@ class Scene(interpolator.InterpolatorController):
     # Script interaction
     
     def fire_adv_event(self, event, *args):
+        if self.paused:
+            return
+            
         self.module.handle_event(event, *args)
     
-    def call_if_available(self, func_name, *args, **kwargs):
+    def call_if_available(self, func_name, *args, **kwargs):            
         if hasattr(self.module, func_name):
             return getattr(self.module, func_name)(*args, **kwargs)
         else:
@@ -150,6 +153,9 @@ class Scene(interpolator.InterpolatorController):
         self.call_if_available('transition_from', old_scene_name)
     
     def on_mouse_release(self, x, y, button, modifiers):
+        if self.paused:
+            return
+            
         clicked_actor = self.actor_under_point(*self.camera.mouse_to_canvas(x, y))
         
         if clicked_actor:
@@ -171,6 +177,9 @@ class Scene(interpolator.InterpolatorController):
         self.paused = True
         print "%s is paused." % self.name
     
+    def resume(self):
+        self.paused = False
+        print "%s has resumed." % self.name
     
     # Update/draw
     
@@ -203,7 +212,6 @@ class Scene(interpolator.InterpolatorController):
         
         self.env.draw_overlay()
         self.convo.draw()
-    
     
     # Serialization
     

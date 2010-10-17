@@ -29,6 +29,7 @@ class SceneHandler(actionsequencer.ActionSequencer):
     
     def set_first_scene(self, scn):
         self.scene = scn
+        self.scene.load_script()
         gamestate.event_manager.set_scene(self.scene)
     
     def __repr__(self):
@@ -72,7 +73,7 @@ class SceneHandler(actionsequencer.ActionSequencer):
             else:
                 interp1 = InterpClass(self.scene, 'x_offset', end=-slide_scene.x_offset, duration=2*self.fade_time)
                 interp2 = InterpClass(slide_scene, 'x_offset', end=0, duration=2*self.fade_time, done_function=self.next_action())
-
+                
             self.controller.add_interpolator(interp1)
             self.controller.add_interpolator(interp2)
             
@@ -81,7 +82,7 @@ class SceneHandler(actionsequencer.ActionSequencer):
             self.scene.exit()
             slide_scene.transition_from(self.scene.name)
             self.scene = slide_scene
-            slide_scene.paused=False
+            self.scene.resume()
             self.next_action()
             
         def complete_transition(ending_action=None):
