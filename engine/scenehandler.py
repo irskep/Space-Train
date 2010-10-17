@@ -20,7 +20,8 @@ LEFT = 4
 class SceneHandler(actionsequencer.ActionSequencer):
     def __init__(self, game_handler):
         super(SceneHandler, self).__init__()
-        self.scene = None
+        self.scene = None   # Main scene
+        self.scenes = []    # Scenes to be drawn
         self.handler = game_handler
         
         self.controller = interpolator.InterpolatorController()
@@ -33,9 +34,16 @@ class SceneHandler(actionsequencer.ActionSequencer):
         self.sprite.opacity = 0
     
     def set_first_scene(self, scn):
-        self.scene = scn
+        self.set_scenes(scn)
         self.scene.load_script()
         gamestate.event_manager.set_scene(self.scene)
+    
+    def set_scenes(self, *args):
+        if args:
+            self.scene = args[0]
+        else:
+            self.scene = None
+        self.scenes = args
     
     def __repr__(self):
         return "SceneHandler(scene_object=%s)" % str(self.scene)
@@ -60,6 +68,7 @@ class SceneHandler(actionsequencer.ActionSequencer):
         gamestate.event_manager.set_scene(None)
         slide_scene = scene.Scene(next_scene, self, self.handler.ui)
         slide_scene.pause()
+        self.set_scenes(self.scene, slide_scene)
         # Determine offset
         if(direction == UP):
             slide_scene.y_offset = gamestate.norm_h
@@ -72,29 +81,35 @@ class SceneHandler(actionsequencer.ActionSequencer):
         
         def slide(ending_action=None):
             self.scene.pause()
-            if direction % 2:
-                interp1 = InterpClass(self.scene, 'y_offset', end=-slide_scene.y_offset, duration=2*self.fade_time)
-                interp2 = InterpClass(slide_scene, 'y_offset', end=0, duration=2*self.fade_time, done_function=self.next_action())
-            else:
-                interp1 = InterpClass(self.scene, 'x_offset', end=-slide_scene.x_offset, duration=2*self.fade_time)
-                interp2 = InterpClass(slide_scene, 'x_offset', end=0, duration=2*self.fade_time, done_function=self.next_action())
+            if direction % 2:   # Up/down
+                interp1 = InterpClass(self.scene, 'y_offset', 
+                                      end=slide_scene.y_offset-gamestate.norm_w, 
+                                      duration=2*self.fade_time)
+                interp2 = InterpClass(slide_scene, 'y_offset', 
+                                      end=0, duration=2*self.fade_time,
+                                      done_function=self.next_action())
+            else:               # Left/right
+                interp1 = InterpClass(self.scene, 'x_offset', start=0, 
+                                      end=-gamestate.norm_w, 
+                                      duration=2*self.fade_time)
+                interp2 = InterpClass(slide_scene, 'x_offset', 
+                                      end=0, duration=2*self.fade_time, 
+                                      done_function=self.next_action)
+                slide_scene.x_offset = gamestate.norm_w
                 
             self.controller.add_interpolator(interp1)
             self.controller.add_interpolator(interp2)
             
-        def switch_scenes(ending_action=None):
+        def complete_transition(ending_action=None):
             self.handler.save()
             self.scene.exit()
             slide_scene.transition_from(self.scene.name)
-            self.scene = slide_scene
-            self.scene.resume()
-            self.next_action()
-            
-        def complete_transition(ending_action=None):
+            self.set_scenes(slide_scene)
+            self.scene.resume()    
             gamestate.event_manager.set_scene(self.scene)
             self.next_action()
             
-        self.simple_sequence(slide, switch_scenes, complete_transition)
+        self.simple_sequence(slide, complete_transition)
     
     def fade_to(self, next_scene):
         InterpClass = interpolator.LinearInterpolator
@@ -114,7 +129,7 @@ class SceneHandler(actionsequencer.ActionSequencer):
             self.scene.exit()
             new_scene = scene.Scene(next_scene, self, self.handler.ui)
             new_scene.transition_from(self.scene.name)
-            self.scene = new_scene
+            self.set_scenes(new_scene)
             interp = InterpClass(self.sprite, 'opacity', end=0, start=255, duration=self.fade_time,
                                 done_function=complete_transition)
             self.controller.add_interpolator(interp)
@@ -123,8 +138,12 @@ class SceneHandler(actionsequencer.ActionSequencer):
     
     def update(self, dt=0):
         self.controller.update_interpolators(dt)
-        if self.scene:
-            self.scene.update(dt)
+        for scn in self.scenes:
+            scn.update(dt)
+    
+    def draw_scenes(self):
+        for scn in self.scenes:
+            scn.draw()
     
     def draw(self):
         self.batch.draw()

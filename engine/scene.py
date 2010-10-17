@@ -205,6 +205,7 @@ class Scene(interpolator.InterpolatorController):
     def draw(self, dt=0):
         pyglet.gl.glPushMatrix()
         pyglet.gl.glTranslatef(self.x_offset, self.y_offset, 0)
+        
         for act in self.actors.viewvalues():
             if act.__above and act.__above.sprite.y > act.sprite.y:
                 self.swap_actor_up(act)
