@@ -1,7 +1,7 @@
 import os, sys, shutil, json, importlib, pyglet, functools
 
 import camera, actor, gamestate, util, interpolator, convo
-from util import walkpath
+from util import walkpath, zenforcer
 
 import cam, environment, gamehandler, scenehandler
 
@@ -39,28 +39,34 @@ class Scene(object):
         self.interp = interpolator.InterpolatorController()
         
         self.paused = False
-        self.highest_group = 0
-        self.groups = []
         self.x_offset = 0.0
         self.y_offset = 0.0
-        
-        self.convo = convo.Conversation(self)
         
         self.resource_path = util.respath_func_with_base_path('game', self.name)
         
         self.init_convenience_bindings()
         self.init_clock()
+        self.init_zenforcer()
+        self.convo = convo.Conversation(self)
         
         self.load_info(load_path)
         self.initialize_from_info()
         self.load_actors()
-        self.init_groups()
+        self.zenforcer.init_groups()
         
         if gamestate.scripts_enabled:
             self.load_script()
     
     def init_convenience_bindings(self):
         self.add_interpolator = self.interp.add_interpolator
+    
+    def init_zenforcer(self):
+        def sprite_maker():
+            for act in self.actors.viewvalues():
+                yield act.sprite
+        sort_func = lambda a, b: a.y < b.y
+        self.zenforcer = zenforcer.ZEnforcer(self.main_group, sprite_maker, sort_func)
+        pyglet.clock.schedule_interval(self.zenforcer.update, 1/30.0)
     
     def initialize_from_info(self):
         """Initialize objects specified in info.json"""
@@ -82,54 +88,6 @@ class Scene(object):
                 new_actor.walkpath_point = attrs['walkpath_point']
                 new_actor.sprite.position = self.walkpath.points[new_actor.walkpath_point]
     
-    def init_groups(self):
-        """Create layer groups, inject __above/__below instance variables"""
-        self.groups = [pyglet.graphics.OrderedGroup(order=i, parent=self.main_group) \
-                       for i in xrange(len(self.actors.viewvalues()))]
-        
-        # Iterate closest to farthest sprite (bottom to top)
-        sorted_actors = sorted(self.actors.values(), lambda a, b: a.sprite.y < b.sprite.y)
-        for i in xrange(len(sorted_actors)):
-            act = sorted_actors[i]
-            act.sprite.group = self.groups[i]
-            act.__below = None  # Sprite drawn below this one (higher on screen)
-            act.__above = None  # Sprite drawn above this one (lower on screen)
-            if i > 0:
-                act.__below = sorted_actors[i-1]
-            if i < len(sorted_actors)-1:
-                act.__above = sorted_actors[i+1]
-    
-    def swap_actor_up(self, act):
-        # A
-        # B
-        # C <- being swapped up
-        # D
-        
-        B = act.__above
-        C = act
-        D = act.__below
-        if B:
-            A = B.__above
-        else:
-            A = None
-        
-        if D:
-            D.__above = B
-        
-        if B:
-            B.__below = D
-            B.__above = C
-        
-        if C:
-            C.__below = B
-            C.__above = A
-        
-        if A:
-            A.__below = C
-        
-        g1, g2 = B.sprite.group, C.sprite.group
-        B.sprite.group, C.sprite.group = g2, g1
-    
     def load_script(self):
         # Requires that game/scenes is in PYTHONPATH
         self.module = importlib.import_module(self.name)
@@ -142,6 +100,7 @@ class Scene(object):
         for actor in self.actors.viewvalues():
             actor.sprite.delete()
         self.env.exit()
+        pyglet.clock.unschedule(self.zenforcer.update)
     
     
     # Access
@@ -222,9 +181,6 @@ class Scene(object):
         pyglet.gl.glPushMatrix()
         pyglet.gl.glTranslatef(self.x_offset, self.y_offset, 0)
         
-        for act in self.actors.viewvalues():
-            if act.__above and act.__above.sprite.y > act.sprite.y:
-                self.swap_actor_up(act)
         self.env.draw()
         self.batch.draw()
         
@@ -283,9 +239,11 @@ class Scene(object):
             identifier = "%s_%d" % (actor_name, next_identifier)
         new_actor = actor.Actor(identifier, actor_name, self, **kwargs)
         self.actors[identifier] = new_actor
+        self.zenforcer.init_groups()
         return new_actor
     
     def remove_actor(self, identifier):
         self.actors[identifier].sprite.delete()
         del self.actors[identifier]
+        self.zenforcer.init_groups()
     
