@@ -1,5 +1,4 @@
 import pyglet, math, functools
-import eventmanager
 
 main_window = None
 norm_w = 1280

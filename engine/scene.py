@@ -5,8 +5,23 @@ from util import walkpath
 
 import cam, environment, gamehandler, scenehandler
 
-
 update_t = 1/60.0
+
+class ClipGroup(pyglet.graphics.OrderedGroup): 
+    """Sprite group that clips to a rectangle"""
+    def __init__(self, order=0, parent=None,
+                 x=0, y=0, w=gamestate.norm_w, h=gamestate.norm_h):
+        super(ClipGroup, self).__init__(order, parent)
+        self.x, self.y, self.w, self.h = x, y, w, h
+        self.x, self.y, self.w, self.h = [int(i) for i in (self.x, self.y, self.w, self.h)]
+    
+    def set_state(self):
+        pyglet.gl.glScissor(int(self.x), int(self.y), int(self.w), int(self.h)) 
+        pyglet.gl.glEnable(pyglet.gl.GL_SCISSOR_TEST) 
+    
+    def unset_state(self): 
+        pyglet.gl.glDisable(pyglet.gl.GL_SCISSOR_TEST)
+
 class Scene(interpolator.InterpolatorController):
     
     # Initialization
@@ -16,6 +31,7 @@ class Scene(interpolator.InterpolatorController):
         self.name = name
         self.handler = scene_handler
         self.batch = pyglet.graphics.Batch()
+        self.main_group = ClipGroup()
         self.ui = ui
         self.actors = {}
         self.camera_points = {}
@@ -44,7 +60,7 @@ class Scene(interpolator.InterpolatorController):
     def initialize_from_info(self):
         """Initialize objects specified in info.json"""
         self.environment_name = self.info['environment']
-        self.env = environment.Environment(self.environment_name)
+        self.env = environment.Environment(self.environment_name, self.main_group)
         self.walkpath = walkpath.WalkPath(dict_repr = self.info['walkpath'])
         self.camera = camera.Camera(dict_repr=self.info['camera_points'])
     
@@ -63,7 +79,7 @@ class Scene(interpolator.InterpolatorController):
     
     def init_groups(self):
         """Create layer groups, inject __above/__below instance variables"""
-        self.groups = [pyglet.graphics.OrderedGroup(i) \
+        self.groups = [pyglet.graphics.OrderedGroup(order=i, parent=self.main_group) \
                        for i in xrange(len(self.actors.viewvalues()))]
         
         # Iterate closest to farthest sprite (bottom to top)
@@ -203,6 +219,8 @@ class Scene(interpolator.InterpolatorController):
     
     @camera.obey_camera
     def draw(self, dt=0):
+        self.main_group.x = self.x_offset
+        self.main_group.y = self.y_offset
         pyglet.gl.glPushMatrix()
         pyglet.gl.glTranslatef(self.x_offset, self.y_offset, 0)
         
