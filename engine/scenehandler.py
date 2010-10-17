@@ -12,6 +12,11 @@ import pyglet
 
 import gamestate, actionsequencer, util, interpolator, scene
 
+UP = 1
+RIGHT = 2
+DOWN = 3
+LEFT = 4
+
 class SceneHandler(actionsequencer.ActionSequencer):
     def __init__(self, game_handler):
         super(SceneHandler, self).__init__()
@@ -50,19 +55,19 @@ class SceneHandler(actionsequencer.ActionSequencer):
                 self.slide_to(next_scene, dir)
             
     # For direction 1 is up, 2 is right, 3 is down, 4 is left
-    def slide_to(self, next_scene, direction=2):
+    def slide_to(self, next_scene, direction=RIGHT):
         InterpClass = interpolator.LinearInterpolator
         gamestate.event_manager.set_scene(None)
         slide_scene = scene.Scene(next_scene, self, self.handler.ui)
         slide_scene.pause()
         # Determine offset
-        if(direction == 1):
+        if(direction == UP):
             slide_scene.y_offset = gamestate.norm_h
-        elif(direction == 2):
+        elif(direction == RIGHT):
             slide_scene.x_offset = gamestate.norm_w
-        elif(direction == 3):
+        elif(direction == DOWN):
             slide_scene.y_offset = -gamestate.norm_h
-        elif(direction == 4):
+        elif(direction == LEFT):
             slide_scene.x_offset = -gamestate.norm_w
         
         def slide(ending_action=None):
