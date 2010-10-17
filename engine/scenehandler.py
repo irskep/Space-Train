@@ -84,14 +84,14 @@ class SceneHandler(actionsequencer.ActionSequencer):
             self.scene.pause()
             if direction % 2:   # Up/down
                 interp1 = InterpClass(self.scene, 'y_offset', 
-                                      end=slide_scene.y_offset-gamestate.norm_w, 
+                                      end=-slide_scene.y_offset, 
                                       duration=2*self.fade_time)
                 interp2 = InterpClass(slide_scene, 'y_offset', 
                                       end=0, duration=2*self.fade_time,
                                       done_function=self.next_action())
             else:               # Left/right
                 interp1 = InterpClass(self.scene, 'x_offset', start=0, 
-                                      end=-gamestate.norm_w, 
+                                      end=-slide_scene.x_offset, 
                                       duration=2*self.fade_time)
                 interp2 = InterpClass(slide_scene, 'x_offset', 
                                       end=0, duration=2*self.fade_time, 
