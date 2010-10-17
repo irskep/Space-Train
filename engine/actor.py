@@ -199,6 +199,7 @@ class Actor(actionsequencer.ActionSequencer):
         self.actions.append([(self.jump, [])])
         self.actions.append([(self.update_state, ['stand_front'])])
     
+    
     # Serialization
     
     # No load_info() or save_info() because there is no graphical editor for Actors

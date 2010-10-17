@@ -133,7 +133,7 @@ class Scene(object):
         self.call_if_available('transition_from', old_scene_name)
     
     def on_mouse_release(self, x, y, button, modifiers):
-        if self.paused:
+        if self.paused or (self.actors.has_key('main') and self.actors['main'].blocking_actions):
             return
             
         clicked_actor = self.actor_under_point(*self.camera.mouse_to_canvas(x, y))
