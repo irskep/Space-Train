@@ -30,12 +30,13 @@ class Inventory(object):
         self.batches['closed'] = pyglet.graphics.Batch()
         self.sprites['open'] = []
         self.sprites['closed'] = []
-
         self.batches['items'] = pyglet.graphics.Batch()
+        
+        self.visible = True
         
         self.items = {}
         
-        self.width = 5
+        self.held_item = None
                 
         self.isopen = False
         
@@ -46,23 +47,40 @@ class Inventory(object):
         # Create the inventory open state now
         self.sprites['open'].append( util.load_sprite(['ui', 'purseopen.png'], x = gamestate.norm_w, y = gamestate.norm_h, batch = self.batches['open']) )
         self.translate_bottomleft_to_topright(self.sprites['open'])
+        
+        self.height = self.sprites['open'][0].height
 
         gamestate.event_manager.set_inventory(self)
     
     # inventory item interaction methods
     def put_item(self, actor):
         self.items[actor.identifier] = actor
+        self.items[actor.identifier].icon.batch = self.batches['items']
+        self.items[actor.identifier].sprite.batch = None
+        self.update_item_positions()
+        self.isopen = True
 
     def get_item(self, identifier):
+        #self.items[identifier].sprite.batch = self.items[identifier].scene.batch
+        self.items[identifier].icon.batch = None
         ret = self.items[identifier]
         del self.items[identifier]
+        self.update_item_positions()
         return ret
         
-    def update_ui(self):
-        for item in self.items:
-            
+    def update_item_positions(self):
+        leftmost_x = self.sprites['open'][0].x
+        inventory_height = self.sprites['open'][0].height
+        inventory_y = self.sprites['open'][0].y
+        for ident, item in self.items.iteritems():
+            sprite = item.icon
+            # place the sprite appropriately
+            sprite.x = leftmost_x - sprite.width
+            sprite.y = inventory_y
+            print "Sprite %s dimensions (%d, %d) position (%d, %d)" % (ident, sprite.width, sprite.height, sprite.x, sprite.y)
+            leftmost_x -= sprite.width
     
-    #needs to go in util sometime
+    #needs to go in util sometime?
     def translate_bottomleft_to_topright(self, sprites):
         # translate everything to where it needs to be
         x_trans = 0
@@ -75,8 +93,17 @@ class Inventory(object):
             sprite.y -= y_trans
     
     def on_mouse_release(self, x, y, button, modifiers):
-        if self.intersects_active_area(x, y):
-            self.toggle()
+        if self.intersects_active_area(x, y) and self.visible:
+            print "Inventory handling click at (%d, %d)" % (x, y)
+            if(self.held_item is not None):
+                self.put_item(self.held_item)
+                self.held_item = None
+            else:
+                clicked_item = self.item_under_point(x, y)
+                if(clicked_item is not None):
+                    self.held_item = self.get_item(clicked_item.identifier)
+                if(util.intersects_sprite(x, y, self.sprites['closed'][0])):
+                    self.toggle()
             return pyglet.event.EVENT_HANDLED
         else:
             return pyglet.event.EVENT_UNHANDLED
@@ -84,19 +111,37 @@ class Inventory(object):
     
     def toggle(self):
         self.isopen = not self.isopen
-        
+    
+    def set_visibility(self, visibile):
+        self.visibile = visibile
+    
+    def item_under_point(self, x, y):
+        for id, item in self.items.iteritems():
+            if item.icon_covers_point(x, y):
+                    return item
+        return None
+    
     def intersects_active_area(self, x, y):
-        sprite_list = (self.sprites['open'] if self.isopen else self.sprites['closed'])
+        sprite_list = []
+        sprites = (self.sprites['open'] if self.isopen else self.sprites['closed'])
+        sprite_list.extend(sprites)
         for sprite in sprite_list:
             if(x > sprite.x and x < sprite.x + sprite.width and
                y > sprite.y and y < sprite.y + sprite.height):
                 return True
+                
+        if self.isopen:
+            if(self.item_under_point(x, y) is not None):
+                return True
+                
         return False 
         
     # Render the inventory in the UI
     def draw(self, dt=0):
         #print self.isopen
-        if(self.isopen is False):
-            self.batches['closed'].draw()
-        else:
-            self.batches['open'].draw()
+        if(self.visible):
+            if(self.isopen is False):
+                self.batches['closed'].draw()
+            else:
+                self.batches['open'].draw()
+                self.batches['items'].draw()
