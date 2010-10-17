@@ -203,6 +203,7 @@ class Scene(interpolator.InterpolatorController):
     
     @camera.obey_camera
     def draw(self, dt=0):
+        pyglet.gl.glPushMatrix()
         pyglet.gl.glTranslatef(self.x_offset, self.y_offset, 0)
         for act in self.actors.viewvalues():
             if act.__above and act.__above.sprite.y > act.sprite.y:
@@ -212,6 +213,8 @@ class Scene(interpolator.InterpolatorController):
         
         self.env.draw_overlay()
         self.convo.draw()
+        
+        pyglet.gl.glPopMatrix()
     
     # Serialization
     

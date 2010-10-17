@@ -50,24 +50,24 @@ class SceneHandler(actionsequencer.ActionSequencer):
                 self.slide_to(next_scene, dir)
             
     # For direction 1 is up, 2 is right, 3 is down, 4 is left
-    def slide_to(self, next_scene, dir=2):
+    def slide_to(self, next_scene, direction=2):
         InterpClass = interpolator.LinearInterpolator
         gamestate.event_manager.set_scene(None)
         slide_scene = scene.Scene(next_scene, self, self.handler.ui)
         slide_scene.pause()
         # Determine offset
-        if(dir == 1):
+        if(direction == 1):
             slide_scene.y_offset = gamestate.norm_h
-        elif(dir == 2):
+        elif(direction == 2):
             slide_scene.x_offset = gamestate.norm_w
-        elif(dir == 3):
+        elif(direction == 3):
             slide_scene.y_offset = -gamestate.norm_h
-        elif(dir == 4):
+        elif(direction == 4):
             slide_scene.x_offset = -gamestate.norm_w
         
         def slide(ending_action=None):
             self.scene.pause()
-            if(dir == 1 or dir == 3):
+            if direction % 2:
                 interp1 = InterpClass(self.scene, 'y_offset', end=-slide_scene.y_offset, duration=2*self.fade_time)
                 interp2 = InterpClass(slide_scene, 'y_offset', end=0, duration=2*self.fade_time, done_function=self.next_action())
             else:
