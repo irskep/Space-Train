@@ -24,6 +24,8 @@ class Scene(interpolator.InterpolatorController):
         self.accum_time = 0.0
         self.clock = pyglet.clock.Clock(time_function=lambda: self.game_time) 
         self.paused = False
+        self.highest_group = 0
+        self.groups = []
         
         self.convo = convo.Conversation(self)
         
@@ -32,6 +34,7 @@ class Scene(interpolator.InterpolatorController):
         self.load_info(load_path)
         self.initialize_from_info()
         self.load_actors()
+        self.init_groups()
         
         if gamestate.scripts_enabled:
             self.load_script()
@@ -55,6 +58,54 @@ class Scene(interpolator.InterpolatorController):
             if attrs.has_key('walkpath_point'):
                 new_actor.walkpath_point = attrs['walkpath_point']
                 new_actor.sprite.position = self.walkpath.points[new_actor.walkpath_point]
+    
+    def init_groups(self):
+        """Create layer groups, inject __above/__below instance variables"""
+        self.groups = [pyglet.graphics.OrderedGroup(i) \
+                       for i in xrange(len(self.actors.viewvalues()))]
+        
+        # Iterate closest to farthest sprite (bottom to top)
+        sorted_actors = sorted(self.actors.values(), lambda a, b: a.sprite.y < b.sprite.y)
+        for i in xrange(len(sorted_actors)):
+            act = sorted_actors[i]
+            act.sprite.group = self.groups[i]
+            act.__below = None  # Sprite drawn below this one (higher on screen)
+            act.__above = None  # Sprite drawn above this one (lower on screen)
+            if i > 0:
+                act.__below = sorted_actors[i-1]
+            if i < len(sorted_actors)-1:
+                act.__above = sorted_actors[i+1]
+    
+    def swap_actor_up(self, act):
+        # A
+        # B
+        # C <- being swapped up
+        # D
+        
+        B = act.__above
+        C = act
+        D = act.__below
+        if B:
+            A = B.__above
+        else:
+            A = None
+        
+        if D:
+            D.__above = B
+        
+        if B:
+            B.__below = D
+            B.__above = C
+        
+        if C:
+            C.__below = B
+            C.__above = A
+        
+        if A:
+            A.__below = C
+        
+        g1, g2 = B.sprite.group, C.sprite.group
+        B.sprite.group, C.sprite.group = g2, g1
     
     def load_script(self):
         # Requires that game/scenes is in PYTHONPATH
@@ -102,7 +153,6 @@ class Scene(interpolator.InterpolatorController):
         if clicked_actor:
             if(self.ui.inventory.held_item is not None):
                 if self.call_if_available('give_actor', clicked_actor, self.ui.inventory.held_item) is False:
-                    print "Doing a thing"
                     self.ui.inventory.put_item(self.ui.inventory.held_item)
                 self.ui.inventory.held_item = None
             else:
@@ -138,6 +188,9 @@ class Scene(interpolator.InterpolatorController):
     
     @camera.obey_camera
     def draw(self, dt=0):
+        for act in self.actors.viewvalues():
+            if act.__above and act.__above.sprite.y > act.sprite.y:
+                self.swap_actor_up(act)
         self.env.draw()
         self.batch.draw()
         

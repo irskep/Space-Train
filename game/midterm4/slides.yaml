@@ -1,0 +1,21 @@
+- title_pos: [0.1, 0.8]
+  body_pos: [0.1, 0.7]
+  title_text: What's Next
+  body_text: |
+    • Finish scene transitions
+    
+    • Load/save screens
+    
+    • UI polish
+    
+    • Complete first level
+
+- title_text: First level
+  body_text: |
+    • Learn about the Space Train
+    
+    • Attempt to reach Stanislov for an autograph
+    
+    • Experience kidnapping!
+    
+    • Solve a couple of puzzles on the way

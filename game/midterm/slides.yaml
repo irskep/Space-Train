@@ -1,4 +1,4 @@
-- title_pos: [0.55, 0.8]
+- title_pos: [0.35, 0.08]
   body_pos: [0.55, 0.7]
   title_text: Space Train
   body_text: |
@@ -9,22 +9,22 @@
   call: hide_poster_show_stanislov
   body_text: |
     Artists:
-    • Kelsey Bass
-    • Drew Carrow
-    • Dylan Carrow
-    • Liz Keegan
-    • Susie Kim
-    • Vincent Pizarski
+      • Kelsey Bass
+      • Drew Carrow
+      • Dylan Carrow
+      • Liz Keegan
+      • Susie Kim
+      • Vincent Pizarski
 
 - title_pos: [0.1, 0.8]
   body_pos: [0.1, 0.7]
   title_text: Team Space Train
   body_text: |
     Programmers:
-    • Steve Johnson
-    • Fred Hatfull
-    • Tyler Goeringer
-    • Sean Murphy
+      • Steve Johnson
+      • Fred Hatfull
+      • Tyler Goeringer
+      • Sean Murphy
 
 - title_pos: [0.2, 0.8]
   body_pos: [0.1, 0.7]
@@ -37,7 +37,9 @@
   title_text: WAS IST SPACE TRAIN?
   body_text: |
     • Point-and-click adventure
+    
     • Focus on storytelling, puzzle solving, humor
+    
     • Inspired by classic games such as Zork, 
         Monkey Island, and Myst
 
@@ -46,22 +48,28 @@
   title_text: Backstory
   body_text: |
     • Train between Space Russia and Space 
-      France is hijacked by German Space 
-      Pirates led by Baron von Sniffmienschorts
+        France is hijacked by German Space 
+        Pirates led by Baron von Sniffmienschorts
+    
     • Kidnap of famous Russian poet Stanislov 
-      Slavinsky
+        Slavinsky
+    
     • Inga Borga, a spunky senior citizen, will 
-      save the poet and Mother Russia
+        save the poet and Mother Russia
 
 - title_pos: [0.1, 0.8]
   body_pos: [0.1, 0.7]
+  call: kidnap
   title_text: Environment
   body_text: |
     • Futuristic (of course!)
+    
     • “Democratic USSR” - Cold War propaganda 
-      style but for democracy
+        style but for democracy
+    
     • New game areas unlocked by getting into
-      train cars closer to the front
+        train cars closer to the front
+    
 
 - title_pos: [0.1, 0.8]
   body_pos: [0.1, 0.7]
@@ -70,3 +78,12 @@
 - title_pos: [0.1, 0.8]
   body_pos: [0.1, 0.7]
   call: the_baron
+
+- title_pos: [0.2, 0.8]
+  body_pos: [0.1, 0.7]
+  call: hide_baron
+  title_text: DEMO TIME
+
+- title_pos: [0.1, 0.8]
+  body_pos: [0.1, 0.7]
+  call: go_to_demo
