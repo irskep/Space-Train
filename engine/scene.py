@@ -87,6 +87,8 @@ class Scene(object):
         
         if gamestate.scripts_enabled:
             self.load_script()
+        
+        self.update(0)
     
     def init_convenience_bindings(self):
         self.add_interpolator = self.interp.add_interpolator
@@ -211,7 +213,8 @@ class Scene(object):
         self.update_clock(dt)
         
         if self.actors.has_key('main'):
-            self.camera.set_target(self.actors["main"].sprite.x, self.actors["main"].sprite.y)
+            self.camera.set_target(self.actors["main"].sprite.x, self.actors["main"].sprite.y,
+                                   immediate=True)
         self.camera.update(dt)
         self.interp.update_interpolators(dt)
     

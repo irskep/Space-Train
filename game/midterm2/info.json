@@ -8,9 +8,9 @@
     }, 
     "actors": {
         "cart_lady": {
-            "walkpath_point": "cart_lady_left", 
+            "walkpath_point": "cart_lady_right", 
             "name": "cart_lady", 
-            "start_state": "walk_left"
+            "start_state": "walk_right"
         }, 
         "bean_salesman": {
             "y": 144, 
