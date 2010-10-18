@@ -8,9 +8,20 @@
     }, 
     "actors": {
         "cart_lady": {
-            "walkpath_point": "cart_lady_left", 
+            "walkpath_point": "cart_lady_right", 
             "name": "cart_lady", 
             "start_state": "walk_right"
+        }, 
+        "main": {
+            "walkpath_point": "inga_walk_way_left", 
+            "name": "inga", 
+            "start_state": "stand_front"
+        }, 
+        "key_1": {
+            "y": 180, 
+            "x": 936, 
+            "name": "key", 
+            "start_state": "key"
         }, 
         "kidnapper": {
             "y": 144, 
@@ -18,21 +29,9 @@
             "name": "sneaky_bastard", 
             "start_state": "stand_front"
         }, 
-        "main": {
-            "walkpath_point": "inga_walk_left", 
-            "name": "inga", 
-            "start_state": "stand_front"
-        },
-        "key_1": {
-            "y": 180, 
-            "x": 936, 
-            "name": "key", 
-            "start_state": "key"
-        },
         "next_slide": {
-            "x": 2495,
             "y": 55, 
-            "scale": 1.0, 
+            "x": 2495, 
             "name": "slide_click", 
             "start_state": "normal"
         }
@@ -82,16 +81,12 @@
                 "b": "inga_walk_middle"
             }, 
             {
-                "a": "inga_walk_left", 
-                "b": "inga_walk_way_left"
+                "a": "inga_walk_way_left", 
+                "b": "inga_walk_left"
             }, 
             {
                 "a": "cart_lady_left", 
                 "b": "cart_lady_right"
-            }, 
-            {
-                "a": "inga_walk_way_left", 
-                "b": "inga_walk_left"
             }, 
             {
                 "a": "point_3", 
@@ -100,6 +95,10 @@
             {
                 "a": "point_2", 
                 "b": "inga_walk_left"
+            }, 
+            {
+                "a": "inga_walk_left", 
+                "b": "inga_walk_way_left"
             }, 
             {
                 "a": "inga_walk_right", 

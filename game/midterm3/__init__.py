@@ -25,7 +25,7 @@ def cart_lady_walk(actor, point):
 
 def inga_walk(actor, point):
     if point == 'inga_walk_way_left':
-        myscene.handler.notify('midterm2')
+        myscene.handler.notify('midterm2', 4)
 
 def be_curious():
     myscene.convo.begin_conversation('shady_business')

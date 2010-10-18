@@ -158,11 +158,11 @@ class Scene(object):
         else:
             return False
     
-    
-    # Events
-    
     def transition_from(self, old_scene_name):
         self.call_if_available('transition_from', old_scene_name)
+    
+    
+    # Events
     
     def on_mouse_release(self, x, y, button, modifiers):
         if self.paused or (self.actors.has_key('main') and self.actors['main'].blocking_actions):
@@ -173,7 +173,7 @@ class Scene(object):
         if clicked_actor:
             self.click_actor(clicked_actor)
         elif self.actors.has_key("main"):
-            self.move_main()
+            self.move_main(x, y)
     
     def click_actor(self, clicked_actor):
         if(self.ui.inventory.held_item is not None):
@@ -185,7 +185,7 @@ class Scene(object):
         else:
             self.call_if_available('actor_clicked', clicked_actor)
     
-    def move_main(self):
+    def move_main(self, x, y):
         # Send main actor to click location according to actor's moving behavior
         main = self.actors["main"]
         while(main.blocking_actions > 0):

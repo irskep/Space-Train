@@ -10,7 +10,7 @@
         "cart_lady": {
             "walkpath_point": "cart_lady_left", 
             "name": "cart_lady", 
-            "start_state": "walk_right"
+            "start_state": "walk_left"
         }, 
         "bean_salesman": {
             "y": 144, 
@@ -19,7 +19,7 @@
             "start_state": "stand_front"
         }, 
         "main": {
-            "walkpath_point": "inga_walk_left", 
+            "walkpath_point": "inga_walk_right", 
             "name": "inga", 
             "start_state": "stand_front"
         }, 
@@ -57,8 +57,8 @@
                 "x": 884
             }, 
             "point_3": {
-                "y": 143.0, 
-                "x": 2105.0
+                "y": 143, 
+                "x": 2105
             }
         }, 
         "edges": [
@@ -71,16 +71,8 @@
                 "b": "inga_walk_middle"
             }, 
             {
-                "a": "inga_walk_right", 
-                "b": "point_3"
-            }, 
-            {
                 "a": "cart_lady_left", 
                 "b": "cart_lady_right"
-            }, 
-            {
-                "a": "point_3", 
-                "b": "inga_walk_right"
             }, 
             {
                 "a": "point_3", 
