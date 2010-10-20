@@ -1,9 +1,9 @@
 """
 Controls all aspects of a single scene (background, overlay, and contained objects).
 
- =========================
- = Scene script methods: =
- =========================
+ ========================
+ = Scene script methods =
+ ========================
 
 REQUIRED
 

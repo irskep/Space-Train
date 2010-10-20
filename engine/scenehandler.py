@@ -58,7 +58,7 @@ class SceneHandler(actionsequencer.ActionSequencer):
         if next_scene is None:
             self.handler.prompt_save_and_quit()
         else:
-            self.scene.save_info()
+            self.handler.save()
             if direction == FADE:
                 self.fade_to(next_scene)
             else:
