@@ -31,6 +31,13 @@ class Actor(actionsequencer.ActionSequencer):
         if self.scene and batch is None:
             batch = self.scene.batch
         self.sprite = pyglet.sprite.Sprite(Actor.images[self.name][self.current_state], batch=batch)
+        try:
+            self.icon = pyglet.sprite.Sprite(self.image_named("icon", 0, 0), batch = None)
+        except pyglet.resource.ResourceNotFoundException:
+            self.icon = pyglet.sprite.Sprite(Actor.images[self.name][self.current_state], batch = None) 
+            if self.icon.height > self.scene.ui.inventory.height:
+                self.icon.scale = float(self.scene.ui.inventory.height) / float(self.icon.height)     
+        
         # Update attributes
         for attr in ['x', 'y', 'scale', 'rotation']:
             if attrs.has_key(attr):
@@ -46,6 +53,22 @@ class Actor(actionsequencer.ActionSequencer):
     # Access
     
     def covers_point(self, x, y):
+        if not self.sprite.visible:
+            return False
+        min_x = self.abs_position_x()
+        min_y = self.abs_position_y()
+        max_x = self.abs_position_x() + self.width()
+        max_y = self.abs_position_y() + self.height()
+        return min_x <= x <= max_x and min_y <= y <= max_y
+        
+    def icon_covers_point(self, x, y):
+        min_x = self.icon.x - self.icon.image.anchor_x
+        min_y = self.icon.y - self.icon.image.anchor_y
+        max_x = self.icon.x - self.icon.image.anchor_x + self.icon.width*self.icon.scale
+        max_y = self.icon.y - self.icon.image.anchor_y + self.icon.height*self.icon.scale
+        return min_x <= x <= max_x and min_y <= y <= max_y
+            
+    def covers_visible_point(self, x, y):
         min_x = self.abs_position_x()
         min_y = self.abs_position_y()
         max_x = self.abs_position_x() + self.width()
