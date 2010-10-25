@@ -17,6 +17,7 @@
         "title": {
             "y": 453, 
             "x": 370, 
+            "scale": 0.9999389091025732, 
             "name": "a_train_in_spain", 
             "start_state": "title"
         }

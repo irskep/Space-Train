@@ -61,7 +61,6 @@ class Interpolator(object):
         fmt = "Interpolator '%s' on %s.%s from %0.2f to %0.2f taking %0.2f seconds)"
         return fmt % (self.name, str(self.host_object), self.attr_name, 
                       self.start, self.end, self.duration)
-    
 
 class LinearInterpolator(Interpolator):
     def __init__(self, *args, **kwargs):
@@ -76,7 +75,6 @@ class LinearInterpolator(Interpolator):
         fmt = "LinearInterpolator '%s' on %s.%s from %0.2f to %0.2f taking %0.2f seconds)"
         return fmt % (self.name, str(self.host_object), self.attr_name, 
                       self.start, self.end, self.duration)
-    
 
 class Linear2DInterpolator(Interpolator):
     def __init__(self, host_object, attr_name, end_tuple, name="position", 

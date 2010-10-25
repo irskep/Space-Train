@@ -38,8 +38,7 @@ class EdgeEditor(abstracteditor.AbstractEditor):
     def wants_drag(self, x, y):
         return True
     
-    def end_drag(self, x, y):
-        world_point = self.scene.camera.mouse_to_canvas(x, y)
+    def end_drag(self, *world_point):
         old_selection = self.selected_item
         new_selection = self.scene.walkpath.closest_edge_to_point(world_point)
         

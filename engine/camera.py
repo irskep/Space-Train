@@ -29,8 +29,10 @@ class Camera(object):
         y = min(max(y, self.min_bounds[1]), self.max_bounds[1])
         return (x, y)
     
-    def set_target(self, x, y):
+    def set_target(self, x, y, immediate=False):
         self.target = self.constrain_point(x, y)
+        if immediate:
+            self.position = self.target
     
     def set_position(self, x, y):
         self.position = self.constrain_point(x, y)

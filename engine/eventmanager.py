@@ -12,7 +12,7 @@ To manage your events, (TODO)
 """
 
 import pyglet
-import cam, gamestate, scene
+import gamestate
 
 #HAH-HA!!
 #I GET TO USE CAMELCASE!

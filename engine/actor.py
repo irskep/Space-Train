@@ -146,8 +146,19 @@ class Actor(actionsequencer.ActionSequencer):
         """Move toward (x, y) either straight or via walk path"""
         if self.blocking_actions == 0:
             if self.walkpath_point:
-                dest_point = self.scene.walkpath.point_near(x, y)
-                self.prepare_walkpath_move(dest_point)
+                # Find the closest reachable walkpath point
+                ok = False
+                excluded_points = set()
+                dest_point = self.scene.walkpath.point_near(x, y, exclude=excluded_points)
+                while not ok:
+                    try:
+                        self.prepare_walkpath_move(dest_point)
+                        ok = True
+                    except IndexError:
+                        # dijkstra.py throws IndexError if no path exists
+                        # (internal heap gets over-popped)
+                        excluded_points.add(dest_point)
+                        dest_point = self.scene.walkpath.point_near(x, y, exclude=excluded_points)
             else:
                 self.prepare_direct_move(x, y)
             return True
@@ -187,6 +198,7 @@ class Actor(actionsequencer.ActionSequencer):
     def prepare_jump(self):
         self.actions.append([(self.jump, [])])
         self.actions.append([(self.update_state, ['stand_front'])])
+    
     
     # Serialization
     

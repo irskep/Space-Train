@@ -60,20 +60,3 @@ def image_alpha_at_point(img, x, y):
 # caution - broken. doesn't account for anchors
 def intersects_sprite(x, y, sprite):
     return x > sprite.x and y > sprite.y and x < sprite.x + sprite.width and y < sprite.y + sprite.height
-        
-# Other
-
-class ClipGroup(pyglet.graphics.OrderedGroup): 
-    """Sprite group that clips to a rectangle"""
-    def __init__(self, name="ClipGroup", order=0, parent=None): 
-        super(ClipGroup, self).__init__(order, parent) 
-        self.x, self.y, self.w, self.h = 0, 0, 256, 256 
-        self.name=name 
-    
-    def set_state(self): 
-        gl.glScissor(self.x, self.y, self.w, self.h) 
-        gl.glEnable(gl.GL_SCISSOR_TEST) 
-    
-    def unset_state(self): 
-        gl.glDisable(gl.GL_SCISSOR_TEST)
-    

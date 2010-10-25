@@ -3,7 +3,7 @@ import os, pyglet, json
 import gamestate, util
 
 class Environment(object):
-    def __init__(self, name):
+    def __init__(self, name, group=None):
         self.name = name
         info_path = util.respath('environments', name, 'info.json')
         with pyglet.resource.file(info_path, 'r') as info_file:
@@ -28,7 +28,8 @@ class Environment(object):
                                                          '%d_%d.png' % (x, y)))
                 tile_w, tile_h = img.width, img.height
                 new_sprite = pyglet.sprite.Sprite(img, x=x*tile_w, y=y*tile_h,
-                                                  batch=self.background_batch)
+                                                  batch=self.background_batch,
+                                                  group=group)
                 self.background_sprites.append(new_sprite)
                 background_sprites_dict[(x, y)] = new_sprite
         for x in range(self.background_tile_cols):
