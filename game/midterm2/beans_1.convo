@@ -42,8 +42,8 @@ main_choice:
           goto: discuss_beans
 
 discuss_beans:
+    - main: Could you tell me a little about beans?
     - bean_salesman: I would be happy to tell you about the merits of beans!
-    - main: Go on...
     - bean_salesman: Blah blah blah blah beans blah blah blah. Beans! Beans blah.
     - update_animations:
         speaking:

@@ -7,6 +7,13 @@
         }
     }, 
     "actors": {
+        "logo": {
+            "x":640,
+            "y": 400,  
+            "scale": 1.0, 
+            "name": "a_train_in_spain", 
+            "start_state": "logo"
+        },
         "train_poster": {
             "x": 0,
             "y": 360,  
@@ -31,9 +38,15 @@
         "stanislov": {
             "x": 1280,
             "y": 432,  
-            "scale": 0.8, 
+            "scale": 0.9, 
             "name": "posters", 
             "start_state": "stanislov"
+        },
+        "kidnapper": {
+            "x": 1600,
+            "y": 0,  
+            "name": "kidnapper", 
+            "start_state": "walk_left"
         },
         "next_slide": {
             "x": 1215,

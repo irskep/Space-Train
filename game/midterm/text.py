@@ -1,6 +1,6 @@
 import pyglet, yaml
 from engine.gamestate import norm_w, norm_h
-from engine.interpolator import LinearInterpolator, Linear2DInterpolator
+from engine.interpolator import LinearInterpolator, Linear2DInterpolator, PulseInterpolator
 
 myscene = None
 title = None
@@ -8,12 +8,19 @@ body = None
 slides = []
 slide_number = 0
 
+pulse_interp = None
+
 def init(scn):
-    global title, body, slides, myscene
+    global title, body, slides, myscene, pulse_interp
     myscene = scn
     slides = yaml.load(pyglet.resource.file(myscene.resource_path('slides.yaml'), 'r'))
     
+    logo = myscene.actors['logo']
+    pulse_interp = PulseInterpolator(logo.sprite, 'scale', 0.95, 1.0, speed=4)
+    myscene.add_interpolator(pulse_interp)
+    
     myscene.actors['zeppelin_poster'].sprite.visible = False
+    myscene.actors['train_poster'].sprite.visible = False
     
     this_slide = slides[0]
     tx, ty = this_slide['title_pos']
@@ -60,10 +67,17 @@ def advance():
         globals()[this_slide['call']]()
 
 def hide_poster_show_stanislov():
-    myscene.actors['train_poster'].sprite.visible = False
+    pulse_interp.stop = True
+    logo = myscene.actors['logo']
+    interp = LinearInterpolator(logo.sprite, 'scale', 1.5, duration=1.0)
+    myscene.add_interpolator(interp)
+    
+    logo = myscene.actors['logo']
+    interp = LinearInterpolator(logo.sprite, 'opacity', 0, 255, duration=1.0)
+    myscene.add_interpolator(interp)
     
     stan = myscene.actors['stanislov']
-    interp = Linear2DInterpolator(stan.sprite, 'position', (1000, stan.sprite.y), speed=400.0)
+    interp = Linear2DInterpolator(stan.sprite, 'position', (900, stan.sprite.y), speed=400.0)
     myscene.add_interpolator(interp)
     # myscene.actors['stanislov'].sprite.visible = True
 
@@ -79,6 +93,12 @@ def hide_stanislov_again():
     interp = Linear2DInterpolator(stan.sprite, 'position', (stan.sprite.x, -2000), duration=1.0)
     myscene.add_interpolator(interp)
 
+def kidnap():
+    kidnapper = myscene.actors['kidnapper']
+    interp = Linear2DInterpolator(kidnapper.sprite, 'position', (-200, kidnapper.sprite.y),
+                                  speed=400)
+    myscene.add_interpolator(interp)
+
 def the_zeppelin():
     myscene.actors['zeppelin_poster'].sprite.visible = True
 
@@ -89,3 +109,11 @@ def the_baron():
     baron = myscene.actors['baron_poster']
     interp = Linear2DInterpolator(baron.sprite, 'position', (baron.sprite.x, 360), duration=1.0)
     myscene.add_interpolator(interp)
+
+def hide_baron():
+    interp = LinearInterpolator(myscene.actors['baron_poster'].sprite, 
+                                'opacity', end=0, start=255, duration=1.0)
+    myscene.add_interpolator(interp)
+
+def go_to_demo():
+    myscene.handler.notify('midterm2')

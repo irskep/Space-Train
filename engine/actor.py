@@ -35,8 +35,9 @@ class Actor(actionsequencer.ActionSequencer):
             self.icon = pyglet.sprite.Sprite(self.image_named("icon", 0, 0), batch = None)
         except pyglet.resource.ResourceNotFoundException:
             self.icon = pyglet.sprite.Sprite(Actor.images[self.name][self.current_state], batch = None) 
-            if self.icon.height > self.scene.ui.inventory.height:
-                self.icon.scale = float(self.scene.ui.inventory.height) / float(self.icon.height)     
+            if self.scene.ui:
+                if self.icon.height > self.scene.ui.inventory.height:
+                    self.icon.scale = float(self.scene.ui.inventory.height) / float(self.icon.height)
         
         # Update attributes
         for attr in ['x', 'y', 'scale', 'rotation']:

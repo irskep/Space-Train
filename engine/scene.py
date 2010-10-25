@@ -21,8 +21,12 @@ class Scene(interpolator.InterpolatorController):
         self.camera_points = {}
         self.game_time = 0.0
         self.accum_time = 0.0
-        self.clock = pyglet.clock.Clock(time_function=lambda: self.game_time) 
+        self.clock = pyglet.clock.Clock(time_function=lambda: self.game_time)
         self.paused = False
+        self.highest_group = 0
+        self.groups = []
+        self.x_offset = 0.0
+        self.y_offset = 0.0
         
         self.convo = convo.Conversation(self)
         
@@ -31,6 +35,7 @@ class Scene(interpolator.InterpolatorController):
         self.load_info(load_path)
         self.initialize_from_info()
         self.load_actors()
+        self.init_groups()
         
         if gamestate.scripts_enabled:
             self.load_script()
@@ -55,6 +60,54 @@ class Scene(interpolator.InterpolatorController):
                 new_actor.walkpath_point = attrs['walkpath_point']
                 new_actor.sprite.position = self.walkpath.points[new_actor.walkpath_point]
 
+    
+    def init_groups(self):
+        """Create layer groups, inject __above/__below instance variables"""
+        self.groups = [pyglet.graphics.OrderedGroup(i) \
+                       for i in xrange(len(self.actors.viewvalues()))]
+        
+        # Iterate closest to farthest sprite (bottom to top)
+        sorted_actors = sorted(self.actors.values(), lambda a, b: a.sprite.y < b.sprite.y)
+        for i in xrange(len(sorted_actors)):
+            act = sorted_actors[i]
+            act.sprite.group = self.groups[i]
+            act.__below = None  # Sprite drawn below this one (higher on screen)
+            act.__above = None  # Sprite drawn above this one (lower on screen)
+            if i > 0:
+                act.__below = sorted_actors[i-1]
+            if i < len(sorted_actors)-1:
+                act.__above = sorted_actors[i+1]
+    
+    def swap_actor_up(self, act):
+        # A
+        # B
+        # C <- being swapped up
+        # D
+        
+        B = act.__above
+        C = act
+        D = act.__below
+        if B:
+            A = B.__above
+        else:
+            A = None
+        
+        if D:
+            D.__above = B
+        
+        if B:
+            B.__below = D
+            B.__above = C
+        
+        if C:
+            C.__below = B
+            C.__above = A
+        
+        if A:
+            A.__below = C
+        
+        g1, g2 = B.sprite.group, C.sprite.group
+        B.sprite.group, C.sprite.group = g2, g1
     
     def load_script(self):
         # Requires that game/scenes is in PYTHONPATH
@@ -82,9 +135,12 @@ class Scene(interpolator.InterpolatorController):
     # Script interaction
     
     def fire_adv_event(self, event, *args):
+        if self.paused:
+            return
+            
         self.module.handle_event(event, *args)
     
-    def call_if_available(self, func_name, *args, **kwargs):
+    def call_if_available(self, func_name, *args, **kwargs):            
         if hasattr(self.module, func_name):
             return getattr(self.module, func_name)(*args, **kwargs)
         else:
@@ -98,12 +154,14 @@ class Scene(interpolator.InterpolatorController):
     
     def on_mouse_release(self, x, y, button, modifiers):
 
+        if self.paused:
+            return
+        
         clicked_actor = self.actor_under_point(*self.camera.mouse_to_canvas(x, y))
         
         if clicked_actor:
             if(self.ui.inventory.held_item is not None):
                 if self.call_if_available('give_actor', clicked_actor, self.ui.inventory.held_item) is False:
-                    print "Doing a thing"
                     self.ui.inventory.put_item(self.ui.inventory.held_item)
                 self.ui.inventory.held_item = None
             else:
@@ -115,7 +173,14 @@ class Scene(interpolator.InterpolatorController):
                 main.next_action()
             if main.prepare_move(*self.camera.mouse_to_canvas(x, y)):
                 main.next_action()
+                
+    def pause(self):
+        self.paused = True
+        print "%s is paused." % self.name
     
+    def resume(self):
+        self.paused = False
+        print "%s has resumed." % self.name
     
     # Update/draw
     
@@ -139,12 +204,15 @@ class Scene(interpolator.InterpolatorController):
     
     @camera.obey_camera
     def draw(self, dt=0):
+        pyglet.gl.glTranslatef(self.x_offset, self.y_offset, 0)
+        for act in self.actors.viewvalues():
+            if act.__above and act.__above.sprite.y > act.sprite.y:
+                self.swap_actor_up(act)
         self.env.draw()
         self.batch.draw()
         
         self.env.draw_overlay()
         self.convo.draw()
-    
     
     # Serialization
     

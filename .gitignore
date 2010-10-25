@@ -7,3 +7,8 @@ coder_art/
 *~
 
 yaml/
+build/
+copyresources.sh
+dist/
+resources_repo
+

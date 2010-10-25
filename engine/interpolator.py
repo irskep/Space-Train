@@ -61,7 +61,6 @@ class Interpolator(object):
         fmt = "Interpolator '%s' on %s.%s from %0.2f to %0.2f taking %0.2f seconds)"
         return fmt % (self.name, str(self.host_object), self.attr_name, 
                       self.start, self.end, self.duration)
-    
 
 class LinearInterpolator(Interpolator):
     def __init__(self, *args, **kwargs):
@@ -76,7 +75,6 @@ class LinearInterpolator(Interpolator):
         fmt = "LinearInterpolator '%s' on %s.%s from %0.2f to %0.2f taking %0.2f seconds)"
         return fmt % (self.name, str(self.host_object), self.attr_name, 
                       self.start, self.end, self.duration)
-    
 
 class Linear2DInterpolator(Interpolator):
     def __init__(self, host_object, attr_name, end_tuple, name="position", 
@@ -145,6 +143,7 @@ class PulseInterpolator(Interpolator):
     def __init__(self, host_object, attr_name, inner, outer, **kwargs):
         self.inner = inner
         self.spread = outer - inner
+        self.stop = False
         super(PulseInterpolator, self).__init__(host_object, attr_name, 
                                                start=0.0, end=math.pi*2, **kwargs)
         self.update(0.0)
@@ -155,5 +154,5 @@ class PulseInterpolator(Interpolator):
                 self.inner + math.sin(self.progress*self.speed)*self.spread)
     
     def complete(self):
-        return False
+        return self.stop
     

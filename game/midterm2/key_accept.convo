@@ -10,4 +10,4 @@ variables:
     dummy: true
     
 start:
-    - bean_salesman: Thank you for the key! This is just what I needed for my chastity belt.
+    - bean_salesman: Thank you for the key! I would give you beans but I am all out.
