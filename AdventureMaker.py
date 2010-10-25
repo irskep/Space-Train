@@ -1,4 +1,3 @@
-#r8xih7
 import math, os, sys, json
 
 import pyglet
