@@ -251,4 +251,9 @@ class Scene(interpolator.InterpolatorController):
     def remove_actor(self, identifier):
         self.actors[identifier].sprite.delete()
         del self.actors[identifier]
-    
+
+    def load_song(self, song_name):
+        self.song = pyglet.resource.media(song_name)
+        song.play()
+
+        

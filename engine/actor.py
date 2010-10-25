@@ -20,6 +20,7 @@ class Actor(actionsequencer.ActionSequencer):
         
         self.identifier = identifier
         self.walkpath_point = None
+        self.music_path = util.respath_func_with_base_path('music')
         self.resource_path = util.respath_func_with_base_path('actors', self.name)
         
         self.update_static_info()
@@ -243,5 +244,10 @@ class Actor(actionsequencer.ActionSequencer):
         if self.sprite.scale != 1.0:
             dict_repr['scale'] = self.sprite.scale
         return dict_repr
-    
 
+    def play_sound(self, load_sound):
+        self.sound = pyglet.resource.media(self.music_path("%s.mp3" % load_sound))
+        self.sound.play()
+
+
+    
