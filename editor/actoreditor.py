@@ -104,7 +104,6 @@ class ActorEditor(abstracteditor.AbstractEditor):
     
     def actor_button_action(self, button=None):
         def actor_placer(x, y):
-            world_point = self.scene.camera.mouse_to_canvas(x, y)
             self.dragging_item = self.scene.new_actor(button.text,
                                                       attrs = {'x': x, 'y': y})
             editorstate.set_status_message('')

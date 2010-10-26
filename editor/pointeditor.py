@@ -97,8 +97,7 @@ class PointEditor(abstracteditor.AbstractEditor):
     
     def delete_point(self, button=None):
         def point_deleter(x, y):
-            world_point = self.scene.camera.mouse_to_canvas(x, y)
-            self.scene.walkpath.remove_point(self.scene.walkpath.path_point_near_point(world_point))
+            self.scene.walkpath.remove_point(self.scene.walkpath.path_point_near_point((x, y)))
             editorstate.set_status_message('')
         self.editor.click_actions.append(point_deleter)
         editorstate.set_status_message("Click a point to delete it")
@@ -108,10 +107,9 @@ class PointEditor(abstracteditor.AbstractEditor):
             return
         self.point_1 = self.selected_item
         def edge_finish(x, y):
-            world_point = self.scene.camera.mouse_to_canvas(x, y)
-            self.point_2 = self.scene.walkpath.path_point_near_point(world_point)
+            self.point_2 = self.scene.walkpath.path_point_near_point((x, y))
             if not self.point_2:
-                self.point_2 = self.scene.walkpath.add_point(*world_point)
+                self.point_2 = self.scene.walkpath.add_point((x, y))
             if self.point_1 != self.point_2:
                 self.editor.change_selection(self.editor.edge_ed)
                 new_edge = self.scene.walkpath.add_edge(self.point_1, self.point_2)

@@ -38,9 +38,9 @@ class EdgeEditor(abstracteditor.AbstractEditor):
     def wants_drag(self, x, y):
         return True
     
-    def end_drag(self, *world_point):
+    def end_drag(self, x, y):
         old_selection = self.selected_item
-        new_selection = self.scene.walkpath.closest_edge_to_point(world_point)
+        new_selection = self.scene.walkpath.closest_edge_to_point((x, y))
         
         if new_selection is not None and old_selection == new_selection \
                 and new_selection.counterpart:
