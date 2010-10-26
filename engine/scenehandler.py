@@ -36,7 +36,6 @@ class SceneHandler(actionsequencer.ActionSequencer):
     
     def set_first_scene(self, scn):
         self.set_scenes(scn)
-        self.scene.load_script()
         gamestate.event_manager.set_scene(self.scene)
     
     def set_scenes(self, *args):
