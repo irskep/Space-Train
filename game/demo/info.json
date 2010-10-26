@@ -1,0 +1,87 @@
+{
+    "environment": "height_test", 
+    "camera_points": {
+        "start": {
+            "y": 360, 
+            "x": 640
+        }
+    }, 
+    "actors": {
+        "cart_lady": {
+            "walkpath_point": "cart_lady_left", 
+            "name": "cart_lady", 
+            "start_state": "walk_right"
+        }, 
+        "bean_salesman": {
+            "y": 144, 
+            "x": 1438, 
+            "name": "hobo", 
+            "start_state": "stand_front"
+        }, 
+        "main": {
+            "walkpath_point": "inga_walk_left", 
+            "name": "inga", 
+            "start_state": "stand_front"
+        }, 
+        "key_1": {
+            "y": 180, 
+            "x": 936, 
+            "name": "key", 
+            "start_state": "key"
+        }
+    }, 
+    "walkpath": {
+        "points": {
+            "inga_walk_middle": {
+                "y": 143, 
+                "x": 1294
+            }, 
+            "cart_lady_right": {
+                "y": 60, 
+                "x": 2860
+            }, 
+            "cart_lady_left": {
+                "y": 60, 
+                "x": -300
+            }, 
+            "inga_walk_right": {
+                "y": 143, 
+                "x": 1956
+            }, 
+            "point_1": {
+                "y": 145, 
+                "x": 937
+            }, 
+            "inga_walk_left": {
+                "y": 143, 
+                "x": 569
+            }
+        }, 
+        "edges": [
+            {
+                "a": "cart_lady_right", 
+                "b": "cart_lady_left"
+            }, 
+            {
+                "a": "inga_walk_right", 
+                "b": "inga_walk_middle"
+            }, 
+            {
+                "a": "cart_lady_left", 
+                "b": "cart_lady_right"
+            }, 
+            {
+                "a": "inga_walk_middle", 
+                "b": "inga_walk_right"
+            }, 
+            {
+                "a": "inga_walk_left", 
+                "b": "inga_walk_middle"
+            }, 
+            {
+                "a": "inga_walk_middle", 
+                "b": "inga_walk_left"
+            }
+        ]
+    }
+}

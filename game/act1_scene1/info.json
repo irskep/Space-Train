@@ -1,0 +1,38 @@
+{
+    "environment": "act1_scene1", 
+    "camera_points": {
+        "camera_point_1": {
+            "y": 360, 
+            "x": 640
+        }, 
+        "camera_point_2": {
+            "y": 360, 
+            "x": 1904.0
+        }
+    }, 
+    "actors": {
+        "main": {
+            "walkpath_point": "point_1", 
+            "name": "inga", 
+            "start_state": "stand_front"
+        }
+    }, 
+    "walkpath": {
+        "points": {
+            "point_1": {
+                "y": 135, 
+                "x": 348
+            }, 
+            "point_2": {
+                "y": 133, 
+                "x": 1188
+            }
+        }, 
+        "edges": [
+            {
+                "a": "point_1", 
+                "b": "point_2"
+            }
+        ]
+    }
+}
