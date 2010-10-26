@@ -58,12 +58,15 @@ class Scene(object):
     
     # Initialization
     
-    def __init__(self, name, scene_handler=None, ui=None, load_path=None):
+    def __init__(self, name, scene_handler=None, ui=None, load_path=None, clip=True):
         super(Scene, self).__init__()
         self.name = name
         self.handler = scene_handler
         self.batch = pyglet.graphics.Batch()
-        self.main_group = ClipGroup()
+        if clip:
+            self.main_group = ClipGroup()
+        else:
+            self.main_group = None
         self.ui = ui
         self.actors = {}
         self.camera_points = {}
@@ -220,8 +223,9 @@ class Scene(object):
     
     @camera.obey_camera
     def draw(self, dt=0):
-        self.main_group.x = self.x_offset
-        self.main_group.y = self.y_offset
+        if self.main_group:
+            self.main_group.x = self.x_offset
+            self.main_group.y = self.y_offset
         pyglet.gl.glPushMatrix()
         pyglet.gl.glTranslatef(self.x_offset, self.y_offset, 0)
         

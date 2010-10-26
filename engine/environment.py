@@ -59,6 +59,3 @@ class Environment(object):
     
     def __repr__(self):
         return 'Environment(name="%s")' % self.name
-    
-
-        
