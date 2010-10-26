@@ -36,6 +36,8 @@ def end_conversation(convo_name):
         lemonade = actor.Actor("lemonade", "lemonade", scene = myscene, attrs = {'start_state': 'lemonade'})
         myscene.add_actor(lemonade)
         myscene.ui.inventory.put_item(lemonade)
+        
+        myscene.convo.begin_conversation("introduction_continued")
 
 walk_handlers = {
     'main': inga_walk,
