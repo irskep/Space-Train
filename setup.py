@@ -7,7 +7,6 @@ Usage (Windows):
 """
 
 import sys
-from setuptools import setup
 
 mainscript = 'Adventure.py'
 
@@ -20,6 +19,7 @@ OPTIONS = dict(
 )
 
 if sys.platform == 'darwin':
+     from setuptools import setup
      extra_options = dict(
          setup_requires=['py2app'],
          app=[mainscript],
@@ -28,6 +28,8 @@ if sys.platform == 'darwin':
          options={'py2app': OPTIONS},
      )
 elif sys.platform == 'win32':
+     from distutils.core import setup
+     import py2exe
      extra_options = dict(
          setup_requires=['py2exe'],
          app=[mainscript],

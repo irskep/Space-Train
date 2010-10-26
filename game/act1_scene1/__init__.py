@@ -27,7 +27,15 @@ def ask_about_beans():
     bean_salesman = myscene.actors['bean_salesman']
 
 def end_conversation(convo_name):
-    myscene.actors['main'].update_state('stand_front')
+    if convo_name == "introduction":   
+        # Create the items to be given to Inga
+        nuts = actor.Actor("tasty_nuts", "tasty_nuts", scene = myscene, attrs = {'start_state': 'tasty_nuts'})
+        myscene.add_actor(nuts)
+        myscene.ui.inventory.put_item(nuts)
+        
+        lemonade = actor.Actor("lemonade", "lemonade", scene = myscene, attrs = {'start_state': 'lemonade'})
+        myscene.add_actor(lemonade)
+        myscene.ui.inventory.put_item(lemonade)
 
 walk_handlers = {
     'main': inga_walk,
