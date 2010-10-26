@@ -21,6 +21,7 @@ class Actor(actionsequencer.ActionSequencer):
         self.identifier = identifier
         self.walkpath_point = None
         self.resource_path = util.respath_func_with_base_path('actors', self.name)
+        self.sound_path = util.respath_func_with_base_path('music')
         
         self.update_static_info()
         self.current_state = Actor.info[self.name]['start_state']
@@ -257,7 +258,7 @@ class Actor(actionsequencer.ActionSequencer):
         return dict_repr
 
     def play_sound(self, load_sound):
-        self.sound = pyglet.resource.media(self.music_path("%s.mp3" % load_sound))
+        self.sound = pyglet.resource.media(self.sound_path("%s.mp3" % load_sound))
         self.sound.play()
 
 

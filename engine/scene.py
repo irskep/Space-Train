@@ -174,12 +174,7 @@ class Scene(object):
     # Events
     
     def on_mouse_release(self, x, y, button, modifiers):
-<<<<<<< HEAD
         if self.paused or (self.actors.has_key('main') and self.actors['main'].blocking_actions):
-=======
-
-        if self.paused:
->>>>>>> f37442a9d8a870aa02bdd1e7852e1cbb381c0a66
             return
         
         clicked_actor = self.actor_under_point(*self.camera.mouse_to_canvas(x, y))
