@@ -9,7 +9,7 @@ import editorstate
 
 class EditorView(object):
     def __init__(self, scene_name):
-        self.scene = scene.Scene(scene_name)
+        self.scene = scene.Scene(scene_name, clip=False)
         gamestate.main_window.push_handlers(self)
         
         self.drag_start = (0, 0)
