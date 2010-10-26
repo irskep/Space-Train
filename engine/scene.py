@@ -66,7 +66,7 @@ class Scene(object):
         if clip:
             self.main_group = ClipGroup()
         else:
-            self.main_group = False
+            self.main_group = None
         self.ui = ui
         self.actors = {}
         self.camera_points = {}
