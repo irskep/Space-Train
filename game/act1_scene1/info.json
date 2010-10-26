@@ -5,15 +5,31 @@
             "y": 360, 
             "x": 640
         }, 
+        "camera_point_3": {
+            "y": 360, 
+            "x": 3200
+        }, 
         "camera_point_2": {
             "y": 360, 
             "x": 1904.0
         }
     }, 
     "actors": {
+        "seat_8": {
+            "y": 186, 
+            "x": 2681, 
+            "name": "seat", 
+            "start_state": "crappy"
+        }, 
+        "seat_9": {
+            "y": 187, 
+            "x": 2962, 
+            "name": "seat", 
+            "start_state": "crappy"
+        }, 
         "seat_4": {
-            "y": 182, 
-            "x": 1502, 
+            "y": 186, 
+            "x": 1434, 
             "name": "seat", 
             "start_state": "crappy"
         }, 
@@ -23,9 +39,21 @@
             "name": "seat", 
             "start_state": "crappy"
         }, 
+        "seat_6": {
+            "y": 190, 
+            "x": 2114, 
+            "name": "seat", 
+            "start_state": "crappy"
+        }, 
+        "seat_7": {
+            "y": 187, 
+            "x": 2406, 
+            "name": "seat", 
+            "start_state": "crappy"
+        }, 
         "seat_1": {
-            "y": 185, 
-            "x": 896, 
+            "y": 183, 
+            "x": 892, 
             "name": "seat", 
             "start_state": "crappy"
         }, 
@@ -41,27 +69,78 @@
             "name": "seat", 
             "start_state": "crappy"
         }, 
-        "main": {
-            "walkpath_point": "point_1", 
-            "name": "inga", 
+        "seat_10": {
+            "y": 186, 
+            "x": 3491, 
+            "name": "seat", 
+            "start_state": "crappy"
+        }, 
+        "seat_11": {
+            "y": 186, 
+            "x": 3232, 
+            "name": "seat", 
+            "start_state": "crappy"
+        }, 
+        "hobo_1": {
+            "y": 196, 
+            "x": 2678, 
+            "name": "hobo", 
             "start_state": "stand_front"
+        }, 
+        "main": {
+            "walkpath_point": "seat", 
+            "name": "inga", 
+            "start_state": "sit_dead"
+        }, 
+        "levity": {
+            "walkpath_point": "levity_start", 
+            "name": "cart_lady", 
+            "start_state": "walk_right"
         }
     }, 
     "walkpath": {
         "points": {
+            "levity_start": {
+                "y": 107, 
+                "x": 928
+            }, 
+            "levity_inga": {
+                "y": 118.0, 
+                "x": 3262.0
+            }, 
             "point_1": {
                 "y": 135, 
-                "x": 348
+                "x": 3490
             }, 
             "point_2": {
-                "y": 133, 
-                "x": 1188
+                "y": 135, 
+                "x": 2824
+            }, 
+            "seat": {
+                "y": 184, 
+                "x": 3491
             }
         }, 
         "edges": [
             {
                 "a": "point_1", 
                 "b": "point_2"
+            }, 
+            {
+                "a": "point_1", 
+                "b": "seat"
+            }, 
+            {
+                "a": "levity_start", 
+                "b": "levity_inga"
+            }, 
+            {
+                "a": "point_2", 
+                "b": "point_1"
+            }, 
+            {
+                "a": "seat", 
+                "b": "point_1"
             }
         ]
     }
