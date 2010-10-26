@@ -11,7 +11,6 @@ def init():
     myscene.ui.inventory.visible = True
     myscene.actors['levity'].prepare_walkpath_move("levity_inga")
     myscene.actors['levity'].next_action()
-    #text.init(myscene)
 
 def inga_walk(actor, point):
     pass
@@ -21,6 +20,7 @@ def levity_walk(actor, point):
         #begin convo
         print "updating state"
         actor.update_state("stand_right")
+        myscene.convo.begin_conversation("introduction")
     
 def ask_about_beans():
     myscene.convo.begin_conversation('beans_1')
