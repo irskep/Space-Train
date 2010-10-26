@@ -75,8 +75,7 @@ class EdgeEditor(abstracteditor.AbstractEditor):
     def new_edge(self, button=None):
         editorstate.set_status_message('Click the source point')
         def edge_setup(x, y):
-            world_point = self.scene.camera.mouse_to_canvas(x, y)
-            self.point_1 = self.scene.walkpath.path_point_near_point(world_point)
+            self.point_1 = self.scene.walkpath.path_point_near_point((x, y))
             if self.point_1:
                 editorstate.set_status_message('Click the destination point')
             else:
@@ -84,8 +83,7 @@ class EdgeEditor(abstracteditor.AbstractEditor):
                 self.editor.empty_click_actions()
                 editorstate.set_status_message('')
         def edge_finish(x, y):
-            world_point = self.scene.camera.mouse_to_canvas(x, y)
-            self.point_2 = self.scene.walkpath.path_point_near_point(world_point)
+            self.point_2 = self.scene.walkpath.path_point_near_point((x, y))
             if self.point_2 and self.point_1 != self.point_2:
                 self.editor.change_selection(self)
                 self.set_selected_item(self.scene.walkpath.add_edge(self.point_1, self.point_2))
@@ -96,8 +94,7 @@ class EdgeEditor(abstracteditor.AbstractEditor):
     def delete_edge(self, button=None):
         editorstate.set_status_message('Click the source point')
         def edge_setup(x, y):
-            world_point = self.scene.camera.mouse_to_canvas(x, y)
-            self.point_1 = self.scene.walkpath.path_point_near_point(world_point)
+            self.point_1 = self.scene.walkpath.path_point_near_point((x, y))
             if self.point_1:
                 editorstate.set_status_message('Click the destination point')
             else:
@@ -105,8 +102,7 @@ class EdgeEditor(abstracteditor.AbstractEditor):
                 self.click_actions = collections.deque()
                 editorstate.set_status_message('')
         def edge_finish(x, y):
-            world_point = self.scene.camera.mouse_to_canvas(x, y)
-            self.point_2 = self.scene.walkpath.path_point_near_point(world_point)
+            self.point_2 = self.scene.walkpath.path_point_near_point((x, y))
             if self.point_2:
                 self.editor.change_selection(self)
                 self.set_selected_item(None)
