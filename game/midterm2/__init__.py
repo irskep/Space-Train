@@ -52,6 +52,7 @@ def handle_event(event, *args):
 def actor_clicked(clicked_actor):    
     print "Clicked on %s" % clicked_actor.name
     if clicked_actor.identifier == 'main':
+        clicked_actor.play_sound("laugh")
         actions = {
             'Eat': inga_actions.eat,
             'Pray': inga_actions.pray,
