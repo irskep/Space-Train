@@ -18,29 +18,41 @@ class PointEditor(abstracteditor.AbstractEditor):
             glydget.Button('New edge out (o)', self.new_edge_from_point),
         ])
         self.inspector.move(2, gamestate.main_window.height-2)
+        
+        self.placing_point = False
     
     def wants_drag(self, x, y):
-        self.dragging_item = self.scene.walkpath.path_point_near_point((x, y))
-        return self.dragging_item is not None
+        if self.placing_point:
+            self.editor.change_selection(self)
+            self.set_selected_item(self.scene.walkpath.add_point(x, y))
+            editorstate.set_status_message('')
+            return True
+        else:
+            self.dragging_item = self.scene.walkpath.path_point_near_point((x, y))
+            return self.dragging_item is not None
     
     def start_drag(self, x, y):
-        self.drag_start = (x, y)
-        self.drag_anchor = self.scene.walkpath.points[self.dragging_item]
+        if not self.placing_point:
+            self.drag_start = (x, y)
+            self.drag_anchor = self.scene.walkpath.points[self.dragging_item]
     
     def continue_drag(self, x, y):
-        new_point = (self.drag_anchor[0] - (self.drag_start[0] - x),
-                     self.drag_anchor[1] - (self.drag_start[1] - y))
-        self.is_dragging_item = True
-        self.scene.walkpath.points[self.dragging_item] = new_point
-        for actor in self.scene.actors.viewvalues():
-            if actor.walkpath_point == self.dragging_item:
-                actor.sprite.position = new_point
+        if not self.placing_point:
+            new_point = (self.drag_anchor[0] - (self.drag_start[0] - x),
+                         self.drag_anchor[1] - (self.drag_start[1] - y))
+            self.is_dragging_item = True
+            self.scene.walkpath.points[self.dragging_item] = new_point
+            for actor in self.scene.actors.viewvalues():
+                if actor.walkpath_point == self.dragging_item:
+                    actor.sprite.position = new_point
     
     def end_drag(self, x, y):
-        self.is_dragging_item = False
-        if self.dragging_item:
-            self.set_selected_item(self.dragging_item)
-        self.dragging_item = False
+        if not self.placing_point:
+            self.is_dragging_item = False
+            if self.dragging_item:
+                self.set_selected_item(self.dragging_item)
+            self.dragging_item = False
+        self.placing_point = False
     
     def update_item_from_inspector(self, widget=None):
         if self.selected_item:
@@ -81,12 +93,7 @@ class PointEditor(abstracteditor.AbstractEditor):
     
     def new_point(self, button=None):
         editorstate.set_status_message("Click to place a point")
-        def point_placer(x, y):
-            world_point = self.scene.camera.mouse_to_canvas(x, y)
-            self.editor.change_selection(self)
-            self.set_selected_item(self.scene.walkpath.add_point(*world_point))
-            editorstate.set_status_message('')
-        self.editor.click_actions.append(point_placer)
+        self.placing_point = True
     
     def delete_point(self, button=None):
         def point_deleter(x, y):

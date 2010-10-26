@@ -19,7 +19,7 @@ class EditorView(object):
         
         self.click_actions = collections.deque()
         
-        self.cam_ed = cameraeditor.CameraEditor(self)
+        # self.cam_ed = cameraeditor.CameraEditor(self)
         self.point_ed = pointeditor.PointEditor(self)
         self.actor_ed = actoreditor.ActorEditor(self)
         self.edge_ed = edgeeditor.EdgeEditor(self)
@@ -27,14 +27,17 @@ class EditorView(object):
         self.ed_with_selection = None
         self.ed_with_drag = None
         
-        self.editors = [self.cam_ed, self.point_ed, self.actor_ed, self.edge_ed]
+        self.editors = [
+            # self.cam_ed, 
+            self.point_ed, self.actor_ed, self.edge_ed]
         self.windows = [self.actor_ed.actor_pallet, 
                         self.actor_ed.inspector, 
                         self.edge_ed.edge_pallet, 
                         self.edge_ed.inspector,
                         self.point_ed.inspector,
-                        self.cam_ed.camera_pallet,
-                        self.cam_ed.inspector]
+                        # self.cam_ed.camera_pallet,
+                        # self.cam_ed.inspector
+                        ]
         
         editorstate.init()
         
