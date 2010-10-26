@@ -223,8 +223,9 @@ class Scene(object):
     
     @camera.obey_camera
     def draw(self, dt=0):
-        self.main_group.x = self.x_offset
-        self.main_group.y = self.y_offset
+        if self.main_group:
+            self.main_group.x = self.x_offset
+            self.main_group.y = self.y_offset
         pyglet.gl.glPushMatrix()
         pyglet.gl.glTranslatef(self.x_offset, self.y_offset, 0)
         
