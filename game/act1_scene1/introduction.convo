@@ -1,0 +1,27 @@
+# Initialization
+
+at_rest:
+    main: sit_dead
+    levity: stand_front
+
+speaking:
+    main: sit_dead
+    levity: stand_right
+
+variables:
+    bean_hate: false
+
+# States
+
+start:
+    - levity: Excuse me miss, would you like anything to eat or drink?
+    - goto: food_choice
+
+food_choice:
+    - choice:
+        I'd love a delicious snack!:
+          hide_after_use: true
+          goto: ask_for_food
+
+ask_for_food:
+    - main: Yes please! I'll have some Tasty Nuts and a lemonade.

@@ -120,13 +120,17 @@ class Scene(object):
             # Initialize and store
             new_actor = actor.Actor(name=attrs['name'], identifier=identifier, 
                                     scene=self, attrs=attrs)
-            self.actors[identifier] = new_actor
             
             # Obey walk paths
             if attrs.has_key('walkpath_point'):
                 new_actor.walkpath_point = attrs['walkpath_point']
                 new_actor.sprite.position = self.walkpath.points[new_actor.walkpath_point]
-
+            self.add_actor(new_actor)
+    
+    def add_actor(self, actor):
+        self.actors[actor.identifier] = actor
+        self.zenforcer.init_groups()
+        self.zenforcer.update()
     
     def load_script(self):
         # Requires that game/scenes is in PYTHONPATH

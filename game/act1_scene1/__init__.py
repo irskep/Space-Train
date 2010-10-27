@@ -11,7 +11,6 @@ def init():
     myscene.ui.inventory.visible = True
     myscene.actors['levity'].prepare_walkpath_move("levity_inga")
     myscene.actors['levity'].next_action()
-    #text.init(myscene)
 
 def inga_walk(actor, point):
     pass
@@ -21,13 +20,24 @@ def levity_walk(actor, point):
         #begin convo
         print "updating state"
         actor.update_state("stand_right")
+        myscene.convo.begin_conversation("introduction")
     
 def ask_about_beans():
     myscene.convo.begin_conversation('beans_1')
     bean_salesman = myscene.actors['bean_salesman']
 
 def end_conversation(convo_name):
-    myscene.actors['main'].update_state('stand_front')
+    if convo_name == "introduction":   
+        # Create the items to be given to Inga
+        nuts = actor.Actor("tasty_nuts", "tasty_nuts", scene = myscene, attrs = {'start_state': 'tasty_nuts'})
+        myscene.add_actor(nuts)
+        myscene.ui.inventory.put_item(nuts)
+        
+        lemonade = actor.Actor("lemonade", "lemonade", scene = myscene, attrs = {'start_state': 'lemonade'})
+        myscene.add_actor(lemonade)
+        myscene.ui.inventory.put_item(lemonade)
+        
+        myscene.convo.begin_conversation("introduction_continued")
 
 walk_handlers = {
     'main': inga_walk,

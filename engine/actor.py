@@ -97,7 +97,6 @@ class Actor(actionsequencer.ActionSequencer):
         except AttributeError:
             return self.sprite.image
     
-    
     # State changes
     
     def set_image_if_exists(self, image_name):
