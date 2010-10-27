@@ -100,8 +100,10 @@ class Conversation(object):
         self.animations = None
         self.convo_lines = None
         self.convo_position = 0
-        self.convo_label = pyglet.text.Label("", color = (0,0,0,255), 
-                                             font_size=12, anchor_x='center', anchor_y='bottom', multiline = True, width = 400)
+        
+        self.convo_label = pyglet.text.Label("", color = (0,0,0,255), font_size=12, 
+                                             anchor_x='center', anchor_y='bottom',
+                                             multiline=True, width=400)
     
     active = property(lambda self: self.convo_name is not None)
     
@@ -120,8 +122,8 @@ class Conversation(object):
             w = self.convo_label.content_width
             h = self.convo_label.content_height
             
-            rect_args = (x - (400 / 2) - 5,  y,
-                         x + (400 / 2) + 5,  y + h)
+            rect_args = (x - (400 / 2) - 5,  y - 5,
+                         x + (400 / 2) + 5,  y + h + 5)
                          
             print "x: %d y: %d w: %d h: %d" % (rect_args[0], rect_args[1], rect_args[2] - rect_args[0], rect_args[3] - rect_args[1])
             print "Text... x: %d y: %d w: %d h: %d" % (x, y, w, h)

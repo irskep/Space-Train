@@ -71,6 +71,9 @@ class Scene(object):
         self.actors = {}
         self.camera_points = {}
         
+        self.game_time = 0.0
+        self.accum_time = 0.0
+        self.clock = pyglet.clock.Clock(time_function=lambda: self.game_time)
         self.paused = False
         self.x_offset = 0.0
         self.y_offset = 0.0
@@ -122,7 +125,6 @@ class Scene(object):
             if attrs.has_key('walkpath_point'):
                 new_actor.walkpath_point = attrs['walkpath_point']
                 new_actor.sprite.position = self.walkpath.points[new_actor.walkpath_point]
-            
             self.add_actor(new_actor)
     
     def add_actor(self, actor):
@@ -178,7 +180,7 @@ class Scene(object):
     def on_mouse_release(self, x, y, button, modifiers):
         if self.paused or (self.actors.has_key('main') and self.actors['main'].blocking_actions):
             return
-            
+        
         clicked_actor = self.actor_under_point(*self.camera.mouse_to_canvas(x, y))
         
         if clicked_actor:
@@ -301,4 +303,8 @@ class Scene(object):
         self.actors[identifier].sprite.delete()
         del self.actors[identifier]
         self.zenforcer.init_groups()
+    
+    def load_song(self, song_name):
+        self.song = pyglet.resource.media(song_name)
+        song.play()
     
