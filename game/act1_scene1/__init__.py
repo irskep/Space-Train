@@ -7,18 +7,28 @@ from engine.util.const import WALK_PATH_COMPLETED
 # myscene is set by scene.py
 myscene = None
 
+levity_exposition = False
+
 def init():
     myscene.ui.inventory.visible = True
-    myscene.actors['levity'].prepare_walkpath_move("levity_inga")
+    myscene.actors['levity'].prepare_walkpath_move("levity_4")
     myscene.actors['levity'].next_action()
 
 def inga_walk(actor, point):
     pass
     
 def levity_walk(actor, point):
-    if point == "levity_inga":
+    levity =  myscene.actors['levity']
+    if point == "levity_left":
+        levity.prepare_walkpath_move("levity_1")
+        myscene.clock.schedule_once(levity.next_action, 60)
+    if point == "levity_right":
+        levity.prepare_walkpath_move("levity_4")
+        myscene.clock.schedule_once(levity.next_action, 60)
+    if point == "levity_1":
+        
+    if point == "levity_4":
         #begin convo
-        print "updating state"
         actor.update_state("stand_right")
         myscene.convo.begin_conversation("introduction")
     
