@@ -255,7 +255,7 @@ class Conversation(object):
                                  act.current_image().height - act.current_image().anchor_y
             self.convo_label.text = arg
             self.convo_label.end_update()
-            self.scene.clock.schedule_once(self.next_line, max(len(arg)*0.04, 2.0))
+            self.scene.clock.schedule_once(self.next_line, max(len(arg)*0.05, 3.0))
         else:
             if arg.has_key('action'):
                 getattr(act, arg['action'])()

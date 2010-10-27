@@ -21,6 +21,7 @@ class Actor(actionsequencer.ActionSequencer):
         self.identifier = identifier
         self.walkpath_point = None
         self.resource_path = util.respath_func_with_base_path('actors', self.name)
+        self.sound_path = util.respath_func_with_base_path('music')
         
         self.update_static_info()
         self.current_state = Actor.info[self.name]['start_state']
@@ -31,6 +32,14 @@ class Actor(actionsequencer.ActionSequencer):
         if self.scene and batch is None:
             batch = self.scene.batch
         self.sprite = pyglet.sprite.Sprite(Actor.images[self.name][self.current_state], batch=batch)
+        try:
+            self.icon = pyglet.sprite.Sprite(self.image_named("icon", 0, 0), batch = None)
+        except pyglet.resource.ResourceNotFoundException:
+            self.icon = pyglet.sprite.Sprite(Actor.images[self.name][self.current_state], batch = None) 
+            if self.scene.ui:
+                if self.icon.height > self.scene.ui.inventory.height:
+                    self.icon.scale = float(self.scene.ui.inventory.height) / float(self.icon.height)
+        
         # Update attributes
         for attr in ['x', 'y', 'scale', 'rotation']:
             if attrs.has_key(attr):
@@ -46,6 +55,22 @@ class Actor(actionsequencer.ActionSequencer):
     # Access
     
     def covers_point(self, x, y):
+        if not self.sprite.visible:
+            return False
+        min_x = self.abs_position_x()
+        min_y = self.abs_position_y()
+        max_x = self.abs_position_x() + self.width()
+        max_y = self.abs_position_y() + self.height()
+        return min_x <= x <= max_x and min_y <= y <= max_y
+        
+    def icon_covers_point(self, x, y):
+        min_x = self.icon.x - self.icon.image.anchor_x
+        min_y = self.icon.y - self.icon.image.anchor_y
+        max_x = self.icon.x - self.icon.image.anchor_x + self.icon.width*self.icon.scale
+        max_y = self.icon.y - self.icon.image.anchor_y + self.icon.height*self.icon.scale
+        return min_x <= x <= max_x and min_y <= y <= max_y
+            
+    def covers_visible_point(self, x, y):
         min_x = self.abs_position_x()
         min_y = self.abs_position_y()
         max_x = self.abs_position_x() + self.width()
@@ -122,8 +147,19 @@ class Actor(actionsequencer.ActionSequencer):
         """Move toward (x, y) either straight or via walk path"""
         if self.blocking_actions == 0:
             if self.walkpath_point:
-                dest_point = self.scene.walkpath.point_near(x, y)
-                self.prepare_walkpath_move(dest_point)
+                # Find the closest reachable walkpath point
+                ok = False
+                excluded_points = set()
+                dest_point = self.scene.walkpath.point_near(x, y, exclude=excluded_points)
+                while not ok:
+                    try:
+                        self.prepare_walkpath_move(dest_point)
+                        ok = True
+                    except IndexError:
+                        # dijkstra.py throws IndexError if no path exists
+                        # (internal heap gets over-popped)
+                        excluded_points.add(dest_point)
+                        dest_point = self.scene.walkpath.point_near(x, y, exclude=excluded_points)
             else:
                 self.prepare_direct_move(x, y)
             return True
@@ -163,6 +199,7 @@ class Actor(actionsequencer.ActionSequencer):
     def prepare_jump(self):
         self.actions.append([(self.jump, [])])
         self.actions.append([(self.update_state, ['stand_front'])])
+    
     
     # Serialization
     
@@ -219,5 +256,10 @@ class Actor(actionsequencer.ActionSequencer):
         if self.sprite.scale != 1.0:
             dict_repr['scale'] = self.sprite.scale
         return dict_repr
-    
 
+    def play_sound(self, load_sound):
+        self.sound = pyglet.resource.media(self.sound_path("%s.mp3" % load_sound))
+        self.sound.play()
+
+
+    

@@ -79,9 +79,9 @@ class WalkPath(object):
                 e.counterpart.counterpart = None
             del self.edges[(p1, p2)]
     
-    def point_near(self, x, y):
+    def point_near(self, x, y, exclude=None):
         dest_coords = (x, y)
-        dest_edge = self.closest_edge_to_point(dest_coords)
+        dest_edge = self.closest_edge_to_point(dest_coords, exclude)
         dist_sq_to_a = vector.dist_squared_between(dest_coords, self.points[dest_edge.a])
         dist_sq_to_b = vector.dist_squared_between(dest_coords, self.points[dest_edge.b])
         if dist_sq_to_a < dist_sq_to_b:
@@ -105,12 +105,15 @@ class WalkPath(object):
                 return identifier
         return None
     
-    def closest_edge_to_point(self, point):
+    def closest_edge_to_point(self, point, exclude=None):
         # Optimize me! Use rectangles.
+        
+        exclude = exclude or set()
         closest_point = None
         closest_dist = None
         closest_edge = None
-        for edge in self.edges.viewvalues():
+        for edge in [e for e in self.edges.viewvalues() \
+                     if e.a not in exclude and e.b not in exclude]:
             cp = self.closest_edge_point_to_point(edge, point)
             test_dist = vector.length_squared((point[0]-cp[0], point[1]-cp[1]))
             if closest_dist is None or test_dist < closest_dist:

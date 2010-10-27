@@ -31,7 +31,7 @@ class GameHandler(object):
     
     #@gamestate.scaled
     def draw(self, dt=0):
-        self.scene_handler.scene.draw()
+        self.scene_handler.draw_scenes()
         self.ui.draw()
         self.scene_handler.draw()
     

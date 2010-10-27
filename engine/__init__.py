@@ -5,10 +5,11 @@ from util import settings
 #Bootstrap's bootstraps
 
 resource_locations = [
-    os.path.join(os.path.dirname(__file__), r"resources"),   # the 'r' turns off escape sequences
+    os.path.join(os.path.dirname(__file__), r"resources"),
+    os.path.join(os.path.dirname(__file__), r"resources_repo"),
     r"C:\Users\Fred\Documents\My Dropbox\resources",
     r"/Users/stephen/Dropbox/resources",
-    r"C:\Users\Tyler\Documents\My Dropbox\resources"
+    r"C:\Users\Tyler\Documents\My Dropbox\resources",
     r"C:\Users\Merfie\Documents\My Dropbox\resources"
 ]
 
@@ -19,7 +20,7 @@ for location in resource_locations:
     else:
         try:
             from Carbon import File
-            fs, _, _ = File.ResolveAliasFile('resources',1)
+            fs, _, _ = File.ResolveAliasFile('location',1)
             settings.resources_path = fs.as_pathname()
             break
         except:

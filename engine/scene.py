@@ -1,45 +1,116 @@
+"""
+Controls all aspects of a single scene (background, overlay, and contained objects).
+
+ ========================
+ = Scene script methods =
+ ========================
+
+REQUIRED
+
+handle_event(event_type, *args, **kwargs)
+    event_type: see util.const
+    args, kwargs: usually just a single dictionary 'info' is passed as a positional argument
+
+OPTIONAL
+
+init()
+    Scene is finished loading, perform any necessary setup not done at the module level
+
+transition_from(previous_scene)
+    Called just before scene becomes visible after being switched to from previous_scene.
+    Set character positions, etc.
+
+actor_clicked(clicked_actor)
+    clicked_actor was clicked by the user, do whatever or nothing
+
+give_actor(receiving_actor, item)
+    Return True if receiving_actor can/should receive item. Also start any event chains, 
+    set variables, etc.
+"""
+
 import os, sys, shutil, json, importlib, pyglet, functools
 
 import camera, actor, gamestate, util, interpolator, convo
-from util import walkpath
+from util import walkpath, zenforcer
 
 import cam, environment, gamehandler, scenehandler
 
+update_t = 1/120.0
 
-update_t = 1/60.0
-class Scene(interpolator.InterpolatorController):
+class ClipGroup(pyglet.graphics.OrderedGroup): 
+    """Sprite group that clips to a rectangle"""
+    def __init__(self, order=0, parent=None,
+                 x=0, y=0, w=gamestate.norm_w, h=gamestate.norm_h):
+        super(ClipGroup, self).__init__(order, parent)
+        self.x, self.y, self.w, self.h = x, y, w, h
+        # Some kind of weird ctypes issue here, need to re-cast
+        self.x, self.y, self.w, self.h = [int(i) for i in (self.x, self.y, self.w, self.h)]
+    
+    def set_state(self):
+        pyglet.gl.glScissor(int(self.x), int(self.y), int(self.w), int(self.h)) 
+        pyglet.gl.glEnable(pyglet.gl.GL_SCISSOR_TEST) 
+    
+    def unset_state(self): 
+        pyglet.gl.glDisable(pyglet.gl.GL_SCISSOR_TEST)
+    
+
+class Scene(object):
     
     # Initialization
     
-    def __init__(self, name, scene_handler=None, ui=None, load_path=None):
+    def __init__(self, name, scene_handler=None, ui=None, load_path=None, clip=True):
         super(Scene, self).__init__()
         self.name = name
         self.handler = scene_handler
         self.batch = pyglet.graphics.Batch()
+        if clip:
+            self.main_group = ClipGroup()
+        else:
+            self.main_group = None
         self.ui = ui
         self.actors = {}
         self.camera_points = {}
         
         self.game_time = 0.0
         self.accum_time = 0.0
-        self.clock = pyglet.clock.Clock(time_function=lambda: self.game_time) 
+        self.clock = pyglet.clock.Clock(time_function=lambda: self.game_time)
         self.paused = False
-        
-        self.convo = convo.Conversation(self)
+        self.x_offset = 0.0
+        self.y_offset = 0.0
         
         self.resource_path = util.respath_func_with_base_path('game', self.name)
+        
+        self.init_clock()
+        self.init_zenforcer()
+        self.interp = interpolator.InterpolatorController()
+        self.convo = convo.Conversation(self)
+        self.init_convenience_bindings()
         
         self.load_info(load_path)
         self.initialize_from_info()
         self.load_actors()
+        self.zenforcer.init_groups()
         
         if gamestate.scripts_enabled:
             self.load_script()
+        
+        self.update(0)
+    
+    def init_convenience_bindings(self):
+        self.add_interpolator = self.interp.add_interpolator
+    
+    def init_zenforcer(self):
+        def sprite_maker():
+            for act in self.actors.viewvalues():
+                yield act.sprite
+        sort_func = lambda a, b: a.y < b.y
+        self.zenforcer = zenforcer.ZEnforcer(self.main_group, sprite_maker, sort_func)
+        pyglet.clock.schedule_interval(self.zenforcer.update, 1/30.0)
     
     def initialize_from_info(self):
         """Initialize objects specified in info.json"""
         self.environment_name = self.info['environment']
-        self.env = environment.Environment(self.environment_name)
+        self.env = environment.Environment(self.environment_name, self.main_group)
         self.walkpath = walkpath.WalkPath(dict_repr = self.info['walkpath'])
         self.camera = camera.Camera(dict_repr=self.info['camera_points'])
     
@@ -55,6 +126,7 @@ class Scene(interpolator.InterpolatorController):
             if attrs.has_key('walkpath_point'):
                 new_actor.walkpath_point = attrs['walkpath_point']
                 new_actor.sprite.position = self.walkpath.points[new_actor.walkpath_point]
+
     
     def load_script(self):
         # Requires that game/scenes is in PYTHONPATH
@@ -64,10 +136,12 @@ class Scene(interpolator.InterpolatorController):
     
     
     # Cleanup
+    
     def exit(self):
         for actor in self.actors.viewvalues():
             actor.sprite.delete()
         self.env.exit()
+        pyglet.clock.unschedule(self.zenforcer.update)
     
     
     # Access
@@ -81,31 +155,60 @@ class Scene(interpolator.InterpolatorController):
     
     # Script interaction
     
-    def fire_adv_event(self, event, *args):
-        self.module.handle_event(event, *args)
+    def fire_adv_event(self, event, *args, **kwargs):
+        if self.paused:
+            return
+        
+        self.module.handle_event(event, *args, **kwargs)
     
     def call_if_available(self, func_name, *args, **kwargs):
         if hasattr(self.module, func_name):
-            getattr(self.module, func_name)(*args, **kwargs)
-    
-    
-    # Events
+            return getattr(self.module, func_name)(*args, **kwargs)
+        else:
+            return False
     
     def transition_from(self, old_scene_name):
         self.call_if_available('transition_from', old_scene_name)
     
+    
+    # Events
+    
     def on_mouse_release(self, x, y, button, modifiers):
+        if self.paused or (self.actors.has_key('main') and self.actors['main'].blocking_actions):
+            return
+        
         clicked_actor = self.actor_under_point(*self.camera.mouse_to_canvas(x, y))
         
         if clicked_actor:
-            self.call_if_available('actor_clicked', clicked_actor)
+            self.click_actor(clicked_actor)
         elif self.actors.has_key("main"):
-            # Send main actor to click location according to actor's moving behavior
-            main = self.actors["main"]
-            while(main.blocking_actions > 0):
-                main.next_action()
-            if main.prepare_move(*self.camera.mouse_to_canvas(x, y)):
-                main.next_action()
+            self.move_main(x, y)
+    
+    def click_actor(self, clicked_actor):
+        if(self.ui.inventory.held_item is not None):
+            can_receive_item = self.call_if_available('give_actor', clicked_actor, 
+                                                      self.ui.inventory.held_item)
+            if not can_receive_item:
+                self.ui.inventory.put_item(self.ui.inventory.held_item)
+            self.ui.inventory.held_item = None
+        else:
+            self.call_if_available('actor_clicked', clicked_actor)
+    
+    def move_main(self, x, y):
+        # Send main actor to click location according to actor's moving behavior
+        main = self.actors["main"]
+        while(main.blocking_actions > 0):
+            main.next_action()
+        if main.prepare_move(*self.camera.mouse_to_canvas(x, y)):
+            main.next_action()
+    
+    def pause(self):
+        self.paused = True
+        print "%s is paused." % self.name
+    
+    def resume(self):
+        self.paused = False
+        print "%s has resumed." % self.name
     
     
     # Update/draw
@@ -114,6 +217,39 @@ class Scene(interpolator.InterpolatorController):
         if self.paused: 
             return
         
+        self.update_clock(dt)
+        
+        if self.actors.has_key('main'):
+            self.camera.set_target(self.actors["main"].sprite.x, self.actors["main"].sprite.y,
+                                   immediate=True)
+        self.camera.update(dt)
+        self.interp.update_interpolators(dt)
+    
+    @camera.obey_camera
+    def draw(self, dt=0):
+        if self.main_group:
+            self.main_group.x = self.x_offset
+            self.main_group.y = self.y_offset
+        pyglet.gl.glPushMatrix()
+        pyglet.gl.glTranslatef(self.x_offset, self.y_offset, 0)
+        
+        self.env.draw()
+        self.batch.draw()
+        
+        self.env.draw_overlay()
+        self.convo.draw()
+        
+        pyglet.gl.glPopMatrix()
+    
+    
+    # Clock
+    
+    def init_clock(self):
+        self.game_time = 0.0
+        self.accum_time = 0.0
+        self.clock = pyglet.clock.Clock(time_function=lambda: self.game_time)
+    
+    def update_clock(self, dt=0):
         # Align updates to fixed timestep 
         self.accum_time += dt 
         if self.accum_time > update_t * 3: 
@@ -122,19 +258,6 @@ class Scene(interpolator.InterpolatorController):
             self.game_time += update_t
             self.clock.tick() 
             self.accum_time -= update_t
-        
-        if self.actors.has_key('main'):
-            self.camera.set_target(self.actors["main"].sprite.x, self.actors["main"].sprite.y)
-        self.camera.update(dt)
-        self.update_interpolators(dt)
-    
-    @camera.obey_camera
-    def draw(self, dt=0):
-        self.env.draw()
-        self.batch.draw()
-        
-        self.env.draw_overlay()
-        self.convo.draw()
     
     
     # Serialization
@@ -169,9 +292,15 @@ class Scene(interpolator.InterpolatorController):
             identifier = "%s_%d" % (actor_name, next_identifier)
         new_actor = actor.Actor(identifier, actor_name, self, **kwargs)
         self.actors[identifier] = new_actor
+        self.zenforcer.init_groups()
         return new_actor
     
     def remove_actor(self, identifier):
         self.actors[identifier].sprite.delete()
         del self.actors[identifier]
+        self.zenforcer.init_groups()
+    
+    def load_song(self, song_name):
+        self.song = pyglet.resource.media(song_name)
+        song.play()
     
