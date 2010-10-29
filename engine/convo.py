@@ -124,9 +124,7 @@ class Conversation(object):
             
             rect_args = (x - (400 / 2) - 5,  y - 5,
                          x + (400 / 2) + 5,  y + h + 5)
-                         
-            print "x: %d y: %d w: %d h: %d" % (rect_args[0], rect_args[1], rect_args[2] - rect_args[0], rect_args[3] - rect_args[1])
-            print "Text... x: %d y: %d w: %d h: %d" % (x, y, w, h)
+
             draw.rect(*rect_args)
             draw.set_color(0,0,0,1)
             draw.rect_outline(*rect_args)

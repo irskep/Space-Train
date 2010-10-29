@@ -81,7 +81,7 @@
             "name": "seat", 
             "start_state": "crappy"
         }, 
-        "hobo_1": {
+        "gregg_briggs": {
             "y": 196, 
             "x": 2678, 
             "name": "hobo", 
@@ -100,7 +100,7 @@
     }, 
     "walkpath": {
         "points": {
-            "levity_end_left": {
+            "levity_left": {
                 "y": 125, 
                 "x": -185
             }, 
@@ -167,7 +167,7 @@
                 "b": "levity_2"
             }, 
             {
-                "a": "levity_end_left", 
+                "a": "levity_left", 
                 "b": "levity_1"
             }, 
             {
@@ -180,7 +180,7 @@
             }, 
             {
                 "a": "levity_1", 
-                "b": "levity_end_left"
+                "b": "levity_left"
             }, 
             {
                 "a": "levity_3", 

@@ -1,0 +1,31 @@
+# Initialization
+
+at_rest:
+    gregg_briggs: stand_front
+
+speaking:
+    gregg_briggs: stand_front
+
+variables:
+    bean_hate: false
+
+# States
+start:
+    gregg_briggs: mfnnfrrrng...
+    goto: cats
+cats:
+    gregg_briggs: cats...
+    goto: poke
+poke:
+    gregg_briggs: mmgrmgnng...
+    goto: ablative
+ablative:
+    gregg_briggs: ablative...
+    goto: signal
+signal: 
+    gregg_briggs: nnff...
+    goto: electron
+electron:
+    gregg_briggs: electron...
+    goto: start
+    
