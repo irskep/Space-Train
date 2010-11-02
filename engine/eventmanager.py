@@ -22,10 +22,13 @@ class EventManager(object):
         self.scene = scene
         self.inventory = inventory
         self.cam = cam
+        self.is_cutscene = False
         self.build_stack()
         
     # build the event stack in the correct order needed for SPACE TRAIIIN
     def build_stack(self):
+        if self.is_cutscene:
+            return
         self.clear_stack()
 
         #here is where the order of event handlers is determined
@@ -49,6 +52,22 @@ class EventManager(object):
         
     def set_cam(self, cam):
         self.cam = cam
+        self.build_stack()
+    
+    # cutscene mode
+    # excludes handlers for the moving the actor
+    def enter_cutscene(self):
+        self.is_cutscene = True
+        self.clear_stack()
+        self.add_handlers(pyglet.window.key.KeyStateHandler())
+        if self.scene:
+            self.add_handlers(self.scene.convo)
+        self.add_handlers(self.inventory)
+        self.add_handlers(self.cam)
+        self.add_handlers(self.inventory)
+    
+    def exit_cutscene(self):
+        self.is_cutscene = False
         self.build_stack()
     
     # Clear the event handler stack

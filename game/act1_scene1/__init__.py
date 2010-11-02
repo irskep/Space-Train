@@ -3,6 +3,9 @@ import functools
 from engine import actor
 from engine.interpolator import PulseInterpolator, LinearInterpolator
 from engine.util.const import WALK_PATH_COMPLETED
+from engine import ui
+from engine import cam
+from engine import gamestate
 
 # myscene is set by scene.py
 myscene = None
@@ -12,6 +15,7 @@ levity_direction = "right"
 
 def init():
     myscene.ui.inventory.visible = True
+    gamestate.event_manager.enter_cutscene()
     myscene.actors['levity'].prepare_walkpath_move("levity_4")
     myscene.actors['levity'].next_action()
 
@@ -25,8 +29,7 @@ def levity_walk(actor, point):
     global levity_direction
     levity = myscene.actors['levity']
     next_point = point
-    if point == "levity_left" or point == "levity_right":
-        print "Talk about it"
+    if point == "levity_left" or point == "levity_right":   
         if point == "levity_left":
             levity_direction = "right"
             next_point = "levity_1"
@@ -37,7 +40,6 @@ def levity_walk(actor, point):
         myscene.clock.schedule_once(levity.prepare_walkpath_move(next_point), 25)
         myscene.clock.schedule_once(levity.next_action, 30)
     else:
-        print "Funky town"
         if point == "levity_1":
             next_point = "levity_2" if levity_direction == "right" else "levity_left"
         elif point == "levity_2":
@@ -77,7 +79,7 @@ def end_conversation(convo_name):
         #Set levity to do her walk around the level
         myscene.actors['levity'].prepare_walkpath_move("levity_right")
         myscene.actors['levity'].next_action()
-        myscene.convo.begin_conversation("mumblestiltskin")
+        gamestate.event_manager.exit_cutscene()
 
 walk_handlers = {
     'main': inga_walk,
@@ -94,4 +96,6 @@ def handle_event(event, *args):
     print "Handled", event, "with", args
 
 def actor_clicked(clicked_actor):    
-    print "Clicked on %s" % clicked_actor.name
+    if clicked_actor.identifier == "gregg_briggs":
+        #show a CAM with options
+        myscene.ui.show_cam(clicked_actor, {'Greet the Odd Fellow': lambda: myscene.convo.start_conversation("briggs_exposition"), 'Avoid Eye Contact': None})
