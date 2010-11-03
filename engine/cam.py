@@ -33,6 +33,7 @@ class CAM(object):
         self.actions = actions
         self.x = x
         self.y = y
+        self.hide_on_click_outside = True
 
         self.batch = pyglet.graphics.Batch()
         self.buttons = []
@@ -91,15 +92,17 @@ class CAM(object):
     
     # Handle an event
     def on_mouse_release(self, x, y, button, modifiers):
-        if(self.visible):
-            self.visible = False
+        if self.visible:
             button = self.button_under(x,y)
             if button is None:
+                if self.hide_on_click_outside:
+                    self.set_visible(False)
                 # pass this even down to other handlers, clean up the CAM
                 return pyglet.event.EVENT_UNHANDLED
             else:
                 # execute the click action and clean up the CAM
                 button.click()
+                self.set_visible(False)
                 return pyglet.event.EVENT_HANDLED
     
     def on_key_press(self, symbol, modifiers):
@@ -123,6 +126,7 @@ class CAM(object):
             if button.x <= x <= button.x + button.sprite.width \
             and button.y <= y <= button.y + button.sprite.height \
             and util.image_alpha_at_point(button.sprite.image, x-button.x, y-button.y) > 0:
+                print 'alpha:', util.image_alpha_at_point(button.sprite.image, x-button.x, y-button.y)
                 return button
         return None
     

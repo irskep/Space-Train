@@ -109,7 +109,7 @@ class Conversation(object):
     
     def on_mouse_release(self, x, y, button, modifiers):
         """Skip speaking delay on mouse click"""
-        if self.active:
+        if self.active and not self.scene.ui.cam:
             self.scene.clock.unschedule(self.next_line)
             self.next_line()
     
@@ -185,6 +185,7 @@ class Conversation(object):
         self.convo_position = 0
         self.convo_lines = self.convo_info[val]
         if self.scene.ui.cam:
+            print 'hidefromgoto'
             self.scene.ui.cam.set_visible(False)
         return True
     
@@ -196,6 +197,7 @@ class Conversation(object):
         choice_mappings = {k: self._make_choice_callback(k, val, v) for k, v
                            in temp_choices.viewitems()}
         self.scene.ui.show_cam(self.scene.actors['main'], choice_mappings)
+        self.scene.ui.cam.hide_on_click_outside = False
         return False
     
     def _parse_command_dict(self, cmd_dict):

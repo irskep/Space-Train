@@ -1,3 +1,4 @@
+import pyglet
 import functools
 
 from engine import actor
@@ -15,7 +16,7 @@ levity_direction = "right"
 
 def init():
     myscene.ui.inventory.visible = True
-    gamestate.event_manager.enter_cutscene()
+    # gamestate.event_manager.enter_cutscene()
     myscene.actors['levity'].prepare_walkpath_move("levity_4")
     myscene.actors['levity'].next_action()
 
@@ -37,8 +38,8 @@ def levity_walk(actor, point):
             levity_direction = "left"
             next_point = "levity_4"
         #levity.prepare_walkpath_move(next_point)
-        myscene.clock.schedule_once(levity.prepare_walkpath_move(next_point), 25)
-        myscene.clock.schedule_once(levity.next_action, 30)
+        pyglet.clock.schedule_once(levity.prepare_walkpath_move(next_point), 25)
+        pyglet.clock.schedule_once(levity.next_action, 26)
     else:
         if point == "levity_1":
             next_point = "levity_2" if levity_direction == "right" else "levity_left"
@@ -79,7 +80,7 @@ def end_conversation(convo_name):
         #Set levity to do her walk around the level
         myscene.actors['levity'].prepare_walkpath_move("levity_right")
         myscene.actors['levity'].next_action()
-        gamestate.event_manager.exit_cutscene()
+        # gamestate.event_manager.exit_cutscene()
 
 walk_handlers = {
     'main': inga_walk,

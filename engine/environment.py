@@ -45,7 +45,6 @@ class Environment(object):
                     img = pyglet.resource.image(overlay_tile_path)
                     new_sprite = pyglet.sprite.Sprite(img, x=x*tile_w, y=y*tile_h,
                                                       batch=self.overlay_batch)
-                    print new_sprite
                     self.overlay_sprites.append(new_sprite)
                 except pyglet.resource.ResourceNotFoundException:
                     pass    # Ignore if no overlay
