@@ -5,13 +5,21 @@ from util import settings
 #Bootstrap's bootstraps
 
 resource_locations = [
-    os.path.join(os.path.dirname(__file__), r"resources"),
-    os.path.join(os.path.dirname(__file__), r"resources_repo"),
+    r"resources",
     r"C:\Users\Fred\Documents\My Dropbox\resources",
     r"/Users/stephen/Dropbox/resources",
     r"C:\Users\Tyler\Documents\My Dropbox\resources",
     r"C:\Users\Merfie\Documents\My Dropbox\resources"
 ]
+
+try:
+    more_locations = [
+        os.path.join(os.path.dirname(__file__), r"resources"),
+        os.path.join(os.path.dirname(__file__), r"resources_repo"),
+    ]
+    resource_locations = more_locations + resource_locations
+except:
+    pass
 
 for location in resource_locations:
     if os.path.isdir(location):
