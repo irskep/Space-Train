@@ -52,6 +52,10 @@ class Conversation(object):
             
             EXAMPLE: goto start
         
+        give: <actor_name>
+            Add a new instance of <actor_name> to the inventory with an ID of the form actor_name_#,
+            where # is the highest unused number in this form.
+        
         actor_id: <text>
             Make an actor speak a phrase. Delay the next action.
             
