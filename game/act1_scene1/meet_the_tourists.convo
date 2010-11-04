@@ -1,19 +1,37 @@
-INGA approaches the TOURISTS, who are reading TRAVEL GUIDES. Upon CLICKING, the player will see the <Main Dialogue Options>.
+# Initialization
 
-        <Main Dialogue Options>
-                Where are you headed?
-                What are you reading?
+at_rest:
+    main: stand_left
+    tourist: tourist
 
-What are you reading?
-        NICOLE: I’m reading all about the flower gardens of Vootka!
-        DON: “Zetzo’s Guide to Popular Space Train Destinations.”
+speaking:
+    main: stand_left
+    tourist: tourist
 
-Where are you headed?
-        NICOLE: It’s our 10th wedding anniversary! Don got us tickets to [Space France]. It’s going to be SO romantic!
-        DON: Best vacation I could afford! I’ll have so many great pictures!
-        NICOLE: Right. Don put us in this LOVELY economy-class car.
-        DON: Come on Nicole, it’s fun! Say, would you mind taking our picture?
+variables:
+    knows_about_baron: false
+    
+# States
+start:
+    - choice:
+        Where are you headed?:
+            goto: ask_direction
+        What are you reading?:
+            goto: ask_reading
 
-                <Local options>        #FIXME
-                        Sure!
-                        No thanks, I don’t like cameras.
+ask_reading:
+    - main: What are you reading?
+    - tourist: I'm reading all about the flower gardens of Vootka!
+    - tourist: "Zetzo's Guide to Popular Space Train Destinations."
+    - goto: start
+
+ask_direction:
+    - tourist: It's our 10th wedding anniversary! Don got us tickets to Space France. It's going to be SO romantic!
+    - tourist: Best vacation I could afford! I'll have so many great pictures!
+    - tourist: Right. Don put us in this LOVELY economy-class car.
+    - tourist: Come on Nicole, it's fun! Say, would you mind taking our picture?
+    - choice:
+        Sure!:
+            goto: start
+        No thanks, I don't like cameras.:
+            goto: start

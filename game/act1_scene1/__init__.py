@@ -101,3 +101,5 @@ def actor_clicked(clicked_actor):
     if clicked_actor.identifier == "gregg_briggs":
         #show a CAM with options
         myscene.ui.show_cam(clicked_actor, {'Greet the Odd Fellow': lambda: myscene.convo.begin_conversation("briggs_exposition"), 'Avoid Eye Contact': None})
+    if clicked_actor.identifier == "tourist":
+        myscene.convo.begin_conversation("meet_the_tourists")
