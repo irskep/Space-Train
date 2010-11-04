@@ -6,7 +6,7 @@ TODO:
 """
 
 import pyglet, yaml, collections, functools
-
+import actor
 from util import draw
 
 # Convenience function for creating defaultdicts that return None if key not present
@@ -173,10 +173,14 @@ class Conversation(object):
     
     def _update_locals(self, val):
         """Update variables dictionary"""
-        val = val[0]
-        print val
-        print self.convo_info['variables']
-        self.convo_info['variables'].update(val)
+        for val in v:
+            self.convo_info['variables'].update(v)
+        return True
+    
+    def _give(self, val):
+        print 'give', val
+        new_actor = self.scene.new_actor(val)
+        self.scene.ui.inventory.put_item(new_actor)
         return True
     
     def _update_animations(self, val):
@@ -190,7 +194,6 @@ class Conversation(object):
         self.convo_position = 0
         self.convo_lines = self.convo_info[val]
         if self.scene.ui.cam:
-            print 'hidefromgoto'
             self.scene.ui.cam.set_visible(False)
         return True
     

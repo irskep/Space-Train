@@ -193,6 +193,7 @@ class Scene(object):
             c.delete()
             self.background_convos.remove(c)
     
+    
     # Events
     
     def on_mouse_release(self, x, y, button, modifiers):

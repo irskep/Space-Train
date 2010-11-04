@@ -14,7 +14,7 @@ class Actor(actionsequencer.ActionSequencer):
     
     def __init__(self, identifier, name, scene, batch=None, attrs=None):
         super(Actor, self).__init__()
-        attrs = attrs or None
+        attrs = attrs or {}
         self.name = name
         self.scene = scene
         
