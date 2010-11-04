@@ -51,6 +51,7 @@ class Environment(object):
         
         self.draw = self.background_batch.draw
         self.draw_overlay = self.overlay_batch.draw
+        self.behind = pyglet.resource.image('environments/spacebackground.png')
     
     def exit(self):
         for background_sprite in self.background_sprites:
@@ -58,3 +59,4 @@ class Environment(object):
     
     def __repr__(self):
         return 'Environment(name="%s")' % self.name
+    

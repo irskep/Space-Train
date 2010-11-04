@@ -234,6 +234,7 @@ class Scene(object):
         self.interp.update_interpolators(dt)
     
     def draw(self, dt=0):
+        self.env.behind.blit(0,0,0)
         with camera.apply_camera(self.camera):
             if self.main_group:
                 self.main_group.x = self.x_offset
