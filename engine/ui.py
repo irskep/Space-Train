@@ -32,11 +32,14 @@ class UI(object):
         sprite = pyglet.sprite.Sprite(img, x = gamestate.norm_w, y = gamestate.norm_h - img_h, batch=self.batch)
         self.sprites.append(sprite)
     
-    def show_cam(self, actor, actions):
+    def show_cam(self, actor, actions):    
         ax = actor.abs_position_x() - 180
         ay = actor.abs_position_y() + (actor.height() / 2)
         px, py = actor.scene.camera.world_to_screen_position(ax, ay)
-        self.cam = cam.CAM(actions, px, py)
+        self.cam = cam.CAM(actions, px, py, self)
+    
+    def clean_cam(self):
+        self.cam = None
     
     # render the UI to the screen
     def draw(self, dt=0):

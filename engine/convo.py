@@ -89,7 +89,6 @@ class Conversation(object):
                     Require that the conversation variable <local> be set to some true value
             
             (hide_after_use is somewhat redundant to update_locals+require, but it's convenient.)
-    
     """
     def __init__(self, scn):
         super(Conversation, self).__init__()
@@ -171,6 +170,9 @@ class Conversation(object):
     
     def _update_locals(self, val):
         """Update variables dictionary"""
+        val = val[0]
+        print val
+        print self.convo_info['variables']
         self.convo_info['variables'].update(val)
         return True
     

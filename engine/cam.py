@@ -27,13 +27,14 @@ from pyglet.window import key
 class CAM(object):
     
     # Init
-    def __init__(self, actions, x, y):
+    def __init__(self, actions, x, y, ui):
         print "Drawing CAM at (%d, %d)" % (x, y)
         self.visible = False
         self.actions = actions
         self.x = x
         self.y = y
         self.hide_on_click_outside = True
+        self.ui = ui
 
         self.batch = pyglet.graphics.Batch()
         self.buttons = []
@@ -103,6 +104,7 @@ class CAM(object):
                 # execute the click action and clean up the CAM
                 button.click()
                 self.set_visible(False)
+                self.ui.clean_cam()
                 return pyglet.event.EVENT_HANDLED
     
     def on_key_press(self, symbol, modifiers):
