@@ -14,6 +14,7 @@ class GameHandler(object):
         self.ui = ui.UI()
         
         self.name = name
+        self.game_variables = {}
         
         self.save_path = pyglet.resource.get_settings_path(self.name)
         util.mkdir_if_absent(self.save_path)
@@ -45,7 +46,8 @@ class GameHandler(object):
     def dict_repr(self):
         return {
             'name': self.name,
-            'first_scene': self.scene_handler.scene.name
+            'first_scene': self.scene_handler.scene.name,
+            'game_variables': self.game_variables
         }
     
     def load(self, folder_name="autosave"):
@@ -56,6 +58,7 @@ class GameHandler(object):
             return None
         else:
             my_info = util.load_json(os.path.join(base_path, 'game'))
+            self.game_variables = my_info['game_variables']
             return scene.Scene(my_info['first_scene'], self.scene_handler, self.ui,
                                load_path=os.path.join(base_path, my_info['first_scene']))
     

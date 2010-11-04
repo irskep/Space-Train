@@ -78,6 +78,13 @@ class Conversation(object):
             
             Set/update the values of any conversation-local variables
         
+        update_globals:
+            name: value
+            name: value
+            ...
+            
+            Set/update the values of any game global variables
+        
         choice:
             <choice text>:
                 [action list]
@@ -179,6 +186,12 @@ class Conversation(object):
         """Update variables dictionary"""
         for val in v:
             self.convo_info['variables'].update(v)
+        return True
+    
+    def _update_locals(self, val):
+        """Update variables dictionary"""
+        for val in v:
+            self.scene.handler.game_variables.update(v)
         return True
     
     def _give(self, val):
