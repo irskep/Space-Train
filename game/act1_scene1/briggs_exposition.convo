@@ -1,0 +1,64 @@
+# Initialization
+
+at_rest:
+    main: stand_left
+    gregg_briggs: stand_front
+
+speaking:
+    main: stand_left
+    gregg_briggs: stand_front
+
+variables:
+    knows_about_baron: false
+    
+# States
+
+start:
+    - main: Hello!
+    - gregg_briggs: ...ampersand...what? Oh, hi.
+    - goto: main_choice
+    
+main_choice:
+    - choice:
+        What's your name?:
+            hide_after_use: true
+            goto: ask_name
+        Where are you headed?:
+            hide_after_use: true
+            goto: ask_direction
+        What was that you were saying?:
+            hide_after_use: true
+            goto: ask_saying   
+        I'll be going now.:
+            hide_after_use: true
+            goto: goodbye
+        Who's the Baron?:
+            require: knows_about_baron
+            hide_after_use: true
+            goto: explain_baron
+            
+ask_name:
+    - main: What's your name?
+    - gregg_briggs: Greg Briggs. Astrophysician and Psychomusicist. Professor of Celestial Wonder. Who're you.
+    - main: My name's Inga!
+    - gregg_briggs: Hmph.
+    - goto: main_choice
+
+ask_direction:
+    - main: Where are you headed?
+    - gregg_briggs: Gonna study the oceans. Learn the language of the byorknels. Attain enlightenment.
+    - gregg_briggs: Been ridin' around a long time now. Tryin' to find myself. Been on a lot of space trains. All of 'em been hit by the Baron.
+    - update_locals:
+        - knows_about_baron: true
+    - goto: main_choice
+    
+ask_saying:
+    - main: What was that you were saying earlier? I didn't quite catch it.
+    - gregg_briggs: I was coming up with a way to cure galactic hunger using shoelaces.
+    - goto: main_choice
+
+explain_baron:
+    - gregg_briggs: (Long and interesting exposition about how the Baron has hit every Space Train but this one looking for something, and Levity knows something about it)
+    - goto: main_choice
+    
+goodbye:

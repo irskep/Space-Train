@@ -38,8 +38,9 @@ def levity_walk(actor, point):
             levity_direction = "left"
             next_point = "levity_4"
         #levity.prepare_walkpath_move(next_point)
-        pyglet.clock.schedule_once(levity.prepare_walkpath_move(next_point), 25)
+        #pyglet.clock.schedule_once(levity.prepare_walkpath_move(next_point), 25)
         pyglet.clock.schedule_once(levity.next_action, 26)
+        
     else:
         if point == "levity_1":
             next_point = "levity_2" if levity_direction == "right" else "levity_left"
@@ -99,4 +100,4 @@ def handle_event(event, *args):
 def actor_clicked(clicked_actor):    
     if clicked_actor.identifier == "gregg_briggs":
         #show a CAM with options
-        myscene.ui.show_cam(clicked_actor, {'Greet the Odd Fellow': lambda: myscene.convo.start_conversation("briggs_exposition"), 'Avoid Eye Contact': None})
+        myscene.ui.show_cam(clicked_actor, {'Greet the Odd Fellow': lambda: myscene.convo.begin_conversation("briggs_exposition"), 'Avoid Eye Contact': None})
