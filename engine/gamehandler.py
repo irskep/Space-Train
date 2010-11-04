@@ -29,11 +29,11 @@ class GameHandler(object):
         self.scene_handler.set_first_scene(scn)
         self.update = self.scene_handler.update
     
-    #@gamestate.scaled
     def draw(self, dt=0):
-        self.scene_handler.draw_scenes()
-        self.ui.draw()
-        self.scene_handler.draw()
+        with util.pushmatrix(gamestate.scale):
+            self.scene_handler.draw_scenes()
+            self.ui.draw()
+            self.scene_handler.draw()
     
     # Called by scenehandler when the user is exiting the game, should prompt for a save
     def prompt_save_and_quit(self):
