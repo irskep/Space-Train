@@ -156,7 +156,15 @@ class Scene(object):
         return 'Scene(name="%s")' % self.name
     
     def actor_under_point(self, x, y):
-        return util.first(self.actors.viewvalues(), lambda act:act.covers_point(x, y))
+        possible_actors = {act for act in self.actors.viewvalues() if act.covers_point(x, y)}
+        try:
+            closest = possible_actors.pop()
+            for act in possible_actors:
+                if act.sprite.group > closest.sprite.group:
+                    closest = act
+            return closest
+        except KeyError:
+            return None
     
     
     # Script interaction
