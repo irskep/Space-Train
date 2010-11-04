@@ -36,16 +36,3 @@ def init_scale():
 
 def scale():
     pyglet.gl.glScalef(scale_factor,scale_factor,1)
-
-def scaled(draw_function):
-    """Decorator to cause a drawing function to be scaled by scale_factor"""
-    if scale_factor == 1.0:
-        return draw_function
-    else:
-        @functools.wraps(draw_function)
-        def draw_scaled(*args, **kwargs):
-            pyglet.gl.glPushMatrix()
-            pyglet.gl.glScalef(scale_factor,scale_factor,1)
-            draw_function(*args, **kwargs)
-            pyglet.gl.glPopMatrix()
-        return draw_scaled

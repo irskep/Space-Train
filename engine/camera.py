@@ -104,14 +104,4 @@ class Camera(object):
     def world_to_screen_position(self, x, y):
         return ( (x/gamestate.scale_factor) - (self.position[0]-gamestate.norm_w//2), 
                 (y/gamestate.scale_factor) - (self.position[1]-gamestate.norm_h//2))
-
-def obey_camera(draw_function):
-    @functools.wraps(draw_function)
-    def draw_with_camera(*args, **kwargs):
-        # args[0] is the class instance
-        pyglet.gl.glPushMatrix()
-        pyglet.gl.glTranslatef(-args[0].camera.position[0]+gamestate.norm_w//2, 
-                               -args[0].camera.position[1]+gamestate.norm_h//2,0)
-        draw_function(*args, **kwargs)
-        pyglet.gl.glPopMatrix()
-    return draw_with_camera
+    

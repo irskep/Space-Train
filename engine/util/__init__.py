@@ -17,6 +17,21 @@ def first(list_to_search, condition_to_satisfy):
             return item
     return None
 
+class pushmatrix(object):
+    def __init__(self, gl_func, *args, **kwargs):
+        super(pushmatrix, self).__init__()
+        self.gl_func = gl_func
+        self.args = args
+        self.kwargs = kwargs
+    
+    def __enter__(self):
+        pyglet.gl.glPushMatrix()
+        self.gl_func(*self.args, **self.kwargs)
+    
+    def __exit__(self, type, value, traceback):
+        pyglet.gl.glPopMatrix()
+    
+
 # Conventions
 
 def respath(*args):

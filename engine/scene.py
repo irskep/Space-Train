@@ -31,7 +31,7 @@ give_actor(receiving_actor, item)
 import os, sys, shutil, json, importlib, pyglet, functools
 
 import camera, actor, gamestate, util, interpolator, convo
-from util import walkpath, zenforcer
+from util import walkpath, zenforcer, pushmatrix
 
 import cam, environment, gamehandler, scenehandler
 
@@ -64,7 +64,8 @@ class Scene(object):
         self.handler = scene_handler
         self.batch = pyglet.graphics.Batch()
         if clip:
-            self.main_group = ClipGroup()
+            self.main_group = ClipGroup(w=gamestate.main_window.width, 
+                                        h=gamestate.main_window.height)
         else:
             self.main_group = None
         self.ui = ui
@@ -239,16 +240,13 @@ class Scene(object):
             if self.main_group:
                 self.main_group.x = self.x_offset
                 self.main_group.y = self.y_offset
-            pyglet.gl.glPushMatrix()
-            pyglet.gl.glTranslatef(self.x_offset, self.y_offset, 0)
+            
+            with pushmatrix(pyglet.gl.glTranslatef, self.x_offset, self.y_offset, 0):
+                self.env.draw()
+                self.batch.draw()
         
-            self.env.draw()
-            self.batch.draw()
-        
-            self.env.draw_overlay()
-            self.convo.draw()
-        
-            pyglet.gl.glPopMatrix()
+                self.env.draw_overlay()
+                self.convo.draw()
     
     
     # Clock
