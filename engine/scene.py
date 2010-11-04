@@ -233,21 +233,21 @@ class Scene(object):
         self.camera.update(dt)
         self.interp.update_interpolators(dt)
     
-    @camera.obey_camera
     def draw(self, dt=0):
-        if self.main_group:
-            self.main_group.x = self.x_offset
-            self.main_group.y = self.y_offset
-        pyglet.gl.glPushMatrix()
-        pyglet.gl.glTranslatef(self.x_offset, self.y_offset, 0)
+        with camera.apply_camera(self.camera):
+            if self.main_group:
+                self.main_group.x = self.x_offset
+                self.main_group.y = self.y_offset
+            pyglet.gl.glPushMatrix()
+            pyglet.gl.glTranslatef(self.x_offset, self.y_offset, 0)
         
-        self.env.draw()
-        self.batch.draw()
+            self.env.draw()
+            self.batch.draw()
         
-        self.env.draw_overlay()
-        self.convo.draw()
+            self.env.draw_overlay()
+            self.convo.draw()
         
-        pyglet.gl.glPopMatrix()
+            pyglet.gl.glPopMatrix()
     
     
     # Clock

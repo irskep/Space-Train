@@ -2,6 +2,17 @@ import pyglet, functools
 
 import gamestate
 
+class apply_camera(object):
+    def __init__(self, c):
+        self.camera = c
+    
+    def __enter__(self):
+        self.camera.apply()
+    
+    def __exit__(self, type, value, traceback):
+        self.camera.unapply()
+    
+
 class CameraPoint(object):
     def __init__(self, identifier, position):
         self.identifier = identifier
