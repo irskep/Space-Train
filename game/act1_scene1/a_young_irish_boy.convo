@@ -1,0 +1,46 @@
+# Initialization
+
+at_rest:
+    main: stand_left
+    shamus: head
+
+speaking:
+    main: stand_left
+    shamus: head
+
+variables:
+    knows_about_baron: false
+
+# States
+
+start:
+    - choice:
+        Comment on the Hamster:
+            goto: comment
+            
+comment:
+    - main: Your pet is so cute!
+    - shamus: Thanks! His name's Potato!
+    - main: I am Inga! What is your name?
+    - shamus: I'm Shamus! Nice to meet you!
+    - choice:
+        What will you do in Space France?:
+            goto: future
+        
+
+future:
+    - main: What will you do in Space France?
+    - shamus: Me and Potato are going to see everything! We're going to build a tree house near a beach and make friends with monkeys!
+    - main: Are your parents coming too?
+
+    #SHAMUS looks sad.
+
+    - shamus: No... my parents passed away in a space boating accident when I was little. And I am done with foster care!
+    - shamus: Anyway, I better let Potato run around or he'll get fat.
+    - main: See you later!
+
+    #INGA turns and leaves the conversation.
+
+    - shamus: Okay Potato, time for your exercise!
+    #- shamus puts POTATO in a hamster ball and sets him on the floor. POTATO immediately runs away. From this point forward, POTATO periodically rolls across the floor in ECONOMY CLASS.
+

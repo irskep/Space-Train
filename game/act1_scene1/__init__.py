@@ -99,9 +99,14 @@ def handle_event(event, *args):
             walk_handlers[actor.identifier](actor, point)
     print "Handled", event, "with", args
 
-def actor_clicked(clicked_actor):    
+def actor_clicked(clicked_actor):
+    print clicked_actor
     if clicked_actor.identifier == "gregg_briggs":
         #show a CAM with options
         myscene.ui.show_cam(clicked_actor, {'Greet the Odd Fellow': talk_to_briggs, 'Avoid Eye Contact': None})
     if clicked_actor.identifier == "tourist":
         myscene.begin_conversation("meet_the_tourists")
+    if clicked_actor.identifier == "vladimir" or clicked_actor.identifier == "petro" or clicked_actor.identifier == "nikolai":
+        myscene.begin_conversation("making_connections")
+    if clicked_actor.identifier == "shamus":
+        myscene.begin_conversation("a_young_irish_boy")

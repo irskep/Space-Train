@@ -76,8 +76,8 @@
             "start_state": "crappy"
         }, 
         "seat_2": {
-            "y": 186, 
-            "x": 1199, 
+            "y": 185, 
+            "x": 1207, 
             "name": "seat", 
             "start_state": "crappy"
         }, 
@@ -105,6 +105,12 @@
             "name": "seat", 
             "start_state": "crappy"
         }, 
+        "shamus": {
+            "y": 181, 
+            "x": 1218, 
+            "name": "tourist", 
+            "start_state": "head"
+        }, 
         "main": {
             "walkpath_point": "seat", 
             "name": "inga", 
@@ -124,9 +130,9 @@
     }, 
     "walkpath": {
         "points": {
-            "levity_4": {
-                "y": 118, 
-                "x": 3262
+            "levity_left": {
+                "y": 125, 
+                "x": -185
             }, 
             "seat": {
                 "y": 184, 
@@ -148,9 +154,17 @@
                 "y": 117, 
                 "x": 4132
             }, 
-            "levity_left": {
-                "y": 125, 
-                "x": -185
+            "levity_4": {
+                "y": 118, 
+                "x": 3262
+            }, 
+            "point_4": {
+                "y": 94, 
+                "x": 1951
+            }, 
+            "point_5": {
+                "y": 89, 
+                "x": 1300
             }, 
             "point_1": {
                 "y": 135, 
@@ -187,12 +201,16 @@
                 "b": "levity_2"
             }, 
             {
-                "a": "levity_4", 
-                "b": "levity_3"
+                "a": "point_5", 
+                "b": "point_4"
             }, 
             {
                 "a": "point_2", 
                 "b": "point_1"
+            }, 
+            {
+                "a": "levity_3", 
+                "b": "levity_2"
             }, 
             {
                 "a": "levity_left", 
@@ -207,12 +225,16 @@
                 "b": "point_1"
             }, 
             {
-                "a": "levity_3", 
-                "b": "levity_4"
+                "a": "point_3", 
+                "b": "point_4"
             }, 
             {
                 "a": "levity_1", 
                 "b": "levity_left"
+            }, 
+            {
+                "a": "point_4", 
+                "b": "point_5"
             }, 
             {
                 "a": "point_2", 
@@ -227,8 +249,16 @@
                 "b": "seat"
             }, 
             {
+                "a": "levity_4", 
+                "b": "levity_3"
+            }, 
+            {
+                "a": "point_4", 
+                "b": "point_3"
+            }, 
+            {
                 "a": "levity_3", 
-                "b": "levity_2"
+                "b": "levity_4"
             }
         ]
     }
