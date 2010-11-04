@@ -7,6 +7,7 @@ from engine.util.const import WALK_PATH_COMPLETED
 from engine import ui
 from engine import cam
 from engine import gamestate
+from engine import convo
 
 # myscene is set by scene.py
 myscene = None
@@ -60,10 +61,6 @@ def levity_walk(actor, point):
         if next_point is not point:    
             levity.prepare_walkpath_move(next_point)
     print "Moving from %s to %s..." % (point, next_point)
-    
-def ask_about_beans():
-    myscene.convo.begin_conversation('beans_1')
-    bean_salesman = myscene.actors['bean_salesman']
 
 def end_conversation(convo_name):
     if convo_name == "introduction":
@@ -77,6 +74,7 @@ def end_conversation(convo_name):
         myscene.ui.inventory.put_item(lemonade)
         
         myscene.convo.begin_conversation("introduction_continued")
+        #convo.Conversation(myscene).begin_conversation("mumblestiltskin")
     if convo_name == "introduction_continued":
         #Set levity to do her walk around the level
         myscene.actors['levity'].prepare_walkpath_move("levity_right")
@@ -101,3 +99,5 @@ def actor_clicked(clicked_actor):
     if clicked_actor.identifier == "gregg_briggs":
         #show a CAM with options
         myscene.ui.show_cam(clicked_actor, {'Greet the Odd Fellow': lambda: myscene.convo.begin_conversation("briggs_exposition"), 'Avoid Eye Contact': None})
+    if clicked_actor.identifier == "tourist":
+        myscene.convo.begin_conversation("meet_the_tourists")

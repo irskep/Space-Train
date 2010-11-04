@@ -15,6 +15,12 @@
         }
     }, 
     "actors": {
+        "nikolai": {
+            "y": 180, 
+            "x": 1618, 
+            "name": "fist", 
+            "start_state": "stand_front"
+        }, 
         "gregg_briggs": {
             "y": 196, 
             "x": 2678, 
@@ -32,6 +38,12 @@
             "x": 2962, 
             "name": "seat", 
             "start_state": "crappy"
+        }, 
+        "vladimir": {
+            "y": 176, 
+            "x": 1779, 
+            "name": "fist", 
+            "start_state": "stand_front"
         }, 
         "seat_4": {
             "y": 183, 
@@ -74,6 +86,12 @@
             "x": 574, 
             "name": "seat", 
             "start_state": "crappy"
+        }, 
+        "petro": {
+            "y": 191, 
+            "x": 1949, 
+            "name": "fist", 
+            "start_state": "stand_front"
         }, 
         "seat_10": {
             "y": 186, 
@@ -141,6 +159,10 @@
             "point_2": {
                 "y": 135, 
                 "x": 2824
+            }, 
+            "point_3": {
+                "y": 135, 
+                "x": 2412
             }
         }, 
         "edges": [
@@ -151,6 +173,10 @@
             {
                 "a": "levity_4", 
                 "b": "levity_right"
+            }, 
+            {
+                "a": "levity_2", 
+                "b": "levity_1"
             }, 
             {
                 "a": "levity_right", 
@@ -189,16 +215,20 @@
                 "b": "levity_left"
             }, 
             {
-                "a": "levity_3", 
-                "b": "levity_2"
+                "a": "point_2", 
+                "b": "point_3"
+            }, 
+            {
+                "a": "point_3", 
+                "b": "point_2"
             }, 
             {
                 "a": "point_1", 
                 "b": "seat"
             }, 
             {
-                "a": "levity_2", 
-                "b": "levity_1"
+                "a": "levity_3", 
+                "b": "levity_2"
             }
         ]
     }
