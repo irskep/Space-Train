@@ -15,6 +15,12 @@
         }
     }, 
     "actors": {
+        "gregg_briggs": {
+            "y": 196, 
+            "x": 2678, 
+            "name": "hobo", 
+            "start_state": "stand_front"
+        }, 
         "seat_8": {
             "y": 186, 
             "x": 2681, 
@@ -81,12 +87,6 @@
             "name": "seat", 
             "start_state": "crappy"
         }, 
-        "gregg_briggs": {
-            "y": 196, 
-            "x": 2678, 
-            "name": "hobo", 
-            "start_state": "stand_front"
-        }, 
         "main": {
             "walkpath_point": "seat", 
             "name": "inga", 
@@ -96,13 +96,19 @@
             "walkpath_point": "levity_1", 
             "name": "cart_lady", 
             "start_state": "walk_right"
+        }, 
+        "tourist": {
+            "y": 223, 
+            "x": 2257, 
+            "name": "tourist", 
+            "start_state": "head"
         }
     }, 
     "walkpath": {
         "points": {
-            "levity_left": {
-                "y": 125, 
-                "x": -185
+            "levity_4": {
+                "y": 118, 
+                "x": 3262
             }, 
             "seat": {
                 "y": 184, 
@@ -121,12 +127,12 @@
                 "x": 928
             }, 
             "levity_right": {
-                "y": 117.0, 
-                "x": 4132.0
+                "y": 117, 
+                "x": 4132
             }, 
-            "levity_4": {
-                "y": 118, 
-                "x": 3262
+            "levity_left": {
+                "y": 125, 
+                "x": -185
             }, 
             "point_1": {
                 "y": 135, 
@@ -139,36 +145,36 @@
         }, 
         "edges": [
             {
-                "a": "levity_3", 
-                "b": "levity_4"
-            }, 
-            {
-                "a": "levity_1", 
-                "b": "levity_2"
-            }, 
-            {
-                "a": "point_1", 
-                "b": "point_2"
+                "a": "levity_2", 
+                "b": "levity_3"
             }, 
             {
                 "a": "levity_4", 
-                "b": "levity_3"
+                "b": "levity_right"
             }, 
             {
                 "a": "levity_right", 
                 "b": "levity_4"
             }, 
             {
-                "a": "point_2", 
-                "b": "point_1"
-            }, 
-            {
                 "a": "levity_1", 
                 "b": "levity_2"
             }, 
             {
+                "a": "levity_4", 
+                "b": "levity_3"
+            }, 
+            {
+                "a": "point_2", 
+                "b": "point_1"
+            }, 
+            {
                 "a": "levity_left", 
                 "b": "levity_1"
+            }, 
+            {
+                "a": "point_1", 
+                "b": "point_2"
             }, 
             {
                 "a": "seat", 
@@ -176,7 +182,7 @@
             }, 
             {
                 "a": "levity_3", 
-                "b": "levity_2"
+                "b": "levity_4"
             }, 
             {
                 "a": "levity_1", 
@@ -184,23 +190,15 @@
             }, 
             {
                 "a": "levity_3", 
-                "b": "levity_4"
+                "b": "levity_2"
             }, 
             {
                 "a": "point_1", 
                 "b": "seat"
             }, 
             {
-                "a": "levity_4", 
-                "b": "levity_right"
-            }, 
-            {
                 "a": "levity_2", 
                 "b": "levity_1"
-            }, 
-            {
-                "a": "levity_2", 
-                "b": "levity_3"
             }
         ]
     }
