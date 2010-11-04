@@ -124,9 +124,9 @@
     }, 
     "walkpath": {
         "points": {
-            "levity_4": {
-                "y": 118, 
-                "x": 3262
+            "levity_left": {
+                "y": 125, 
+                "x": -185
             }, 
             "seat": {
                 "y": 184, 
@@ -148,9 +148,13 @@
                 "y": 117, 
                 "x": 4132
             }, 
-            "levity_left": {
-                "y": 125, 
-                "x": -185
+            "levity_4": {
+                "y": 118, 
+                "x": 3262
+            }, 
+            "point_4": {
+                "y": 94.0, 
+                "x": 1951.0
             }, 
             "point_1": {
                 "y": 135, 
@@ -175,12 +179,12 @@
                 "b": "levity_right"
             }, 
             {
-                "a": "levity_2", 
-                "b": "levity_1"
-            }, 
-            {
                 "a": "levity_right", 
                 "b": "levity_4"
+            }, 
+            {
+                "a": "point_3", 
+                "b": "point_4"
             }, 
             {
                 "a": "levity_1", 
@@ -193,6 +197,10 @@
             {
                 "a": "point_2", 
                 "b": "point_1"
+            }, 
+            {
+                "a": "levity_3", 
+                "b": "levity_2"
             }, 
             {
                 "a": "levity_left", 
@@ -219,16 +227,20 @@
                 "b": "point_3"
             }, 
             {
-                "a": "point_3", 
-                "b": "point_2"
+                "a": "levity_2", 
+                "b": "levity_1"
             }, 
             {
                 "a": "point_1", 
                 "b": "seat"
             }, 
             {
-                "a": "levity_3", 
-                "b": "levity_2"
+                "a": "point_3", 
+                "b": "point_2"
+            }, 
+            {
+                "a": "point_4", 
+                "b": "point_3"
             }
         ]
     }

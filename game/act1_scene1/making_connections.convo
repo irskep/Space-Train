@@ -1,0 +1,48 @@
+# Initialization
+
+at_rest:
+    main: stand_left
+    vladimir: stand_front
+    petro: stand_front
+    nikolai: stand_front
+
+speaking:
+    main: stand_left
+    vladimir: stand_front
+    petro: stand_front
+    nikolai: stand_front
+
+variables:
+    knows_about_baron: false
+    
+# States
+
+start:
+    - choice:  
+        Greet the Card Players:
+            goto: greet
+        Scold the Fat One for Smoking:
+            goto: scold
+            
+greet:
+    - main: Hello gentlemen.
+    - nikolai: Good day, ma'am.
+    - petro: Hello.
+    - main: What will you be doing in Space France?
+    - vladimir: We have a... friend.
+    - nikolai: He has gotten himself in some trouble.
+    - petro: We like to help friends, so we are going to help him.
+    - petro: We are the kind of people who have "resources" that others do not have.
+    - vladimir: And you?
+    - main: I am seeing the great Stanislov Slavinsky!
+    - petro: Truly a treasure of our great planet!
+    - vladimir: One of our favorites.
+    - nikolai: You may be interested to know, dear lady, that Slavinsky is on this very train.
+    - vladimir: Very close, in fact.
+    - nikolai: In the next car.
+    - main: Oh my! How exciting!
+    - main: Well, it was wonderful talking to you!
+
+scold:        
+    - main: You should drop that filthy habit!
+    - petro: When you have lived as I, you learn that these things are not worth fussing about
