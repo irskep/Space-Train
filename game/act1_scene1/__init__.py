@@ -54,7 +54,7 @@ def levity_walk(actor, point):
                 levity_exposition = True
                 #begin convo
                 actor.update_state("stand_right")
-                myscene.convo.begin_conversation("introduction")
+                myscene.begin_conversation("introduction")
             else:
                 next_point = "levity_right" if levity_direction == "right" else "levity_3"
         
@@ -73,13 +73,17 @@ def end_conversation(convo_name):
         myscene.add_actor(lemonade)
         myscene.ui.inventory.put_item(lemonade)
         
-        myscene.convo.begin_conversation("introduction_continued")
-        #convo.Conversation(myscene).begin_conversation("mumblestiltskin")
+        myscene.begin_conversation("introduction_continued")
+        myscene.begin_background_conversation("mumblestiltskin")
     if convo_name == "introduction_continued":
         #Set levity to do her walk around the level
         myscene.actors['levity'].prepare_walkpath_move("levity_right")
         myscene.actors['levity'].next_action()
         # gamestate.event_manager.exit_cutscene()
+
+def talk_to_briggs():
+    myscene.end_background_conversation('mumblestiltskin')
+    myscene.begin_conversation("briggs_exposition")
 
 walk_handlers = {
     'main': inga_walk,
@@ -98,6 +102,6 @@ def handle_event(event, *args):
 def actor_clicked(clicked_actor):    
     if clicked_actor.identifier == "gregg_briggs":
         #show a CAM with options
-        myscene.ui.show_cam(clicked_actor, {'Greet the Odd Fellow': lambda: myscene.convo.begin_conversation("briggs_exposition"), 'Avoid Eye Contact': None})
+        myscene.ui.show_cam(clicked_actor, {'Greet the Odd Fellow': talk_to_briggs, 'Avoid Eye Contact': None})
     if clicked_actor.identifier == "tourist":
-        myscene.convo.begin_conversation("meet_the_tourists")
+        myscene.begin_conversation("meet_the_tourists")

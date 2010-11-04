@@ -85,6 +85,7 @@ class Scene(object):
         self.init_zenforcer()
         self.interp = interpolator.InterpolatorController()
         self.convo = convo.Conversation(self)
+        self.background_convos = set()
         self.init_convenience_bindings()
         
         self.load_info(load_path)
@@ -175,6 +176,22 @@ class Scene(object):
     def transition_from(self, old_scene_name):
         self.call_if_available('transition_from', old_scene_name)
     
+    def begin_conversation(self, convo_name):
+        self.convo.begin_conversation(convo_name)
+    
+    def begin_background_conversation(self, convo_name):
+        new_convo = convo.Conversation(self)
+        self.background_convos.add(new_convo)
+        new_convo.begin_conversation(convo_name)
+    
+    def end_background_conversation(self, convo_name):
+        to_remove = set()
+        for c in self.background_convos:
+            if c.convo_name == convo_name:
+                to_remove.add(c)
+        for c in to_remove:
+            c.delete()
+            self.background_convos.remove(c)
     
     # Events
     
@@ -247,6 +264,15 @@ class Scene(object):
         
                 self.env.draw_overlay()
                 self.convo.draw()
+                
+                convos_to_remove = set()
+                for c in self.background_convos:
+                    c.draw()
+                    if not c.active:
+                        convos_to_remove.add(c)
+                for c in convos_to_remove:
+                    c.delete()
+                    self.background_convos.remove(c)
     
     
     # Clock

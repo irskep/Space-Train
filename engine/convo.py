@@ -104,6 +104,9 @@ class Conversation(object):
                                              anchor_x='center', anchor_y='bottom',
                                              multiline=True, width=400)
     
+    def delete(self):
+        self.convo_label.delete()
+    
     active = property(lambda self: self.convo_name is not None)
     
     def on_mouse_release(self, x, y, button, modifiers):
