@@ -1,0 +1,27 @@
+# Initialization
+
+at_rest:
+    main: stand_left
+    sneelock: stand_front
+
+speaking:
+    main: stand_left
+    sneelock: stand_front
+
+variables:
+    knows_about_baron: false
+    
+# States
+
+start:
+    - sneelock: I'm sorry Ma'am, but I can't allow you to go through there.
+    - main: Why not?
+    - sneelock: Only Silver Space Train Spacers may pass through to the Silver Spacers' Special Spot.
+    - sneelock: You are only a Bronze Space Train Benefactor and therefore must remain in the Bronze Benefactors' Billet.
+    - main: So... business class?
+    - sneelock: Yes.
+    - main: There is no way for me to get to the... what was it...
+    - sneelock: The Silver Spacers' Special Spot?
+    - main: ...the Silver Spacers' Special Spot?
+    - sneelock: You must possess a Silver Space Train Spacers Membership Card.
+    - main: Thank you.

@@ -121,6 +121,11 @@
             "name": "cart_lady", 
             "start_state": "walk_right"
         }, 
+        "sneelock": {
+            "walkpath_point": "sneelock_guard", 
+            "name": "hold_steady_fat_man", 
+            "start_state": "stand_front"
+        }, 
         "tourist": {
             "y": 223, 
             "x": 2257, 
@@ -130,9 +135,17 @@
     }, 
     "walkpath": {
         "points": {
+            "levity_4": {
+                "y": 118, 
+                "x": 3262
+            }, 
             "levity_left": {
                 "y": 125, 
                 "x": -185
+            }, 
+            "sneelock_block": {
+                "y": 119, 
+                "x": 74
             }, 
             "seat": {
                 "y": 184, 
@@ -154,9 +167,13 @@
                 "y": 117, 
                 "x": 4132
             }, 
-            "levity_4": {
-                "y": 118, 
-                "x": 3262
+            "inga_attempt_silver_class": {
+                "y": 116, 
+                "x": 229
+            }, 
+            "sneelock_guard": {
+                "y": 187, 
+                "x": 295
             }, 
             "point_4": {
                 "y": 94, 
@@ -181,60 +198,72 @@
         }, 
         "edges": [
             {
-                "a": "levity_2", 
-                "b": "levity_3"
-            }, 
-            {
-                "a": "levity_4", 
-                "b": "levity_right"
-            }, 
-            {
-                "a": "levity_2", 
-                "b": "levity_1"
-            }, 
-            {
                 "a": "levity_right", 
                 "b": "levity_4"
             }, 
             {
-                "a": "levity_1", 
-                "b": "levity_2"
-            }, 
-            {
-                "a": "point_5", 
-                "b": "point_4"
+                "a": "point_1", 
+                "b": "point_2"
             }, 
             {
                 "a": "point_2", 
                 "b": "point_1"
+            }, 
+            {
+                "a": "point_3", 
+                "b": "point_4"
             }, 
             {
                 "a": "levity_3", 
                 "b": "levity_2"
             }, 
             {
-                "a": "levity_left", 
+                "a": "sneelock_guard", 
+                "b": "sneelock_block"
+            }, 
+            {
+                "a": "levity_2", 
                 "b": "levity_1"
             }, 
             {
-                "a": "point_1", 
-                "b": "point_2"
+                "a": "levity_2", 
+                "b": "levity_3"
             }, 
             {
-                "a": "seat", 
-                "b": "point_1"
+                "a": "point_4", 
+                "b": "point_5"
             }, 
             {
-                "a": "point_3", 
+                "a": "sneelock_block", 
+                "b": "sneelock_guard"
+            }, 
+            {
+                "a": "point_5", 
                 "b": "point_4"
+            }, 
+            {
+                "a": "levity_left", 
+                "b": "levity_1"
             }, 
             {
                 "a": "levity_1", 
                 "b": "levity_left"
             }, 
             {
-                "a": "point_4", 
+                "a": "point_5", 
+                "b": "inga_attempt_silver_class"
+            }, 
+            {
+                "a": "point_1", 
+                "b": "seat"
+            }, 
+            {
+                "a": "inga_attempt_silver_class", 
                 "b": "point_5"
+            }, 
+            {
+                "a": "levity_4", 
+                "b": "levity_3"
             }, 
             {
                 "a": "point_2", 
@@ -245,16 +274,20 @@
                 "b": "point_2"
             }, 
             {
-                "a": "point_1", 
-                "b": "seat"
+                "a": "point_4", 
+                "b": "point_3"
             }, 
             {
                 "a": "levity_4", 
-                "b": "levity_3"
+                "b": "levity_right"
             }, 
             {
-                "a": "point_4", 
-                "b": "point_3"
+                "a": "levity_1", 
+                "b": "levity_2"
+            }, 
+            {
+                "a": "seat", 
+                "b": "point_1"
             }, 
             {
                 "a": "levity_3", 

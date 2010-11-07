@@ -67,7 +67,10 @@ class Inventory(object):
         del self.items[identifier]
         self.update_item_positions()
         return ret
-        
+    
+    def has_item(self, identifier):
+        return identifier in self.items
+    
     def update_item_positions(self):
         leftmost_x = self.sprites['open'][0].x
         inventory_height = self.sprites['open'][0].height

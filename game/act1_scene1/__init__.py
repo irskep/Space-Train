@@ -22,7 +22,12 @@ def init():
     myscene.actors['levity'].next_action()
 
 def inga_walk(actor, point):
-    pass
+    if point == "inga_attempt_silver_class":
+        if not myscene.ui.inventory.has_item("membership_card"):        # TODO: PLACEHOLDER CONDITION
+            sneelock = myscene.actors['sneelock']
+            sneelock.prepare_walkpath_move("sneelock_block")
+            sneelock.next_action()
+            myscene.convo.begin_conversation("you_shall_not_pass")
     
 #TODO: Find a more pythonic way to do some of this...
 def levity_walk(actor, point):
