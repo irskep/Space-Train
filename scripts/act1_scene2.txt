@@ -1,267 +1,60 @@
-SPACE TRAIN
-ACT 1
+SCENE 2: “Disaster!”
+The Second to Last Car of the Mustachio Express (Business Class)
 
-CAST OF CHARACTERS
+POINT A: “Meet Stanislov”
 
-INGA BORGA, an Adorable Old Lady from Russia and Our Hero
-LEVITY WHISK, a Seller of Refreshments
-GREG BRIGGS, a Raving Lunatic
-SHAMUS, a Young Boy
-POTATO, a Hamster
-STANISLOV SLAVINSKY, a Revered Poet
-SNEELOCK, a Wearer of Many Hats
-AMANDA, FRAN, and LIAM, Hipsters
-FRIEDRICK HURTMAN, a Shady Character
-NIKOLAI, VLADIMIR, and PETRO, Members of the Mob
-MORTIZ and MIKHAIL, Guards of STANISLOV
-DON and NICOLE, Tourists
-COMMUTERS, People of No Action
-BARON VON SnifmenSCHORTS, the Villain
+INGA enters BUSINESS CLASS from HOUSE RIGHT. We now see FRIEDRICK HURTMAN in a new disguise in a seat HOUSE CENTER. The GUARDS are standing at HOUSE LEFT.
 
-SCENE 1: “Foreshadowing and Exposition”
-The Last Car of the Mustachio Express (Economy Class)
+The camera pans to the FAR LEFT where STANISLOV is signing autographs or something. The camera pans back to INGA.
 
-POINT A: “Meet Inga”
+INGA: I must speak with him!
 
-INGA is seen sitting in a CHAIR at HOUSE RIGHT. She is reading a MAGAZINE. GREG BRIGGS is three seats in front of her. FRIEDRICK HURTMAN is several seats in front of him, OFFSCREEN. Past him are the TOURISTS, the MOB, and SHAMUS. Most of the remaining seats are filled by COMMUTERS.
+POINT B: “No Groupies!”
 
-Enter LEVITY WHISK from HOUSE LEFT. She is pushing a CART.
+INGA attempts to approach STANISLOV. MORITZ and MIKHAIL move up to her to stop her from reaching STANISLOV.
 
-LEVITY stops every three seats and asks groups of COMMUTERS if they would like anything to eat or drink. The COMMUTERS do not respond.
+MORITZ: Authorized personnel only!
+MIKHAIL: No disallowed persons!
+MORITZ: You are not authorized!
+MIKHAIL: Can’t go through!
+INGA: But I MUST speak to Stanislov!
+MORITZ: Stanislov is very busy. You will not see him.
+MIKHAIL: Off limits!
 
-LEVITY stops next to INGA.
+From now on, whenever INGA attempts to approach STANISLOV the conversation will be:
+MORITZ: Still trying to get by, hmm?
+MIKHAIL: No entry!
 
-LEVITY: Excuse me miss, would you like anything to eat or drink?
+POINT C: “A Convenient Opening”
 
-INGA: Yes please! I’ll have some Tasty Nuts and a lemonade.
+INGA passes by a CONVENIENT AIR DUCT OPENING ROUGHLY THE SIZE OF A HAMSTER BALL on her way back from speaking with the GUARDS. She inspects it. The CAMERA pans LEFT to the OTHER OPENING over STANISLOV.
 
-LEVITY rummages in her cart and produces TASTY NUTS. She hands them to INGA, who tucks them in her PURSE. The TASTY NUTS appear in the INVENTORY.
-LEVITY rummages in her cart and produces LEMONADE. She hands the LEMONADE to INGA, who drinks it and puts the EMPTY CUP in her PURSE. The CUP appears in the INVENTORY.
+INGA: Hmmm…
 
-LEVITY: Oh, I see you’re reading “Motherland Poems Monthly!”
-INGA: Yes, I just love Stanislov Slavinsky’s series about comets this month! I’m traveling now to see him read in [Space France].
-LEVITY: Lucky woman! I love Stanislov’s work as well.
-LEVITY: Enjoy your Tasty Nuts!
+Shortly after, the HAMSTER BALL rolls into BUSINESS CLASS, wobbles around a bit, and rolls back into ECONOMY CLASS. If INGA goes to ECONOMY CLASS, the ball is rolling around on the floor.
 
-LEVITY continues on her rounds. When she exits at HOUSE LEFT or HOUSE RIGHT, she comes back after 60 seconds.
+POINT D: “Candy from a Baby”
 
-The PLAYER may now take control of INGA.
+Upon CLICKING the HAMSTER BALL, the player may SET POTATO FREE. The EMPTY HAMSTER BALL passes into the INVENTORY.
 
-POINT B: “An Odd Fellow”
+Upon dragging the PEN onto the PAD OF PAPER in the inventory, INGA writes a NOTE TO STANISLOV:
 
-INGA approaches GREG BRIGGS, who is constantly MUMBLING.
+INGA: Dear Mr. Slavinsky, I have been following your work for the past few years and would be delighted if you would have tea with me to discuss the utsmer-yezzish form. Shall we? Inga Borga
 
-GREG: mfnnfrrrng…cats…mmgrmgnng…ablative…nnff…electron…
+There is now a NOTE TO STANISLOV in the inventory. Upon dragging the NOTE TO STANISLOV onto the EMPTY HAMSTER BALL, INGA places the NOTE TO STANISLOV in the EMPTY HAMSTER BALL producing a NOTE DELIVERY SYSTEM.
 
-Upon CLICKING, the PLAYER may GREET THE ODD FELLOW or AVOID EYE CONTACT
+Upon dragging the NOTE DELIVERY SYSTEM to the CONVENIENT AIR DUCT OPENING ROUGHLY THE SIZE OF A HAMSTER BALL, INGA puts the HAMSTER BALL into the DUCT and it rolls past the GUARDS. It exits the other end of the duct and drops on STANISLOV’s head. He reads the NOTE TO STANISLOV. He looks over at INGA and SAPPY MUSIC plays.
 
-GREET THE ODD FELLOW:
+STANISLOV sends a note to MORITZ, who beckons to INGA.
 
-INGA: Hello!
-GREG: …ampersand…what? Oh, hi.
+MORITZ: Stanislov will see you now.
 
-	<Main Dialogue Options>
-		(All disappear locally after use but return on new convo initiation)
-		What’s your name?
-		Where are you headed?
-		What was that you were saying?
-		I’ll be going now.
+INGA moves toward STANISLOV.
 
-What’s your name?
-	INGA: What’s your name?
-	GREG: Greg Briggs. Astrophysician and Psychomusicist. Professor of Celestial Wonder. Who’re you.
-	INGA: My name’s Inga!
-	GREG: Hmph.
-	<Back to Main Dialogue Options>
+The lights go out.
 
-Where are you headed?
-	INGA: Where are you headed?
-	GREG: [Space France]. Gonna study the oceans. Learn the language of the byorknels. Attain enlightenment.
-	GREG: Been ridin’ around a long time now. Tryin’ to find myself. Been on a lot of space trains. All of ‘em been hit by the Baron.
-	<Additions to Main Dialogue Options>
-		Who’s the Baron?
-	<Back to Main Dialogue Options>
+STANISLOV screams.
 
-What was that you were saying?
-	INGA: What was that you were saying earlier? I didn’t quite catch it.
-	GREG: One of the following:
-				Oh, just thinkin’. So many pieces, so many connections…
-				I was coming up with a way to cure galactic hunger using shoelaces.
-				I was just reciting the lyrics to “Baby Got Back.”
-				Etc.
+The lights flicker. FRIEDRICK HURTMAN is seen dragging a SACK out to the left. The lights go out. There are sounds of a fight.
 
-Who’s the Baron?
-	GREG: (Long and interesting exposition about how the Baron has hit every Space Train but this one looking for something, and Levity knows something about it)
-
-POINT C: “Meet the Tourists”
-
-INGA approaches the TOURISTS, who are reading TRAVEL GUIDES. Upon CLICKING, the player will see the <Main Dialogue Options>.
-
-	<Main Dialogue Options>
-		Where are you headed?
-		What are you reading?
-
-What are you reading?
-	NICOLE: I’m reading all about the flower gardens of Vootka!
-	DON: “Zetzo’s Guide to Popular Space Train Destinations.”
-
-Where are you headed?
-	NICOLE: It’s our 10th wedding anniversary! Don got us tickets to [Space France]. It’s going to be SO romantic!
-	DON: Best vacation I could afford! I’ll have so many great pictures!
-	NICOLE: Right. Don put us in this LOVELY economy-class car.
-	DON: Come on Nicole, it’s fun! Say, would you mind taking our picture?
-
-		<Local options>	#FIXME
-			Sure!
-			No thanks, I don’t like cameras.
-
-Point D: “Not Cool Enough”
-
-Inga approaches the HIPSTERS: AMANDA, FRAN, and LIAM. They are having a HIPSTER CONVERSATION.
-
-Upon CLICKING, the player may ATTEMPT TO GREET THE HIPSTERS only to be greeted with GRUNTS.
-
-POINT E: “Making Connections”
-Inga approaches the MOB: NIKOLAI, VLADIMIR, and PETRO. They periodically say POKER THINGS.
-
-Upon CLICKING, the player may GREET THE CARD PLAYERS or SCOLD THE FAT ONE FOR SMOKING.
-
-Greet the card players:
-	INGA: Hello gentlemen.
-	NIKOLAI: Good day, ma’am.
-	PETRO: Hello.
-	INGA: What will you be doing in Space France?
-	VLADIMIR: We have a…friend.
-	NIKOLAI: He has gotten himself in some trouble.
-	PETRO: We like to help friends, so we are going to help him.
-	PETRO: We are the kind of people who have…resources…that others do not have.
-	VLADIMIR: And you?
-	INGA: I am seeing the great Stanislov Slavinsky!
-	PETRO: Truly a treasure of our great planet!
-	VLADIMIR: One of our favorites.
-	NIKOLAI: You may be interested to know, dear lady, that Slavinsky is on this very train.
-	VLADIMIR: Very close, in fact.
-	NIKOLAI: In the next car.
-	INGA: Oh my! How exciting!
-	INGA: Well, it was wonderful talking to you!
-
-Scold the fat one for smoking:	
-	INGA: You should drop that filthy habit!
-	PETRO: When you have lived as I, you learn that these things are not worth fussing about.
-
-
-TURNING POINT: The player now knows about STANISLOV’S presence on the MUSTACHIO EXPRESS. Dialogue options are exposed to inquire about STANISLOV.
-
-POINT K: “A Young Irish Boy”
-
-Inga approaches SHAMUS, who is in his seat playing with POTATO. Upon CLICKING, the player may COMMENT ON THE HAMSTER.
-
-Comment on the hamster:
-	INGA: Your pet is so cute!
-	SHAMUS: Thanks! His name’s Potato!
-	INGA: I am Inga! What is your name?
-	SHAMUS: I’m Shamus! Nice to meet you!
-
-	<Main dialogue options>
-		What will you do in Space France?
-
-What will you do in Space France?
-	INGA: What will you do in Space France?
-	SHAMUS: Me and Potato are going to see everything! We’re going to build a tree house near a beach and make friends with monkeys!
-	INGA: Are your parents coming too?
-
-	SHAMUS looks sad.
-
-	SHAMUS: No…my parents passed away in a space boating accident when I was little. And I am done with foster care!
-	SHAMUS: Anyway, I better let Potato run around or he’ll get fat.
-	INGA: See you later!
-
-	INGA turns and leaves the conversation.
-
-	SHAMUS: Okay Potato, time for your exercise!
-	SHAMUS puts POTATO in a hamster ball and sets him on the floor. POTATO immediately runs away. From this point forward, POTATO periodically rolls across the floor in ECONOMY CLASS.
-
-POINT F: “You Shall Not Pass”
-
-Inga approaches SNEELOCK, who is currently a BOUNCER for BUSINESS CLASS. She attempts to walk through the DOOR at HOUSE LEFT. SNEELOCK steps in front of the door, blocking her.
-
-SNEELOCK: I’m sorry Ma’am, but I can’t allow you to go through there.
-INGA: Why not?
-SNEELOCK: Only Silver Space Train Spacers may pass through to the Silver Spacers’ Special Spot.
-SNEELOCK: You are only a Bronze Space Train Benefactor and therefore must remain in the Bronze Benefactors’ Billet.
-INGA: So…business class?
-SNEELOCK: Yes.
-INGA: There is no way for me to get to the…what was it…
-SNEELOCK: The Silver Spacers’ Special Spot?
-INGA: …the Silver Spacers’ Special Spot?
-SNEELOCK: You must possess a Silver Space Train Spacers Membership Card.
-INGA: Thank you.
-
-
-TURNING POINT: The player now knows about the MEMBERSHIP CARD.  Dialogue options are changed to target the MEMBERSHIP CARD.
-
-
-POINT G: “I Need a Favor”
-
-INGA approaches the MOB. Upon CLICKING, she can ASK ABOUT MEMBERSHIP CARDS in addition to earlier options.
-
-Ask about membership cards:
-	INGA: I remember you told me that you three have resources that others do not have.
-	PETRO: This is so.
-	INGA: Do you know how I could get, say, and upgraded membership card with access to the next car?
-	NIKOLAI: Hmm.
-	VLADIMIR: Interesting.
-	ALL: Yes.
-	NIKOLAI: But we do not do favors for free, even if you are from the Mother Planet.
-	INGA: What would you like me to do?
-	PETRO: I am nearly out of cigarettes. Find me more, and we will talk.
-
-Inga may no longer talk to the MOB until she has CIGARETTES.
-
-POINT H: “Street Cred”
-
-Inga approaches the HIPSTERS. Upon CLICKING, she can ASK ABOUT STRANGE CLOTHING or BUM A CIG.
-
-Ask about strange clothing:
-	(Funny commentary about fashion styles)
-
-Bum a cig:
-	INGA: Could you kind folks spare a cigarette?
-	FRAN: Pssh. Like, no. You like totally don’t understand our generation.
-	LIAM: Ja. I bet you haffen’t even heard of the band Rampant Lizards.
-	AMANDA: Or Lieutenant McSpazz’s Shoelace Extravaganza.
-	FRAN: Or the best band ever, Deep Couch.
-	LIAM: Ja. They broke up like, fifty years ago.
-	AMANDA: Sold thirteen records and played one show.
-	FRAN: (Holding up a vinyl disc) THIS IS EIN ORIGINAL RECORD.
-	
-	INGA: You are all so young…
-	INGA: Too young to remember how Deep Couch were when they were formed.
-	The HIPSTERS’ eyes all bug out
-	INGA: You see, the members of Deep Couch were my cousins. Musical geniuses, all of them.
-	INGA: My uncle converted his textile factory to produce records, but it burned down after only 13 were made.
-	INGA: Such a pity that after their first show, the lead singer married a Hawaiian dancer and moved away.
-	
-	AMANDA: …wow…
-	FRAN: We are so sorry for doubting you!
-	LIAM: Here, take my pack of Green Shoe Cigarettes!
-	
-	(LIAM hands the CIGARETTES to INGA)
-
-POINT I: “Calling In Favors”
-
-INGA approaches the MOB. Upon GIVING the CIGARETTES to the MOB:
-
-PETRO: Thank you dear lady! Now here is your pass to the next car.
-
-PETRO hands INGA the MEMBERSHIP CARD.
-
-POINT J: “Mellon (the Elvish word for ‘friend’)”
-
-INGA approaches the DOOR at HOUSE LEFT. SNEELOCK steps in front of the DOOR as before.
-
-SNEELOCK: You again?
-INGA: I upgraded my Space Train membership!
-SNEELOCK: Congratulations on becoming a Silver Spacer!
-
-SNEELOCK steps aside dramatically and lets INGA pass.
+The lights come on. MORITZ and MIKHAIL are unconscious on the floor. The pants of both have been stolen.
