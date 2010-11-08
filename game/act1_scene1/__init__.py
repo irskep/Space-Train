@@ -9,6 +9,7 @@ from engine import ui
 from engine import cam
 from engine import gamestate
 from engine import convo
+from engine import util
 
 # myscene is set by scene.py
 myscene = None
@@ -104,6 +105,10 @@ def end_conversation(convo_name):
         myscene.actors['levity'].next_action()
         # gamestate.event_manager.exit_cutscene()
 
+    if convo_name == "you_shall_not_pass":
+        myscene.actors['sneelock'].prepare_walkpath_move("sneelock_guard")
+        myscene.actors['sneelock'].next_action()
+        
 def talk_to_briggs():
     myscene.end_background_conversation('mumblestiltskin')
     myscene.begin_conversation("briggs_exposition")
@@ -112,7 +117,7 @@ walk_handlers = {
     'main': inga_walk,
     'levity': levity_walk
 }
-
+s
 def handle_event(event, *args):
     if event == WALK_PATH_COMPLETED:
         info = args[0]
@@ -123,8 +128,14 @@ def handle_event(event, *args):
     print "Handled", event, "with", args
 
 def set_temperature(temp):
+    print "Setting temp"
     global temperature
     temperature = temp
+    if temperature >= 80:
+        # Nicole complains!
+        tourist = myscene.actors['tourist']
+        pyglet.clock.schedule_once(util.make_dt_wrapper(tourist.prepare_walkpath_move), 10, "tourist_complain")
+        pyglet.clock.schedule_once(tourist.next_action, 15)
     
 def actor_clicked(clicked_actor):
     print clicked_actor
@@ -143,4 +154,4 @@ def actor_clicked(clicked_actor):
     if clicked_actor.identifier == "hipster_amanda" or clicked_actor.identifier == "hipster_liam" or clicked_actor.identifier == "hipster_fran":
         myscene.begin_conversation("grunt")
     if clicked_actor.identifier == "thermostat":
-        myscene.ui.show_cam(clicked_actor, {'Inspect': None, 'Raise Temperature': set_temperature(80)})
+        myscene.ui.show_cam(clicked_actor, {'Inspect': None, 'Raise Temperature': lambda: set_temperature(80)})
