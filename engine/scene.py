@@ -71,6 +71,7 @@ class Scene(object):
         self.ui = ui
         self.actors = {}
         self.camera_points = {}
+        self.interaction_enabled = True
         
         self.game_time = 0.0
         self.accum_time = 0.0
@@ -189,7 +190,7 @@ class Scene(object):
         self.convo.begin_conversation(convo_name)
     
     def begin_background_conversation(self, convo_name):
-        new_convo = convo.Conversation(self)
+        new_convo = convo.Conversation(self, background=True)
         self.background_convos.add(new_convo)
         new_convo.begin_conversation(convo_name)
     
@@ -202,6 +203,9 @@ class Scene(object):
             c.delete()
             self.background_convos.remove(c)
     
+    def convo_in_progress(self):
+        return self.convo.convo_name is not None
+    
     
     # Events
     
@@ -210,7 +214,9 @@ class Scene(object):
             return
         if self.actors.has_key('main') and self.actors['main'].blocking_actions:
             return
-        if self.convo.convo_name:
+        if self.convo_in_progress():
+            return
+        if not self.interaction_enabled:
             return
         
         clicked_actor = self.actor_under_point(*self.camera.mouse_to_canvas(x, y))

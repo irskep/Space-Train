@@ -23,6 +23,7 @@ temperature = 72
 
 def init():
     myscene.ui.inventory.visible = True
+    myscene.interaction_enabled = False
     # gamestate.event_manager.enter_cutscene()
     myscene.actors['levity'].prepare_walkpath_move("levity_4")
     myscene.actors['levity'].next_action()
@@ -95,6 +96,7 @@ def tourist_walk(actor, point):
     
 def end_conversation(convo_name):
     if convo_name == "introduction":
+        myscene.interaction_enabled = True
         myscene.actors['levity'].prepare_walkpath_move("levity_right")
         myscene.actors['levity'].next_action()
 

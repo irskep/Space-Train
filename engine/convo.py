@@ -77,6 +77,13 @@ class Conversation(object):
                 bean_salesman:
                     action: jump
         
+        update_animations:
+            Update the animations dictionary (top level dictionary), like so:
+            
+            - update_animations:
+                at_rest:
+                    main: stand_front
+        
         update_locals:
             name: value
             name: value
@@ -107,7 +114,7 @@ class Conversation(object):
             
             (hide_after_use is somewhat redundant to update_locals+require, but it's convenient.)
     """
-    def __init__(self, scn):
+    def __init__(self, scn, background=False):
         super(Conversation, self).__init__()
         self.scene = scn
         
@@ -116,6 +123,7 @@ class Conversation(object):
         self.animations = None
         self.convo_lines = None
         self.convo_position = 0
+        self.background = background
         
         self.convo_label = pyglet.text.Label("", color = (0,0,0,255), font_size=12, 
                                              anchor_x='center', anchor_y='bottom',
@@ -169,14 +177,21 @@ class Conversation(object):
             # Variables default to None
             self.convo_info['variables'] = nonedict(self.convo_info['variables'])
             # Bare minimum of animations
-            self.animations = {
-                'at_rest': {
-                    'main': 'stand_right'
-                },
-                'speaking': {
-                    'main': 'talk_right'
+            if self.background:
+                # Probably doesn't move the player around
+                self.animations = {
+                    'at_rest': {},
+                    'speaking': {}
                 }
-            }
+            else:
+                self.animations = {
+                    'at_rest': {
+                        'main': 'stand_right'
+                    },
+                    'speaking': {
+                        'main': 'talk_right'
+                    }
+                }
             # Add animations from YAML file
             self._update_anim_dict(self.convo_info)
             
