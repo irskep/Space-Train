@@ -103,7 +103,7 @@ def end_conversation(convo_name):
         myscene.actors['sneelock'].next_action()
     
     if convo_name == "its_too_hot":
-        myscene.actors['sneelock'].prepare_walkpath_move("sneelock_investigate")
+        myscene.actors['sneelock'].prepare_walkpath_move("sneelock_inspect")
         myscene.actors['sneelock'].next_action()
         
 def talk_to_briggs():
