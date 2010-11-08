@@ -21,17 +21,19 @@ do_sit = False
 
 temperature = 72
 
-def init():
+def init(fresh=False):
     myscene.ui.inventory.visible = True
-    myscene.interaction_enabled = False
-    # gamestate.event_manager.enter_cutscene()
-    myscene.actors['levity'].prepare_walkpath_move("levity_4")
-    myscene.actors['levity'].next_action()
-    
-    spcbux = myscene.new_actor('space_bucks', 'space_bucks')
-    myscene.ui.inventory.put_item(spcbux)
     
     myscene.begin_background_conversation("mumblestiltskin")
+    
+    if fresh:
+        myscene.interaction_enabled = False
+        # gamestate.event_manager.enter_cutscene()
+        myscene.actors['levity'].prepare_walkpath_move("levity_4")
+        myscene.actors['levity'].next_action()
+    
+        spcbux = myscene.new_actor('space_bucks', 'space_bucks')
+        myscene.ui.inventory.put_item(spcbux)
 
 def inga_walk(actor, point):
     global do_sit
@@ -99,14 +101,17 @@ def end_conversation(convo_name):
         myscene.interaction_enabled = True
         myscene.actors['levity'].prepare_walkpath_move("levity_right")
         myscene.actors['levity'].next_action()
+        myscene.handler.handler.save()
 
     if convo_name == "you_shall_not_pass":
         myscene.actors['sneelock'].prepare_walkpath_move("sneelock_guard")
         myscene.actors['sneelock'].next_action()
+        myscene.handler.handler.save()
     
     if convo_name == "its_too_hot":
         myscene.actors['sneelock'].prepare_walkpath_move("sneelock_investigate")
         myscene.actors['sneelock'].next_action()
+        myscene.handler.handler.save()
         
 def talk_to_briggs():
     myscene.end_background_conversation('mumblestiltskin')
