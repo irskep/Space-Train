@@ -77,6 +77,13 @@ class Conversation(object):
                 bean_salesman:
                     action: jump
         
+        update_animations:
+            Update the animations dictionary (top level dictionary), like so:
+            
+            - update_animations:
+                at_rest:
+                    main: stand_front
+        
         update_locals:
             name: value
             name: value
