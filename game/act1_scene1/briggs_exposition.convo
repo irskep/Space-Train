@@ -2,11 +2,11 @@
 
 at_rest:
     main: stand_left
-    gregg_briggs: stand_front
+    gregg_briggs: conspiracytheorist
 
 speaking:
     main: stand_left
-    gregg_briggs: stand_front
+    gregg_briggs: conspiracytheorist
 
 variables:
     knows_about_baron: false

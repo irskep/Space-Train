@@ -130,6 +130,7 @@ class Scene(object):
             self.add_actor(new_actor)
     
     def add_actor(self, actor):
+        print "Adding actor %s" % actor.identifier
         self.actors[actor.identifier] = actor
         self.zenforcer.init_groups()
         self.zenforcer.update()
