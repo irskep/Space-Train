@@ -27,6 +27,12 @@
             "name": "seat", 
             "start_state": "couch"
         }, 
+        "thermostat": {
+            "y": 453, 
+            "x": 1238, 
+            "name": "thermostat", 
+            "start_state": "thermostat"
+        }, 
         "seat_4": {
             "y": 172, 
             "x": 1482, 
@@ -98,8 +104,7 @@
             "start_state": "sit"
         }, 
         "tourist": {
-            "y": 404, 
-            "x": 2227, 
+            "walkpath_point": "tourist_start", 
             "name": "tourist", 
             "start_state": "head"
         }, 
@@ -147,33 +152,41 @@
     }, 
     "walkpath": {
         "points": {
-            "sneelock_guard": {
-                "y": 184, 
-                "x": 228
-            }, 
-            "levity_4": {
-                "y": 118, 
-                "x": 3262
-            }, 
-            "point_3": {
-                "y": 135, 
-                "x": 2412
+            "point_10": {
+                "y": 122, 
+                "x": 1176
             }, 
             "sneelock_block": {
                 "y": 119, 
                 "x": 74
             }, 
-            "point_8": {
-                "y": 90, 
-                "x": 956
-            }, 
-            "levity_left": {
-                "y": 125, 
-                "x": -185
-            }, 
             "seat": {
                 "y": 153, 
                 "x": 3489
+            }, 
+            "levity_right": {
+                "y": 117, 
+                "x": 4132
+            }, 
+            "inga_attempt_silver_class": {
+                "y": 116, 
+                "x": 229
+            }, 
+            "tourist_complain": {
+                "y": 401, 
+                "x": 373
+            }, 
+            "sneelock_inspect": {
+                "y": 152.0, 
+                "x": 1148.0
+            }, 
+            "tourist_start": {
+                "y": 397, 
+                "x": 2222
+            }, 
+            "sneelock_guard": {
+                "y": 184, 
+                "x": 228
             }, 
             "levity_2": {
                 "y": 121, 
@@ -187,21 +200,25 @@
                 "y": 122, 
                 "x": 928
             }, 
-            "levity_right": {
-                "y": 117, 
-                "x": 4132
+            "levity_4": {
+                "y": 118, 
+                "x": 3262
+            }, 
+            "seat_11": {
+                "y": 154, 
+                "x": 3047
+            }, 
+            "point_8": {
+                "y": 90, 
+                "x": 956
             }, 
             "point_9": {
                 "y": 135, 
                 "x": 3048
             }, 
-            "point_10": {
-                "y": 122.0, 
-                "x": 1176.0
-            }, 
-            "seat_11": {
-                "y": 154, 
-                "x": 3047
+            "levity_left": {
+                "y": 125, 
+                "x": -185
             }, 
             "point_4": {
                 "y": 94, 
@@ -227,9 +244,9 @@
                 "y": 135, 
                 "x": 2824
             }, 
-            "inga_attempt_silver_class": {
-                "y": 116, 
-                "x": 229
+            "point_3": {
+                "y": 135, 
+                "x": 2412
             }
         }, 
         "edges": [
@@ -244,6 +261,10 @@
             {
                 "a": "point_1", 
                 "b": "point_9"
+            }, 
+            {
+                "a": "point_6", 
+                "b": "point_7"
             }, 
             {
                 "a": "point_10", 
@@ -266,12 +287,16 @@
                 "b": "levity_3"
             }, 
             {
-                "a": "levity_left", 
-                "b": "levity_1"
+                "a": "point_4", 
+                "b": "point_5"
             }, 
             {
                 "a": "point_6", 
                 "b": "inga_attempt_silver_class"
+            }, 
+            {
+                "a": "sneelock_inspect", 
+                "b": "sneelock_block"
             }, 
             {
                 "a": "inga_attempt_silver_class", 
@@ -290,8 +315,8 @@
                 "b": "levity_2"
             }, 
             {
-                "a": "point_4", 
-                "b": "point_5"
+                "a": "levity_left", 
+                "b": "levity_1"
             }, 
             {
                 "a": "levity_2", 
@@ -304,6 +329,10 @@
             {
                 "a": "point_1", 
                 "b": "seat"
+            }, 
+            {
+                "a": "tourist_complain", 
+                "b": "tourist_start"
             }, 
             {
                 "a": "point_8", 
@@ -322,12 +351,20 @@
                 "b": "levity_left"
             }, 
             {
+                "a": "sneelock_block", 
+                "b": "sneelock_inspect"
+            }, 
+            {
                 "a": "sneelock_guard", 
                 "b": "sneelock_block"
             }, 
             {
                 "a": "levity_4", 
                 "b": "levity_3"
+            }, 
+            {
+                "a": "sneelock_block", 
+                "b": "sneelock_inspect"
             }, 
             {
                 "a": "point_9", 
@@ -342,8 +379,8 @@
                 "b": "point_3"
             }, 
             {
-                "a": "point_6", 
-                "b": "point_7"
+                "a": "tourist_start", 
+                "b": "tourist_complain"
             }, 
             {
                 "a": "point_3", 

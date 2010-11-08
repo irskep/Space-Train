@@ -9,6 +9,7 @@ from engine import ui
 from engine import cam
 from engine import gamestate
 from engine import convo
+from engine import util
 
 # myscene is set by scene.py
 myscene = None
@@ -30,7 +31,7 @@ def init():
     spcbux = myscene.new_actor('space_bucks', 'space_bucks')
     myscene.ui.inventory.put_item(spcbux)
     
-    #myscene.begin_background_conversation("mumblestiltskin")
+    myscene.begin_background_conversation("mumblestiltskin")
 
 def inga_walk(actor, point):
     global do_sit
@@ -66,8 +67,8 @@ def levity_walk(actor, point):
             levity_direction = "left"
             next_point = "levity_4"
         #levity.prepare_walkpath_move(next_point)
-        #pyglet.clock.schedule_once(levity.prepare_walkpath_move(next_point), 25)
-        pyglet.clock.schedule_once(levity.next_action, 26)
+        pyglet.clock.schedule_once(util.make_dt_wrapper(levity.prepare_walkpath_move), 1, next_point)
+        pyglet.clock.schedule_once(levity.next_action, 60)
         
     else:
         if point == "levity_1":
@@ -89,19 +90,32 @@ def levity_walk(actor, point):
             levity.prepare_walkpath_move(next_point)
     print "Moving from %s to %s..." % (point, next_point)
 
+def tourist_walk(actor, point):
+    if point == "tourist_complain":
+        myscene.begin_conversation("its_too_hot")
+    
 def end_conversation(convo_name):
     if convo_name == "introduction":
         myscene.interaction_enabled = True
         myscene.actors['levity'].prepare_walkpath_move("levity_right")
         myscene.actors['levity'].next_action()
 
+    if convo_name == "you_shall_not_pass":
+        myscene.actors['sneelock'].prepare_walkpath_move("sneelock_guard")
+        myscene.actors['sneelock'].next_action()
+    
+    if convo_name == "its_too_hot":
+        myscene.actors['sneelock'].prepare_walkpath_move("sneelock_investigate")
+        myscene.actors['sneelock'].next_action()
+        
 def talk_to_briggs():
     myscene.end_background_conversation('mumblestiltskin')
     myscene.begin_conversation("briggs_exposition")
 
 walk_handlers = {
     'main': inga_walk,
-    'levity': levity_walk
+    'levity': levity_walk,
+    'tourist': tourist_walk
 }
 
 def handle_event(event, *args):
@@ -114,8 +128,14 @@ def handle_event(event, *args):
     print "Handled", event, "with", args
 
 def set_temperature(temp):
+    print "Setting temp"
     global temperature
     temperature = temp
+    if temperature >= 80:
+        # Nicole complains!
+        tourist = myscene.actors['tourist']
+        pyglet.clock.schedule_once(util.make_dt_wrapper(tourist.prepare_walkpath_move), 5, "tourist_complain")
+        pyglet.clock.schedule_once(tourist.next_action, 10)
     
 def actor_clicked(clicked_actor):
     print clicked_actor
@@ -134,4 +154,4 @@ def actor_clicked(clicked_actor):
     if clicked_actor.identifier == "hipster_amanda" or clicked_actor.identifier == "hipster_liam" or clicked_actor.identifier == "hipster_fran":
         myscene.begin_conversation("grunt")
     if clicked_actor.identifier == "thermostat":
-        myscene.ui.show_cam(clicked_actor, {'Inspect': None, 'Raise Temperature': set_temperature(80)})
+        myscene.ui.show_cam(clicked_actor, {'Inspect': None, 'Raise Temperature': lambda: set_temperature(80)})

@@ -53,6 +53,13 @@ def save_json(data, path):
     with open("%s.json" % path, 'w') as f:
         json.dump(data, f, indent=4)
 
+        
+def make_dt_wrapper(func):
+    @functools.wraps(func)
+    def inner_func(dt, *args, **kwargs):
+        func(*args, **kwargs)
+    return inner_func
+        
 # Convenience and global use
 
 def load_sprite(path, *args, **kwargs):
