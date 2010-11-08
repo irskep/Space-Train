@@ -1,12 +1,12 @@
 # Initialization
 
 at_rest:
-    main: stand_left
-    shamus: head
+    main: stand_right
+    shamus: shamus
 
 speaking:
-    main: stand_left
-    shamus: head
+    main: stand_right
+    shamus: shamus
 
 variables:
     knows_about_baron: false
@@ -36,8 +36,8 @@ future:
     #SHAMUS looks sad.
 
     - shamus: No... my parents passed away in a space boating accident when I was little. And I am done with foster care!
-    - shamus: Anyway, I better let Potato run around or he'll get fat.
-    - main: See you later!
+    - shamus: But there are downsides. I can't buy much food from this train and I'm hungry.
+    - main: Maybe I can help him.
 
     #INGA turns and leaves the conversation.
 

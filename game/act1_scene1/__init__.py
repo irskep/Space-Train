@@ -18,13 +18,18 @@ levity_direction = "right"
 
 do_sit = False
 
+temperature = 72
+
 def init():
     myscene.ui.inventory.visible = True
     # gamestate.event_manager.enter_cutscene()
     myscene.actors['levity'].prepare_walkpath_move("levity_4")
     myscene.actors['levity'].next_action()
+    
+    #myscene.begin_background_conversation("mumblestiltskin")
 
 def inga_walk(actor, point):
+    global do_sit
     if point == "inga_attempt_silver_class":
         if not myscene.ui.inventory.has_item("membership_card"):        # TODO: PLACEHOLDER CONDITION
             sneelock = myscene.actors['sneelock']
@@ -32,9 +37,11 @@ def inga_walk(actor, point):
             sneelock.next_action()
             myscene.convo.begin_conversation("you_shall_not_pass")
     if re.match("seat_\d+", point) and do_sit:
-        myscene.actors['main'].current_state = "sit"
+        myscene.actors['main'].update_state("sit")
+        do_sit = False
             
 def inga_sit(seat):
+    global do_sit
     inga = myscene.actors['main']
     inga.prepare_walkpath_move(seat.identifier)
     inga.next_action()
@@ -98,7 +105,7 @@ def end_conversation(convo_name):
         # gamestate.event_manager.exit_cutscene()
 
 def talk_to_briggs():
-    #myscene.end_background_conversation('mumblestiltskin')
+    myscene.end_background_conversation('mumblestiltskin')
     myscene.begin_conversation("briggs_exposition")
 
 walk_handlers = {
@@ -115,10 +122,15 @@ def handle_event(event, *args):
             walk_handlers[actor.identifier](actor, point)
     print "Handled", event, "with", args
 
+def set_temperature(temp):
+    global temperature
+    temperature = temp
+    
 def actor_clicked(clicked_actor):
     print clicked_actor
     if re.match("seat_\d+", clicked_actor.identifier) and clicked_actor.current_state == "couch":
-        myscene.ui.show_cam(clicked_actor, {'Sit': lambda: inga_sit(clicked_actor) })
+        if clicked_actor.identifier in myscene.info['walkpath']['points']:
+            myscene.ui.show_cam(clicked_actor, {'Sit': lambda: inga_sit(clicked_actor) })
     if clicked_actor.identifier == "gregg_briggs":
         #show a CAM with options
         myscene.ui.show_cam(clicked_actor, {'Greet the Odd Fellow': talk_to_briggs, 'Avoid Eye Contact': None})
@@ -128,3 +140,7 @@ def actor_clicked(clicked_actor):
         myscene.begin_conversation("making_connections")
     if clicked_actor.identifier == "shamus":
         myscene.begin_conversation("a_young_irish_boy")
+    if clicked_actor.identifier == "hipster_amanda" or clicked_actor.identifier == "hipster_liam" or clicked_actor.identifier == "hipster_fran":
+        myscene.begin_conversation("grunt")
+    if clicked_actor.identifier == "thermostat":
+        myscene.ui.show_cam(clicked_actor, {'Inspect': None, 'Raise Temperature': set_temperature(80)})

@@ -1,10 +1,10 @@
 # Initialization
 
 at_rest:
-    gregg_briggs: stand_front
+    gregg_briggs: conspiracytheorist
 
 speaking:
-    gregg_briggs: stand_front
+    gregg_briggs: conspiracytheorist
 
 variables:
     bean_hate: false
