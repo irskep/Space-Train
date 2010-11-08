@@ -1,5 +1,6 @@
 import pyglet
 import functools
+import re
 
 from engine import actor
 from engine.interpolator import PulseInterpolator, LinearInterpolator
@@ -15,6 +16,8 @@ myscene = None
 levity_exposition = False
 levity_direction = "right"
 
+do_sit = False
+
 def init():
     myscene.ui.inventory.visible = True
     # gamestate.event_manager.enter_cutscene()
@@ -28,6 +31,14 @@ def inga_walk(actor, point):
             sneelock.prepare_walkpath_move("sneelock_block")
             sneelock.next_action()
             myscene.convo.begin_conversation("you_shall_not_pass")
+    if re.match("seat_\d+", point) and do_sit:
+        myscene.actors['main'].current_state = "sit"
+            
+def inga_sit(seat):
+    inga = myscene.actors['main']
+    inga.prepare_walkpath_move(seat.identifier)
+    inga.next_action()
+    do_sit = True
     
 #TODO: Find a more pythonic way to do some of this...
 def levity_walk(actor, point):
@@ -87,7 +98,7 @@ def end_conversation(convo_name):
         # gamestate.event_manager.exit_cutscene()
 
 def talk_to_briggs():
-    myscene.end_background_conversation('mumblestiltskin')
+    #myscene.end_background_conversation('mumblestiltskin')
     myscene.begin_conversation("briggs_exposition")
 
 walk_handlers = {
@@ -106,6 +117,8 @@ def handle_event(event, *args):
 
 def actor_clicked(clicked_actor):
     print clicked_actor
+    if re.match("seat_\d+", clicked_actor.identifier) and clicked_actor.current_state == "couch":
+        myscene.ui.show_cam(clicked_actor, {'Sit': lambda: inga_sit(clicked_actor) })
     if clicked_actor.identifier == "gregg_briggs":
         #show a CAM with options
         myscene.ui.show_cam(clicked_actor, {'Greet the Odd Fellow': talk_to_briggs, 'Avoid Eye Contact': None})

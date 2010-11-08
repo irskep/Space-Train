@@ -16,76 +16,81 @@
     }, 
     "actors": {
         "nikolai": {
-            "y": 180, 
-            "x": 1618, 
+            "y": 170, 
+            "x": 1612, 
             "name": "fist", 
             "start_state": "stand_front"
         }, 
         "gregg_briggs": {
-            "y": 196, 
-            "x": 2678, 
+            "y": 147, 
+            "x": 2671, 
             "name": "hobo", 
             "start_state": "stand_front"
         }, 
         "seat_8": {
-            "y": 186, 
-            "x": 2681, 
+            "y": 160, 
+            "x": 2678, 
             "name": "seat", 
-            "start_state": "crappy"
+            "start_state": "couch"
         }, 
-        "seat_9": {
-            "y": 187, 
-            "x": 2962, 
-            "name": "seat", 
-            "start_state": "crappy"
+        "tourist": {
+            "y": 404, 
+            "x": 2227, 
+            "name": "tourist", 
+            "start_state": "head"
         }, 
         "vladimir": {
-            "y": 176, 
+            "y": 170, 
             "x": 1779, 
             "name": "fist", 
             "start_state": "stand_front"
         }, 
         "seat_4": {
-            "y": 183, 
-            "x": 1484, 
+            "y": 172, 
+            "x": 1482, 
             "name": "seat", 
-            "start_state": "crappy"
+            "start_state": "chair"
         }, 
         "seat_5": {
-            "y": 183, 
-            "x": 1789, 
+            "y": 173, 
+            "x": 1787, 
             "name": "seat", 
-            "start_state": "crappy"
+            "start_state": "chair"
         }, 
         "seat_6": {
-            "y": 190, 
-            "x": 2114, 
+            "y": 172, 
+            "x": 2111, 
             "name": "seat", 
-            "start_state": "crappy"
+            "start_state": "chair"
         }, 
         "seat_7": {
-            "y": 187, 
-            "x": 2406, 
+            "y": 175, 
+            "x": 2331, 
             "name": "seat", 
-            "start_state": "crappy"
+            "start_state": "chair"
         }, 
         "seat_1": {
-            "y": 183, 
-            "x": 892, 
+            "y": 163, 
+            "x": 845, 
             "name": "seat", 
-            "start_state": "crappy"
+            "start_state": "couch"
         }, 
         "seat_2": {
-            "y": 185, 
-            "x": 1207, 
+            "y": 158, 
+            "x": 1196, 
             "name": "seat", 
-            "start_state": "crappy"
+            "start_state": "couch"
         }, 
         "seat_3": {
-            "y": 185, 
-            "x": 574, 
+            "y": 160, 
+            "x": 505, 
             "name": "seat", 
-            "start_state": "crappy"
+            "start_state": "couch"
+        }, 
+        "sneelock": {
+            "walkpath_point": "sneelock_guard", 
+            "name": "hold_steady_fat_man", 
+            "start_state": "stand_front"
         }, 
         "petro": {
             "y": 191, 
@@ -94,62 +99,59 @@
             "start_state": "stand_front"
         }, 
         "seat_10": {
-            "y": 186, 
-            "x": 3491, 
+            "y": 159, 
+            "x": 3464, 
             "name": "seat", 
-            "start_state": "crappy"
+            "start_state": "couch"
         }, 
         "seat_11": {
-            "y": 186, 
-            "x": 3232, 
+            "y": 161, 
+            "x": 3038, 
             "name": "seat", 
-            "start_state": "crappy"
+            "start_state": "couch"
         }, 
         "shamus": {
-            "y": 181, 
-            "x": 1218, 
+            "y": 394, 
+            "x": 1213, 
             "name": "tourist", 
             "start_state": "head"
         }, 
         "main": {
             "walkpath_point": "seat", 
             "name": "inga", 
-            "start_state": "sit_dead"
+            "start_state": "sit"
         }, 
         "levity": {
             "walkpath_point": "levity_1", 
             "name": "cart_lady", 
             "start_state": "walk_right"
-        }, 
-        "sneelock": {
-            "walkpath_point": "sneelock_guard", 
-            "name": "hold_steady_fat_man", 
-            "start_state": "stand_front"
-        }, 
-        "tourist": {
-            "y": 223, 
-            "x": 2257, 
-            "name": "tourist", 
-            "start_state": "head"
         }
     }, 
     "walkpath": {
         "points": {
-            "levity_4": {
-                "y": 118, 
-                "x": 3262
-            }, 
-            "levity_left": {
-                "y": 125, 
-                "x": -185
-            }, 
             "sneelock_block": {
                 "y": 119, 
                 "x": 74
             }, 
+            "seat_1": {
+                "y": 156, 
+                "x": 842
+            }, 
             "seat": {
+                "y": 153, 
+                "x": 3489
+            }, 
+            "levity_right": {
+                "y": 117, 
+                "x": 4132
+            }, 
+            "inga_attempt_silver_class": {
+                "y": 116, 
+                "x": 229
+            }, 
+            "sneelock_guard": {
                 "y": 184, 
-                "x": 3491
+                "x": 228
             }, 
             "levity_2": {
                 "y": 121, 
@@ -163,17 +165,29 @@
                 "y": 122, 
                 "x": 928
             }, 
-            "levity_right": {
-                "y": 117, 
-                "x": 4132
+            "levity_4": {
+                "y": 118, 
+                "x": 3262
             }, 
-            "inga_attempt_silver_class": {
-                "y": 116, 
-                "x": 229
+            "seat_11": {
+                "y": 154, 
+                "x": 3047
             }, 
-            "sneelock_guard": {
-                "y": 187, 
-                "x": 295
+            "seat_3": {
+                "y": 155, 
+                "x": 509
+            }, 
+            "point_8": {
+                "y": 90, 
+                "x": 956
+            }, 
+            "point_9": {
+                "y": 135, 
+                "x": 3048
+            }, 
+            "levity_left": {
+                "y": 125, 
+                "x": -185
             }, 
             "point_4": {
                 "y": 94, 
@@ -182,6 +196,14 @@
             "point_5": {
                 "y": 89, 
                 "x": 1300
+            }, 
+            "point_6": {
+                "y": 87, 
+                "x": 393
+            }, 
+            "point_7": {
+                "y": 89, 
+                "x": 648
             }, 
             "point_1": {
                 "y": 135, 
@@ -198,15 +220,31 @@
         }, 
         "edges": [
             {
+                "a": "seat_3", 
+                "b": "seat_1"
+            }, 
+            {
+                "a": "point_8", 
+                "b": "point_5"
+            }, 
+            {
                 "a": "levity_right", 
                 "b": "levity_4"
             }, 
             {
                 "a": "point_1", 
-                "b": "point_2"
+                "b": "point_9"
             }, 
             {
-                "a": "point_2", 
+                "a": "point_6", 
+                "b": "seat_3"
+            }, 
+            {
+                "a": "point_1", 
+                "b": "point_9"
+            }, 
+            {
+                "a": "point_9", 
                 "b": "point_1"
             }, 
             {
@@ -216,10 +254,6 @@
             {
                 "a": "levity_3", 
                 "b": "levity_2"
-            }, 
-            {
-                "a": "sneelock_guard", 
-                "b": "sneelock_block"
             }, 
             {
                 "a": "levity_2", 
@@ -234,12 +268,28 @@
                 "b": "point_5"
             }, 
             {
-                "a": "sneelock_block", 
-                "b": "sneelock_guard"
+                "a": "point_6", 
+                "b": "inga_attempt_silver_class"
+            }, 
+            {
+                "a": "inga_attempt_silver_class", 
+                "b": "point_6"
+            }, 
+            {
+                "a": "point_2", 
+                "b": "point_9"
             }, 
             {
                 "a": "point_5", 
                 "b": "point_4"
+            }, 
+            {
+                "a": "seat_3", 
+                "b": "point_6"
+            }, 
+            {
+                "a": "point_7", 
+                "b": "seat_1"
             }, 
             {
                 "a": "levity_left", 
@@ -250,24 +300,64 @@
                 "b": "levity_left"
             }, 
             {
-                "a": "point_5", 
-                "b": "inga_attempt_silver_class"
-            }, 
-            {
                 "a": "point_1", 
                 "b": "seat"
             }, 
             {
-                "a": "inga_attempt_silver_class", 
-                "b": "point_5"
+                "a": "point_8", 
+                "b": "point_7"
+            }, 
+            {
+                "a": "sneelock_block", 
+                "b": "sneelock_guard"
+            }, 
+            {
+                "a": "seat_1", 
+                "b": "point_8"
+            }, 
+            {
+                "a": "point_7", 
+                "b": "point_6"
+            }, 
+            {
+                "a": "point_5", 
+                "b": "point_8"
+            }, 
+            {
+                "a": "sneelock_guard", 
+                "b": "sneelock_block"
+            }, 
+            {
+                "a": "seat_3", 
+                "b": "point_7"
             }, 
             {
                 "a": "levity_4", 
                 "b": "levity_3"
             }, 
             {
+                "a": "seat_1", 
+                "b": "seat_3"
+            }, 
+            {
+                "a": "seat_1", 
+                "b": "point_7"
+            }, 
+            {
+                "a": "point_9", 
+                "b": "point_2"
+            }, 
+            {
+                "a": "seat_11", 
+                "b": "point_9"
+            }, 
+            {
                 "a": "point_2", 
                 "b": "point_3"
+            }, 
+            {
+                "a": "point_6", 
+                "b": "point_7"
             }, 
             {
                 "a": "point_3", 
@@ -282,8 +372,24 @@
                 "b": "levity_right"
             }, 
             {
+                "a": "inga_attempt_silver_class", 
+                "b": "seat_3"
+            }, 
+            {
+                "a": "point_7", 
+                "b": "point_8"
+            }, 
+            {
+                "a": "point_8", 
+                "b": "seat_1"
+            }, 
+            {
                 "a": "levity_1", 
                 "b": "levity_2"
+            }, 
+            {
+                "a": "point_9", 
+                "b": "seat_11"
             }, 
             {
                 "a": "seat", 
@@ -292,6 +398,14 @@
             {
                 "a": "levity_3", 
                 "b": "levity_4"
+            }, 
+            {
+                "a": "seat_3", 
+                "b": "inga_attempt_silver_class"
+            }, 
+            {
+                "a": "point_7", 
+                "b": "seat_3"
             }
         ]
     }

@@ -1,11 +1,11 @@
 # Initialization
 
 at_rest:
-    main: sit_dead
+    main: sit
     levity: stand_front
 
 speaking:
-    main: sit_dead
+    main: sit
     levity: stand_right
 
 variables:
