@@ -19,10 +19,9 @@ class ActorEditor(abstracteditor.AbstractEditor):
             glydget.Button('< prev', self.prev_page),
             glydget.Button('next >', self.next_page),
         ])
-        self.add_children_from_current_page()
         
         self.actor_pallet.show()
-        self.actor_pallet.move(gamestate.main_window.width - 2 - self.actor_pallet.width, 
+        self.actor_pallet.move(gamestate.main_window.width - 2 - self.actor_pallet.width*1.5, 
                                gamestate.main_window.height - 242)
         gamestate.main_window.push_handlers(self.actor_pallet)
         
@@ -42,16 +41,25 @@ class ActorEditor(abstracteditor.AbstractEditor):
             glydget.Button('Delete', self.delete_selected_actor)
         ])
         self.inspector.move(2, gamestate.main_window.height-2)
+        
+        self.add_children_from_current_page()
     
-    def next_page(self):
-        pass
+    def next_page(self, _):
+        for button in self.actor_list[self.list_pos:self.list_pos+10]:
+            self.actor_pallet.child.remove(button)
+        if self.list_pos < len(self.actor_list)-1:
+            self.list_pos += 10
+        self.add_children_from_current_page()
     
-    def prev_page(self):
-        pass
+    def prev_page(self, _):
+        for button in self.actor_list[self.list_pos:self.list_pos+10]:
+            self.actor_pallet.child.remove(button)
+        if self.list_pos > 0:
+            self.list_pos -= 10
+        self.add_children_from_current_page()
     
     def add_children_from_current_page(self):
         for button in self.actor_list[self.list_pos:self.list_pos+10]:
-            print button._text
             self.actor_pallet.child.append(button)
     
     def wants_drag(self, x, y):
