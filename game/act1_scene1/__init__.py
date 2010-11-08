@@ -30,7 +30,7 @@ def init():
     spcbux = myscene.new_actor('space_bucks', 'space_bucks')
     myscene.ui.inventory.put_item(spcbux)
     
-    #myscene.begin_background_conversation("mumblestiltskin")
+    myscene.begin_background_conversation("mumblestiltskin")
 
 def inga_walk(actor, point):
     global do_sit
@@ -66,8 +66,8 @@ def levity_walk(actor, point):
             levity_direction = "left"
             next_point = "levity_4"
         #levity.prepare_walkpath_move(next_point)
-        #pyglet.clock.schedule_once(levity.prepare_walkpath_move(next_point), 25)
-        pyglet.clock.schedule_once(levity.next_action, 26)
+        pyglet.clock.schedule_once(util.make_dt_wrapper(levity.prepare_walkpath_move), 1, next_point)
+        pyglet.clock.schedule_once(levity.next_action, 60)
         
     else:
         if point == "levity_1":
@@ -89,6 +89,10 @@ def levity_walk(actor, point):
             levity.prepare_walkpath_move(next_point)
     print "Moving from %s to %s..." % (point, next_point)
 
+def tourist_walk(actor, point):
+    if point == "tourist_complain":
+        myscene.begin_conversation("its_too_hot")
+    
 def end_conversation(convo_name):
     if convo_name == "introduction":
         myscene.actors['levity'].prepare_walkpath_move("levity_right")
@@ -97,6 +101,10 @@ def end_conversation(convo_name):
     if convo_name == "you_shall_not_pass":
         myscene.actors['sneelock'].prepare_walkpath_move("sneelock_guard")
         myscene.actors['sneelock'].next_action()
+    
+    if convo_name == "its_too_hot":
+        myscene.actors['sneelock'].prepare_walkpath_move("sneelock_investigate")
+        myscene.actors['sneelock'].next_action()
         
 def talk_to_briggs():
     myscene.end_background_conversation('mumblestiltskin')
@@ -104,9 +112,10 @@ def talk_to_briggs():
 
 walk_handlers = {
     'main': inga_walk,
-    'levity': levity_walk
+    'levity': levity_walk,
+    'tourist': tourist_walk
 }
-s
+
 def handle_event(event, *args):
     if event == WALK_PATH_COMPLETED:
         info = args[0]
@@ -123,8 +132,8 @@ def set_temperature(temp):
     if temperature >= 80:
         # Nicole complains!
         tourist = myscene.actors['tourist']
-        pyglet.clock.schedule_once(util.make_dt_wrapper(tourist.prepare_walkpath_move), 10, "tourist_complain")
-        pyglet.clock.schedule_once(tourist.next_action, 15)
+        pyglet.clock.schedule_once(util.make_dt_wrapper(tourist.prepare_walkpath_move), 5, "tourist_complain")
+        pyglet.clock.schedule_once(tourist.next_action, 10)
     
 def actor_clicked(clicked_actor):
     print clicked_actor
