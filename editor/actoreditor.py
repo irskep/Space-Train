@@ -8,11 +8,19 @@ class ActorEditor(abstracteditor.AbstractEditor):
     def __init__(self, ed):
         super(ActorEditor, self).__init__(ed)
         
-        self.actor_pallet = glydget.Window("Make Actor", [
+        self.actor_list = [
             glydget.Button(actor_name, self.actor_button_action) \
             for actor_name in os.listdir(os.path.join(settings.resources_path, 'actors'))
             if actor_name != '.DS_Store'
+        ]
+        self.list_pos = 0
+        
+        self.actor_pallet = glydget.Window("Make Actor", [
+            glydget.Button('< prev', self.prev_page),
+            glydget.Button('next >', self.next_page),
         ])
+        self.add_children_from_current_page()
+        
         self.actor_pallet.show()
         self.actor_pallet.move(gamestate.main_window.width - 2 - self.actor_pallet.width, 
                                gamestate.main_window.height - 242)
@@ -34,6 +42,17 @@ class ActorEditor(abstracteditor.AbstractEditor):
             glydget.Button('Delete', self.delete_selected_actor)
         ])
         self.inspector.move(2, gamestate.main_window.height-2)
+    
+    def next_page(self):
+        pass
+    
+    def prev_page(self):
+        pass
+    
+    def add_children_from_current_page(self):
+        for button in self.actor_list[self.list_pos:self.list_pos+10]:
+            print button._text
+            self.actor_pallet.child.append(button)
     
     def wants_drag(self, x, y):
         self.dragging_item = self.scene.actor_under_point(x, y)
