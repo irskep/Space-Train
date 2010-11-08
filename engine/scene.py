@@ -71,6 +71,7 @@ class Scene(object):
         self.ui = ui
         self.actors = {}
         self.camera_points = {}
+        self.interaction_enabled = True
         
         self.game_time = 0.0
         self.accum_time = 0.0
@@ -213,7 +214,9 @@ class Scene(object):
             return
         if self.actors.has_key('main') and self.actors['main'].blocking_actions:
             return
-        if self.convo.convo_name:
+        if self.convo_in_progress():
+            return
+        if not self.interaction_enabled:
             return
         
         clicked_actor = self.actor_under_point(*self.camera.mouse_to_canvas(x, y))
