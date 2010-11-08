@@ -5,12 +5,15 @@ TODO:
 - Preload conversations (make sure to *copy*, not *reference* convo_info)
 """
 
-import pyglet, yaml, collections, functools
+import pyglet, yaml, collections, functools, re
 import actor
 from util import draw
 
 # Convenience function for creating defaultdicts that return None if key not present
 nonedict = functools.partial(collections.defaultdict, lambda: None)
+
+# Match 'give:' syntax
+parens_match = re.compile(r'(?P<name>[^(]+\S+)\s+\((?P<id>[^)]+)\)')
 
 class Conversation(object):
     """
@@ -55,6 +58,9 @@ class Conversation(object):
         give: <actor_name>
             Add a new instance of <actor_name> to the inventory with an ID of the form actor_name_#,
             where # is the highest unused number in this form.
+        
+        give: <actor_name> (new_id)
+            Like give, but you can also specify the object's identifier string.
         
         actor_id: <text>
             Make an actor speak a phrase. Delay the next action.
@@ -196,7 +202,12 @@ class Conversation(object):
     
     def _give(self, val):
         print 'give', val
-        new_actor = self.scene.new_actor(val)
+        match = parens_match.match(val)
+        if match:
+            print match.group('name'), match.group('id')
+            new_actor = self.scene.new_actor(match.group('name'), match.group('id'))
+        else:
+            new_actor = self.scene.new_actor(val)
         self.scene.ui.inventory.put_item(new_actor)
         return True
     
