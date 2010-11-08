@@ -27,6 +27,9 @@ def init():
     myscene.actors['levity'].prepare_walkpath_move("levity_4")
     myscene.actors['levity'].next_action()
     
+    spcbux = myscene.new_actor('space_bucks', 'space_bucks')
+    myscene.ui.inventory.put_item(spcbux)
+    
     #myscene.begin_background_conversation("mumblestiltskin")
 
 def inga_walk(actor, point):
@@ -88,22 +91,8 @@ def levity_walk(actor, point):
 
 def end_conversation(convo_name):
     if convo_name == "introduction":
-        # Create the items to be given to Inga
-    #     nuts = actor.Actor("tasty_nuts", "tasty_nuts", scene = myscene, attrs = {'start_state': 'tasty_nuts'})
-    #     myscene.add_actor(nuts)
-    #     myscene.ui.inventory.put_item(nuts)
-    #     
-    #     lemonade = actor.Actor("lemonade", "lemonade", scene = myscene, attrs = {'start_state': 'lemonade'})
-    #     myscene.add_actor(lemonade)
-    #     myscene.ui.inventory.put_item(lemonade)
-    #     
-    #     myscene.begin_conversation("introduction_continued")
-    #     myscene.begin_background_conversation("mumblestiltskin")
-    # if convo_name == "introduction_continued":
-        #Set levity to do her walk around the level
         myscene.actors['levity'].prepare_walkpath_move("levity_right")
         myscene.actors['levity'].next_action()
-        # gamestate.event_manager.exit_cutscene()
 
     if convo_name == "you_shall_not_pass":
         myscene.actors['sneelock'].prepare_walkpath_move("sneelock_guard")

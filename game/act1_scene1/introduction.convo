@@ -14,7 +14,6 @@ variables:
 # States
 
 start:
-    - give: space_bucks
     - levity: Excuse me miss, would you like anything to eat or drink?
     - goto: food_choice
 
@@ -26,8 +25,10 @@ food_choice:
 
 ask_for_food:
     - main: Yes please! I'll have some Tasty Nuts and a lemonade.
-    - give: tasty_nuts
-    - give: lemonade
+    - levity: That'll be five space bucks please.
+    - take: space_bucks
+    - give: tasty_nuts (nuts)
+    - give: lemonade (lemonade)
     - levity: Here you go.
     - levity: Oh, I see you're reading "Motherland Poems Monthly!"
     - main: Yes, I just love Stanislov Slavinsky's series about comets this month! I'm traveling now to see him read in [Space France].
