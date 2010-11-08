@@ -23,7 +23,7 @@ The Last Car of the Mustachio Express (Economy Class)
 
 POINT A: “Meet Inga”
 
-INGA is seen sitting in a CHAIR at HOUSE RIGHT. She is reading a MAGAZINE. GREG BRIGGS is three seats in front of her. FRIEDRICK HURTMAN is several seats in front of him, OFFSCREEN. Past him are the TOURISTS, the MOB, and SHAMUS. Most of the remaining seats are filled by COMMUTERS.
+INGA is seen sitting in a CHAIR at HOUSE RIGHT. She is reading a MAGAZINE. GREG BRIGGS is three seats in front of her. FRIEDRICK HURTMAN is several seats in front of him, OFFSCREEN. Past him are the TOURISTS, the MOB, and SHAMUS. Most of the remaining seats are filled by COMMUTERS. Somewhere on the wall there is a THERMOSTAT.
 
 Enter LEVITY WHISK from HOUSE LEFT. She is pushing a CART.
 
@@ -34,6 +34,10 @@ LEVITY stops next to INGA.
 LEVITY: Excuse me miss, would you like anything to eat or drink?
 
 INGA: Yes please! I’ll have some Tasty Nuts and a lemonade.
+
+LEVITY: That'll be five Space Bucks.
+
+INGA hands LEVITY the SPACE BUCKS.
 
 LEVITY rummages in her cart and produces TASTY NUTS. She hands them to INGA, who tucks them in her PURSE. The TASTY NUTS appear in the INVENTORY.
 LEVITY rummages in her cart and produces LEMONADE. She hands the LEMONADE to INGA, who drinks it and puts the EMPTY CUP in her PURSE. The CUP appears in the INVENTORY.
@@ -65,6 +69,7 @@ GREG: …ampersand…what? Oh, hi.
 		What’s your name?
 		Where are you headed?
 		What was that you were saying?
+		What's in the bag?
 		I’ll be going now.
 
 What’s your name?
@@ -78,6 +83,7 @@ Where are you headed?
 	INGA: Where are you headed?
 	GREG: [Space France]. Gonna study the oceans. Learn the language of the byorknels. Attain enlightenment.
 	GREG: Been ridin’ around a long time now. Tryin’ to find myself. Been on a lot of space trains. All of ‘em been hit by the Baron.
+	
 	<Additions to Main Dialogue Options>
 		Who’s the Baron?
 	<Back to Main Dialogue Options>
@@ -92,6 +98,21 @@ What was that you were saying?
 
 Who’s the Baron?
 	GREG: (Long and interesting exposition about how the Baron has hit every Space Train but this one looking for something, and Levity knows something about it)
+
+What's in the bag?
+    GREG: Beans. Want to buy some?
+    
+    <Options>
+        Yes
+        No
+    
+    Yes:
+        INGA: Yes please! One bowl of bean soup!
+        GREG: That'll be five space bucks.
+        INGA hands GREG the SPACE BUCKS. GREG hands INGA a BOWL OF BEAN SOUP.
+    
+    No:
+        INGA: No thank you...
 
 POINT C: “Meet the Tourists”
 
@@ -173,13 +194,10 @@ What will you do in Space France?
 	SHAMUS looks sad.
 
 	SHAMUS: No…my parents passed away in a space boating accident when I was little. And I am done with foster care!
-	SHAMUS: Anyway, I better let Potato run around or he’ll get fat.
-	INGA: See you later!
-
-	INGA turns and leaves the conversation.
-
-	SHAMUS: Okay Potato, time for your exercise!
-	SHAMUS puts POTATO in a hamster ball and sets him on the floor. POTATO immediately runs away. From this point forward, POTATO periodically rolls across the floor in ECONOMY CLASS.
+	
+	SHAMUS: But there are downsides. I can't buy much food from this train and I'm hungry.
+	
+	INGA (to player): Maybe I can help him.
 
 POINT F: “You Shall Not Pass”
 
@@ -198,27 +216,14 @@ SNEELOCK: You must possess a Silver Space Train Spacers Membership Card.
 INGA: Thank you.
 
 
-TURNING POINT: The player now knows about the MEMBERSHIP CARD.  Dialogue options are changed to target the MEMBERSHIP CARD.
+POINT G: “Turn Up the Heat”
 
+Upon clicking the THEROMSTAT, the heat is turned up to 80 degrees. NICOLE walks to SNEELOCK and complains. SNEELOCK goes to turn down the THERMOSTAT, leaving the door to BUSINESS CLASS unguarded.
 
-POINT G: “I Need a Favor”
-
-INGA approaches the MOB. Upon CLICKING, she can ASK ABOUT MEMBERSHIP CARDS in addition to earlier options.
-
-Ask about membership cards:
-	INGA: I remember you told me that you three have resources that others do not have.
-	PETRO: This is so.
-	INGA: Do you know how I could get, say, and upgraded membership card with access to the next car?
-	NIKOLAI: Hmm.
-	VLADIMIR: Interesting.
-	ALL: Yes.
-	NIKOLAI: But we do not do favors for free, even if you are from the Mother Planet.
-	INGA: What would you like me to do?
-	PETRO: I am nearly out of cigarettes. Find me more, and we will talk.
-
-Inga may no longer talk to the MOB until she has CIGARETTES.
 
 POINT H: “Street Cred”
+
+(This is a connection to the next car in which you can bribe the guards for passage)
 
 Inga approaches the HIPSTERS. Upon CLICKING, she can ASK ABOUT STRANGE CLOTHING or BUM A CIG.
 
@@ -248,20 +253,13 @@ Bum a cig:
 	
 	(LIAM hands the CIGARETTES to INGA)
 
-POINT I: “Calling In Favors”
 
-INGA approaches the MOB. Upon GIVING the CIGARETTES to the MOB:
+POINT I: "Hamster from a Baby"
 
-PETRO: Thank you dear lady! Now here is your pass to the next car.
+(This is a connection to the next car in which you can get a message to Stanislov to get him to let you through his guards)
 
-PETRO hands INGA the MEMBERSHIP CARD.
+Upon giving the BOWL OF BEAN SOUP to SHAMUS:
 
-POINT J: “Mellon (the Elvish word for ‘friend’)”
+SHAMUS: Wow, bean soup! I love bean soup! Thanks!
 
-INGA approaches the DOOR at HOUSE LEFT. SNEELOCK steps in front of the DOOR as before.
-
-SNEELOCK: You again?
-INGA: I upgraded my Space Train membership!
-SNEELOCK: Congratulations on becoming a Silver Spacer!
-
-SNEELOCK steps aside dramatically and lets INGA pass.
+SHAMUS puts POTATO on the floor and ravages the BOWL OF BEAN SOUP. POTATO starts to run around and can be picked up when clicked while near INGA.
