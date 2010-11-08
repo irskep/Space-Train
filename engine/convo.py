@@ -238,7 +238,7 @@ class Conversation(object):
         """Start executing a different action list"""
         self.convo_position = 0
         self.convo_lines = self.convo_info[val]
-        if self.scene.ui.cam:
+        if self.scene.ui.cam and not self.background:
             self.scene.ui.cam.set_visible(False)
         return True
     
