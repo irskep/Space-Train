@@ -201,14 +201,16 @@ class Conversation(object):
         return True
     
     def _give(self, val):
-        print 'give', val
         match = parens_match.match(val)
         if match:
-            print match.group('name'), match.group('id')
             new_actor = self.scene.new_actor(match.group('name'), match.group('id'))
         else:
             new_actor = self.scene.new_actor(val)
         self.scene.ui.inventory.put_item(new_actor)
+        return True
+    
+    def _take(self, val):
+        self.scene.ui.inventory.get_item(val)
         return True
     
     def _update_animations(self, val):
