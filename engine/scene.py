@@ -189,7 +189,7 @@ class Scene(object):
         self.convo.begin_conversation(convo_name)
     
     def begin_background_conversation(self, convo_name):
-        new_convo = convo.Conversation(self)
+        new_convo = convo.Conversation(self, background=True)
         self.background_convos.add(new_convo)
         new_convo.begin_conversation(convo_name)
     
@@ -201,6 +201,9 @@ class Scene(object):
         for c in to_remove:
             c.delete()
             self.background_convos.remove(c)
+    
+    def convo_in_progress(self):
+        return self.convo.convo_name is not None
     
     
     # Events
