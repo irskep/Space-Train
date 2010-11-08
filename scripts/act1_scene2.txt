@@ -5,9 +5,13 @@ POINT A: “Meet Stanislov”
 
 INGA enters BUSINESS CLASS from HOUSE RIGHT. We now see FRIEDRICK HURTMAN in a new disguise in a seat HOUSE CENTER. The GUARDS are standing at HOUSE LEFT.
 
-The camera pans to the FAR LEFT where STANISLOV is signing autographs or something. The camera pans back to INGA.
+The camera pans to the FAR LEFT where STANISLOV is signing autographs or something. The camera pans to MORITZ and MIKHAIL, who are having a conversation...
 
-INGA: I must speak with him!
+MORITZ: ...and so the Space Train Authority banned smoking outside of economy class.
+MORITZ: They took my pack of 
+MIKHAIL: That's nuts! I'll go crazy if I can't get a smoke soon!
+
+The camera pans back to INGA.
 
 POINT B: “No Groupies!”
 
@@ -17,13 +21,28 @@ MORITZ: Authorized personnel only!
 MIKHAIL: No disallowed persons!
 MORITZ: You are not authorized!
 MIKHAIL: Can’t go through!
-INGA: But I MUST speak to Stanislov!
-MORITZ: Stanislov is very busy. You will not see him.
-MIKHAIL: Off limits!
 
-From now on, whenever INGA attempts to approach STANISLOV the conversation will be:
-MORITZ: Still trying to get by, hmm?
-MIKHAIL: No entry!
+(Later conversations at this point will skip that first bit and continue here...)
+
+<Main dialogue options>
+    I MUST speak to Stanislov!
+    (If cigarettes in inventory)
+        Bribe with cigarettes
+
+I MUST speak to Stanislov!
+    INGA: I MUST speak to Stanislov!
+    MORITZ: Stanislov is very busy. You will not see him.
+    MIKHAIL: Off limits!
+
+Bribe with cigarettes:
+    INGA: If you don't let me through, you'll miss a big opportunity.
+    MIKHAIL: What sort of opportunity?
+    INGA: The kind that involves a green shoe.
+    MIKHAIL: What's a green shoe?
+    MORITZ: My favorite brand of cigarettes, stupid!
+    MORITZ: Hand 'em over, you can pass.
+    
+    INGA hands the CIGARETTES to MORITZ, who lets her through. POINT C is now invalidated.
 
 POINT C: “A Convenient Opening”
 
