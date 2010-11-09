@@ -5,7 +5,7 @@ at_rest:
     sneelock: stand_front
 
 speaking:
-    main: stand_left
+    main: talk_left
     sneelock: stand_front
 
 variables:

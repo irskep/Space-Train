@@ -5,7 +5,7 @@ at_rest:
     tourist: tourist
 
 speaking:
-    main: stand_left
+    main: talk_left
     tourist: tourist
 
 variables:

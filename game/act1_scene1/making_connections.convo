@@ -7,7 +7,7 @@ at_rest:
     nikolai: stand_front
 
 speaking:
-    main: stand_left
+    main: talk_left
     vladimir: stand_front
     petro: stand_front
     nikolai: stand_front
