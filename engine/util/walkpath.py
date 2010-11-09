@@ -68,15 +68,7 @@ class WalkPath(object):
     
     def remove_point(self, identifier):
         try:
-            print 'deleting', identifier
             del self.points[identifier]
-            to_delete = set()
-            for (a, b) in self.edges.viewkeys():
-                if a == identifier or b == identifier:
-                    to_delete.add((a, b))
-            for x in to_delete:
-                print 'deleting', x
-                del self.edges[x]
         except KeyError:
             return
     

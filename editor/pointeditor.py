@@ -97,7 +97,15 @@ class PointEditor(abstracteditor.AbstractEditor):
     
     def delete_point(self, button=None):
         def point_deleter(x, y):
-            self.scene.walkpath.remove_point(self.scene.walkpath.path_point_near_point((x, y)))
+            identifier = self.scene.walkpath.path_point_near_point((x, y))
+            self.scene.walkpath.remove_point(identifier)
+            to_delete = set()
+            for (a, b) in self.edges.viewkeys():
+                if a == identifier or b == identifier:
+                    to_delete.add((a, b))
+            for x in to_delete:
+                print 'deleting', x
+                del self.edges[x]
             editorstate.set_status_message('')
         self.editor.click_actions.append(point_deleter)
         editorstate.set_status_message("Click a point to delete it")
