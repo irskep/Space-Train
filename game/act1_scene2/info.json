@@ -1,13 +1,31 @@
 {
     "environment": "act1_scene2", 
-    "camera_points": {
-    }, 
+    "camera_points": {}, 
     "actors": {
+        "stanislav_1": {
+            "y": 43, 
+            "x": 426, 
+            "walk_speed": 400.0, 
+            "name": "stanislav", 
+            "start_state": "stand_front"
+        }, 
+        "seat_1": {
+            "y": 183, 
+            "x": 690, 
+            "walk_speed": 400.0, 
+            "name": "seat", 
+            "start_state": "couch"
+        }, 
+        "seat_2": {
+            "y": 188, 
+            "x": 230, 
+            "walk_speed": 400.0, 
+            "name": "seat", 
+            "start_state": "chair"
+        }
     }, 
     "walkpath": {
-        "points": {
-        }, 
-        "edges": [
-        ]
+        "points": {}, 
+        "edges": []
     }
 }
