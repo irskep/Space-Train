@@ -212,7 +212,7 @@ class Conversation(object):
     
     def _update_locals(self, val):
         """Update variables dictionary"""
-        for val in v:
+        for v in val:
             self.scene.handler.game_variables.update(v)
         return True
     
@@ -282,8 +282,10 @@ class Conversation(object):
         temp_choices = choices.copy()
         for choice, tags in choices.viewitems():
             if tags.has_key('require'):
-                in_local = self.convo_info['variables'][tags['require']]
-                in_global = self.scene.handler.game_variables[tags['require']]
+                in_local = (tags['require'] in self.convo_info['variables']) \
+                            and self.convo_info['variables'][tags['require']]
+                in_global = (tags['require'] in self.scene.handler.handler.game_variables) \
+                            and self.scene.handler.handler.game_variables[tags['require']]
                 if not in_local or in_global:
                     del temp_choices[choice]
         return temp_choices
