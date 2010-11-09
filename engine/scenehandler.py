@@ -30,7 +30,7 @@ class SceneHandler(actionsequencer.ActionSequencer):
         self.batch = pyglet.graphics.Batch()
         
         # Build transition sprite(s)
-        scene_transition_img = pyglet.resource.image(util.respath('environments', 'transitions', 'test.png'))
+        scene_transition_img = util.load_image(util.respath('environments', 'transitions', 'test.png'))
         self.sprite = pyglet.sprite.Sprite(scene_transition_img, x = 0, y = 0, batch=self.batch)
         self.sprite.opacity = 0
     
@@ -139,6 +139,11 @@ class SceneHandler(actionsequencer.ActionSequencer):
     
     def update(self, dt=0):
         self.controller.update_interpolators(dt)
+        
+        # DIRTY DIRTY DIRTY (to save a function call)
+        self.handler.dj.update(dt)
+        self.handler.background_dj.update(dt)
+        
         for scn in self.scenes:
             scn.update(dt)
     

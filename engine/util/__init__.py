@@ -8,6 +8,12 @@ import settings
 import vector
 import walkpath
 
+# Intercept resource loads
+
+def load_image(img):
+    print 'Loading', img
+    return pyglet.resource.image(img)
+
 # Functional
 
 def first(list_to_search, condition_to_satisfy):
@@ -63,7 +69,7 @@ def make_dt_wrapper(func):
 # Convenience and global use
 
 def load_sprite(path, *args, **kwargs):
-    loaded_image = pyglet.resource.image(respath(*path))
+    loaded_image = load_image(respath(*path))
     return pyglet.sprite.Sprite(loaded_image, *args, **kwargs)
 
 def image_alpha_at_point(img, x, y):
