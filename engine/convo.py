@@ -201,7 +201,15 @@ class Conversation(object):
             # Go!
             self.convo_lines = self.convo_info['start']
             self.convo_position = 0
-            self.next_line()
+            
+            # Or not!
+            if self.convo_info.has_key('stand_at'):
+                def callback():
+                    self.scene.main.next_action()
+                    self.next_line()
+                self.scene.main.prepare_walkpath_move(self.convo_info['stand_at'])
+            else:
+                self.next_line()
     
     # ACTION LIST COMMANDS
     # Returns True if the caller can/should immediately execute the next line

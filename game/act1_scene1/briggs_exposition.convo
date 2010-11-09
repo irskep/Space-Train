@@ -10,6 +10,8 @@ speaking:
 
 variables:
     knows_about_baron: False
+
+stand_at: point_4
     
 # States
 

@@ -172,7 +172,7 @@ class Actor(actionsequencer.ActionSequencer):
         else:
             return False
     
-    def prepare_walkpath_move(self, dest_point):
+    def prepare_walkpath_move(self, dest_point, callback=None):
         wp = self.scene.walkpath
         final_dest_point, moves = wp.move_sequence_between(self.walkpath_point, dest_point)
         if moves:
@@ -185,9 +185,11 @@ class Actor(actionsequencer.ActionSequencer):
                 'point': self.walkpath_point
             }
             event_args = (util.const.WALK_PATH_COMPLETED, info)
+            if callback is None:
+                callback = self.fire_adv_event
             self.actions.append([
                 (self.update_state, ['stand_front']),   # Stand still at the end
-                (self.fire_adv_event, event_args)       # Send an event to the level script
+                (callback, event_args)       # Send an event to the level script
             ])
     
     def prepare_direct_move(self, x, y):

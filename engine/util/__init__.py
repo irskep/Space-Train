@@ -89,7 +89,6 @@ preload = [
 'actors/fist/climb_down.png',
 'actors/conspiracy_theorist/icon.png',
 'actors/seat/chair.png',
-
 ]
 
 random.shuffle(preload)
