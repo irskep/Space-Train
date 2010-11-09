@@ -2,6 +2,7 @@ import math, os, sys, json
 
 import pyglet
 
+import engine
 from engine import gamestate, util
 from editor import editorview
 
@@ -22,6 +23,8 @@ class AdventureMakerWindow(pyglet.window.Window):
         gamestate.init_scale()
         gamestate.keys = pyglet.window.key.KeyStateHandler()
         gamestate.main_window.push_handlers(gamestate.keys)
+        
+        engine.init()
         
         pyglet.gl.glEnable(pyglet.gl.GL_BLEND)
         pyglet.gl.glBlendFunc(pyglet.gl.GL_SRC_ALPHA, pyglet.gl.GL_ONE_MINUS_SRC_ALPHA)
