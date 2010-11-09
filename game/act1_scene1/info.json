@@ -172,13 +172,17 @@
                 "y": 116, 
                 "x": 229
             }, 
+            "transition_left": {
+                "y": 116, 
+                "x": 2
+            }, 
             "tourist_complain": {
                 "y": 401, 
                 "x": 373
             }, 
             "sneelock_inspect": {
-                "y": 152.0, 
-                "x": 1148.0
+                "y": 152, 
+                "x": 1148
             }, 
             "tourist_start": {
                 "y": 397, 
@@ -259,12 +263,12 @@
                 "b": "levity_4"
             }, 
             {
-                "a": "point_1", 
-                "b": "point_9"
+                "a": "inga_attempt_silver_class", 
+                "b": "transition_left"
             }, 
             {
-                "a": "point_6", 
-                "b": "point_7"
+                "a": "point_1", 
+                "b": "point_9"
             }, 
             {
                 "a": "point_10", 
@@ -279,6 +283,10 @@
                 "b": "point_10"
             }, 
             {
+                "a": "tourist_start", 
+                "b": "tourist_complain"
+            }, 
+            {
                 "a": "levity_3", 
                 "b": "levity_2"
             }, 
@@ -287,20 +295,16 @@
                 "b": "levity_3"
             }, 
             {
-                "a": "point_4", 
-                "b": "point_5"
+                "a": "levity_left", 
+                "b": "levity_1"
             }, 
             {
                 "a": "point_6", 
                 "b": "inga_attempt_silver_class"
             }, 
             {
-                "a": "sneelock_inspect", 
-                "b": "sneelock_block"
-            }, 
-            {
-                "a": "inga_attempt_silver_class", 
-                "b": "point_6"
+                "a": "point_6", 
+                "b": "point_7"
             }, 
             {
                 "a": "point_2", 
@@ -315,16 +319,24 @@
                 "b": "levity_2"
             }, 
             {
-                "a": "levity_left", 
-                "b": "levity_1"
+                "a": "point_4", 
+                "b": "point_5"
             }, 
             {
                 "a": "levity_2", 
                 "b": "point_10"
             }, 
             {
-                "a": "point_5", 
-                "b": "point_8"
+                "a": "transition_left", 
+                "b": "inga_attempt_silver_class"
+            }, 
+            {
+                "a": "sneelock_inspect", 
+                "b": "sneelock_block"
+            }, 
+            {
+                "a": "levity_1", 
+                "b": "levity_left"
             }, 
             {
                 "a": "point_1", 
@@ -347,12 +359,8 @@
                 "b": "point_6"
             }, 
             {
-                "a": "levity_1", 
-                "b": "levity_left"
-            }, 
-            {
-                "a": "sneelock_block", 
-                "b": "sneelock_inspect"
+                "a": "point_5", 
+                "b": "point_8"
             }, 
             {
                 "a": "sneelock_guard", 
@@ -379,8 +387,8 @@
                 "b": "point_3"
             }, 
             {
-                "a": "tourist_start", 
-                "b": "tourist_complain"
+                "a": "inga_attempt_silver_class", 
+                "b": "point_6"
             }, 
             {
                 "a": "point_3", 

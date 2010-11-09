@@ -18,6 +18,7 @@ levity_exposition = False
 levity_direction = "right"
 
 do_sit = False
+sneelock_distracted = False
 
 temperature = 72
 
@@ -40,8 +41,9 @@ def init(fresh=False):
 
 def inga_walk(actor, point):
     global do_sit
+    global sneelock_distracted
     if point == "inga_attempt_silver_class":
-        if not myscene.ui.inventory.has_item("membership_card"):        # TODO: PLACEHOLDER CONDITION
+        if not sneelock_distracted:
             sneelock = myscene.actors['sneelock']
             sneelock.prepare_walkpath_move("sneelock_block")
             sneelock.next_action()
@@ -96,8 +98,14 @@ def levity_walk(actor, point):
     print "Moving from %s to %s..." % (point, next_point)
 
 def tourist_walk(actor, point):
+    global sneelock_distracted
     if point == "tourist_complain":
-        myscene.begin_conversation("its_too_hot")
+        sneelock_distracted = True
+        myscene.begin_background_conversation("its_too_hot")
+        
+def sneelock_walk(actor, point):
+    if point == "sneelock_inspect":
+        pyglet.clock.schedule_once(util.make_dt_wrapper(myscene.begin_background_conversation), 5, "sneelock_checks_it_out")
     
 def end_conversation(convo_name):
     if convo_name == "introduction":
@@ -109,10 +117,14 @@ def end_conversation(convo_name):
     if convo_name == "you_shall_not_pass":
         myscene.actors['sneelock'].prepare_walkpath_move("sneelock_guard")
         myscene.actors['sneelock'].next_action()
+
+        myscene.actors['main'].prepare_walkpath_move("point_6")
+        myscene.actors['main'].next_action()
+        
         myscene.handler.handler.save()
     
     if convo_name == "its_too_hot":
-        myscene.actors['sneelock'].prepare_walkpath_move("sneelock_investigate")
+        myscene.actors['sneelock'].prepare_walkpath_move("sneelock_inspect")
         myscene.actors['sneelock'].next_action()
         myscene.handler.handler.save()
         
@@ -123,7 +135,8 @@ def talk_to_briggs():
 walk_handlers = {
     'main': inga_walk,
     'levity': levity_walk,
-    'tourist': tourist_walk
+    'tourist': tourist_walk,
+    'sneelock': sneelock_walk
 }
 
 def handle_event(event, *args):
@@ -143,7 +156,7 @@ def set_temperature(temp):
         # Nicole complains!
         tourist = myscene.actors['tourist']
         pyglet.clock.schedule_once(util.make_dt_wrapper(tourist.prepare_walkpath_move), 5, "tourist_complain")
-        pyglet.clock.schedule_once(tourist.next_action, 10)
+        pyglet.clock.schedule_once(tourist.next_action, 5)
     
 def actor_clicked(clicked_actor):
     print clicked_actor
@@ -160,6 +173,25 @@ def actor_clicked(clicked_actor):
     if clicked_actor.identifier == "shamus":
         myscene.begin_conversation("a_young_irish_boy")
     if clicked_actor.identifier == "hipster_amanda" or clicked_actor.identifier == "hipster_liam" or clicked_actor.identifier == "hipster_fran":
-        myscene.begin_conversation("grunt")
+        if not sneelock_distracted:
+            myscene.begin_conversation("grunt")
+        else:
+            myscene.begin_conversation("hipsterz")
     if clicked_actor.identifier == "thermostat":
         myscene.ui.show_cam(clicked_actor, {'Inspect': None, 'Raise Temperature': lambda: set_temperature(80)})
+        
+        
+def give_actor(actor, item):
+    print "Attemping to give %s %s" % (actor.identifier, item.identifier)
+    if actor.identifier == "shamus" and item.identifier == "beans":
+        myscene.begin_conversation("hamster_from_a_baby")
+        return True
+    else:
+        return False
+        
+        
+def filter_move(point):
+    if point == "transition_left" and not sneelock_distracted:
+        return "inga_attempt_silver_class"
+    else:
+        return point

@@ -253,6 +253,7 @@ class Scene(object):
             dest_point = self.module.filter_move(dest_point)
             if dest_point:
                 main.prepare_walkpath_move(dest_point)
+                main.next_action()
         else:
             main.prepare_walkpath_move(dest_point)
             main.next_action()
