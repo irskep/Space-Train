@@ -361,6 +361,7 @@ class Conversation(object):
     def stop_speaking(self, dt=0):
         """Stop the cutscene"""
         self.clear_speech_bubble()
+        self.scene.clock.unschedule(self.next_line)
         
         # Order matters here in case the script starts a new conversation
         cn = self.convo_name

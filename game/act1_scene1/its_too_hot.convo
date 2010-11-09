@@ -2,11 +2,11 @@
 
 at_rest:
     sneelock: sneelock
-    tourist: head
+    tourist: ftouriststand
 
 speaking:
     sneelock: sneelock
-    tourist: head
+    tourist: ftouriststand
 
 variables:
     knows_about_baron: false
