@@ -9,6 +9,9 @@ class InterpolatorController(object):
         # Shortcut to add a new interpolator
         self.add_interpolator = self.interpolators.add
     
+    def delete(self):
+        self.interpolators = set()
+    
     def update_interpolators(self, dt=0):
         """Update all interpolators and remove those that have completed"""
         to_remove = set()

@@ -52,6 +52,9 @@ class Actor(actionsequencer.ActionSequencer):
         self.anchor_x = Actor.info[self.name]['anchor_x']
         self.anchor_y = Actor.info[self.name]['anchor_y']
     
+    def delete(self):
+        self.sprite.delete()
+    
     def __repr__(self):
         return 'Actor(name="%s", identifier=%s)' % (self.name, self.identifier)
     

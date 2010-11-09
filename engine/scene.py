@@ -146,10 +146,13 @@ class Scene(object):
     # Cleanup
     
     def exit(self):
+        self.interp.delete()
         for actor in self.actors.viewvalues():
-            actor.sprite.delete()
+            actor.delete()
+        self.actors = None
         for convo in self.background_convos:
             convo.stop_speaking()
+        self.background_convos = None
         self.env.exit()
         pyglet.clock.unschedule(self.zenforcer.update)
     
@@ -180,6 +183,8 @@ class Scene(object):
         self.module.handle_event(event, *args, **kwargs)
     
     def call_if_available(self, func_name, *args, **kwargs):
+        if not self.actors:
+            return False
         if hasattr(self.module, func_name):
             return getattr(self.module, func_name)(*args, **kwargs)
         else:
