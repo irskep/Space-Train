@@ -63,6 +63,7 @@ class Scene(object):
         self.name = name
         self.handler = scene_handler
         self.batch = pyglet.graphics.Batch()
+        self.fresh = (load_path is None)
         if clip:
             self.main_group = ClipGroup(w=gamestate.main_window.width, 
                                         h=gamestate.main_window.height)
@@ -140,7 +141,7 @@ class Scene(object):
         # Requires that game/scenes is in PYTHONPATH
         self.module = importlib.import_module(self.name)
         self.module.myscene = self
-        self.call_if_available('init')
+        self.call_if_available('init', self.fresh)
     
     
     # Cleanup

@@ -124,13 +124,10 @@ class Conversation(object):
         self.convo_lines = None
         self.convo_position = 0
         self.background = background
-        
-        self.convo_label = pyglet.text.Label("", color = (0,0,0,255), font_size=12, 
-                                             anchor_x='center', anchor_y='bottom',
-                                             multiline=True, width=400)
+        self.convo_label = None
     
     def delete(self):
-        self.convo_label.delete()
+        pass
     
     active = property(lambda self: self.convo_name is not None)
     
@@ -142,15 +139,19 @@ class Conversation(object):
     
     def draw(self):
         """Draw dialogue box and text"""
-        if self.convo_label.text:
+        if self.convo_label:
             draw.set_color(1,1,1,1)
             x = self.convo_label.x
             y = self.convo_label.y
             w = self.convo_label.content_width
             h = self.convo_label.content_height
             
-            rect_args = (x - (400 / 2) - 5,  y - 5,
-                         x + (400 / 2) + 5,  y + h + 5)
+            if self.convo_label.multiline:
+                rect_args = (x - (400 / 2) - 5,  y - 5,
+                             x + (400 / 2) + 5,  y + h + 5)
+            else:
+                rect_args = (x - (w / 2) - 5,  y - 5,
+                             x + (w / 2) + 5,  y + h + 5)
 
             draw.rect(*rect_args)
             draw.set_color(0,0,0,1)
@@ -211,7 +212,7 @@ class Conversation(object):
     
     def _update_locals(self, val):
         """Update variables dictionary"""
-        for val in v:
+        for v in val:
             self.scene.handler.game_variables.update(v)
         return True
     
@@ -238,7 +239,7 @@ class Conversation(object):
         """Start executing a different action list"""
         self.convo_position = 0
         self.convo_lines = self.convo_info[val]
-        if self.scene.ui.cam:
+        if self.scene.ui.cam and not self.background:
             self.scene.ui.cam.set_visible(False)
         return True
     
@@ -281,8 +282,10 @@ class Conversation(object):
         temp_choices = choices.copy()
         for choice, tags in choices.viewitems():
             if tags.has_key('require'):
-                in_local = self.convo_info['variables'][tags['require']]
-                in_global = self.scene.handler.game_variables[tags['require']]
+                in_local = (tags['require'] in self.convo_info['variables']) \
+                            and self.convo_info['variables'][tags['require']]
+                in_global = (tags['require'] in self.scene.handler.handler.game_variables) \
+                            and self.scene.handler.handler.game_variables[tags['require']]
                 if not in_local or in_global:
                     del temp_choices[choice]
         return temp_choices
@@ -310,12 +313,22 @@ class Conversation(object):
         act = self.scene.actors[actor_id]
         if isinstance(arg, str):
             act.update_state(self.animations['speaking'][actor_id])
-            self.convo_label.begin_update()
-            self.convo_label.x = act.sprite.x
-            self.convo_label.y = act.sprite.y + 20 + \
-                                 act.current_image().height - act.current_image().anchor_y
-            self.convo_label.text = arg
-            self.convo_label.end_update()
+            self.clear_speech_bubble()
+            if len(arg) > 47:
+                self.convo_label = pyglet.text.Label(arg, color = (0,0,0,255), font_size=12, 
+                                                     anchor_x='center', anchor_y='bottom',
+                                                     x=act.sprite.x,
+                                                     y=act.sprite.y + 20 + \
+                                                        act.current_image().height - \
+                                                        act.current_image().anchor_y,
+                                                     multiline=True, width=400)
+            else:
+                self.convo_label = pyglet.text.Label(arg, color = (0,0,0,255), font_size=12, 
+                                                     anchor_x='center', anchor_y='bottom',
+                                                     x=act.sprite.x,
+                                                     y=act.sprite.y + 20 + \
+                                                        act.current_image().height - \
+                                                        act.current_image().anchor_y)
             self.scene.clock.schedule_once(self.next_line, max(len(arg)*0.05, 3.0))
         else:
             if arg.has_key('action'):
@@ -324,9 +337,9 @@ class Conversation(object):
     
     def clear_speech_bubble(self):
         """Clear all spoken text"""
-        self.convo_label.begin_update()
-        self.convo_label.text = ""
-        self.convo_label.end_update()
+        if self.convo_label:
+            self.convo_label.delete()
+            self.convo_label = None
     
     def stop_speaking(self, dt=0):
         """Stop the cutscene"""
