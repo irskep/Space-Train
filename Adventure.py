@@ -43,13 +43,13 @@ class AdventureWindow(pyglet.window.Window):
         img.anchor_x = img.width/2
         img.anchor_y = img.height/2
         self.load_sprite = pyglet.sprite.Sprite(
-            img, x=self.width/2, y=self.height/4*2.7
+            img, x=self.width/2, y=self.height*0.55
         )
         img = pyglet.resource.image('actors/a_train_in_spain/train.png')
         img.anchor_x = img.width
-        img.anchor_y = img.height/2
+        img.anchor_y = 0
         self.crawler = pyglet.sprite.Sprite(
-            img, x=0, y=self.height/4*1.3
+            img, x=0, y=0
         )
 
         with pyglet.resource.file(util.respath('game', 'info.json'), 'r') as game_info_file:
