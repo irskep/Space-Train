@@ -146,7 +146,7 @@ class CAM(object):
             self.sprite = sprite
             self.sprite.x = x
             self.sprite.y = y
-            self.label = pyglet.text.Label(action, font_name = 'Times New Roman', 
+            self.label = pyglet.text.Label(action, font_name = 'Helvetica', 
                                            font_size = 14, anchor_x = 'left', 
                                            anchor_y = 'bottom', batch = self.sprite.batch, 
                                            color = (255, 255, 255, 255),
