@@ -26,6 +26,9 @@ def init(fresh=False):
     
     myscene.begin_background_conversation("mumblestiltskin")
     
+    myscene.play_music('simple')
+    myscene.play_background('Train_Loop1')
+    
     if fresh:
         myscene.interaction_enabled = False
         # gamestate.event_manager.enter_cutscene()

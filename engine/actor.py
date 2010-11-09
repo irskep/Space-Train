@@ -154,6 +154,7 @@ class Actor(actionsequencer.ActionSequencer):
                     # This should never go into an infinite loop because eventually,
                     # dest_point will just equal self.walkpath_point...
                     try:
+                        wp = self.scene.walkpath
                         wp.move_sequence_between(self.walkpath_point, dest_point)
                         ok = True
                     except IndexError:

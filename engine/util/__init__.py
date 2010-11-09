@@ -8,6 +8,12 @@ import settings
 import vector
 import walkpath
 
+# Intercept resource loads
+
+def load_image(img):
+    print 'Loading', img
+    return pyglet.resource.image(img)
+
 # Functional
 
 def first(list_to_search, condition_to_satisfy):

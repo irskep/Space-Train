@@ -139,6 +139,11 @@ class SceneHandler(actionsequencer.ActionSequencer):
     
     def update(self, dt=0):
         self.controller.update_interpolators(dt)
+        
+        # DIRTY DIRTY DIRTY (to save a function call)
+        self.handler.dj.update(dt)
+        self.handler.background_dj.update(dt)
+        
         for scn in self.scenes:
             scn.update(dt)
     
