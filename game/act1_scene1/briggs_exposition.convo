@@ -60,7 +60,7 @@ ask_direction:
     - gregg_briggs: Gonna study the oceans. Learn the language of the byorknels. Attain enlightenment.
     - gregg_briggs: Been ridin' around a long time now. Tryin' to find myself. Been on a lot of space trains. All of 'em been hit by the Baron.
     - update_locals:
-        - knows_about_baron: True
+        knows_about_baron: True
     - goto: main_choice
     
 ask_saying:
