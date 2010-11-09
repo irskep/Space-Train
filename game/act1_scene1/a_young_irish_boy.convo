@@ -5,7 +5,7 @@ at_rest:
     shamus: shamus
 
 speaking:
-    main: stand_right
+    main: talk_right
     shamus: shamus
 
 variables:
@@ -37,7 +37,13 @@ future:
 
     - shamus: No... my parents passed away in a space boating accident when I was little. And I am done with foster care!
     - shamus: But there are downsides. I can't buy much food from this train and I'm hungry.
+    - update_animations:
+        speaking:
+            main: stand_front
     - main: Maybe I can help him.
+    - update_animations:
+        speaking:
+            main: talk_right
 
     #INGA turns and leaves the conversation.
 

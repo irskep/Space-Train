@@ -33,4 +33,6 @@ ask_for_food:
     - levity: Oh, I see you're reading "Motherland Poems Monthly!"
     - main: Yes, I just love Stanislov Slavinsky's series about comets this month! I'm traveling now to see him read in [Space France].
     - levity: Lucky woman! I love Stanislov's work as well.
-    - levity: Enjoy your Tasty Nuts!
+    - levity: He is actually traveling on this same train to get to his reading!
+    - levity: I wish I could speak with him, but his bouncers are very insistent.
+    - levity: Anyway, enjoy your Tasty Nuts!
