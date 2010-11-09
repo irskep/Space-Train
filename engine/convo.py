@@ -6,7 +6,9 @@ TODO:
 """
 
 import pyglet, yaml, collections, functools, re
-import actor
+
+import actor, gamestate
+
 from util import draw
 
 # Convenience function for creating defaultdicts that return None if key not present
@@ -329,6 +331,11 @@ class Conversation(object):
                                                      y=act.sprite.y + 20 + \
                                                         act.current_image().height - \
                                                         act.current_image().anchor_y)
+            
+            
+            cw = self.convo_label.content_width/1.5
+            self.convo_label.x = max(cw, self.convo_label.x)
+            self.convo_label.x = min(self.scene.camera.position[0]+gamestate.norm_w/2-cw, self.convo_label.x)
             self.scene.clock.schedule_once(self.next_line, max(len(arg)*0.05, 3.0))
         else:
             if arg.has_key('action'):
