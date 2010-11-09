@@ -1,0 +1,22 @@
+# Initialization
+
+at_rest:
+    sneelock: sneelock
+    tourist: head
+
+speaking:
+    sneelock: sneelock
+    tourist: head
+
+variables:
+    knows_about_baron: false
+
+# States
+
+start:
+    - tourist: It's too hot in here! I'm sweating fire!
+    - sneelock: It is a bit hot. Let me see if there's an engineer on board.
+    - tourist: NO! I need it fixed NOW!
+    - sneelock: But I'm just a guard...
+    - tourist: You could be the ultra-pope for all I care! Just FIX IT!
+    - sneelock: Right away...

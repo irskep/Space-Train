@@ -1,0 +1,29 @@
+# Initialization
+
+at_rest:
+    main: stand_front
+    hipster_fran: hipster_fran
+    hipster_amanda: hipster_amanda
+    hipster_liam: hipster_liam
+
+speaking:
+    main: stand_front
+    hipster_fran: hipster_fran
+    hipster_amanda: hipster_amanda
+    hipster_liam: hipster_liam
+
+variables:
+    knows_about_baron: false
+    
+# States
+
+start:
+    - choice:
+        Attempt to greet the hipsters:
+            goto: grunt
+
+grunt:
+    - main: Hi!
+    - hipster_fran: ...scoff...
+    - hipster_amanda: ...vinyl....
+    - hipster_liam: ...argyle...
