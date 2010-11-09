@@ -109,7 +109,6 @@ class Scene(object):
                 yield act.sprite
         sort_func = lambda a, b: a.y < b.y
         self.zenforcer = zenforcer.ZEnforcer(self.main_group, sprite_maker, sort_func)
-        pyglet.clock.schedule_interval(self.zenforcer.update, 1/30.0)
     
     def initialize_from_info(self):
         """Initialize objects specified in info.json"""
@@ -280,6 +279,7 @@ class Scene(object):
                                    immediate=True)
         self.camera.update(dt)
         self.interp.update_interpolators(dt)
+        self.zenforcer.update(dt)
     
     def draw(self, dt=0):
         self.env.behind.blit(0,0,0)

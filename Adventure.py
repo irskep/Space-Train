@@ -8,9 +8,9 @@ Main file for the Space Train game engine. Run this.
 
 import math, os, sys, json
 
-# pyglet.options['debug_gl'] = False
-
 import pyglet
+
+pyglet.options['debug_gl'] = False
 
 import engine
 from engine import gamestate, util
