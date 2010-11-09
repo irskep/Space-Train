@@ -176,3 +176,12 @@ def actor_clicked(clicked_actor):
             myscene.begin_conversation("hipsterz")
     if clicked_actor.identifier == "thermostat":
         myscene.ui.show_cam(clicked_actor, {'Inspect': None, 'Raise Temperature': lambda: set_temperature(80)})
+        
+        
+def give_actor(actor, item):
+    print "Attemping to give %s %s" % (actor.identifier, item.identifier)
+    if actor.identifier == "shamus" and item.identifier == "beans":
+        myscene.begin_conversation("hamster_from_a_baby")
+        return True
+    else:
+        return False
