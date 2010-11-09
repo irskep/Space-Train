@@ -222,10 +222,9 @@ class Conversation(object):
             self.convo_info['variables'].update(v)
         return True
     
-    def _update_locals(self, val):
+    def _update_globals(self, val):
         """Update variables dictionary"""
-        for v in val:
-            self.scene.handler.game_variables.update(v)
+        self.scene.handler.handler.game_variables.update(val)
         return True
     
     def _give(self, val):
