@@ -135,6 +135,7 @@ class EditorView(object):
     # Update/Draw
     def update(self, dt):
         self.check_camera_keys()
+        self.scene.zenforcer.update(dt)
     
     def draw(self):
         draw.set_color(0,0,0,1)

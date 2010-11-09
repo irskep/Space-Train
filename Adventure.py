@@ -34,6 +34,9 @@ class AdventureWindow(pyglet.window.Window):
                                         #   a consistent window size
         gamestate.event_manager = eventmanager.EventManager()
         
+        pyglet.gl.glEnable(pyglet.gl.GL_BLEND)
+        pyglet.gl.glBlendFunc(pyglet.gl.GL_SRC_ALPHA, pyglet.gl.GL_ONE_MINUS_SRC_ALPHA)
+        
         self.game_handler = None
         
         engine.init()                   # Set up resource paths
