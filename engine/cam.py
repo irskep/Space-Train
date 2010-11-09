@@ -33,6 +33,8 @@ class CAM(object):
         self.actions = actions
         self.x = x
         self.y = y
+        # JK LOL
+        self.x, self.y = 0, 0
         self.hide_on_click_outside = True
         self.ui = ui
 
@@ -42,29 +44,29 @@ class CAM(object):
         # Static resources, such as sprites for the CAM backgrounds
         sprites = {}
         sprite_batch = pyglet.graphics.Batch()
-        sprites = {i: util.load_sprite(['ui', 'new_cam_%d.png' % i], batch = self.batch)
+        # sprites = {i: util.load_sprite(['ui', 'new_cam_%d.png' % i], batch = self.batch)
+        #             for i in xrange(1,7)}
+        sprites = {i: util.load_sprite(['ui', 'new_new_cam.png'], batch = self.batch)
                     for i in xrange(1,7)}
         for s in sprites.viewvalues():
-            s.anchor_x = s.width
+            # s.anchor_x = s.width
+            s.anchor_x = 0
 
         positioning = {}
-        # positioning[1] = (150,187)
-        # positioning[2] = (140,155)
-        # positioning[3] = (130,120)
-        # positioning[4] = (130,84)
-        # positioning[5] = (140,48)
-        # positioning[6] = (150,17)
-        positioning[1] = (280,187)
-        positioning[2] = (265,155)
-        positioning[3] = (260,120)
-        positioning[4] = (260,84)
-        positioning[5] = (265,48)
-        positioning[6] = (280,17)
+        # positioning[1] = (280,187)
+        # positioning[2] = (265,155)
+        # positioning[3] = (260,120)
+        # positioning[4] = (260,84)
+        # positioning[5] = (265,48)
+        # positioning[6] = (280,17)
+        
+        positioning = {y+1: (0, y*30) for y in range(0, 6)}
         
         y -= sprites[1].height/2
                 
         #defines the generic order in which CAM backrounds are used
-        generic_item_order = [3, 4, 2, 5, 1, 6]
+        # generic_item_order = [3, 4, 2, 5, 1, 6]
+        generic_item_order = [1,2,3,4,5,6]
         
         used_items = []
         for action, callback in self.actions.items():
@@ -75,8 +77,11 @@ class CAM(object):
         # Turn each action entry into a menu item
         for action, callback in self.actions.items():  
             count = used_items.pop(0)
-            button = self.Button(x-sprites[1].width/3, y, 
-                                 positioning[count][0], positioning[count][1],
+            # button = self.Button(x-sprites[1].width/3, y, 
+            #                      positioning[count][0], positioning[count][1],
+            #                      sprites[count], action, callback)
+            button = self.Button(positioning[count][0], positioning[count][1], 
+                                 5, 5,
                                  sprites[count], action, callback)
             self.buttons.append(button)
         
@@ -142,9 +147,9 @@ class CAM(object):
             self.sprite.x = x
             self.sprite.y = y
             self.label = pyglet.text.Label(action, font_name = 'Times New Roman', 
-                                           font_size = 14, anchor_x = 'right', 
-                                           anchor_y = 'center', batch = self.sprite.batch, 
-                                           color = (0, 0, 0, 255),
+                                           font_size = 14, anchor_x = 'left', 
+                                           anchor_y = 'bottom', batch = self.sprite.batch, 
+                                           color = (255, 255, 255, 255),
                                            x = self.sprite.x + text_x, 
                                            y = self.sprite.y + text_y)
             
