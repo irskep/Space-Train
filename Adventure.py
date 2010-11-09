@@ -12,6 +12,7 @@ import math, os, sys, json
 
 import pyglet
 
+import engine
 from engine import gamestate, util
 from engine import gamehandler, eventmanager
 
@@ -32,29 +33,56 @@ class AdventureWindow(pyglet.window.Window):
         gamestate.init_scale()          # Set up scaling transformations to have
                                         #   a consistent window size
         gamestate.event_manager = eventmanager.EventManager()
-		
-        # Load default game scene. Probably belongs in GameHandler actually.
+        
+        self.game_handler = None
+        
+        engine.init()                   # Set up resource paths
+        
+        self.load_fraction = 0.0
 
         with pyglet.resource.file(util.respath('game', 'info.json'), 'r') as game_info_file:
-            game_info = json.load(game_info_file)
-            game_info['reset_save'] = reset_save
+            self.game_info = json.load(game_info_file)
+            self.game_info['reset_save'] = reset_save
             if reset_at_scene:
-                game_info['first_scene'] = reset_at_scene
-            self.set_caption(game_info["name"])
-            self.game_handler = gamehandler.GameHandler(**game_info)
+                self.game_info['first_scene'] = reset_at_scene
+            self.set_caption(self.game_info["name"])
         
-        # gamestate.scaled is a decorator that wraps the given function in calls to
-        # scale/unscale the OpenGL context. If/when AdventureWindow grows its own
-        # on_draw() method, you can just write '@gamestate.scaled' above the function
-        # definition.
-        self.on_draw = self.game_handler.draw
+        # Stupid hack to get around pyglet loading bullshit
+        pyglet.clock.schedule_once(self.finish_loading, 0.0000001)
+    
+    def finish_loading(self, dt=0):
+        self.preload()
+        self.game_handler = gamehandler.GameHandler(**self.game_info)
         
         # Schedule drawing and update functions.
         # Draw really only needs 60 FPS, update can be faster.
         pyglet.clock.schedule_interval(self.on_draw, 1/60.0)
         pyglet.clock.schedule_interval(self.game_handler.update, 1/120.0)
+    
+    def preload(self):
+        self.on_draw()
+        self.flip()
+        i = 0
+        for item in util.preload:
+            try:
+                util.load_image(item)
+            except pyglet.resource.ResourceNotFoundException:
+                print "bad", item
+            i += 1
+            self.load_fraction = float(i)/float(len(util.preload))
+            self.on_draw()
+            self.flip()
+            # pyglet.app.event_loop.idle()
 
-        
+    def on_draw(self, dt=0):
+        if self.game_handler:
+            self.game_handler.draw()
+        else:
+            util.draw.set_color(0,0,0)
+            util.draw.rect(0,0,self.width,self.height)
+            util.draw.set_color(0,255,0)
+            util.draw.rect(0, self.height/2-20, self.width*self.load_fraction, self.height/2+20)
+    
     def on_key_press(self, symbol, modifiers):
         # Override default behavior of escape key quitting
         if symbol == pyglet.window.key.ESCAPE:
