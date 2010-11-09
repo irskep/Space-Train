@@ -82,7 +82,7 @@ class CAM(object):
             #                      sprites[count], action, callback)
             button = self.Button(positioning[count][0], positioning[count][1], 
                                  5, 5,
-                                 sprites[count], action, callback)
+                                 sprites[count], "%d: %s" % (count, action), callback)
             self.buttons.append(button)
         
         self.set_visible(True)
@@ -124,6 +124,11 @@ class CAM(object):
             self.buttons[button].set_y(self.buttons[button].y - 1)
             
         print "Button %d: (%d, %d)" % (button, self.buttons[button].x, self.buttons[button].y)
+    
+    def on_key_release(self, symbol, modifiers):
+        nums = {getattr(pyglet.window.key,"NUM_%d" % (i+1)): self.buttons[i] for i in range(len(self.buttons))}
+        for num, button in nums.viewitems():
+            button.click()
     
     # Determines which button is under the given point
     # Note that this function's behaviour is undefined when buttons overlap
