@@ -217,7 +217,7 @@ class Actor(actionsequencer.ActionSequencer):
     
     def image_named(self, img_name, anchor_x, anchor_y):
         """Load and anchor a PNG"""
-        img = pyglet.resource.image(self.resource_path("%s.png" % img_name))
+        img = util.load_image(self.resource_path("%s.png" % img_name))
         img.anchor_x = img.width * anchor_x
         img.anchor_y = img.height * anchor_y
         return img
