@@ -128,9 +128,9 @@ class CAM(object):
         print "Button %d: (%d, %d)" % (button, self.buttons[button].x, self.buttons[button].y)
     
     def on_key_release(self, symbol, modifiers):
-        nums = {getattr(pyglet.window.key,"NUM_%d" % (i+1)): self.buttons[i] for i in range(len(self.buttons))}
+        nums = {getattr(pyglet.window.key,"_%d" % (i+1)): self.buttons[i] for i in range(len(self.buttons))}
         for num, button in nums.viewitems():
-            if num & symbol:
+            if num == symbol:
                 button.click()
                 self.set_visible(False)
                 self.ui.clean_cam()
@@ -183,3 +183,6 @@ class CAM(object):
             self.sprite.y = y
             self.label.y = (self.sprite.y + self.sprite.height) - (self.sprite.height / 2) - 5
             self.y = y
+        
+        def __repr__(self):
+            return "Button: " + self.label.text
