@@ -7,6 +7,7 @@ from engine.interpolator import PulseInterpolator, LinearInterpolator
 from engine.util.const import WALK_PATH_COMPLETED
 from engine import ui
 from engine import cam
+from engine import gamehandler
 from engine import gamestate
 from engine import convo
 from engine import util
@@ -20,8 +21,6 @@ levity_direction = "right"
 do_sit = False
 sneelock_distracted = False
 
-temperature = 72
-
 def init(fresh=False):
     myscene.ui.inventory.visible = True
     
@@ -29,6 +28,8 @@ def init(fresh=False):
     
     myscene.play_music('simple', fade=False)
     myscene.play_background('Train_Loop1', fade=True)
+    
+    myscene.handler.handler.game_variables['temperature'] = 72
     
     if fresh:
         myscene.interaction_enabled = False
@@ -147,6 +148,14 @@ def end_conversation(convo_name):
         potato.walkpath_point = "potato_1"
         potato.prepare_walkpath_move("potato_2")
         potato.next_action()
+    
+    if convo_name == "thermostat_discover":
+        print myscene.handler.handler.game_variables['temperature']
+        if myscene.handler.handler.game_variables['temperature'] >= 80:
+            # Nicole complains!
+            tourist = myscene.actors['tourist']
+            pyglet.clock.schedule_once(util.make_dt_wrapper(tourist.prepare_walkpath_move), 5, "tourist_complain")
+            pyglet.clock.schedule_once(tourist.next_action, 5)
         
 def talk_to_briggs():
     myscene.end_background_conversation('mumblestiltskin')
@@ -168,16 +177,7 @@ def handle_event(event, *args):
         if walk_handlers.has_key(actor.identifier):
             walk_handlers[actor.identifier](actor, point)
     print "Handled", event, "with", args
-
-def set_temperature(temp):
-    print "Setting temp"
-    global temperature
-    temperature = temp
-    if temperature >= 80:
-        # Nicole complains!
-        tourist = myscene.actors['tourist']
-        pyglet.clock.schedule_once(util.make_dt_wrapper(tourist.prepare_walkpath_move), 5, "tourist_complain")
-        pyglet.clock.schedule_once(tourist.next_action, 5)
+    
     
 def actor_clicked(clicked_actor):
     print clicked_actor
@@ -199,7 +199,7 @@ def actor_clicked(clicked_actor):
         else:
             myscene.begin_conversation("hipsterz")
     if clicked_actor.identifier == "thermostat":
-        myscene.ui.show_cam(clicked_actor, {'Inspect': None, 'Raise Temperature': lambda: set_temperature(80)})
+        myscene.ui.show_cam(clicked_actor, {'Inspect': lambda: myscene.begin_conversation("thermostat_discover")})
         
         
 def give_actor(actor, item):
