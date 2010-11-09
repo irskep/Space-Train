@@ -27,6 +27,9 @@ def init(fresh=False):
     
     myscene.begin_background_conversation("mumblestiltskin")
     
+    myscene.play_music('simple', fade=False)
+    myscene.play_background('Train_Loop1', fade=True)
+    
     if fresh:
         myscene.interaction_enabled = False
         # gamestate.event_manager.enter_cutscene()
@@ -176,3 +179,19 @@ def actor_clicked(clicked_actor):
             myscene.begin_conversation("hipsterz")
     if clicked_actor.identifier == "thermostat":
         myscene.ui.show_cam(clicked_actor, {'Inspect': None, 'Raise Temperature': lambda: set_temperature(80)})
+        
+        
+def give_actor(actor, item):
+    print "Attemping to give %s %s" % (actor.identifier, item.identifier)
+    if actor.identifier == "shamus" and item.identifier == "beans":
+        myscene.begin_conversation("hamster_from_a_baby")
+        return True
+    else:
+        return False
+        
+        
+def filter_move(point):
+    if point == "transition_left" and not sneelock_distracted:
+        return "inga_attempt_silver_class"
+    else:
+        return point

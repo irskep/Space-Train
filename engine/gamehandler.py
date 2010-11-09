@@ -7,6 +7,7 @@ import pyglet
 
 import gamestate, util
 import scene, scenehandler, ui
+import music
 
 class GameHandler(object):
     """This class will be useful when scene transitions are implemented."""
@@ -15,6 +16,9 @@ class GameHandler(object):
         
         self.name = name
         self.game_variables = {}
+        
+        self.dj = music.DJ(self, 0.8)
+        self.background_dj = music.DJ(self, 0.1)
         
         self.save_path = pyglet.resource.get_settings_path(self.name)
         util.mkdir_if_absent(self.save_path)
@@ -29,6 +33,9 @@ class GameHandler(object):
         scn = self.load() or scene.Scene(first_scene, self.scene_handler, self.ui)
         self.scene_handler.set_first_scene(scn)
         self.update = self.scene_handler.update
+    
+    def paused(self):
+        return self.scene_handler.scene.paused
     
     def draw(self, dt=0):
         with util.pushmatrix(gamestate.scale):

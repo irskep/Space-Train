@@ -25,7 +25,7 @@ class UI(object):
         self.batch = pyglet.graphics.Batch()
         self.sprites = []
         self.inventory = inventory.Inventory()
-        img = pyglet.resource.image(util.respath('actors', 'fist', 'stand_front.png'))
+        img = util.load_image(util.respath('actors', 'fist', 'stand_front.png'))
         img_data = img.get_image_data()
         img_w = img_data.width
         img_h = img_data.height

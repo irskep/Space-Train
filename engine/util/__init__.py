@@ -8,6 +8,65 @@ import settings
 import vector
 import walkpath
 
+# Intercept resource loads
+
+print_loads = False
+
+preload = [
+'ui/purse.png',
+'ui/purseopen.png',
+'actors/fist/stand_front.png',
+'environments/transitions/test.png',
+'environments/act1_scene1/0_0.png',
+'environments/act1_scene1/1_0.png',
+'environments/act1_scene1/2_0.png',
+'environments/act1_scene1/overlay_0_0.png',
+'environments/act1_scene1/overlay_1_0.png',
+'environments/act1_scene1/overlay_2_0.png',
+'environments/spacebackground.png',
+'actors/fist/climb_down.png',
+'actors/fist/climb_up.png',
+'actors/fist/walk_right_1.png',
+'actors/fist/walk_right_2.png',
+'actors/fist/walk_left_1.png',
+'actors/fist/walk_left_2.png',
+'actors/fist/walk_back_1.png',
+'actors/fist/walk_back_2.png',
+'actors/fist/walk_front_1.png',
+'actors/fist/walk_front_2.png',
+'actors/fist/stand_front.png',
+'actors/seat/chair.png',
+'actors/seat/couch.png',
+'actors/thermostat/thermostat.png',
+'actors/cart_lady/stand_right.png',
+'actors/cart_lady/walk_right_1.png',
+'actors/cart_lady/walk_right_2.png',
+'actors/cart_lady/walk_left_1.png',
+'actors/cart_lady/walk_left_2.png',
+'actors/conspiracy_theorist/conspiracytheorist.png',
+'actors/hipster_liam/hipster_liam.png',
+'actors/inga/walk_right_1.png',
+'actors/inga/walk_right_2.png',
+'actors/inga/walk_left_1.png',
+'actors/inga/walk_left_2.png',
+'actors/inga/sit.png',
+'actors/inga/stand_right.png',
+'actors/inga/talk_right_1.png',
+'actors/inga/talk_right_2.png',
+'actors/inga/stand_front.png',
+'actors/tourist/head.png',
+'actors/hold_steady_fat_man/stand_front.png',
+'actors/hipster_amanda/hipster_amanda.png',
+'actors/hipster_fran/hipster_fran.png',
+'actors/shamus/shamus.png',
+'actors/space_bucks/five.png',
+]
+
+def load_image(img):
+    if print_loads:
+        print "'%s'," % img
+    return pyglet.resource.image(img)
+
 # Functional
 
 def first(list_to_search, condition_to_satisfy):
@@ -63,7 +122,7 @@ def make_dt_wrapper(func):
 # Convenience and global use
 
 def load_sprite(path, *args, **kwargs):
-    loaded_image = pyglet.resource.image(respath(*path))
+    loaded_image = load_image(respath(*path))
     return pyglet.sprite.Sprite(loaded_image, *args, **kwargs)
 
 def image_alpha_at_point(img, x, y):

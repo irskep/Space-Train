@@ -207,6 +207,12 @@ class Scene(object):
     def convo_in_progress(self):
         return self.convo.convo_name is not None
     
+    def play_music(self, name, fade=True):
+        self.handler.handler.dj.transition_to(name, fade=fade)
+    
+    def play_background(self, name, fade=True):
+        self.handler.handler.background_dj.transition_to(name, fade=fade)
+    
     
     # Events
     
@@ -242,7 +248,14 @@ class Scene(object):
         main = self.actors["main"]
         while(main.blocking_actions > 0):
             main.next_action()
-        if main.prepare_move(*self.camera.mouse_to_canvas(x, y)):
+        dest_point = main.closest_valid_walkpath_point(*self.camera.mouse_to_canvas(x, y))
+        if hasattr(self.module, 'filter_move'):
+            dest_point = self.module.filter_move(dest_point)
+            if dest_point:
+                main.prepare_walkpath_move(dest_point)
+                main.next_action()
+        else:
+            main.prepare_walkpath_move(dest_point)
             main.next_action()
     
     def pause(self):

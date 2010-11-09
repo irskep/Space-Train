@@ -23,7 +23,7 @@ class Environment(object):
         for x in range(self.background_tile_cols):
             this_y = 0
             for y in range(self.background_tile_rows):
-                img = pyglet.resource.image(util.respath('environments', 
+                img = util.load_image(util.respath('environments', 
                                                          name, 
                                                          '%d_%d.png' % (x, y)))
                 tile_w, tile_h = img.width, img.height
@@ -42,7 +42,7 @@ class Environment(object):
             for y in range(self.background_tile_rows):
                 overlay_tile_path = util.respath('environments', name, 'overlay_%d_%d.png' % (x, y))
                 try:
-                    img = pyglet.resource.image(overlay_tile_path)
+                    img = util.load_image(overlay_tile_path)
                     new_sprite = pyglet.sprite.Sprite(img, x=x*tile_w, y=y*tile_h,
                                                       batch=self.overlay_batch)
                     self.overlay_sprites.append(new_sprite)
@@ -51,7 +51,7 @@ class Environment(object):
         
         self.draw = self.background_batch.draw
         self.draw_overlay = self.overlay_batch.draw
-        self.behind = pyglet.resource.image('environments/spacebackground.png')
+        self.behind = util.load_image('environments/spacebackground.png')
     
     def exit(self):
         for background_sprite in self.background_sprites:

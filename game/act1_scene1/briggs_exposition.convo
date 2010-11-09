@@ -9,7 +9,7 @@ speaking:
     gregg_briggs: conspiracytheorist
 
 variables:
-    knows_about_baron: false
+    knows_about_baron: False
     
 # States
 
@@ -29,6 +29,8 @@ main_choice:
         What was that you were saying?:
             hide_after_use: true
             goto: ask_saying   
+        What's in the bag?:
+            goto: sell_beans
         I'll be going now.:
             hide_after_use: true
             goto: goodbye
@@ -49,7 +51,7 @@ ask_direction:
     - gregg_briggs: Gonna study the oceans. Learn the language of the byorknels. Attain enlightenment.
     - gregg_briggs: Been ridin' around a long time now. Tryin' to find myself. Been on a lot of space trains. All of 'em been hit by the Baron.
     - update_locals:
-        - knows_about_baron: true
+        - knows_about_baron: True
     - goto: main_choice
     
 ask_saying:
@@ -57,6 +59,36 @@ ask_saying:
     - gregg_briggs: I was coming up with a way to cure galactic hunger using shoelaces.
     - goto: main_choice
 
+sell_beans:
+    - main: What's in the bag?
+    - gregg_briggs: Beans. Want to buy some?
+    - choice:
+        Sure:
+            goto: negotiate_beans
+        No Thanks:
+            goto: no_thanks
+            
+negotiate_beans:
+    - main: Yes please! One bowl of bean soup!
+    - gregg_briggs: That'll be five space bucks.
+    - choice:
+        Care to trade?:
+            goto: trade_for_beans
+        On second thought...:
+            goto: no_thanks
+        
+trade_for_beans:
+    - main: I don't have any more space bucks, but I do have this Tasty Nuts and a lemonade...
+    - gregg_briggs: Sold! Here you go!
+    - take: nuts
+    - take: lemonade
+    - give: beans (beans)
+    - goto: main_choice
+
+no_thanks:
+    - main: No thank you...
+    - goto: main_choice
+    
 explain_baron:
     - gregg_briggs: (Long and interesting exposition about how the Baron has hit every Space Train but this one looking for something, and Levity knows something about it)
     - goto: main_choice
