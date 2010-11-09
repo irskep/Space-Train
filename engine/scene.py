@@ -242,7 +242,13 @@ class Scene(object):
         main = self.actors["main"]
         while(main.blocking_actions > 0):
             main.next_action()
-        if main.prepare_move(*self.camera.mouse_to_canvas(x, y)):
+        dest_point = main.closest_valid_walkpath_point(*self.camera.mouse_to_canvas(x, y)):
+        if hasattr(self.module, 'filter_move'):
+            dest_point = self.module.filter_move(dest_point)
+            if dest_point:
+                main.prepare_walkpath_move(dest_point)
+        else:
+            main.prepare_walkpath_move(dest_point)
             main.next_action()
     
     def pause(self):

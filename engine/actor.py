@@ -21,7 +21,7 @@ class Actor(actionsequencer.ActionSequencer):
         self.identifier = identifier
         self.walkpath_point = None
         self.resource_path = util.respath_func_with_base_path('actors', self.name)
-        self.sound_path = util.respath_func_with_base_path('music')
+        self.sound_path = util.respath_func_with_base_path('sound')
         
         self.update_static_info()
         self.current_state = Actor.info[self.name]['start_state']
@@ -142,7 +142,7 @@ class Actor(actionsequencer.ActionSequencer):
     
     # Convenience methods for preparing standard action sequences
     
-    def prepare_move(self, x, y):
+    def closest_valid_walkpath_point(self, x, y):
         """Move toward (x, y) either straight or via walk path"""
         if self.blocking_actions == 0:
             if self.walkpath_point:
@@ -151,17 +151,19 @@ class Actor(actionsequencer.ActionSequencer):
                 excluded_points = set()
                 dest_point = self.scene.walkpath.point_near(x, y, exclude=excluded_points)
                 while not ok:
+                    # This should never go into an infinite loop because eventually,
+                    # dest_point will just equal self.walkpath_point...
                     try:
-                        self.prepare_walkpath_move(dest_point)
+                        wp.move_sequence_between(self.walkpath_point, dest_point)
                         ok = True
                     except IndexError:
                         # dijkstra.py throws IndexError if no path exists
                         # (internal heap gets over-popped)
                         excluded_points.add(dest_point)
                         dest_point = self.scene.walkpath.point_near(x, y, exclude=excluded_points)
+                return dest_point
             else:
-                self.prepare_direct_move(x, y)
-            return True
+                return False
         else:
             return False
     
