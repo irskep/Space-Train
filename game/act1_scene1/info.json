@@ -15,20 +15,6 @@
         }
     }, 
     "actors": {
-        "hipster_amanda": {
-            "y": 123, 
-            "x": 664, 
-            "walk_speed": 400.0, 
-            "name": "hipster_amanda", 
-            "start_state": "hipster_amanda"
-        }, 
-        "gregg_briggs": {
-            "y": 147, 
-            "x": 2671, 
-            "walk_speed": 400.0, 
-            "name": "conspiracy_theorist", 
-            "start_state": "conspiracytheorist"
-        }, 
         "seat_8": {
             "y": 181, 
             "x": 2678, 
@@ -37,11 +23,25 @@
             "start_state": "couch"
         }, 
         "thermostat": {
-            "y": 453, 
-            "x": 1238, 
+            "y": 456, 
+            "x": 1226, 
             "walk_speed": 400.0, 
             "name": "thermostat", 
             "start_state": "thermostat"
+        }, 
+        "luggage_2": {
+            "y": 179, 
+            "x": 1954, 
+            "walk_speed": 400.0, 
+            "name": "luggage", 
+            "start_state": "luggage2"
+        }, 
+        "luggage_3": {
+            "y": 183, 
+            "x": 1017, 
+            "walk_speed": 400.0, 
+            "name": "luggage", 
+            "start_state": "luggage"
         }, 
         "seat_4": {
             "y": 189, 
@@ -92,25 +92,25 @@
             "name": "seat", 
             "start_state": "couch"
         }, 
-        "sneelock": {
+        "levity": {
             "walk_speed": 400.0, 
-            "walkpath_point": "sneelock_guard", 
-            "name": "hold_steady_fat_man", 
-            "start_state": "stand_front"
+            "walkpath_point": "levity_1", 
+            "name": "cart_lady", 
+            "start_state": "walk_right"
         }, 
-        "hipster_fran": {
-            "y": 151, 
-            "x": 560, 
+        "luggage_1": {
+            "y": 182, 
+            "x": 2874, 
             "walk_speed": 400.0, 
-            "name": "hipster_fran", 
-            "start_state": "hipster_fran"
+            "name": "luggage", 
+            "start_state": "luggage"
         }, 
-        "seat_10": {
-            "y": 180, 
-            "x": 3452, 
+        "gregg_briggs": {
+            "y": 147, 
+            "x": 2671, 
             "walk_speed": 400.0, 
-            "name": "seat", 
-            "start_state": "couch"
+            "name": "conspiracy_theorist", 
+            "start_state": "conspiracytheorist"
         }, 
         "hipster_liam": {
             "y": 127, 
@@ -119,6 +119,45 @@
             "name": "hipster_liam", 
             "start_state": "hipster_liam"
         }, 
+        "main": {
+            "walk_speed": 400.0, 
+            "walkpath_point": "seat", 
+            "name": "inga", 
+            "start_state": "sit"
+        }, 
+        "tourist": {
+            "walk_speed": 400.0, 
+            "walkpath_point": "tourist_start", 
+            "name": "tourist", 
+            "start_state": "head"
+        }, 
+        "sneelock": {
+            "walk_speed": 400.0, 
+            "walkpath_point": "sneelock_guard", 
+            "name": "hold_steady_fat_man", 
+            "start_state": "stand_front"
+        }, 
+        "monitor_3": {
+            "y": 480, 
+            "x": 1269, 
+            "walk_speed": 400.0, 
+            "name": "monitor", 
+            "start_state": "StaticTV"
+        }, 
+        "monitor_1": {
+            "y": 450, 
+            "x": 1925, 
+            "walk_speed": 400.0, 
+            "name": "monitor", 
+            "start_state": "TV_Propaganda"
+        }, 
+        "seat_10": {
+            "y": 180, 
+            "x": 3452, 
+            "walk_speed": 400.0, 
+            "name": "seat", 
+            "start_state": "couch"
+        }, 
         "seat_11": {
             "y": 179, 
             "x": 3041, 
@@ -126,17 +165,47 @@
             "name": "seat", 
             "start_state": "couch"
         }, 
-        "main": {
+        "monitor_2": {
+            "y": 481, 
+            "x": 2553, 
             "walk_speed": 400.0, 
-            "walkpath_point": "seat", 
-            "name": "inga", 
-            "start_state": "sit"
+            "name": "monitor", 
+            "start_state": "StaticTV"
         }, 
-        "levity": {
+        "hipster_amanda": {
+            "y": 123, 
+            "x": 664, 
             "walk_speed": 400.0, 
-            "walkpath_point": "levity_1", 
-            "name": "cart_lady", 
-            "start_state": "walk_right"
+            "name": "hipster_amanda", 
+            "start_state": "hipster_amanda"
+        }, 
+        "hipster_fran": {
+            "y": 151, 
+            "x": 560, 
+            "walk_speed": 400.0, 
+            "name": "hipster_fran", 
+            "start_state": "hipster_fran"
+        }, 
+        "outlet_wire_1": {
+            "y": 180, 
+            "x": 1683, 
+            "walk_speed": 400.0, 
+            "name": "outlet_wire", 
+            "start_state": "outlet_wire"
+        }, 
+        "outlet_wire_3": {
+            "y": 193, 
+            "x": 393, 
+            "walk_speed": 400.0, 
+            "name": "outlet_wire", 
+            "start_state": "outlet_wire"
+        }, 
+        "outlet_wire_2": {
+            "y": 179, 
+            "x": 3255, 
+            "walk_speed": 400.0, 
+            "name": "outlet_wire", 
+            "start_state": "outlet_wire"
         }, 
         "shamus": {
             "y": 130, 
@@ -144,27 +213,53 @@
             "walk_speed": 400.0, 
             "name": "shamus", 
             "start_state": "shamus"
-        }, 
-        "tourist": {
-            "walk_speed": 400.0, 
-            "walkpath_point": "tourist_start", 
-            "name": "tourist", 
-            "start_state": "head"
         }
     }, 
     "walkpath": {
         "points": {
-            "point_10": {
-                "y": 122, 
-                "x": 1176
+            "potato_8": {
+                "y": 68, 
+                "x": 1179
+            }, 
+            "potato_9": {
+                "y": 67, 
+                "x": 1355
+            }, 
+            "point_3": {
+                "y": 135, 
+                "x": 2412
             }, 
             "sneelock_block": {
                 "y": 119, 
                 "x": 74
             }, 
+            "potato_5": {
+                "y": 165, 
+                "x": 723
+            }, 
+            "potato_6": {
+                "y": 45, 
+                "x": 878
+            }, 
+            "potato_7": {
+                "y": 35, 
+                "x": 1020
+            }, 
+            "potato_1": {
+                "y": 147, 
+                "x": 174
+            }, 
+            "potato_2": {
+                "y": 35, 
+                "x": 333
+            }, 
             "seat": {
                 "y": 167, 
                 "x": 3452
+            }, 
+            "potato_18": {
+                "y": 96, 
+                "x": 3331
             }, 
             "levity_right": {
                 "y": 117, 
@@ -178,21 +273,85 @@
                 "y": 116, 
                 "x": 2
             }, 
+            "potato_12": {
+                "y": 156, 
+                "x": 1965
+            }, 
+            "point_11": {
+                "y": 46, 
+                "x": 879
+            }, 
+            "potato_16": {
+                "y": 142, 
+                "x": 2863
+            }, 
+            "potato_29": {
+                "y": 53, 
+                "x": 2077
+            }, 
+            "potato_28": {
+                "y": 70, 
+                "x": 2307
+            }, 
             "tourist_complain": {
                 "y": 401, 
                 "x": 373
             }, 
+            "potato_23": {
+                "y": 160, 
+                "x": 3254
+            }, 
+            "potato_22": {
+                "y": 88, 
+                "x": 3425
+            }, 
+            "potato_21": {
+                "y": 83, 
+                "x": 3558
+            }, 
+            "potato_20": {
+                "y": 134, 
+                "x": 3644
+            }, 
+            "potato_27": {
+                "y": 44, 
+                "x": 2544
+            }, 
             "sneelock_inspect": {
-                "y": 182.0, 
-                "x": 1655.0
+                "y": 182, 
+                "x": 1655
+            }, 
+            "potato_25": {
+                "y": 147, 
+                "x": 2963
+            }, 
+            "potato_24": {
+                "y": 163, 
+                "x": 3073
+            }, 
+            "potato_4": {
+                "y": 204, 
+                "x": 634
+            }, 
+            "potato_40": {
+                "y": 99, 
+                "x": 59
             }, 
             "tourist_start": {
-                "y": 397, 
-                "x": 2222
+                "y": 408, 
+                "x": 2206
+            }, 
+            "potato_13": {
+                "y": 183, 
+                "x": 2162
             }, 
             "sneelock_guard": {
                 "y": 184, 
                 "x": 228
+            }, 
+            "potato_10": {
+                "y": 46, 
+                "x": 1563
             }, 
             "levity_2": {
                 "y": 121, 
@@ -206,13 +365,77 @@
                 "y": 122, 
                 "x": 928
             }, 
-            "levity_4": {
-                "y": 118, 
-                "x": 3262
+            "point_10": {
+                "y": 122, 
+                "x": 1176
             }, 
             "seat_11": {
                 "y": 154, 
                 "x": 3047
+            }, 
+            "potato_26": {
+                "y": 60, 
+                "x": 2742
+            }, 
+            "potato_3": {
+                "y": 103, 
+                "x": 502
+            }, 
+            "potato_38": {
+                "y": 82, 
+                "x": 324
+            }, 
+            "potato_39": {
+                "y": 82, 
+                "x": 179
+            }, 
+            "potato_34": {
+                "y": 173, 
+                "x": 909
+            }, 
+            "potato_35": {
+                "y": 138, 
+                "x": 715
+            }, 
+            "potato_36": {
+                "y": 41, 
+                "x": 580
+            }, 
+            "potato_37": {
+                "y": 33, 
+                "x": 444
+            }, 
+            "potato_30": {
+                "y": 30, 
+                "x": 1828
+            }, 
+            "potato_31": {
+                "y": 33, 
+                "x": 1584
+            }, 
+            "potato_32": {
+                "y": 107, 
+                "x": 1386
+            }, 
+            "potato_33": {
+                "y": 148, 
+                "x": 1144
+            }, 
+            "levity_4": {
+                "y": 118, 
+                "x": 3262
+            }, 
+            "potato_17": {
+                "y": 84, 
+                "x": 3060
+            }, 
+            "potato_14": {
+                "y": 171, 
+                "x": 2362
+            }, 
+            "potato_15": {
+                "y": 129, 
+                "x": 2622
             }, 
             "point_8": {
                 "y": 90, 
@@ -225,6 +448,10 @@
             "levity_left": {
                 "y": 125, 
                 "x": -185
+            }, 
+            "potato_11": {
+                "y": 61, 
+                "x": 1777
             }, 
             "point_4": {
                 "y": 94, 
@@ -250,23 +477,35 @@
                 "y": 135, 
                 "x": 2824
             }, 
-            "point_3": {
-                "y": 135, 
-                "x": 2412
+            "potato_19": {
+                "y": 168, 
+                "x": 3579
             }
         }, 
         "edges": [
+            {
+                "a": "potato_24", 
+                "b": "potato_23"
+            }, 
             {
                 "a": "point_8", 
                 "b": "point_5"
             }, 
             {
-                "a": "levity_right", 
-                "b": "levity_4"
+                "a": "potato_31", 
+                "b": "potato_32"
             }, 
             {
-                "a": "point_1", 
-                "b": "point_9"
+                "a": "potato_40", 
+                "b": "potato_39"
+            }, 
+            {
+                "a": "potato_28", 
+                "b": "potato_29"
+            }, 
+            {
+                "a": "potato_39", 
+                "b": "potato_38"
             }, 
             {
                 "a": "point_10", 
@@ -277,60 +516,296 @@
                 "b": "point_4"
             }, 
             {
-                "a": "levity_1", 
-                "b": "point_10"
+                "a": "potato_21", 
+                "b": "potato_20"
             }, 
             {
-                "a": "tourist_start", 
-                "b": "tourist_complain"
+                "a": "potato_20", 
+                "b": "potato_21"
             }, 
             {
-                "a": "levity_3", 
-                "b": "levity_2"
+                "a": "sneelock_block", 
+                "b": "sneelock_inspect"
             }, 
             {
-                "a": "levity_2", 
-                "b": "levity_3"
-            }, 
-            {
-                "a": "levity_left", 
-                "b": "levity_1"
-            }, 
-            {
-                "a": "point_6", 
-                "b": "inga_attempt_silver_class"
-            }, 
-            {
-                "a": "inga_attempt_silver_class", 
-                "b": "point_6"
-            }, 
-            {
-                "a": "point_2", 
-                "b": "point_9"
+                "a": "potato_27", 
+                "b": "potato_26"
             }, 
             {
                 "a": "point_5", 
                 "b": "point_4"
             }, 
             {
-                "a": "point_10", 
-                "b": "levity_2"
+                "a": "potato_29", 
+                "b": "potato_30"
+            }, 
+            {
+                "a": "potato_5", 
+                "b": "point_11"
             }, 
             {
                 "a": "point_4", 
                 "b": "point_5"
             }, 
             {
-                "a": "levity_2", 
-                "b": "point_10"
+                "a": "potato_11", 
+                "b": "potato_10"
             }, 
             {
-                "a": "sneelock_inspect", 
-                "b": "sneelock_block"
+                "a": "potato_4", 
+                "b": "potato_3"
+            }, 
+            {
+                "a": "potato_30", 
+                "b": "potato_31"
             }, 
             {
                 "a": "levity_1", 
                 "b": "levity_left"
+            }, 
+            {
+                "a": "potato_8", 
+                "b": "potato_9"
+            }, 
+            {
+                "a": "potato_30", 
+                "b": "potato_29"
+            }, 
+            {
+                "a": "potato_10", 
+                "b": "potato_9"
+            }, 
+            {
+                "a": "potato_22", 
+                "b": "potato_21"
+            }, 
+            {
+                "a": "levity_3", 
+                "b": "levity_4"
+            }, 
+            {
+                "a": "potato_9", 
+                "b": "potato_10"
+            }, 
+            {
+                "a": "potato_3", 
+                "b": "potato_2"
+            }, 
+            {
+                "a": "levity_4", 
+                "b": "levity_right"
+            }, 
+            {
+                "a": "potato_26", 
+                "b": "potato_25"
+            }, 
+            {
+                "a": "potato_36", 
+                "b": "potato_35"
+            }, 
+            {
+                "a": "potato_29", 
+                "b": "potato_28"
+            }, 
+            {
+                "a": "potato_36", 
+                "b": "potato_37"
+            }, 
+            {
+                "a": "potato_31", 
+                "b": "potato_30"
+            }, 
+            {
+                "a": "potato_35", 
+                "b": "potato_34"
+            }, 
+            {
+                "a": "point_1", 
+                "b": "point_9"
+            }, 
+            {
+                "a": "potato_4", 
+                "b": "potato_5"
+            }, 
+            {
+                "a": "potato_40", 
+                "b": "potato_1"
+            }, 
+            {
+                "a": "potato_23", 
+                "b": "potato_22"
+            }, 
+            {
+                "a": "potato_16", 
+                "b": "potato_15"
+            }, 
+            {
+                "a": "levity_3", 
+                "b": "levity_2"
+            }, 
+            {
+                "a": "potato_7", 
+                "b": "potato_6"
+            }, 
+            {
+                "a": "inga_attempt_silver_class", 
+                "b": "point_6"
+            }, 
+            {
+                "a": "potato_30", 
+                "b": "potato_31"
+            }, 
+            {
+                "a": "point_10", 
+                "b": "levity_2"
+            }, 
+            {
+                "a": "point_11", 
+                "b": "potato_5"
+            }, 
+            {
+                "a": "levity_2", 
+                "b": "point_10"
+            }, 
+            {
+                "a": "potato_27", 
+                "b": "potato_28"
+            }, 
+            {
+                "a": "point_7", 
+                "b": "point_6"
+            }, 
+            {
+                "a": "potato_7", 
+                "b": "potato_8"
+            }, 
+            {
+                "a": "sneelock_guard", 
+                "b": "sneelock_block"
+            }, 
+            {
+                "a": "potato_1", 
+                "b": "potato_40"
+            }, 
+            {
+                "a": "potato_37", 
+                "b": "potato_36"
+            }, 
+            {
+                "a": "potato_33", 
+                "b": "potato_34"
+            }, 
+            {
+                "a": "potato_32", 
+                "b": "potato_33"
+            }, 
+            {
+                "a": "tourist_start", 
+                "b": "tourist_complain"
+            }, 
+            {
+                "a": "point_3", 
+                "b": "point_2"
+            }, 
+            {
+                "a": "potato_13", 
+                "b": "potato_14"
+            }, 
+            {
+                "a": "potato_8", 
+                "b": "potato_7"
+            }, 
+            {
+                "a": "potato_12", 
+                "b": "potato_11"
+            }, 
+            {
+                "a": "point_7", 
+                "b": "point_8"
+            }, 
+            {
+                "a": "potato_29", 
+                "b": "potato_28"
+            }, 
+            {
+                "a": "potato_20", 
+                "b": "potato_19"
+            }, 
+            {
+                "a": "potato_24", 
+                "b": "potato_25"
+            }, 
+            {
+                "a": "point_9", 
+                "b": "point_1"
+            }, 
+            {
+                "a": "potato_26", 
+                "b": "potato_27"
+            }, 
+            {
+                "a": "potato_28", 
+                "b": "potato_29"
+            }, 
+            {
+                "a": "levity_right", 
+                "b": "levity_4"
+            }, 
+            {
+                "a": "potato_38", 
+                "b": "potato_39"
+            }, 
+            {
+                "a": "potato_5", 
+                "b": "potato_4"
+            }, 
+            {
+                "a": "point_6", 
+                "b": "point_7"
+            }, 
+            {
+                "a": "potato_25", 
+                "b": "potato_24"
+            }, 
+            {
+                "a": "potato_9", 
+                "b": "potato_8"
+            }, 
+            {
+                "a": "potato_10", 
+                "b": "potato_11"
+            }, 
+            {
+                "a": "potato_14", 
+                "b": "potato_13"
+            }, 
+            {
+                "a": "potato_19", 
+                "b": "potato_18"
+            }, 
+            {
+                "a": "levity_2", 
+                "b": "levity_3"
+            }, 
+            {
+                "a": "potato_15", 
+                "b": "potato_14"
+            }, 
+            {
+                "a": "potato_28", 
+                "b": "potato_27"
+            }, 
+            {
+                "a": "potato_39", 
+                "b": "potato_40"
+            }, 
+            {
+                "a": "potato_18", 
+                "b": "potato_17"
+            }, 
+            {
+                "a": "sneelock_inspect", 
+                "b": "sneelock_block"
             }, 
             {
                 "a": "point_1", 
@@ -341,36 +816,24 @@
                 "b": "tourist_start"
             }, 
             {
-                "a": "point_8", 
-                "b": "point_7"
+                "a": "potato_21", 
+                "b": "potato_22"
             }, 
             {
-                "a": "sneelock_block", 
-                "b": "sneelock_guard"
+                "a": "potato_19", 
+                "b": "potato_20"
             }, 
             {
-                "a": "point_7", 
-                "b": "point_6"
+                "a": "potato_37", 
+                "b": "potato_38"
             }, 
             {
-                "a": "point_5", 
-                "b": "point_8"
+                "a": "potato_32", 
+                "b": "potato_31"
             }, 
             {
-                "a": "sneelock_guard", 
-                "b": "sneelock_block"
-            }, 
-            {
-                "a": "levity_4", 
-                "b": "levity_3"
-            }, 
-            {
-                "a": "sneelock_block", 
-                "b": "sneelock_inspect"
-            }, 
-            {
-                "a": "point_9", 
-                "b": "point_2"
+                "a": "potato_35", 
+                "b": "potato_36"
             }, 
             {
                 "a": "seat_11", 
@@ -381,44 +844,144 @@
                 "b": "point_3"
             }, 
             {
-                "a": "point_6", 
-                "b": "point_7"
+                "a": "potato_17", 
+                "b": "potato_16"
             }, 
             {
-                "a": "point_3", 
-                "b": "point_2"
+                "a": "potato_16", 
+                "b": "potato_17"
             }, 
             {
-                "a": "point_4", 
-                "b": "point_3"
+                "a": "potato_34", 
+                "b": "potato_35"
             }, 
             {
-                "a": "levity_4", 
-                "b": "levity_right"
-            }, 
-            {
-                "a": "point_7", 
-                "b": "point_8"
+                "a": "potato_31", 
+                "b": "potato_32"
             }, 
             {
                 "a": "point_9", 
                 "b": "seat_11"
             }, 
             {
+                "a": "potato_15", 
+                "b": "potato_16"
+            }, 
+            {
+                "a": "point_8", 
+                "b": "point_7"
+            }, 
+            {
+                "a": "potato_6", 
+                "b": "potato_7"
+            }, 
+            {
+                "a": "potato_2", 
+                "b": "potato_1"
+            }, 
+            {
+                "a": "potato_3", 
+                "b": "potato_4"
+            }, 
+            {
+                "a": "levity_1", 
+                "b": "point_10"
+            }, 
+            {
+                "a": "potato_38", 
+                "b": "potato_37"
+            }, 
+            {
+                "a": "potato_14", 
+                "b": "potato_15"
+            }, 
+            {
+                "a": "point_6", 
+                "b": "inga_attempt_silver_class"
+            }, 
+            {
+                "a": "point_2", 
+                "b": "point_9"
+            }, 
+            {
+                "a": "potato_12", 
+                "b": "potato_13"
+            }, 
+            {
+                "a": "potato_17", 
+                "b": "potato_18"
+            }, 
+            {
+                "a": "levity_left", 
+                "b": "levity_1"
+            }, 
+            {
+                "a": "point_5", 
+                "b": "point_8"
+            }, 
+            {
+                "a": "potato_34", 
+                "b": "potato_33"
+            }, 
+            {
+                "a": "potato_23", 
+                "b": "potato_24"
+            }, 
+            {
+                "a": "sneelock_block", 
+                "b": "sneelock_guard"
+            }, 
+            {
+                "a": "potato_18", 
+                "b": "potato_19"
+            }, 
+            {
+                "a": "levity_4", 
+                "b": "levity_3"
+            }, 
+            {
+                "a": "potato_13", 
+                "b": "potato_12"
+            }, 
+            {
+                "a": "potato_11", 
+                "b": "potato_12"
+            }, 
+            {
+                "a": "potato_25", 
+                "b": "potato_26"
+            }, 
+            {
+                "a": "point_4", 
+                "b": "point_3"
+            }, 
+            {
                 "a": "point_9", 
-                "b": "point_1"
+                "b": "point_2"
+            }, 
+            {
+                "a": "potato_22", 
+                "b": "potato_23"
+            }, 
+            {
+                "a": "potato_1", 
+                "b": "potato_2"
             }, 
             {
                 "a": "seat", 
                 "b": "point_1"
             }, 
             {
-                "a": "levity_3", 
-                "b": "levity_4"
+                "a": "potato_2", 
+                "b": "potato_3"
             }, 
             {
                 "a": "transition_left", 
                 "b": "inga_attempt_silver_class"
+            }, 
+            {
+                "a": "potato_33", 
+                "b": "potato_32"
             }, 
             {
                 "a": "inga_attempt_silver_class", 
