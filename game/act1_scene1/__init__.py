@@ -107,6 +107,16 @@ def sneelock_walk(actor, point):
     if point == "sneelock_inspect":
         pyglet.clock.schedule_once(util.make_dt_wrapper(myscene.begin_background_conversation), 5, "sneelock_checks_it_out")
     
+def potato_roll(actor, point):
+    point_match = re.search("potato_(\d+)", point)
+    if point_match:
+        current_index = int(point_match.group(1))
+        current_index = current_index + 1
+        if current_index > 40:
+            current_index = 1
+        actor.prepare_walkpath_move(current_index)
+        actor.next_action()
+
 def end_conversation(convo_name):
     if convo_name == "introduction":
         myscene.interaction_enabled = True
@@ -128,6 +138,12 @@ def end_conversation(convo_name):
         myscene.actors['sneelock'].next_action()
         myscene.handler.handler.save()
         
+    if convo_name == "hamster_from_a_baby":
+        potato = myscene.new_actor('potato', 'potato', {'walkpath_point': 'potato_33'})
+        myscene.ui.inventory.put_item(potato)
+        potato.prepare_walkpath_move("potato_34")
+        potato.next_action()
+        
 def talk_to_briggs():
     myscene.end_background_conversation('mumblestiltskin')
     myscene.begin_conversation("briggs_exposition")
@@ -136,7 +152,8 @@ walk_handlers = {
     'main': inga_walk,
     'levity': levity_walk,
     'tourist': tourist_walk,
-    'sneelock': sneelock_walk
+    'sneelock': sneelock_walk,
+    'potato': potato_roll
 }
 
 def handle_event(event, *args):
