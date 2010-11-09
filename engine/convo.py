@@ -204,10 +204,12 @@ class Conversation(object):
             
             # Or not!
             if self.convo_info.has_key('stand_at'):
-                def callback():
-                    self.scene.main.next_action()
+                def callback(*args):
+                    self.scene.actors['main'].next_action()
                     self.next_line()
-                self.scene.main.prepare_walkpath_move(self.convo_info['stand_at'])
+                self.scene.actors['main'].prepare_walkpath_move(self.convo_info['stand_at'],
+                                                                callback=callback)
+                self.scene.actors['main'].next_action()
             else:
                 self.next_line()
     
