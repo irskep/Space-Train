@@ -327,6 +327,8 @@ class Conversation(object):
     
     def speak(self, actor_id, arg):
         """Actor-specific actions like speaking and jumping"""
+        if self.scene.ui.cam and not self.background:
+            self.scene.ui.cam.set_visible(False)
         self._reset_at_rest(exclude=actor_id)
         act = self.scene.actors[actor_id]
         if isinstance(arg, str):

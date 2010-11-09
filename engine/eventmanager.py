@@ -36,7 +36,6 @@ class EventManager(object):
         self.add_handlers(self.scene)
         if self.scene:
             self.add_handlers(self.scene.convo)
-        self.add_handlers(self.inventory)
         self.add_handlers(self.cam)
         self.add_handlers(self.inventory)
     

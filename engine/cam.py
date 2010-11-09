@@ -75,12 +75,13 @@ class CAM(object):
         used_items.sort()
                 
         # Turn each action entry into a menu item
-        for action, callback in self.actions.items():  
+        start_pos = len(self.actions)+1
+        for action, callback in self.actions.viewitems():  
             count = used_items.pop(0)
             # button = self.Button(x-sprites[1].width/3, y, 
             #                      positioning[count][0], positioning[count][1],
             #                      sprites[count], action, callback)
-            button = self.Button(positioning[count][0], positioning[count][1], 
+            button = self.Button(positioning[start_pos-count][0], positioning[start_pos-count][1], 
                                  5, 5,
                                  sprites[count], "%d: %s" % (count, action), callback)
             self.buttons.append(button)
@@ -127,10 +128,13 @@ class CAM(object):
         print "Button %d: (%d, %d)" % (button, self.buttons[button].x, self.buttons[button].y)
     
     def on_key_release(self, symbol, modifiers):
-        print 'cam_release'
         nums = {getattr(pyglet.window.key,"NUM_%d" % (i+1)): self.buttons[i] for i in range(len(self.buttons))}
         for num, button in nums.viewitems():
-            button.click()
+            if num & symbol:
+                button.click()
+                self.set_visible(False)
+                self.ui.clean_cam()
+                return pyglet.event.EVENT_HANDLED
     
     # Determines which button is under the given point
     # Note that this function's behaviour is undefined when buttons overlap

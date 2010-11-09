@@ -94,7 +94,7 @@
         }, 
         "levity": {
             "walk_speed": 300, 
-            "walkpath_point": "levity_1", 
+            "walkpath_point": "levity_2", 
             "name": "cart_lady", 
             "start_state": "walk_right"
         }, 
