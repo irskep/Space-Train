@@ -188,3 +188,10 @@ def give_actor(actor, item):
         return True
     else:
         return False
+        
+        
+def filter_move(point):
+    if point == "transition_left" and not sneelock_distracted:
+        return "inga_attempt_silver_class"
+    else:
+        return point
