@@ -333,7 +333,7 @@ class Conversation(object):
                                                         act.current_image().anchor_y)
             
             
-            cw = self.convo_label.content_width/1.5
+            cw = self.convo_label.content_width/2+40
             self.convo_label.x = max(cw, self.convo_label.x)
             self.convo_label.x = min(self.scene.camera.position[0]+gamestate.norm_w/2-cw, self.convo_label.x)
             self.scene.clock.schedule_once(self.next_line, max(len(arg)*0.05, 3.0))
