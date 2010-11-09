@@ -138,6 +138,14 @@ class Conversation(object):
         if self.active and not self.scene.ui.cam:
             self.scene.clock.unschedule(self.next_line)
             self.next_line()
+            return pyglet.event.EVENT_HANDLED
+    
+    def on_key_release(self, symbol, modifiers):
+        if symbol == pyglet.window.key.SPACE:
+            if self.active and not self.scene.ui.cam:
+                self.scene.clock.unschedule(self.next_line)
+                self.next_line()
+                return pyglet.event.EVENT_HANDLED
     
     def draw(self):
         """Draw dialogue box and text"""
@@ -218,8 +226,7 @@ class Conversation(object):
     
     def _update_locals(self, val):
         """Update variables dictionary"""
-        for val in v:
-            self.convo_info['variables'].update(v)
+        self.convo_info['variables'].update(val)
         return True
     
     def _update_globals(self, val):

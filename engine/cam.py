@@ -94,6 +94,7 @@ class CAM(object):
             gamestate.event_manager.set_cam(self)
         else:
             gamestate.event_manager.set_cam(None)
+            self.ui.cam = None
         self.visible = visible
     
     # Handle an event
@@ -126,6 +127,7 @@ class CAM(object):
         print "Button %d: (%d, %d)" % (button, self.buttons[button].x, self.buttons[button].y)
     
     def on_key_release(self, symbol, modifiers):
+        print 'cam_release'
         nums = {getattr(pyglet.window.key,"NUM_%d" % (i+1)): self.buttons[i] for i in range(len(self.buttons))}
         for num, button in nums.viewitems():
             button.click()
