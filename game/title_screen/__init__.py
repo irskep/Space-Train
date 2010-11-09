@@ -4,7 +4,7 @@ from engine.interpolator import PulseInterpolator, LinearInterpolator
 # myscene is set by scene.py
 myscene = None
 
-def init():
+def init(fresh=True):
     title = myscene.actors['title']
     interp = PulseInterpolator(title.sprite, 'scale', 0.9, 1.0, speed=4)
     myscene.add_interpolator(interp)
