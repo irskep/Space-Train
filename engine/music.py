@@ -56,12 +56,13 @@ class DJ(object):
             self.interp.add_interpolator(fade_out)
         else:
             self.player.volume = 0.0
-            self.player.fade_next_track()
+            self.fade_next_track()
     
     def fade_next_track(self, dt=0):
         fade_in = interpolator.LinearInterpolator(self.player, 'volume', start=0.0,
                                                     end=self.volume, name="volume", duration=5.0)
         self.interp.add_interpolator(fade_in)
+        self.player.play()
     
     def next_track(self, dt=0):
         self.player.volume = 1.0
