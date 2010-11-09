@@ -129,7 +129,7 @@
             "walk_speed": 400.0, 
             "walkpath_point": "tourist_start", 
             "name": "tourist", 
-            "start_state": "head"
+            "start_state": "ftourist"
         }, 
         "sneelock": {
             "walk_speed": 400.0, 
@@ -484,16 +484,8 @@
         }, 
         "edges": [
             {
-                "a": "potato_24", 
-                "b": "potato_23"
-            }, 
-            {
-                "a": "point_8", 
-                "b": "point_5"
-            }, 
-            {
-                "a": "potato_31", 
-                "b": "potato_32"
+                "a": "potato_21", 
+                "b": "potato_20"
             }, 
             {
                 "a": "potato_40", 
@@ -504,10 +496,6 @@
                 "b": "potato_29"
             }, 
             {
-                "a": "potato_39", 
-                "b": "potato_38"
-            }, 
-            {
                 "a": "point_10", 
                 "b": "levity_1"
             }, 
@@ -516,16 +504,16 @@
                 "b": "point_4"
             }, 
             {
-                "a": "potato_21", 
-                "b": "potato_20"
+                "a": "point_8", 
+                "b": "point_5"
             }, 
             {
                 "a": "potato_20", 
                 "b": "potato_21"
             }, 
             {
-                "a": "sneelock_block", 
-                "b": "sneelock_inspect"
+                "a": "point_6", 
+                "b": "point_7"
             }, 
             {
                 "a": "potato_27", 
@@ -534,10 +522,6 @@
             {
                 "a": "point_5", 
                 "b": "point_4"
-            }, 
-            {
-                "a": "potato_29", 
-                "b": "potato_30"
             }, 
             {
                 "a": "potato_5", 
@@ -556,20 +540,16 @@
                 "b": "potato_3"
             }, 
             {
-                "a": "potato_30", 
-                "b": "potato_31"
-            }, 
-            {
                 "a": "levity_1", 
                 "b": "levity_left"
             }, 
             {
-                "a": "potato_8", 
-                "b": "potato_9"
+                "a": "levity_4", 
+                "b": "levity_right"
             }, 
             {
-                "a": "potato_30", 
-                "b": "potato_29"
+                "a": "potato_8", 
+                "b": "potato_9"
             }, 
             {
                 "a": "potato_10", 
@@ -580,8 +560,8 @@
                 "b": "potato_21"
             }, 
             {
-                "a": "levity_3", 
-                "b": "levity_4"
+                "a": "potato_2", 
+                "b": "potato_3"
             }, 
             {
                 "a": "potato_9", 
@@ -592,8 +572,8 @@
                 "b": "potato_2"
             }, 
             {
-                "a": "levity_4", 
-                "b": "levity_right"
+                "a": "potato_23", 
+                "b": "potato_22"
             }, 
             {
                 "a": "potato_26", 
@@ -604,16 +584,16 @@
                 "b": "potato_35"
             }, 
             {
-                "a": "potato_29", 
-                "b": "potato_28"
+                "a": "potato_32", 
+                "b": "potato_33"
+            }, 
+            {
+                "a": "levity_3", 
+                "b": "levity_4"
             }, 
             {
                 "a": "potato_36", 
                 "b": "potato_37"
-            }, 
-            {
-                "a": "potato_31", 
-                "b": "potato_30"
             }, 
             {
                 "a": "potato_35", 
@@ -628,24 +608,20 @@
                 "b": "potato_5"
             }, 
             {
-                "a": "potato_40", 
-                "b": "potato_1"
-            }, 
-            {
-                "a": "potato_23", 
-                "b": "potato_22"
+                "a": "potato_29", 
+                "b": "potato_30"
             }, 
             {
                 "a": "potato_16", 
                 "b": "potato_15"
             }, 
             {
-                "a": "levity_3", 
-                "b": "levity_2"
+                "a": "potato_14", 
+                "b": "potato_13"
             }, 
             {
-                "a": "potato_7", 
-                "b": "potato_6"
+                "a": "potato_31", 
+                "b": "potato_30"
             }, 
             {
                 "a": "inga_attempt_silver_class", 
@@ -672,8 +648,8 @@
                 "b": "potato_28"
             }, 
             {
-                "a": "point_7", 
-                "b": "point_6"
+                "a": "potato_9", 
+                "b": "potato_8"
             }, 
             {
                 "a": "potato_7", 
@@ -684,20 +660,16 @@
                 "b": "sneelock_block"
             }, 
             {
-                "a": "potato_1", 
-                "b": "potato_40"
+                "a": "potato_15", 
+                "b": "potato_14"
             }, 
             {
-                "a": "potato_37", 
-                "b": "potato_36"
+                "a": "sneelock_block", 
+                "b": "sneelock_inspect"
             }, 
             {
                 "a": "potato_33", 
                 "b": "potato_34"
-            }, 
-            {
-                "a": "potato_32", 
-                "b": "potato_33"
             }, 
             {
                 "a": "tourist_start", 
@@ -724,10 +696,6 @@
                 "b": "point_8"
             }, 
             {
-                "a": "potato_29", 
-                "b": "potato_28"
-            }, 
-            {
                 "a": "potato_20", 
                 "b": "potato_19"
             }, 
@@ -744,8 +712,8 @@
                 "b": "potato_27"
             }, 
             {
-                "a": "potato_28", 
-                "b": "potato_29"
+                "a": "potato_39", 
+                "b": "potato_38"
             }, 
             {
                 "a": "levity_right", 
@@ -760,24 +728,20 @@
                 "b": "potato_4"
             }, 
             {
-                "a": "point_6", 
-                "b": "point_7"
-            }, 
-            {
                 "a": "potato_25", 
                 "b": "potato_24"
             }, 
             {
-                "a": "potato_9", 
-                "b": "potato_8"
+                "a": "point_7", 
+                "b": "point_6"
             }, 
             {
                 "a": "potato_10", 
                 "b": "potato_11"
             }, 
             {
-                "a": "potato_14", 
-                "b": "potato_13"
+                "a": "levity_3", 
+                "b": "levity_2"
             }, 
             {
                 "a": "potato_19", 
@@ -788,8 +752,8 @@
                 "b": "levity_3"
             }, 
             {
-                "a": "potato_15", 
-                "b": "potato_14"
+                "a": "potato_37", 
+                "b": "potato_36"
             }, 
             {
                 "a": "potato_28", 
@@ -852,8 +816,8 @@
                 "b": "potato_17"
             }, 
             {
-                "a": "potato_34", 
-                "b": "potato_35"
+                "a": "potato_30", 
+                "b": "potato_29"
             }, 
             {
                 "a": "potato_31", 
@@ -862,6 +826,10 @@
             {
                 "a": "point_9", 
                 "b": "seat_11"
+            }, 
+            {
+                "a": "potato_29", 
+                "b": "potato_28"
             }, 
             {
                 "a": "potato_15", 
@@ -876,6 +844,10 @@
                 "b": "potato_7"
             }, 
             {
+                "a": "potato_22", 
+                "b": "potato_23"
+            }, 
+            {
                 "a": "potato_2", 
                 "b": "potato_1"
             }, 
@@ -888,6 +860,10 @@
                 "b": "point_10"
             }, 
             {
+                "a": "potato_33", 
+                "b": "potato_32"
+            }, 
+            {
                 "a": "potato_38", 
                 "b": "potato_37"
             }, 
@@ -896,8 +872,8 @@
                 "b": "potato_15"
             }, 
             {
-                "a": "point_6", 
-                "b": "inga_attempt_silver_class"
+                "a": "potato_13", 
+                "b": "potato_12"
             }, 
             {
                 "a": "point_2", 
@@ -940,8 +916,8 @@
                 "b": "levity_3"
             }, 
             {
-                "a": "potato_13", 
-                "b": "potato_12"
+                "a": "point_6", 
+                "b": "inga_attempt_silver_class"
             }, 
             {
                 "a": "potato_11", 
@@ -952,16 +928,16 @@
                 "b": "potato_26"
             }, 
             {
+                "a": "potato_7", 
+                "b": "potato_6"
+            }, 
+            {
                 "a": "point_4", 
                 "b": "point_3"
             }, 
             {
                 "a": "point_9", 
                 "b": "point_2"
-            }, 
-            {
-                "a": "potato_22", 
-                "b": "potato_23"
             }, 
             {
                 "a": "potato_1", 
@@ -972,16 +948,16 @@
                 "b": "point_1"
             }, 
             {
-                "a": "potato_2", 
-                "b": "potato_3"
+                "a": "potato_24", 
+                "b": "potato_23"
+            }, 
+            {
+                "a": "potato_34", 
+                "b": "potato_35"
             }, 
             {
                 "a": "transition_left", 
                 "b": "inga_attempt_silver_class"
-            }, 
-            {
-                "a": "potato_33", 
-                "b": "potato_32"
             }, 
             {
                 "a": "inga_attempt_silver_class", 

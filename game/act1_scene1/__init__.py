@@ -109,12 +109,14 @@ def sneelock_walk(actor, point):
     
 def potato_roll(actor, point):
     point_match = re.search("potato_(\d+)", point)
-    if point_match:
+    if point_match and False: #disabled
         current_index = int(point_match.group(1))
-        current_index = current_index + 1
+        next_index = current_index + 1
         if current_index > 40:
             current_index = 1
-        actor.prepare_walkpath_move(current_index)
+        next_point = "potato_%d" % next_index
+        print "Potato rolling from %s to %s" % (point, next_point)
+        actor.prepare_walkpath_move(next_index)
         actor.next_action()
 
 def end_conversation(convo_name):
@@ -139,9 +141,9 @@ def end_conversation(convo_name):
         myscene.handler.handler.save()
         
     if convo_name == "hamster_from_a_baby":
-        potato = myscene.new_actor('potato', 'potato', {'walkpath_point': 'potato_33'})
-        myscene.ui.inventory.put_item(potato)
-        potato.prepare_walkpath_move("potato_34")
+        potato = myscene.new_actor('potato', 'potato')
+        potato.walkpath_point = "potato_1"
+        potato.prepare_walkpath_move("potato_2")
         potato.next_action()
         
 def talk_to_briggs():
