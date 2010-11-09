@@ -153,7 +153,7 @@ def set_temperature(temp):
         # Nicole complains!
         tourist = myscene.actors['tourist']
         pyglet.clock.schedule_once(util.make_dt_wrapper(tourist.prepare_walkpath_move), 5, "tourist_complain")
-        pyglet.clock.schedule_once(tourist.next_action, 10)
+        pyglet.clock.schedule_once(tourist.next_action, 5)
     
 def actor_clicked(clicked_actor):
     print clicked_actor
