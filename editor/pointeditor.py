@@ -117,7 +117,7 @@ class PointEditor(abstracteditor.AbstractEditor):
         def edge_finish(x, y):
             self.point_2 = self.scene.walkpath.path_point_near_point((x, y))
             if not self.point_2:
-                self.point_2 = self.scene.walkpath.add_point((x, y))
+                self.point_2 = self.scene.walkpath.add_point(x, y)
             if self.point_1 != self.point_2:
                 self.editor.change_selection(self.editor.edge_ed)
                 new_edge = self.scene.walkpath.add_edge(self.point_1, self.point_2)

@@ -9,6 +9,12 @@
             "name": "stanislav", 
             "start_state": "stand_front"
         }, 
+        "main": {
+            "walk_speed": 400.0, 
+            "walkpath_point": "point_1", 
+            "name": "inga", 
+            "start_state": "stand_front"
+        }, 
         "seat_1": {
             "y": 183, 
             "x": 690, 
@@ -22,10 +28,47 @@
             "walk_speed": 400.0, 
             "name": "seat", 
             "start_state": "chair"
+        }, 
+        "moritz_1": {
+            "y": 127, 
+            "x": 1690, 
+            "walk_speed": 400.0, 
+            "name": "moritz", 
+            "start_state": "stand_right"
         }
     }, 
     "walkpath": {
-        "points": {}, 
-        "edges": []
+        "points": {
+            "point_1": {
+                "y": 129, 
+                "x": 2619
+            }, 
+            "point_2": {
+                "y": 130, 
+                "x": 2199
+            }, 
+            "point_3": {
+                "y": 131, 
+                "x": 1793
+            }
+        }, 
+        "edges": [
+            {
+                "a": "point_1", 
+                "b": "point_2"
+            }, 
+            {
+                "a": "point_3", 
+                "b": "point_2"
+            }, 
+            {
+                "a": "point_2", 
+                "b": "point_3"
+            }, 
+            {
+                "a": "point_2", 
+                "b": "point_1"
+            }
+        ]
     }
 }
