@@ -256,10 +256,14 @@ class Conversation(object):
     def _goto(self, val):
         """Start executing a different action list"""
         self.convo_position = 0
-        self.convo_lines = self.convo_info[val]
         if self.scene.ui.cam and not self.background:
             self.scene.ui.cam.set_visible(False)
-        return True
+        if val == 'exit':
+            self.stop_speaking()
+            return False
+        else:
+            self.convo_lines = self.convo_info[val]
+            return True
     
     def _choice(self, val):
         """Present the user with a CAM where each button goes to a different label"""

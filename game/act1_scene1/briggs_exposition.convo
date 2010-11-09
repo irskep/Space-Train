@@ -16,6 +16,13 @@ stand_at: point_2
 # States
 
 start:
+    - choice:
+        Greet the odd fellow:
+            goto: talk
+        Avoid eye contact:
+            goto: exit
+
+talk:
     - main: Hello!
     - gregg_briggs: ...ampersand...what? Oh, hi.
     - goto: main_choice
@@ -93,6 +100,8 @@ no_thanks:
     
 explain_baron:
     - gregg_briggs: (Long and interesting exposition about how the Baron has hit every Space Train but this one looking for something, and Levity knows something about it)
+    - update_locals:
+        knows_about_baron: True
     - goto: main_choice
     
 goodbye:
