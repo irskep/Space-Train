@@ -1,0 +1,50 @@
+# Initialization
+
+at_rest:
+    main: stand_front
+    hipster_fran: hipster_fran
+    hipster_amanda: hipster_amanda
+    hipster_liam: hipster_liam
+
+speaking:
+    main: stand_front
+    hipster_fran: hipster_fran
+    hipster_amanda: hipster_amanda
+    hipster_liam: hipster_liam
+
+variables:
+    knows_about_baron: false
+    
+# States
+
+start:
+    - choice:
+        Ask about strange clothing:
+            goto: clothes
+        Bum a cig:
+            goto: cig
+
+clothes:
+    - main: lol
+    
+cig:
+    - main: Could you kind folks spare a cigarette?
+    - hipster_fran: Pssh. Like, no. You like totally don't understand our generation.
+    - hipster_liam: Ja. I bet you haffen't even heard of the band Rampant Lizards.
+    - hipster_amanda: Or Lieutenant McSpazz's Shoelace Extravaganza.
+    - hipster_fran: Or the best band ever, Deep Couch.
+    - hipster_liam: Ja. They broke up like, fifty years ago.
+    - hipster_amanda: Sold thirteen records and played one show.
+    - hipster_fran: (Holding up a vinyl disc) THIS IS EIN ORIGINAL RECORD.
+    
+    - main: You are all so young...
+    - main: Too young to remember how Deep Couch were when they were formed.
+
+    - main: You see, the members of Deep Couch were my cousins. Musical geniuses, all of them.
+    - main: My uncle converted his textile factory to produce records, but it burned down after only 13 were made.
+    - main: Such a pity that after their first show, the lead singer married a Hawaiian dancer and moved away.
+    
+    - hipster_amanda: ...wow...
+    - hipster_fran: We are so sorry for doubting you!
+    - hipster_liam: Here, take my pack of Green Shoe Cigarettes!
+    - give: cigarettes (cigarettes)

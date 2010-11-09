@@ -1,0 +1,29 @@
+# Initialization
+
+at_rest:
+    sneelock: sneelock
+
+speaking:
+    sneelock: sneelock
+
+variables:
+    knows_about_baron: false
+
+# States
+
+start:
+    - sneelock: How does this darn thing work...
+    - goto: loop
+
+loop:
+    - sneelock: Hmmm...
+    - sneelock: Trip the breaker...
+    - sneelock: Re-order the cardinal grammeters...
+    - sneelock: Carry the 5...
+    - sneelock: Hmmm...
+    - sneelock: Configure the isolator...
+    - sneelock: Where's the duct pressure valve on this thing?
+    - sneelock: Hmmm...
+    - sneelock: Seems like the turbo encabulator is busted...
+    - sneelock: Autopilot? Why is there an autopilot on the thermostat?
+    - goto: loop
