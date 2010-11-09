@@ -26,8 +26,8 @@ def init(fresh=False):
     
     myscene.begin_background_conversation("mumblestiltskin")
     
-    myscene.play_music('simple')
-    myscene.play_background('Train_Loop1')
+    myscene.play_music('simple', fade=False)
+    myscene.play_background('Train_Loop1', fade=True)
     
     if fresh:
         myscene.interaction_enabled = False

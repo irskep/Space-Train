@@ -207,11 +207,11 @@ class Scene(object):
     def convo_in_progress(self):
         return self.convo.convo_name is not None
     
-    def play_music(self, name):
-        self.handler.handler.dj.transition_to(name)
+    def play_music(self, name, fade=True):
+        self.handler.handler.dj.transition_to(name, fade=fade)
     
-    def play_background(self, name):
-        self.handler.handler.background_dj.transition_to(name)
+    def play_background(self, name, fade=True):
+        self.handler.handler.background_dj.transition_to(name, fade=fade)
     
     
     # Events

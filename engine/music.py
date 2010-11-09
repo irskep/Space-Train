@@ -32,16 +32,19 @@ class DJ(object):
         for arg in args:
             self.get_sound(arg)
     
-    def transition_to(self, sound_name):
-        new_sound = self.get_sound(sound_name)
-        self.player.queue(new_sound)
-        if self.player.playing:
-            fade_out = interpolator.LinearInterpolator(self.player, 'volume', start=self.volume,
-                                                        end=0.0, name="volume", duration=5.0,
-                                                        done_function=self.next_track)
-            self.interp.add_interpolator(fade_out)
+    def transition_to(self, sound_name, fade=True):
+        if fade:
+            self.fade_in(sound_name)
         else:
-            self.player.play()
+            new_sound = self.get_sound(sound_name)
+            self.player.queue(new_sound)
+            if self.player.playing:
+                fade_out = interpolator.LinearInterpolator(self.player, 'volume', start=self.volume,
+                                                            end=0.0, name="volume", duration=5.0,
+                                                            done_function=self.next_track)
+                self.interp.add_interpolator(fade_out)
+            else:
+                self.player.play()
     
     def fade_in(self, sound_name):
         new_sound = self.get_sound(sound_name)
