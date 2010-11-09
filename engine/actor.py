@@ -25,6 +25,10 @@ class Actor(actionsequencer.ActionSequencer):
         
         self.update_static_info()
         self.current_state = Actor.info[self.name]['start_state']
+        if Actor.info[self.name].has_key('walk_speed'):
+            self.walk_speed = Actor.info[self.name]['walk_speed']
+        else:
+            self.walk_speed = 400.0
         
         if attrs.has_key('start_state'):
             self.current_state = attrs['start_state']
@@ -117,7 +121,7 @@ class Actor(actionsequencer.ActionSequencer):
         """Set up an interpolator to move between this actor's current position and
         the given position, choosing a walk animation automatically if non is provided"""
         InterpClass = interpolator.Linear2DInterpolator # Gee golly this name is long
-        interp = InterpClass(self.sprite, 'position', pos, speed=400.0, 
+        interp = InterpClass(self.sprite, 'position', pos, speed=self.walk_speed, 
                              done_function=self.next_action)
         
         if not anim or not Actor.images[self.name].has_key(anim):
@@ -255,6 +259,7 @@ class Actor(actionsequencer.ActionSequencer):
             dict_repr['x'] = int(self.sprite.x)
             dict_repr['y'] = int(self.sprite.y)
         dict_repr['start_state'] = self.current_state
+        dict_repr['walk_speed'] = self.walk_speed
         if self.sprite.scale != 1.0:
             dict_repr['scale'] = self.sprite.scale
         return dict_repr
