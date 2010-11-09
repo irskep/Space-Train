@@ -35,7 +35,8 @@ def handle_event(event, *args):
         info = args[0]
         actor = info['actor']
         point = info['point']
-        pass
+        if actor.identifier == 'main' and point == 'point_1':
+            myscene.handler.notify('act1_scene1')
     print "Handled", event, "with", args
 
 def actor_clicked(clicked_actor):
