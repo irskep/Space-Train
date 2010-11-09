@@ -36,24 +36,23 @@ class AdventureWindow(pyglet.window.Window):
         
         self.game_handler = None
         
-        engine.init()
+        engine.init()                   # Set up resource paths
         
         self.load_fraction = 0.0
-		
-        # Load default game scene. Probably belongs in GameHandler actually.
 
         with pyglet.resource.file(util.respath('game', 'info.json'), 'r') as game_info_file:
-            game_info = json.load(game_info_file)
-            game_info['reset_save'] = reset_save
+            self.game_info = json.load(game_info_file)
+            self.game_info['reset_save'] = reset_save
             if reset_at_scene:
-                game_info['first_scene'] = reset_at_scene
-            self.set_caption(game_info["name"])
+                self.game_info['first_scene'] = reset_at_scene
+            self.set_caption(self.game_info["name"])
         
-        pyglet.clock.schedule_once(self.finish_loading, 0.1, game_info)
+        # Stupid hack to get around pyglet loading bullshit
+        pyglet.clock.schedule_once(self.finish_loading, 0.0000001)
     
-    def finish_loading(self, dt, game_info):        
+    def finish_loading(self, dt=0):
         self.preload()
-        self.game_handler = gamehandler.GameHandler(**game_info)
+        self.game_handler = gamehandler.GameHandler(**self.game_info)
         
         # Schedule drawing and update functions.
         # Draw really only needs 60 FPS, update can be faster.
