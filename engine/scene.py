@@ -354,6 +354,9 @@ class Scene(object):
                 next_identifier += 1
             identifier = "%s_%d" % (actor_name, next_identifier)
         new_actor = actor.Actor(identifier, actor_name, self, **kwargs)
+        if kwargs.has_key('walkpath_point'):
+            new_actor.walkpath_point = kwargs['walkpath_point']
+            new_actor.sprite.position = self.walkpath.points[new_actor.walkpath_point]
         self.actors[identifier] = new_actor
         self.zenforcer.init_groups()
         return new_actor
