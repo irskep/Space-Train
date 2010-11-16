@@ -213,6 +213,12 @@ class Scene(object):
     def convo_in_progress(self):
         return self.convo.convo_name is not None
     
+    def background_convo_in_process(self, name):
+        for c in self.background_convos:
+            if c.convo_name == name
+                return True
+        return False
+    
     def play_music(self, name, fade=True):
         self.handler.handler.dj.transition_to(name, fade=fade)
     

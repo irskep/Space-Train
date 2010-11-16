@@ -1,0 +1,18 @@
+# Initialization
+
+at_rest:
+    moritz: stand_right
+    mikhail: stand_front
+
+speaking:
+    moritz: stand_right
+    mikhail: stand_front
+
+variables:
+    knows_about_baron: false
+    
+# States
+start:
+    - moritz: ...and so the Space Train Authority banned smoking outside of economy class.
+    - moritz: They took my pack of 
+    - mikhail: That's nuts! I'll go crazy if I can't get a smoke soon!
