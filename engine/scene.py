@@ -227,11 +227,25 @@ class Scene(object):
     def play_background(self, name, fade=True):
         self.handler.handler.background_dj.transition_to(name, fade=fade)
     
-    def camera_sequence(self, *points):
-        fade_out = interpolator.LinearInterpolator(self.camera.target_x, 'volume', start=self.volume,
-                                                    end=0.0, name="volume", duration=5.0,
-                                                    done_function=self.fade_next_track)
-        self.interp.add_interpolator(fade_out)
+    def camera_sequence(self, points, speed=400.0, return_to_start=True):
+        points = list(points)
+        if return_to_start:
+            points.append(self.camera.position)
+        self.moving_camera = True
+        self._cam_seq_callback(points, speed)
+    
+    def _cam_seq_callback(self, points, speed, _=None):
+        if not points:
+            self.moving_camera = False
+        callback = functools.partial(self._cam_seq_callback, points[1:], speed)
+        move_x = interpolator.LinearInterpolator(self.camera, 'x', start=self.camera.x,
+                                                    end=points[0][0], name="move_x", speed=speed)
+        move_y = interpolator.LinearInterpolator(self.camera, 'y', start=self.camera.y,
+                                                    end=points[0][1], name="move_y", 
+                                                    duration=move_x.duration,
+                                                    done_function=callback)
+        self.interp.add_interpolator(move_x)
+        self.interp.add_interpolator(move_y)
     
     
     # Events

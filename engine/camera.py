@@ -33,6 +33,15 @@ class Camera(object):
     
     position = property(lambda self: (self._x, self._y), _set_position)
     
+    def _set_x(self, x):
+        self._set_position((x, self._y))
+    
+    def _set_y(self, y):
+        self._set_position((self._x, y))
+    
+    x = property(lambda self: self._x, _set_x)
+    y = property(lambda self: self._y, _set_y)
+    
     def dict_repr(self):
         return {identifier: {'x': p.position[0], 
                              'y': p.position[1]} 

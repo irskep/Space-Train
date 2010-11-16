@@ -184,6 +184,8 @@ def actor_clicked(clicked_actor):
     if re.match("seat_\d+", clicked_actor.identifier) and clicked_actor.current_state == "couch":
         if clicked_actor.identifier in myscene.info['walkpath']['points']:
             myscene.ui.show_cam(clicked_actor, {'Sit': lambda: inga_sit(clicked_actor) })
+    if clicked_actor.identifier == "main":
+        myscene.camera_sequence([(myscene.camera.x-1000, myscene.camera.y)], return_to_start=True)
     if clicked_actor.identifier == "gregg_briggs":
         talk_to_briggs()
     if clicked_actor.identifier == "tourist" or clicked_actor.identifier == "tourist_1":
