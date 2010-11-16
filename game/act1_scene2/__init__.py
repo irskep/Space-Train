@@ -26,6 +26,7 @@ def end_conversation(convo_name):
 def inga_walk(actor, point):
     if point == "point_2":
         myscene.begin_background_conversation("need_a_smoke")
+    
         
 walk_handlers = {
     'main': inga_walk
