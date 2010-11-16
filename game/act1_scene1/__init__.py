@@ -186,8 +186,9 @@ def actor_clicked(clicked_actor):
             myscene.ui.show_cam(clicked_actor, {'Sit': lambda: inga_sit(clicked_actor) })
     if clicked_actor.identifier == "gregg_briggs":
         talk_to_briggs()
-    if clicked_actor.identifier == "tourist":
-        myscene.begin_conversation("meet_the_tourists")
+    if clicked_actor.identifier == "tourist" or clicked_actor.identifier == "tourist_1":
+        if myscene.actors['tourist'].walkpath_point == "tourist_start":
+            myscene.begin_conversation("meet_the_tourists")
     if clicked_actor.identifier == "vladimir" or clicked_actor.identifier == "petro" or clicked_actor.identifier == "nikolai":
         myscene.begin_conversation("making_connections")
     if clicked_actor.identifier == "shamus":

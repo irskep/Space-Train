@@ -18,6 +18,8 @@ start:
             goto: ask_direction
         What are you reading?:
             goto: ask_reading
+        Seeya:
+            goto: bai
 
 ask_reading:
     - main: What are you reading?
@@ -35,3 +37,5 @@ ask_direction:
             goto: start
         No thanks, I don't like cameras.:
             goto: start
+            
+bai:
