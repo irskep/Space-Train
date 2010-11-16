@@ -182,6 +182,10 @@
                 "y": 151, 
                 "x": 898
             }, 
+            "inga_attempt_stanislov": {
+                "y": 130, 
+                "x": 964
+            }, 
             "mikhail_idle": {
                 "y": 31, 
                 "x": 660
@@ -189,10 +193,6 @@
             "point_4": {
                 "y": 130, 
                 "x": 1408
-            }, 
-            "point_5": {
-                "y": 130, 
-                "x": 964
             }, 
             "point_1": {
                 "y": 129, 
@@ -209,16 +209,16 @@
         }, 
         "edges": [
             {
-                "a": "moritz_guard", 
-                "b": "moritz_idle"
-            }, 
-            {
                 "a": "point_1", 
                 "b": "point_2"
             }, 
             {
-                "a": "point_5", 
+                "a": "inga_attempt_stanislov", 
                 "b": "point_4"
+            }, 
+            {
+                "a": "mikhail_idle", 
+                "b": "mikhail_guard"
             }, 
             {
                 "a": "point_2", 
@@ -226,7 +226,7 @@
             }, 
             {
                 "a": "point_4", 
-                "b": "point_5"
+                "b": "inga_attempt_stanislov"
             }, 
             {
                 "a": "point_3", 
@@ -253,8 +253,8 @@
                 "b": "point_3"
             }, 
             {
-                "a": "mikhail_idle", 
-                "b": "mikhail_guard"
+                "a": "moritz_guard", 
+                "b": "moritz_idle"
             }
         ]
     }

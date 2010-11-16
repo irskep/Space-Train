@@ -1,0 +1,37 @@
+# Initialization
+
+at_rest:
+    main: stand_left
+    moritz: stand_right
+    mikhail: stand_right
+
+speaking:
+    main: talk_left
+    moritz: stand_right
+    mikhail: stand_right
+
+variables:
+    knows_about_baron: false
+    
+# States
+start:
+    - choice:
+        I MUST speak to Stanislov!:
+            goto: brute_force
+        Bribe with Cigarettes:
+            require: cigarettes
+            goto: bribe
+            
+brute_force:
+    - main: I MUST speak to Stanislov!
+    - moritz: Stanislov is very busy. You will not see him.
+    - mikhail: Off limits!
+    
+bribe:
+    - main: If you don't let me through, you'll miss a big opportunity.
+    - mikhail: What sort of opportunity?
+    - main: The kind that involves a green shoe.
+    - mikhail: What's a green shoe?
+    - moritz: My favorite brand of cigarettes, stupid!
+    - moritz: Hand 'em over, you can pass.
+    - take: cigarettes

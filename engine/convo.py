@@ -308,7 +308,8 @@ class Conversation(object):
                             and self.convo_info['variables'][tags['require']]
                 in_global = (tags['require'] in self.scene.handler.handler.game_variables) \
                             and self.scene.handler.handler.game_variables[tags['require']]
-                if not in_local or in_global:
+                in_inventory = (tags['require'] in self.scene.ui.inventory.items)
+                if not (in_local or in_global or in_inventory):   # gotta watch naming variables & items
                     del temp_choices[choice]
         return temp_choices
     
