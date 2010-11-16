@@ -17,14 +17,23 @@ myscene = None
 
 def init(fresh=False):
     myscene.handler.handler.game_variables['no_groupies_intro'] = False
+    myscene.handler.handler.game_variables['guards_appeased'] = False
     if fresh:
         myscene.actors['main'].prepare_walkpath_move("point_2")
         myscene.actors['main'].next_action()
         
+    myscene.ui.inventory.put_item(myscene.new_actor('cigarettes', 'cigarettes'))
+        
 def end_conversation(convo_name):
     if convo_name == "no_groupies_intro":
         myscene.begin_conversation("no_groupies")
-
+    if convo_name == "no_groupies":
+        if myscene.handler.handler.game_variables['guards_appeased']:
+            myscene.actors['mikhail'].prepare_walkpath_move("mikhail_idle")
+            myscene.actors['mikhail'].next_action()
+            myscene.actors['moritz'].prepare_walkpath_move("moritz_idle")
+            myscene.actors['moritz'].next_action()
+            
 def inga_walk(actor, point):
     mikhail = myscene.actors['mikhail']
     moritz = myscene.actors['moritz']

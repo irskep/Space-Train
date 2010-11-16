@@ -26,6 +26,7 @@ brute_force:
     - main: I MUST speak to Stanislov!
     - moritz: Stanislov is very busy. You will not see him.
     - mikhail: Off limits!
+    - goto: start
     
 bribe:
     - main: If you don't let me through, you'll miss a big opportunity.
@@ -35,3 +36,5 @@ bribe:
     - moritz: My favorite brand of cigarettes, stupid!
     - moritz: Hand 'em over, you can pass.
     - take: cigarettes
+    - update_globals:
+        guards_appeased: True
