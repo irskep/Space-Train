@@ -23,12 +23,15 @@ class Camera(object):
     def __init__(self, min_bounds=None, max_bounds=None, speed=50000.0, dict_repr=None):
         self.min_bounds = min_bounds or gamestate.camera_min
         self.max_bounds = max_bounds or gamestate.camera_max
-        self.speed = speed
-        self.position = self.min_bounds
-        self.target = self.position
+        self._x, self._y = self.min_bounds
         dict_repr = dict_repr or {}
         self.points = {identifier: CameraPoint(identifier, (d['x'], d['y'])) \
                        for identifier, d in dict_repr.viewitems()}
+    
+    def _set_position(self, p):
+        self._x, self._y = self.constrain_point(*p)
+    
+    position = property(lambda self: (self._x, self._y), _set_position)
     
     def dict_repr(self):
         return {identifier: {'x': p.position[0], 
@@ -39,15 +42,6 @@ class Camera(object):
         x = min(max(x, self.min_bounds[0]), self.max_bounds[0])
         y = min(max(y, self.min_bounds[1]), self.max_bounds[1])
         return (x, y)
-    
-    def set_target(self, x, y, immediate=False):
-        self.target = self.constrain_point(x, y)
-        if immediate:
-            self.position = self.target
-    
-    def set_position(self, x, y):
-        self.position = self.constrain_point(x, y)
-        self.target = self.position
     
     def camera_point_near_point(self, mouse):
         close = lambda a, b: abs(a-b) <= 5
@@ -75,18 +69,6 @@ class Camera(object):
             del self.points[identifier]
         except KeyError:
             return
-    
-    def update(self, dt):
-        move_amt = self.speed*dt
-        x, y = self.position
-        tx, ty = self.target
-        if x < x - move_amt: x += move_amt
-        if x > tx + move_amt: x -= move_amt
-        if abs(x - tx) <= move_amt: x = tx
-        if y < ty - move_amt: y += move_amt
-        if y > ty + move_amt: y -= move_amt
-        if abs(y - ty) <= move_amt: y = ty
-        self.position = self.constrain_point(x, y)
     
     def apply(self):
         pyglet.gl.glPushMatrix()

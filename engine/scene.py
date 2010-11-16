@@ -81,6 +81,8 @@ class Scene(object):
         self.x_offset = 0.0
         self.y_offset = 0.0
         
+        self.moving_camera = False
+        
         self.resource_path = util.respath_func_with_base_path('game', self.name)
         
         self.init_clock()
@@ -225,6 +227,12 @@ class Scene(object):
     def play_background(self, name, fade=True):
         self.handler.handler.background_dj.transition_to(name, fade=fade)
     
+    def camera_sequence(self, *points):
+        fade_out = interpolator.LinearInterpolator(self.camera.target_x, 'volume', start=self.volume,
+                                                    end=0.0, name="volume", duration=5.0,
+                                                    done_function=self.fade_next_track)
+        self.interp.add_interpolator(fade_out)
+    
     
     # Events
     
@@ -287,10 +295,8 @@ class Scene(object):
         
         self.update_clock(dt)
         
-        if self.actors.has_key('main'):
-            self.camera.set_target(self.actors["main"].sprite.x, self.actors["main"].sprite.y,
-                                   immediate=True)
-        self.camera.update(dt)
+        if not self.moving_camera and self.actors.has_key('main'):
+            self.camera.position = self.actors["main"].sprite.position
         self.interp.update_interpolators(dt)
         self.zenforcer.update(dt)
     
