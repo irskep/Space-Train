@@ -111,7 +111,7 @@ def sneelock_walk(actor, point):
         pyglet.clock.schedule_once(util.make_dt_wrapper(myscene.begin_background_conversation), 5, "sneelock_checks_it_out")
     
 def potato_roll(actor, point):
-    point_match = re.search("potato_(\d+)", point)
+    point_match = re.search(r"potato_(\d+)", point)
     if point_match and False: #disabled
         current_index = int(point_match.group(1))
         next_index = current_index + 1
