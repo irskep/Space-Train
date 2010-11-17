@@ -44,7 +44,6 @@ class EditorView(object):
         self.scene.camera.min_bounds = (0, 0)
         mb = self.scene.camera.max_bounds
         self.scene.camera.max_bounds = (mb[0] + gamestate.norm_w//2, mb[1] + gamestate.norm_h//2)
-        self.scene.camera.update(1)
     
     def empty_click_actions(self):
         self.click_actions = collections.deque()
@@ -125,7 +124,7 @@ class EditorView(object):
     
     def on_mouse_scroll(self, x, y, scroll_x, scroll_y):
         c = self.scene.camera
-        c.set_position(c.position[0] - scroll_x*4, c.position[1] + scroll_y*4)
+        c.position = (c.position[0] - scroll_x*4, c.position[1] + scroll_y*4)
         self.drag_start = (self.drag_start[0] - scroll_x*4, self.drag_start[1] - scroll_y*4)
     
     def on_mouse_motion(self, x, y, dx, dy):
