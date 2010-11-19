@@ -1,0 +1,69 @@
+Point D: “Not Cool Enough”
+
+Inga approaches the HIPSTERS: AMANDA, FRAN, and LIAM. They are having a HIPSTER CONVERSATION.
+
+Upon CLICKING, the player may ATTEMPT TO GREET THE HIPSTERS only to be greeted with GRUNTS.
+
+POINT E: “Making Connections”
+Inga approaches the MOB: NIKOLAI, VLADIMIR, and PETRO. They periodically say POKER THINGS.
+
+Upon CLICKING, the player may GREET THE CARD PLAYERS or SCOLD THE FAT ONE FOR SMOKING.
+
+Greet the card players:
+	INGA: Hello gentlemen.
+	NIKOLAI: Good day, ma’am.
+	PETRO: Hello.
+	INGA: What will you be doing in Space France?
+	VLADIMIR: We have a…friend.
+	NIKOLAI: He has gotten himself in some trouble.
+	PETRO: We like to help friends, so we are going to help him.
+	PETRO: We are the kind of people who have…resources…that others do not have.
+	VLADIMIR: And you?
+	INGA: I am seeing the great Stanislov Slavinsky!
+	PETRO: Truly a treasure of our great planet!
+	VLADIMIR: One of our favorites.
+	NIKOLAI: You may be interested to know, dear lady, that Slavinsky is on this very train.
+	VLADIMIR: Very close, in fact.
+	NIKOLAI: In the next car.
+	INGA: Oh my! How exciting!
+	INGA: Well, it was wonderful talking to you!
+
+Scold the fat one for smoking:	
+	INGA: You should drop that filthy habit!
+	PETRO: When you have lived as I, you learn that these things are not worth fussing about.
+
+
+TURNING POINT: The player now knows about STANISLOV’S presence on the MUSTACHIO EXPRESS. Dialogue options are exposed to inquire about STANISLOV.
+
+
+POINT H: “Street Cred”
+
+(This is a connection to the next car in which you can bribe the guards for passage)
+
+Inga approaches the HIPSTERS. Upon CLICKING, she can ASK ABOUT STRANGE CLOTHING or BUM A CIG.
+
+Ask about strange clothing:
+	(Funny commentary about fashion styles)
+
+Bum a cig:
+	INGA: Could you kind folks spare a cigarette?
+	FRAN: Pssh. Like, no. You like totally don’t understand our generation.
+	LIAM: Ja. I bet you haffen’t even heard of the band Rampant Lizards.
+	AMANDA: Or Lieutenant McSpazz’s Shoelace Extravaganza.
+	FRAN: Or the best band ever, Deep Couch.
+	LIAM: Ja. They broke up like, fifty years ago.
+	AMANDA: Sold thirteen records and played one show.
+	FRAN: (Holding up a vinyl disc) THIS IS EIN ORIGINAL RECORD.
+	
+	INGA: You are all so young…
+	INGA: Too young to remember how Deep Couch were when they were formed.
+	The HIPSTERS’ eyes all bug out
+	INGA: You see, the members of Deep Couch were my cousins. Musical geniuses, all of them.
+	INGA: My uncle converted his textile factory to produce records, but it burned down after only 13 were made.
+	INGA: Such a pity that after their first show, the lead singer married a Hawaiian dancer and moved away.
+	
+	AMANDA: …wow…
+	FRAN: We are so sorry for doubting you!
+	LIAM: Here, take my pack of Green Shoe Cigarettes!
+	
+	(LIAM hands the CIGARETTES to INGA)
