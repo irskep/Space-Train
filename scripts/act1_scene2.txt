@@ -86,7 +86,7 @@ NICOLE: What in the world just happened? The whole train jolted and the lights w
 
 INGA: They've taken Stanislov Slavinsky!
 
-NICOLE: Stanylove who?
+NICOLE: Stan who?
 
 INGA: Stanislov Slavinsky! Baron von Sniffmeinschorts must have kidnapped him!
 
@@ -96,4 +96,8 @@ NICOLE walks off.
 
 POINT F:
 
-INGA approaches the HOUSE LEFT door. No one stops her from walking through and she continues to the next car.
+INGA approaches the HOUSE LEFT door. It has a LOCK. Upon clicking the door, she is presented with a SLIDER PUZZLE with an unknown solution. (Talk to Steve or Kelsey about how this works.)
+
+POINT G:
+
+INGA inspects the bodies of the GUARDS. She finds a SCRAP OF PAPER with the LOCK COMBINATION on it.
