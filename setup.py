@@ -12,7 +12,7 @@ mainscript = 'Adventure.py'
 
 OPTIONS = dict(
     argv_emulation=True,
-    frameworks=[],
+    frameworks=['libavbin.dylib'],
     plist = dict(CFBundleIconFile='spacetrain.icns'), 
     # PyRuntimeLocations=['/Library/Frameworks/Python.framework/Versions/Current/Python']
     #, '/System/Library/Frameworks/Python.framework/Versions/Current/Python'])
