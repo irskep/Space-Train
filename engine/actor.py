@@ -1,4 +1,4 @@
-import os, json, collections
+import os, json, collections, random
 
 import pyglet
 
@@ -251,7 +251,14 @@ class Actor(actionsequencer.ActionSequencer):
                     make_img = lambda i: self.image_named("%s_%d" % (state_name, i), ax, ay)
                     images = [make_img(i) for i in range(1, num_frames+1)]
                     # It may make sense to add this animation to its own texture bin later
-                    anim = pyglet.image.Animation.from_image_sequence(images, time_per_frame);
+                    if my_info.has_key("randomize") and state_name in my_info["randomize"]:
+                        random_images = [i for i in images]
+                        random.shuffle(random_images) # Guarantee at least one occurrence per image
+                        random_images.extend([random.choice(images) for i in xrange(20)])
+                        anim = pyglet.image.Animation.from_image_sequence(random_images,
+                                                                          time_per_frame)
+                    else:
+                        anim = pyglet.image.Animation.from_image_sequence(images, time_per_frame)
                     Actor.images[self.name][state_name] = anim
     
     def dict_repr(self):
