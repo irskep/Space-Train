@@ -10,7 +10,7 @@ def init():
         r"C:\Users\Fred\Documents\My Dropbox\resources",
         r"/Users/stephen/Dropbox/resources",
         r"C:\Users\Tyler\Documents\My Dropbox\resources",
-        r"C:\Users\Merfie\Documents\My Dropbox\resources"
+        r"C:\Users\merfie\Documents\My Dropbox\resources"
     ]
 
     try:

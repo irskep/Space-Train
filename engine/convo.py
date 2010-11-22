@@ -233,6 +233,10 @@ class Conversation(object):
         """Update variables dictionary"""
         self.scene.handler.handler.game_variables.update(val)
         return True
+
+    def _play_sound(self, val):
+        self.scene.play_sound(val)
+        return True
     
     def _give(self, val):
         match = parens_match.match(val)
