@@ -26,9 +26,10 @@ class DJ(object):
         self.update = self.interp.update_interpolators
     
     def get_sound(self, sound_name):
-        if not self.sound_cache.has_key(sound_name):
-            self.sound_cache[sound_name] = pyglet.resource.media('music/%s.ogg' % sound_name, streaming=True)
-        return self.sound_cache[sound_name]
+        # if not self.sound_cache.has_key(sound_name):
+        #     self.sound_cache[sound_name] = pyglet.resource.media('music/%s.ogg' % sound_name, streaming=True)
+        # return self.sound_cache[sound_name]
+        return pyglet.resource.media('music/%s.ogg' % sound_name, streaming=True)
     
     def prime_cache(self, *args):
         # Make sure that things are cached so we don't get nasty delays later
