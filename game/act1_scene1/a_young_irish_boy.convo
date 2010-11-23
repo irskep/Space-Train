@@ -21,6 +21,7 @@ start:
 comment:
     - main: Your pet is so cute!
     - shamus: Thanks! His name's Potato!
+    - play_sound: "hamster"
     - main: I am Inga! What is your name?
     - shamus: I'm Shamus! Nice to meet you!
     - choice:

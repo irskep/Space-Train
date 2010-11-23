@@ -313,6 +313,7 @@ class Scene(object):
     
     def pause(self):
         self.paused = True
+        self.play_sound("pause")
         self.new_actor = actor.Actor("paused", "paused", self)
         self.new_actor.sprite.x = self.actors["main"].sprite.x
         self.new_actor.sprite.y = 600
@@ -329,6 +330,7 @@ class Scene(object):
     
     def resume(self):
         self.paused = False
+        self.play_sound("resume")
         self.remove_actor("paused")
         self.remove_actor("continue")
         self.remove_actor("exit")
