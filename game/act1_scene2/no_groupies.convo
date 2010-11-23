@@ -18,23 +18,9 @@ start:
     - choice:
         I MUST speak to Stanislov!:
             goto: brute_force
-        Bribe with Cigarettes:
-            require: cigarettes
-            goto: bribe
             
 brute_force:
     - main: I MUST speak to Stanislov!
     - moritz: Stanislov is very busy. You will not see him.
     - mikhail: Off limits!
     - goto: start
-    
-bribe:
-    - main: If you don't let me through, you'll miss a big opportunity.
-    - mikhail: What sort of opportunity?
-    - main: The kind that involves a green shoe.
-    - mikhail: What's a green shoe?
-    - moritz: My favorite brand of cigarettes, stupid!
-    - moritz: Hand 'em over, you can pass.
-    - take: cigarettes
-    - update_globals:
-        guards_appeased: True

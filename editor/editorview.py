@@ -99,7 +99,7 @@ class EditorView(object):
         new_point = (self.drag_anchor[0] - (self.drag_start[0] - x),
                      self.drag_anchor[1] - (self.drag_start[1] - y))
         if self.is_dragging_camera:
-            self.scene.camera.set_position(self.drag_anchor[0] + (self.drag_start[0] - x),
+            self.scene.camera.position = (self.drag_anchor[0] + (self.drag_start[0] - x),
                                            self.drag_anchor[1] + (self.drag_start[1] - y))
         elif self.ed_with_drag is not None:
             world_point = self.scene.camera.mouse_to_canvas(x, y)
