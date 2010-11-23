@@ -18,11 +18,18 @@ myscene = None
 def init(fresh=False):
     myscene.handler.handler.game_variables['no_groupies_intro'] = False
     myscene.handler.handler.game_variables['guards_appeased'] = False
-    if fresh:
-        myscene.actors['main'].prepare_walkpath_move("point_2")
-        myscene.actors['main'].next_action()
+    myscene.play_music('bach', fade=False)
+    # if fresh:
+    #     myscene.actors['main'].prepare_walkpath_move("point_2")
+    #     myscene.actors['main'].next_action()
         
     myscene.ui.inventory.put_item(myscene.new_actor('cigarettes', 'cigarettes'))
+
+def transition_from(old_scene):
+    if old_scene == 'act1_scene1':
+        myscene.actors['main'].walkpath_point = 'point_1'
+        myscene.actors['main'].prepare_walkpath_move('point_2')
+        myscene.actors['main'].next_action()
         
 def end_conversation(convo_name):
     if convo_name == "no_groupies_intro":

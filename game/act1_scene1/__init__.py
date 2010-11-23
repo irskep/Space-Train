@@ -22,6 +22,7 @@ do_sit = False
 sneelock_distracted = False
 
 def init(fresh=False):
+    print 'start'
     myscene.ui.inventory.visible = True
     
     myscene.begin_background_conversation("mumblestiltskin")
@@ -40,6 +41,12 @@ def init(fresh=False):
         spcbux = myscene.new_actor('space_bucks', 'space_bucks')
         myscene.ui.inventory.put_item(spcbux)
 
+def transition_from(old_scene):
+    print 'transition from', old_scene
+    myscene.actors['main'].walkpath_point = 'transition_left'
+    myscene.actors['main'].prepare_walkpath_move('inga_attempt_silver_class')
+    myscene.actors['main'].next_action()
+
 def inga_walk(actor, point):
     global do_sit
     global sneelock_distracted
@@ -51,7 +58,7 @@ def inga_walk(actor, point):
             myscene.convo.begin_conversation("you_shall_not_pass")
     if point == "transition_left":
         myscene.handler.notify("act1_scene2")
-    if re.match("seat_\d+", point) and do_sit:
+    if re.match(r"seat_\d+", point) and do_sit:
         myscene.actors['main'].update_state("sit")
         do_sit = False
             
@@ -177,29 +184,30 @@ def handle_event(event, *args):
         if walk_handlers.has_key(actor.identifier):
             walk_handlers[actor.identifier](actor, point)
     print "Handled", event, "with", args
-    
-    
+
 def actor_clicked(clicked_actor):
     print clicked_actor
+    
+    click_handlers = {
+        "gregg_briggs": talk_to_briggs,
+        "shamus": functools.partial(myscene.begin_conversation, "a_young_irish_boy"),
+        "thermostat": functools.partial(myscene.ui.show_cam, clicked_actor, {'Inspect': functools.partial(myscene.begin_conversation, "thermostat_discover")})
+    }
+    
     if re.match(r"seat_\d+", clicked_actor.identifier) and clicked_actor.current_state == "couch":
         if clicked_actor.identifier in myscene.info['walkpath']['points']:
             myscene.ui.show_cam(clicked_actor, {'Sit': lambda: inga_sit(clicked_actor) })
-    if clicked_actor.identifier == "main":
-        myscene.camera_sequence([(myscene.camera.x-1000, myscene.camera.y)], return_to_start=True)
-    if clicked_actor.identifier == "gregg_briggs":
-        talk_to_briggs()
+    
+    if click_handlers.has_key(clicked_actor.identifier):
+        click_handlers[clicked_actor.identifier]()
+    
     if clicked_actor.identifier == "tourist" or clicked_actor.identifier == "tourist_1":
         if myscene.actors['tourist'].walkpath_point == "tourist_start":
             myscene.begin_conversation("meet_the_tourists")
-    if clicked_actor.identifier == "vladimir" or clicked_actor.identifier == "petro" or clicked_actor.identifier == "nikolai":
-        myscene.begin_conversation("making_connections")
-    if clicked_actor.identifier == "shamus":
-        myscene.begin_conversation("a_young_irish_boy")
+    
     if clicked_actor.identifier == "hipster_amanda" or clicked_actor.identifier == "hipster_liam" or clicked_actor.identifier == "hipster_fran":
         if not sneelock_distracted:
             myscene.begin_conversation("grunt")
-    if clicked_actor.identifier == "thermostat":
-        myscene.ui.show_cam(clicked_actor, {'Inspect': lambda: myscene.begin_conversation("thermostat_discover")})
         
         
 def give_actor(actor, item):
