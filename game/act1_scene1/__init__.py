@@ -181,7 +181,7 @@ def handle_event(event, *args):
     
 def actor_clicked(clicked_actor):
     print clicked_actor
-    if re.match("seat_\d+", clicked_actor.identifier) and clicked_actor.current_state == "couch":
+    if re.match(r"seat_\d+", clicked_actor.identifier) and clicked_actor.current_state == "couch":
         if clicked_actor.identifier in myscene.info['walkpath']['points']:
             myscene.ui.show_cam(clicked_actor, {'Sit': lambda: inga_sit(clicked_actor) })
     if clicked_actor.identifier == "main":
@@ -198,8 +198,6 @@ def actor_clicked(clicked_actor):
     if clicked_actor.identifier == "hipster_amanda" or clicked_actor.identifier == "hipster_liam" or clicked_actor.identifier == "hipster_fran":
         if not sneelock_distracted:
             myscene.begin_conversation("grunt")
-        else:
-            myscene.begin_conversation("hipsterz")
     if clicked_actor.identifier == "thermostat":
         myscene.ui.show_cam(clicked_actor, {'Inspect': lambda: myscene.begin_conversation("thermostat_discover")})
         

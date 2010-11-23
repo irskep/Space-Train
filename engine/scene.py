@@ -237,6 +237,7 @@ class Scene(object):
     def _cam_seq_callback(self, points, speed, _=None):
         if not points:
             self.moving_camera = False
+            return
         callback = functools.partial(self._cam_seq_callback, points[1:], speed)
         move_x = interpolator.LinearInterpolator(self.camera, 'x', start=self.camera.x,
                                                     end=points[0][0], name="move_x", speed=speed)
