@@ -69,7 +69,7 @@ class Actor(actionsequencer.ActionSequencer):
         max_x = self.abs_position_x() + self.width()
         max_y = self.abs_position_y() + self.height()
         return min_x <= x <= max_x and min_y <= y <= max_y
-        
+    
     def icon_covers_point(self, x, y):
         min_x = self.icon.x - self.icon.image.anchor_x
         min_y = self.icon.y - self.icon.image.anchor_y
@@ -109,7 +109,10 @@ class Actor(actionsequencer.ActionSequencer):
     def set_image_if_exists(self, image_name):
         """Update image/animation if available, otherwise stay the same"""
         if Actor.images[self.name].has_key(image_name):
-            self.sprite.image = Actor.images[self.name][image_name]
+            try:
+                self.sprite.image = Actor.images[self.name][image_name]
+            except AttributeError:
+                print "Error on", self.identifier, "setting an image", image_name, Actor.images[self.name][image_name], self.sprite._texture
     
     def update_state(self, new_state):
         """Update self.current_state and update animation if possible. Variable is
@@ -275,7 +278,7 @@ class Actor(actionsequencer.ActionSequencer):
         if self.sprite.scale != 1.0:
             dict_repr['scale'] = self.sprite.scale
         return dict_repr
-
+    
     def play_sound(self, load_sound):
         self.sound = pyglet.resource.media(self.sound_path("%s.mp3" % load_sound))
         self.sound.play()

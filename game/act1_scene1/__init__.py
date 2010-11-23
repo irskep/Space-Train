@@ -33,17 +33,20 @@ def init(fresh=False):
     myscene.handler.handler.game_variables['temperature'] = 72
     
     if fresh:
+        print 'fresh'
         myscene.interaction_enabled = False
-        # gamestate.event_manager.enter_cutscene()
         myscene.actors['levity'].prepare_walkpath_move("levity_4")
         myscene.actors['levity'].next_action()
     
         spcbux = myscene.new_actor('space_bucks', 'space_bucks')
         myscene.ui.inventory.put_item(spcbux)
+    else:
+        myscene.interaction_enabled = True
 
 def transition_from(old_scene):
-    print 'transition from', old_scene
+    myscene.interaction_enabled = True
     myscene.actors['main'].walkpath_point = 'transition_left'
+    myscene.actors['main'].sprite.position = myscene.walkpath.points['transition_left']
     myscene.actors['main'].prepare_walkpath_move('inga_attempt_silver_class')
     myscene.actors['main'].next_action()
 
