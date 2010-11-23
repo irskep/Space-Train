@@ -54,7 +54,7 @@ class DJ(object):
                 if self.player.playing:
                     fade_out = interpolator.LinearInterpolator(self.player, 'volume', 
                                                                start=self.volume,
-                                                               end=0.0, name="volume", duration=5.0,
+                                                               end=0.0, name="volume", duration=3.0,
                                                                done_function=self.next_track)
                     self.interp.add_interpolator(fade_out)
                 else:
@@ -66,7 +66,7 @@ class DJ(object):
             self.player.queue(new_sound)
         if self.player.playing:
             fade_out = interpolator.LinearInterpolator(self.player, 'volume', start=self.volume,
-                                                        end=0.0, name="volume", duration=5.0,
+                                                        end=0.0, name="volume", duration=3.0,
                                                         done_function=self.fade_next_track)
             self.interp.add_interpolator(fade_out)
         else:
@@ -75,7 +75,7 @@ class DJ(object):
     
     def fade_next_track(self, dt=0):
         fade_in = interpolator.LinearInterpolator(self.player, 'volume', start=0.0,
-                                                    end=self.volume, name="volume", duration=5.0)
+                                                    end=self.volume, name="volume", duration=3.0)
         self.interp.add_interpolator(fade_in)
         self.player.play()
     
