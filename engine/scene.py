@@ -33,7 +33,9 @@ import os, sys, shutil, json, importlib, pyglet, functools
 import camera, actor, gamestate, util, interpolator, convo
 from util import walkpath, zenforcer, pushmatrix
 
-import cam, environment, gamehandler, scenehandler
+import cam, environment, gamehandler, scenehandler, sound
+
+from pyglet.window import key
 
 update_t = 1/120.0
 
@@ -80,6 +82,8 @@ class Scene(object):
         self.paused = False
         self.x_offset = 0.0
         self.y_offset = 0.0
+
+        self.sound_player = sound.Sound()
         
         self.moving_camera = False
         
@@ -252,7 +256,13 @@ class Scene(object):
     # Events
     
     def on_mouse_release(self, x, y, button, modifiers):
-        if self.paused:
+        if self.paused == True:
+            clicked_actor = self.actor_under_point(*self.camera.mouse_to_canvas(x, y))
+            if clicked_actor.identifier == "continue":
+                self.resume()
+            elif clicked_actor.identifier == "exit":
+                self.resume()
+                self.handler.notify(None)
             return
         if self.actors.has_key('main') and self.actors['main'].blocking_actions:
             return
@@ -277,6 +287,15 @@ class Scene(object):
             self.ui.inventory.held_item = None
         else:
             self.call_if_available('actor_clicked', clicked_actor)
+
+    def on_key_press(self, symbol, modifiers):
+        if symbol == key.ESCAPE:
+            if self.name == "title_screen":
+                self.handler.notify(None)
+            elif self.paused == False:
+                self.pause()
+            else:
+                self.resume()
     
     def move_main(self, x, y):
         # Send main actor to click location according to actor's moving behavior
@@ -295,10 +314,27 @@ class Scene(object):
     
     def pause(self):
         self.paused = True
+        self.play_sound("pause")
+        self.new_actor = actor.Actor("paused", "paused", self)
+        self.new_actor.sprite.x = self.actors["main"].sprite.x
+        self.new_actor.sprite.y = 600
+        self.add_actor(self.new_actor)
+        self.new_actor = actor.Actor("continue", "paused", self, None, {"start_state": "continue"})
+        self.new_actor.sprite.x = self.actors["main"].sprite.x
+        self.new_actor.sprite.y = 450
+        self.add_actor(self.new_actor)
+        self.new_actor = actor.Actor("exit", "paused", self, None, {"start_state": "exit"})
+        self.new_actor.sprite.x = self.actors["main"].sprite.x
+        self.new_actor.sprite.y = 350
+        self.add_actor(self.new_actor)
         print "%s is paused." % self.name
     
     def resume(self):
         self.paused = False
+        self.play_sound("resume")
+        self.remove_actor("paused")
+        self.remove_actor("continue")
+        self.remove_actor("exit")
         print "%s has resumed." % self.name
     
     
@@ -403,4 +439,8 @@ class Scene(object):
     def load_song(self, song_name):
         self.song = pyglet.resource.media(song_name)
         song.play()
+
+    def play_sound(self, sound_name):
+        self.sound_player.play_sound(sound_name)
+                
     

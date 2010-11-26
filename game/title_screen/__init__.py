@@ -15,7 +15,6 @@ def handle_event(event, *args):
 def actor_clicked(clicked_actor):
     print "Clicked on %s" % clicked_actor.name
     if clicked_actor.identifier == "logo":
-        # clicked_actor.play_sound("sound")
         myscene.handler.notify("act1_scene1")
         interp = LinearInterpolator(clicked_actor.sprite, 'rotation', 0.0, 360, speed=500.0)
         myscene.add_interpolator(interp)

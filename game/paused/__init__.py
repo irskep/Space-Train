@@ -12,7 +12,7 @@ def actor_clicked(clicked_actor):
     if clicked_actor.identifier == "exit":
         myscene.handler.notify("exit_game")
     if clicked_actor.identifier == "continue":
-        myscene.handler.notify(myscene.handler.previous_scene)
+        myscene.handler.notify("act1_scene1", 0)
         
 def on_escape_press():
     myscene.handler.notify("title_screen", False)

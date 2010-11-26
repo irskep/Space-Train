@@ -21,7 +21,6 @@ class Actor(actionsequencer.ActionSequencer):
         self.identifier = identifier
         self.walkpath_point = None
         self.resource_path = util.respath_func_with_base_path('actors', self.name)
-        self.sound_path = util.respath_func_with_base_path('sound')
         
         self.update_static_info()
         self.current_state = Actor.info[self.name]['start_state']
