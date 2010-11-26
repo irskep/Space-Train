@@ -278,9 +278,4 @@ class Actor(actionsequencer.ActionSequencer):
             dict_repr['scale'] = self.sprite.scale
         return dict_repr
     
-    def play_sound(self, load_sound):
-        self.sound = pyglet.resource.media(self.sound_path("%s.mp3" % load_sound))
-        self.sound.play()
 
-
-    
