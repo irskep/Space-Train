@@ -44,11 +44,12 @@ def init(fresh=False):
         myscene.interaction_enabled = True
 
 def transition_from(old_scene):
-    myscene.interaction_enabled = True
-    myscene.actors['main'].walkpath_point = 'transition_left'
-    myscene.actors['main'].sprite.position = myscene.walkpath.points['transition_left']
-    myscene.actors['main'].prepare_walkpath_move('inga_attempt_silver_class')
-    myscene.actors['main'].next_action()
+    if old_scene == 'act_scene2':
+        myscene.interaction_enabled = True
+        myscene.actors['main'].walkpath_point = 'transition_left'
+        myscene.actors['main'].sprite.position = myscene.walkpath.points['transition_left']
+        myscene.actors['main'].prepare_walkpath_move('inga_attempt_silver_class')
+        myscene.actors['main'].next_action()
 
 def inga_walk(actor, point):
     global do_sit
