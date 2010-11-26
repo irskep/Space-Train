@@ -1,4 +1,5 @@
 import math
+import weakref
 
 class InterpolatorController(object):
     """Keeps track of the lifecycles of multiple interpolators"""
@@ -29,7 +30,7 @@ class Interpolator(object):
     def __init__(self, host_object, attr_name, end, start=None, 
                  name="value", speed=0.0, duration=0.0,
                  done_function=None):
-        self.host_object = host_object
+        self.host_object = weakref.ref(host_object)
         self.attr_name = attr_name
         self.done_function = done_function
         self.start = start
@@ -43,7 +44,7 @@ class Interpolator(object):
         self.progress = 0.0
     
     def complete(self):
-        return self.progress >= self.duration
+        return self.progress >= self.duration or (not self.host_object)
     
     def fix_speed_and_duration(self):
         if self.speed == 0.0:
@@ -72,6 +73,8 @@ class LinearInterpolator(Interpolator):
     
     def update(self, dt=0):
         super(LinearInterpolator, self).update(dt)
+        if not self.host_object:
+            return
         setattr(self.host_object, self.attr_name, self.start + self.progress*self.speed)
     
     def __repr__(self):
@@ -107,6 +110,8 @@ class Linear2DInterpolator(Interpolator):
     
     def update(self, dt=0):
         super(Linear2DInterpolator, self).update(dt)
+        if not self.host_object:
+            return
         new_tuple = ((self.start_tuple[0] + self.progress*self.x_speed),
                      (self.start_tuple[1] + self.progress*self.y_speed))
         try:
@@ -132,10 +137,14 @@ class JumpInterpolator(Interpolator):
     
     def update(self, dt=0):
         super(JumpInterpolator, self).update(dt)
+        if not self.host_object:
+            return
         setattr(self.host_object, self.attr_name, 
                 self.base_y + math.sin(self.progress*self.speed)*self.height)
     
     def complete(self):
+        if not self.host_object:
+            return True
         if super(JumpInterpolator, self).complete():
             setattr(self.host_object, self.attr_name, self.base_y)
             return True
@@ -155,6 +164,8 @@ class PulseInterpolator(Interpolator):
         self.update(0.0)
     
     def update(self, dt=0):
+        if not self.host_object:
+            return
         self.progress += dt
         setattr(self.host_object, self.attr_name, 
                 self.inner + math.sin(self.progress*self.speed)*self.spread)
