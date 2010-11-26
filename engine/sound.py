@@ -18,11 +18,11 @@ class Sound(object):
 
     def get_sound(self, sound_name):
         if not self.sound_cache.has_key(sound_name):
-            self.sound_cache[sound_name] = pyglet.resource.media('sound/%s.ogg' % sound_name, streaming = True)
-            return self.sound_cache[sound_name]
-
+            self.sound_cache[sound_name] = pyglet.resource.media('sound/%s.ogg' % sound_name,
+                                                                 streaming=False)
+    return self.sound_cache[sound_name]
+    
     def play_sound(self, sound_name, volume = 1.0):
-        self.sound = pyglet.resource.media('sound/%s.ogg' % sound_name, streaming = False)
-        self.sound.play()
-
+        self.get_sound(sound_name).play()
+    
     
