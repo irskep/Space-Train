@@ -24,17 +24,18 @@ class Actor(actionsequencer.ActionSequencer):
         
         self.update_static_info()
         self.current_state = Actor.info[self.name]['start_state']
-        if Actor.info[self.name].has_key('walk_speed'):
-            self.walk_speed = Actor.info[self.name]['walk_speed']
-        else:
-            self.walk_speed = 400.0
         
-        if attrs.has_key('start_state'):
-            self.current_state = attrs['start_state']
+        self.walk_speed = Actor.info[self.name].get('walk_speed', 400.0)
+        self.anchor_x = Actor.info[self.name]['anchor_x']
+        self.anchor_y = Actor.info[self.name]['anchor_y']
+        self.current_state = attrs.get('start_state', Actor.info[self.name]['start_state'])
+        self.casts_shadow = Actor.info[self.name].get('casts_shadow', False)
         
         if self.scene and batch is None:
             batch = self.scene.batch
+        
         self.sprite = pyglet.sprite.Sprite(Actor.images[self.name][self.current_state], batch=batch)
+        
         try:
             self.icon = pyglet.sprite.Sprite(self.image_named("icon", 0, 0), batch = None)
         except pyglet.resource.ResourceNotFoundException:
@@ -47,9 +48,6 @@ class Actor(actionsequencer.ActionSequencer):
         for attr in ['x', 'y', 'scale', 'rotation']:
             if attrs.has_key(attr):
                 setattr(self.sprite, attr, attrs[attr])
-        
-        self.anchor_x = Actor.info[self.name]['anchor_x']
-        self.anchor_y = Actor.info[self.name]['anchor_y']
     
     def delete(self):
         self.sprite.delete()

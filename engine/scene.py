@@ -31,7 +31,7 @@ give_actor(receiving_actor, item)
 import os, sys, shutil, json, importlib, pyglet, functools
 
 import camera, actor, gamestate, util, interpolator, convo
-from util import walkpath, zenforcer, pushmatrix
+from util import walkpath, zenforcer, pushmatrix, shadow
 
 import cam, environment, gamehandler, scenehandler, sound
 
@@ -82,8 +82,9 @@ class Scene(object):
         self.paused = False
         self.x_offset = 0.0
         self.y_offset = 0.0
-
+        
         self.sound_player = sound.Sound()
+        self.shadow = shadow.ShadowManager()
         
         self.moving_camera = False
         
@@ -134,13 +135,16 @@ class Scene(object):
             if attrs.has_key('walkpath_point'):
                 new_actor.walkpath_point = attrs['walkpath_point']
                 new_actor.sprite.position = self.walkpath.points[new_actor.walkpath_point]
-            self.add_actor(new_actor)
+            self.add_actor(new_actor, reset_shadows=False)
+        self.shadow.set_targets([a.sprite for a in self.actors.viewvalues() if a.casts_shadow])
     
-    def add_actor(self, actor):
+    def add_actor(self, actor, reset_shadows=True):
         print "Adding actor %s" % actor.identifier
         self.actors[actor.identifier] = actor
         self.zenforcer.init_groups()
         self.zenforcer.update()
+        if reset_shadows:
+            self.shadow.set_targets([a.sprite for a in self.actors.viewvalues() if a.casts_shadow])
     
     def load_script(self):
         # Requires that game/scenes is in PYTHONPATH
@@ -287,7 +291,7 @@ class Scene(object):
             self.ui.inventory.held_item = None
         else:
             self.call_if_available('actor_clicked', clicked_actor)
-
+    
     def on_key_press(self, symbol, modifiers):
         if symbol == key.ESCAPE:
             if self.name == "title_screen":
@@ -360,6 +364,7 @@ class Scene(object):
             
             with pushmatrix(pyglet.gl.glTranslatef, self.x_offset, self.y_offset, 0):
                 self.env.draw()
+                self.shadow.draw()
                 self.batch.draw()
         
                 self.env.draw_overlay()
@@ -439,7 +444,7 @@ class Scene(object):
     def load_song(self, song_name):
         self.song = pyglet.resource.media(song_name)
         song.play()
-
+    
     def play_sound(self, sound_name):
         self.sound_player.play_sound(sound_name)
                 
