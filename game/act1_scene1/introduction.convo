@@ -19,9 +19,10 @@ start:
 
 food_choice:
     - choice:
-        I'd love a delicious snack!:
+        Yes please! I'll have some Tasty Nuts and a lemonade.:
           hide_after_use: true
           goto: ask_for_food
+        
 
 ask_for_food:
     - main: Yes please! I'll have some Tasty Nuts and a lemonade.

@@ -37,54 +37,25 @@ class CAM(object):
         self.x, self.y = 0, 0
         self.hide_on_click_outside = True
         self.ui = ui
-
+        
+        self.background_sprite = pyglet.sprite.Sprite(
+                                    pyglet.resource.image('ui/options_box_red.png'),
+                                    x=0, y=0)
         self.batch = pyglet.graphics.Batch()
         self.buttons = []
+        self.labels = set()
         
-        # Static resources, such as sprites for the CAM backgrounds
-        sprites = {}
-        sprite_batch = pyglet.graphics.Batch()
-        # sprites = {i: util.load_sprite(['ui', 'new_cam_%d.png' % i], batch = self.batch)
-        #             for i in xrange(1,7)}
-        sprites = {i: util.load_sprite(['ui', 'new_new_cam.png'], batch = self.batch)
-                    for i in xrange(1,7)}
-        for s in sprites.viewvalues():
-            # s.anchor_x = s.width
-            s.anchor_x = 0
-
-        positioning = {}
-        # positioning[1] = (280,187)
-        # positioning[2] = (265,155)
-        # positioning[3] = (260,120)
-        # positioning[4] = (260,84)
-        # positioning[5] = (265,48)
-        # positioning[6] = (280,17)
+        rects = [(90, 123, 330, 40), (455, 115, 380, 40), (880, 123, 330, 40), 
+                 (90, 55, 330, 40),  (455, 55, 380, 40), (880, 55, 330, 40)]
+        print rects
         
-        positioning = {y+1: (0, y*30) for y in range(0, 6)}
-        
-        y -= sprites[1].height/2
-                
-        #defines the generic order in which CAM backrounds are used
-        # generic_item_order = [3, 4, 2, 5, 1, 6]
-        generic_item_order = [1,2,3,4,5,6]
-        
-        used_items = []
-        for action, callback in self.actions.items():
-            used_items.append(generic_item_order.pop(0))
-            
-        used_items.sort()
-                
-        # Turn each action entry into a menu item
-        start_pos = len(self.actions)+1
-        for action, callback in self.actions.viewitems():  
-            count = used_items.pop(0)
-            # button = self.Button(x-sprites[1].width/3, y, 
-            #                      positioning[count][0], positioning[count][1],
-            #                      sprites[count], action, callback)
-            button = self.Button(positioning[start_pos-count][0], positioning[start_pos-count][1], 
-                                 5, 5,
-                                 sprites[count], "%d: %s" % (count, action), callback)
-            self.buttons.append(button)
+        for i, (text, callback) in enumerate(self.actions.viewitems()):
+            rect = rects[i]
+            self.buttons.append((rect, callback))
+            self.labels.add(pyglet.text.Label("%d: %s" % (i+1, text), multiline=True,
+                                    x=rect[0], y=rect[1], width=rect[2], height=rect[3],
+                                    font_size=10,
+                                    batch=self.batch, color=(255,255,255,255)))
         
         self.set_visible(True)
         
@@ -96,42 +67,31 @@ class CAM(object):
         else:
             gamestate.event_manager.set_cam(None)
             self.ui.cam = None
+            for l in self.labels:
+                l.delete()
         self.visible = visible
     
     # Handle an event
     def on_mouse_release(self, x, y, button, modifiers):
         if self.visible:
-            button = self.button_under(x,y)
-            if button is None:
+            callback = self.button_under(x,y)
+            if callback is None:
                 if self.hide_on_click_outside:
                     self.set_visible(False)
                 # pass this even down to other handlers, clean up the CAM
                 return pyglet.event.EVENT_UNHANDLED
             else:
                 # execute the click action and clean up the CAM
-                button.click()
+                callback()
                 self.set_visible(False)
                 self.ui.clean_cam()
                 return pyglet.event.EVENT_HANDLED
     
-    def on_key_press(self, symbol, modifiers):
-        button = 0
-        if symbol == key.LEFT:
-            self.buttons[button].set_x(self.buttons[button].x - 1)
-        elif symbol == key.RIGHT:
-            self.buttons[button].set_x(self.buttons[button].x + 1)
-        elif symbol == key.UP:
-            self.buttons[button].set_y(self.buttons[button].y + 1)
-        elif symbol == key.DOWN:
-            self.buttons[button].set_y(self.buttons[button].y - 1)
-            
-        print "Button %d: (%d, %d)" % (button, self.buttons[button].x, self.buttons[button].y)
-    
     def on_key_release(self, symbol, modifiers):
-        nums = {getattr(pyglet.window.key,"_%d" % (i+1)): self.buttons[i] for i in range(len(self.buttons))}
-        for num, button in nums.viewitems():
+        nums = {getattr(pyglet.window.key,"_%d" % (i+1)): self.buttons[i][1] for i in range(len(self.buttons))}
+        for num, callback in nums.viewitems():
             if num == symbol:
-                button.click()
+                callback()
                 self.set_visible(False)
                 self.ui.clean_cam()
                 return pyglet.event.EVENT_HANDLED
@@ -140,49 +100,14 @@ class CAM(object):
     # Note that this function's behaviour is undefined when buttons overlap
     # this is intended but should later be changed to return the topmost button
     def button_under(self, x, y):
-        for button in self.buttons:
-            if button.x <= x <= button.x + button.sprite.width \
-            and button.y <= y <= button.y + button.sprite.height \
-            and util.image_alpha_at_point(button.sprite.image, x-button.x, y-button.y) > 0:
-                return button
+        print x, y
+        for rect, callback in self.buttons:
+            if rect[0] < x < rect[0]+rect[2] and rect[1]-rect[3] < y < rect[1]:
+                return callback
         return None
     
     def draw(self, dt=0):
         if(self.visible):
+            self.background_sprite.draw()
             self.batch.draw()
-            
-    # TODO: finish button class
-    class Button(object):
-        def __init__(self, x, y, text_x, text_y, sprite, action, callback):
-            self.sprite = sprite
-            self.sprite.x = x
-            self.sprite.y = y
-            self.label = pyglet.text.Label(action, font_name = 'Helvetica', 
-                                           font_size = 14, anchor_x = 'left', 
-                                           anchor_y = 'bottom', batch = self.sprite.batch, 
-                                           color = (255, 255, 255, 255),
-                                           x = self.sprite.x + text_x, 
-                                           y = self.sprite.y + text_y)
-            
-            self.x = x
-            self.y = y
-            self.width = self.sprite.width
-            self.height = self.sprite.height
-            self.callback = callback
-            
-        def click(self):
-            if(self.callback is not None):
-				self.callback()
     
-        def set_x(self, x):
-            self.sprite.x = x
-            self.label.x = self.sprite.x + ((self.sprite.width - 10) / 2)
-            self.x = x
-            
-        def set_y(self, y):
-            self.sprite.y = y
-            self.label.y = (self.sprite.y + self.sprite.height) - (self.sprite.height / 2) - 5
-            self.y = y
-        
-        def __repr__(self):
-            return "Button: " + self.label.text

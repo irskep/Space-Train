@@ -291,7 +291,8 @@ class Scene(object):
                 self.ui.inventory.put_item(self.ui.inventory.held_item)
             self.ui.inventory.held_item = None
         else:
-            self.call_if_available('actor_clicked', clicked_actor)
+            self.module.actor_clicked(clicked_actor)
+            # self.call_if_available('actor_clicked', clicked_actor)
     
     def on_key_press(self, symbol, modifiers):
         if symbol == key.ESCAPE:
