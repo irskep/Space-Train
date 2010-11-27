@@ -150,7 +150,7 @@ class Scene(object):
         # Requires that game/scenes is in PYTHONPATH
         self.module = importlib.import_module(self.name)
         self.module.myscene = self
-        self.call_if_available('init', self.fresh)
+        self.module.init(self.fresh)
     
     
     # Cleanup

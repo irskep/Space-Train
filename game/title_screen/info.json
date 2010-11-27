@@ -8,18 +8,18 @@
     }, 
     "actors": {
         "logo": {
-            "y": 402, 
-            "x": 995, 
-            "scale": 0.8, 
+            "y": 504, 
+            "x": 640, 
+            "scale": 1.0, 
             "name": "a_train_in_spain", 
-            "start_state": "logo"
+            "start_state": "badge"
         }, 
-        "title": {
-            "y": 453, 
-            "x": 370, 
-            "scale": 0.9999389091025732, 
+        "go": {
+            "y": 200, 
+            "x": 640, 
+            "scale": 1.0, 
             "name": "a_train_in_spain", 
-            "start_state": "title"
+            "start_state": "all_aboard"
         }
     }, 
     "walkpath": {

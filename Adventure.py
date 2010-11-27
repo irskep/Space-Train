@@ -41,19 +41,7 @@ class AdventureWindow(pyglet.window.Window):
         
         engine.init()                   # Set up resource paths
         
-        self.load_fraction = 0.0
-        img = pyglet.resource.image('actors/a_train_in_spain/badge.png')
-        img.anchor_x = img.width/2
-        img.anchor_y = img.height/2
-        self.load_sprite = pyglet.sprite.Sprite(
-            img, x=self.width/2, y=self.height*0.55
-        )
-        img = pyglet.resource.image('actors/a_train_in_spain/train.png')
-        img.anchor_x = img.width
-        img.anchor_y = 0
-        self.crawler = pyglet.sprite.Sprite(
-            img, x=0, y=0
-        )
+        self.init_load()
 
         with pyglet.resource.file(util.respath('game', 'info.json'), 'r') as game_info_file:
             self.game_info = json.load(game_info_file)
@@ -64,6 +52,36 @@ class AdventureWindow(pyglet.window.Window):
         
         # Stupid hack to get around pyglet loading bullshit
         pyglet.clock.schedule_once(self.finish_loading, 0.0000001)
+    
+    def init_load(self):
+        self.load_fraction = 0.0
+        self.load_batch = pyglet.graphics.Batch()
+        img = pyglet.resource.image('actors/a_train_in_spain/badge.png')
+        img.anchor_x = img.width/2
+        img.anchor_y = img.height/2
+        self.load_sprite = pyglet.sprite.Sprite(
+            img, x=self.width/2, y=self.height*0.7, batch=self.load_batch
+        )
+        
+        img = pyglet.resource.image('actors/a_train_in_spain/train.png')
+        img.anchor_x = img.width
+        img.anchor_y = 0
+        self.crawler_sprite = pyglet.sprite.Sprite(img, x=0, y=self.height*0.12,
+                                                   batch=self.load_batch)
+        
+        img = pyglet.resource.image('ui/track.png')
+        img.anchor_x = img.width/2
+        img.anchor_y = img.height
+        self.track_sprite = pyglet.sprite.Sprite(img, x=self.width/2, y=self.height*0.12,
+                                                 batch=self.load_batch)
+        
+        self.this_img = pyglet.text.Label('Loading...', anchor_x='center', anchor_y='bottom',
+                                          font_size=48,
+                                          x=self.width/2, y=self.height*0.12, batch=self.load_batch,
+                                          color=(255,255,255,128))
+        
+        self.background_image = pyglet.resource.image(
+                                'environments/the_vast_emptiness_of_space/0_0.png')
     
     def finish_loading(self, dt=0):
         self.preload()
@@ -87,7 +105,6 @@ class AdventureWindow(pyglet.window.Window):
             self.load_fraction = float(i)/float(len(util.preload))
             self.on_draw()
             self.flip()
-            # pyglet.app.event_loop.idle()
 
     def on_draw(self, dt=0):
         if self.game_handler:
@@ -95,10 +112,10 @@ class AdventureWindow(pyglet.window.Window):
         else:
             util.draw.set_color(0,0,0)
             util.draw.rect(0,0,self.width,self.height)
-            self.crawler.x = self.width*self.load_fraction
-            self.crawler.draw()
+            self.crawler_sprite.x = self.width*self.load_fraction
             util.draw.set_color(255,255,255,255)
-            self.load_sprite.draw()
+            self.background_image.blit(0,0)
+            self.load_batch.draw()
     
     def on_key_press(self, symbol, modifiers):
         # Override default behavior of escape key quitting

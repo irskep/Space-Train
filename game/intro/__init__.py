@@ -29,7 +29,6 @@ def sequence_item(sequence, item, final_callback, l=None, _=None):
     if l:
         l.delete()
     if item >= len(sequence):
-        print 'done?'
         final_callback()
         return
     text, size, x, y = sequence[item]
