@@ -39,7 +39,7 @@ class ShadowManager(object):
             w, h = self.shadow_image.width, self.shadow_image.height
             iw, ih = img.width, img.height
             scale = float(iw)/float(w)*0.8
-            self.rel_cache[img] = (-w*scale*0.5, -h*scale*0.5, w*scale, h*scale)
+            self.rel_cache[img] = (-w*scale*0.5, -h*scale*0.3, w*scale, h*scale)
         return self.rel_cache[img]
     
     def draw(self, dt=0):
@@ -52,5 +52,4 @@ class ShadowManager(object):
                 y = t.y + rel_y
                 verts[n*8:(n+1)*8] = map(int,[x,y,x+ww,y,x+ww,y+hh,x,y+hh])
             self.batch.draw()
-        
-        
+    
