@@ -12,14 +12,14 @@ myscene = None
 def init(fresh=True):
     sequence = (
         ("It's the year 3030", 0.05, 0.5, 0.5),
-        ("And here at the Corporate Institutional Bank of Time", 0.04, 0.5, 0.5),
-        ("We find ourselves reflecting", 0.05, 0.5, 0.5),
-        ("Finding out, that in fact, we came back", 0.04, 0.5, 0.5),
-        ("We were always coming back...", 0.04, 0.5, 0.5),
+        # ("And here at the Corporate Institutional Bank of Time", 0.04, 0.5, 0.5),
+        # ("We find ourselves reflecting", 0.05, 0.5, 0.5),
+        # ("Finding out, that in fact, we came back", 0.04, 0.5, 0.5),
+        # ("We were always coming back...", 0.04, 0.5, 0.5),
     )
-    show_sequence(sequence)
+    pyglet.clock.schedule_once(show_sequence, 2.0, sequence)
 
-def show_sequence(sequence):
+def show_sequence(dt=0, sequence=()):
     sequence_item(sequence, 0, end_sequence)
 
 def end_sequence():

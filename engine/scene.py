@@ -112,8 +112,9 @@ class Scene(object):
     
     def init_zenforcer(self):
         def sprite_maker():
-            for act in self.actors.viewvalues():
-                yield act.sprite
+            if self.actors:
+                for act in self.actors.viewvalues():
+                    yield act.sprite
         sort_func = lambda a, b: a.y < b.y
         self.zenforcer = zenforcer.ZEnforcer(self.main_group, sprite_maker, sort_func)
     
@@ -156,6 +157,7 @@ class Scene(object):
     # Cleanup
     
     def exit(self):
+        pyglet.clock.unschedule(self.zenforcer.update)
         self.interp.delete()
         for actor in self.actors.viewvalues():
             actor.delete()
@@ -164,7 +166,6 @@ class Scene(object):
             convo.stop_speaking()
         self.background_convos = None
         self.env.exit()
-        pyglet.clock.unschedule(self.zenforcer.update)
     
     
     # Access
@@ -316,35 +317,39 @@ class Scene(object):
             main.prepare_walkpath_move(dest_point)
             main.next_action()
     
-    def pause(self):
+    def pause(self, show_sprites=True):
         self.paused = True
-        self.play_sound("pause")
-        self.new_actor = actor.Actor("paused", "paused", self)
-        self.new_actor.sprite.x = self.actors["main"].sprite.x
-        self.new_actor.sprite.y = 600
-        self.add_actor(self.new_actor)
-        self.new_actor = actor.Actor("continue", "paused", self, None, {"start_state": "continue"})
-        self.new_actor.sprite.x = self.actors["main"].sprite.x
-        self.new_actor.sprite.y = 450
-        self.add_actor(self.new_actor)
-        self.new_actor = actor.Actor("exit", "paused", self, None, {"start_state": "exit"})
-        self.new_actor.sprite.x = self.actors["main"].sprite.x
-        self.new_actor.sprite.y = 350
-        self.add_actor(self.new_actor)
-        print "%s is paused." % self.name
+        if show_sprites:
+            self.play_sound("pause")
+            self.new_actor = actor.Actor("paused", "paused", self)
+            self.new_actor.sprite.x = self.actors["main"].sprite.x
+            self.new_actor.sprite.y = 600
+            self.add_actor(self.new_actor)
+            self.new_actor = actor.Actor("continue", "paused", self, None, {"start_state": "continue"})
+            self.new_actor.sprite.x = self.actors["main"].sprite.x
+            self.new_actor.sprite.y = 450
+            self.add_actor(self.new_actor)
+            self.new_actor = actor.Actor("exit", "paused", self, None, {"start_state": "exit"})
+            self.new_actor.sprite.x = self.actors["main"].sprite.x
+            self.new_actor.sprite.y = 350
+            self.add_actor(self.new_actor)
+            print "%s is paused." % self.name
     
     def resume(self):
         self.paused = False
-        self.play_sound("resume")
-        self.remove_actor("paused")
-        self.remove_actor("continue")
-        self.remove_actor("exit")
-        print "%s has resumed." % self.name
+        if self.actors.has_key('paused'):
+            self.play_sound("resume")
+            self.remove_actor("paused")
+            self.remove_actor("continue")
+            self.remove_actor("exit")
+            print "%s has resumed." % self.name
     
     
     # Update/draw
     
     def update(self, dt=0):
+        if dt > 0.2:
+            dt = 0.01
         if self.paused: 
             return
         

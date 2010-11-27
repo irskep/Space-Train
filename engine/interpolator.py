@@ -1,5 +1,4 @@
 import math
-import weakref
 
 class InterpolatorController(object):
     """Keeps track of the lifecycles of multiple interpolators"""
@@ -29,13 +28,9 @@ class InterpolatorController(object):
 class Interpolator(object):
     def __init__(self, host_object, attr_name, end, start=None, 
                  name="value", speed=0.0, duration=0.0,
-                 done_function=None, weakref=False):
+                 done_function=None):
         
-        if weakref:
-            self.host_object = weakref.ref(host_object)
-        else:
-            self.host_object = host_object
-        
+        self.host_object = host_object
         self.attr_name = attr_name
         self.done_function = done_function
         self.start = start

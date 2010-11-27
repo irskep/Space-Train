@@ -7,16 +7,18 @@ When a new scene is needed or the game is closed, the notify() method should be 
 """
 
 import json
+import functools
 
 import pyglet
 
 import gamestate, actionsequencer, util, interpolator, scene
 
-FADE = 0
-UP = 1
-RIGHT = 2
-DOWN = 3
-LEFT = 4
+NONE = 0
+FADE = 1
+UP = 2
+RIGHT = 3
+DOWN = 4
+LEFT = 5
 
 class SceneHandler(actionsequencer.ActionSequencer):
     def __init__(self, game_handler):
@@ -60,6 +62,13 @@ class SceneHandler(actionsequencer.ActionSequencer):
             self.handler.save()
             if direction == FADE:
                 self.fade_to(next_scene)
+            elif direction == NONE:
+                gamestate.event_manager.set_scene(None)
+                self.scene.exit()
+                new_scene = scene.Scene(next_scene, self, self.handler.ui)
+                new_scene.transition_from(self.scene.name)
+                self.set_scenes(new_scene)
+                gamestate.event_manager.set_scene(self.scene)
             else:
                 self.slide_to(next_scene, direction)
             
@@ -68,7 +77,7 @@ class SceneHandler(actionsequencer.ActionSequencer):
         InterpClass = interpolator.LinearInterpolator
         gamestate.event_manager.set_scene(None)
         slide_scene = scene.Scene(next_scene, self, self.handler.ui)
-        slide_scene.pause()
+        slide_scene.pause(show_sprites=False)
         self.set_scenes(self.scene, slide_scene)
         # Determine offset
         if direction == UP:
@@ -81,7 +90,7 @@ class SceneHandler(actionsequencer.ActionSequencer):
             slide_scene.x_offset = -gamestate.norm_w
         
         def slide(ending_action=None):
-            self.scene.pause()
+            self.scene.pause(show_sprites=False)
             if direction % 2:   # Up/down
                 interp1 = InterpClass(self.scene, 'y_offset', 
                                       end=-slide_scene.y_offset, 
@@ -120,8 +129,9 @@ class SceneHandler(actionsequencer.ActionSequencer):
                                 done_function=self.next_action)
             self.controller.add_interpolator(interp)
         
-        def complete_transition(ending_action=None):
+        def complete_transition(new_scene, ending_action=None):
             gamestate.event_manager.set_scene(self.scene)
+            new_scene.resume()
             self.next_action()
         
         def fade_in(ending_action=None):
@@ -130,14 +140,22 @@ class SceneHandler(actionsequencer.ActionSequencer):
             self.scene.exit()
             new_scene = scene.Scene(next_scene, self, self.handler.ui)
             new_scene.transition_from(self.scene.name)
+            new_scene.pause(show_sprites=False)
+            
+            # An ever-increasing pile of hax
+            for i in xrange(10):
+                new_scene.zenforcer.update()
+            
             self.set_scenes(new_scene)
             interp = InterpClass(self.sprite, 'opacity', end=0, start=255, duration=self.fade_time,
-                                done_function=complete_transition)
+                                done_function=functools.partial(complete_transition, new_scene))
             self.controller.add_interpolator(interp)
         
         self.simple_sequence(fade_out, fade_in)
     
     def update(self, dt=0):
+        if dt > 0.2:
+            dt = 0.01
         self.controller.update_interpolators(dt)
         
         # DIRTY DIRTY DIRTY (to save a function call)

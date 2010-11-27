@@ -13,8 +13,16 @@ def init(fresh=True):
 def handle_event(event, *args):
     pass
 
+def next(*args, **kwargs):
+    myscene.handler.notify("intro", 0)  # magic numbers ftw
+
 def actor_clicked(clicked_actor):
     if clicked_actor.identifier == "go":
-        myscene.handler.notify("intro")
-        interp = LinearInterpolator(clicked_actor.sprite, 'rotation', 0.0, 360, speed=500.0)
+        interp = LinearInterpolator(myscene.actors['go'].sprite, 'scale', end=3.0, duration=0.72)
+        myscene.add_interpolator(interp)
+        interp = LinearInterpolator(myscene.actors['go'].sprite, 'opacity', 0.0, 
+                     duration=0.72, done_function=next)
+        myscene.add_interpolator(interp)
+        interp = LinearInterpolator(myscene.actors['logo'].sprite, 'opacity', 0.0, 
+                     duration=0.72)
         myscene.add_interpolator(interp)

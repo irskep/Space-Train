@@ -71,7 +71,7 @@ class GameHandler(object):
     
     def save(self, folder_name="autosave"):
         base_path = os.path.join(self.save_path, folder_name)
-        print 'save to', base_path
+        print 'save %s to %s' % (self.scene_handler.scene.name, base_path)
         scn = self.scene_handler.scene
         util.mkdir_if_absent(base_path)
         util.save_json(self.dict_repr(), os.path.join(base_path, 'game'))

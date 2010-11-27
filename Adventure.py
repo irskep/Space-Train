@@ -76,8 +76,8 @@ class AdventureWindow(pyglet.window.Window):
                                                  batch=self.load_batch)
         
         self.this_img = pyglet.text.Label('Loading...', anchor_x='center', anchor_y='bottom',
-                                          font_size=48,
-                                          x=self.width/2, y=self.height*0.12, batch=self.load_batch,
+                                          font_size=36,
+                                          x=self.width/2, y=self.height*0.14, batch=self.load_batch,
                                           color=(255,255,255,128))
         
         self.background_image = pyglet.resource.image(
