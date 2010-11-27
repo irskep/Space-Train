@@ -49,8 +49,12 @@ class CAM(object):
                  (90, 55, 330, 40),  (455, 55, 380, 40), (880, 55, 330, 40)]
         print rects
         
+        self.sound_for_callback = {}
+        
         for i, (text, callback) in enumerate(self.actions.viewitems()):
             rect = rects[i]
+            self.sound_for_callback[callback] = pyglet.resource.media('sound/select_%d.wav' % (i+1),
+                                                                      streaming=False)
             self.buttons.append((rect, callback))
             self.labels.add(pyglet.text.Label("%d: %s" % (i+1, text), multiline=True,
                                     x=rect[0], y=rect[1], width=rect[2], height=rect[3],
@@ -82,6 +86,7 @@ class CAM(object):
                 return pyglet.event.EVENT_UNHANDLED
             else:
                 # execute the click action and clean up the CAM
+                self.sound_for_callback[callback].play()
                 callback()
                 self.set_visible(False)
                 self.ui.clean_cam()
@@ -91,6 +96,7 @@ class CAM(object):
         nums = {getattr(pyglet.window.key,"_%d" % (i+1)): self.buttons[i][1] for i in range(len(self.buttons))}
         for num, callback in nums.viewitems():
             if num == symbol:
+                self.sound_for_callback[callback].play()
                 callback()
                 self.set_visible(False)
                 self.ui.clean_cam()
