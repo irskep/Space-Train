@@ -45,8 +45,8 @@ class CAM(object):
         self.buttons = []
         self.labels = set()
         
-        rects = [(90, 123, 330, 40), (455, 115, 380, 40), (880, 123, 330, 40), 
-                 (90, 55, 330, 40),  (455, 55, 380, 40), (880, 55, 330, 40)]
+        rects = [(90, 138, 330, 40), (455, 130, 380, 40), (880, 138, 330, 40), 
+                 (90, 70, 330, 40),  (455, 70, 380, 40), (880, 70, 330, 40)]
         print rects
         
         self.sound_for_callback = {}
@@ -58,7 +58,7 @@ class CAM(object):
             self.buttons.append((rect, callback))
             self.labels.add(pyglet.text.Label("%d: %s" % (i+1, text), multiline=True,
                                     x=rect[0], y=rect[1], width=rect[2], height=rect[3],
-                                    font_size=10,
+                                    font_size=10, anchor_y="top",
                                     batch=self.batch, color=(255,255,255,255)))
         
         self.set_visible(True)
