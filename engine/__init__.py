@@ -15,8 +15,8 @@ def init():
 
     try:
         more_locations = [
-            os.path.join(os.path.dirname(__file__), r"resources"),
-            os.path.join(os.path.dirname(__file__), r"resources_repo"),
+            os.path.join(os.path.dirname(sys.argv[0]), r"resources"),
+            os.path.join(os.path.dirname(sys.argv[0]), r"resources_repo"),
         ]
         resource_locations = more_locations + resource_locations
     except:
