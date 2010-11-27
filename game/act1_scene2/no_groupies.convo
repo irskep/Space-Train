@@ -18,9 +18,14 @@ start:
     - choice:
         I MUST speak to Stanislov!:
             goto: brute_force
+        I'll just be going then.:
+          goto: end
             
 brute_force:
     - main: I MUST speak to Stanislov!
     - moritz: Stanislov is very busy. You will not see him.
     - mikhail: Off limits!
     - goto: start
+
+end:
+    - main: I'll just be going then.
