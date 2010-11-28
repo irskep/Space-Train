@@ -34,6 +34,8 @@ class Actor(actionsequencer.ActionSequencer):
         if self.scene and batch is None:
             batch = self.scene.batch
         
+        print '---', self.name
+        print Actor.images[self.name]
         self.sprite = pyglet.sprite.Sprite(Actor.images[self.name][self.current_state], batch=batch)
         
         try:
@@ -114,7 +116,7 @@ class Actor(actionsequencer.ActionSequencer):
     def update_state(self, new_state):
         """Update self.current_state and update animation if possible. Variable is
         changed even if animation is not changed so that scripts do not become confused."""
-        if new_state != self.current_state:
+        if new_state != self.current_state and Actor.images[self.name].has_key(new_state):
             self.current_state = new_state
             self.set_image_if_exists(new_state)
     

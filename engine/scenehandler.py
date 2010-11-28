@@ -6,6 +6,7 @@ Notes: A scenehandler object has a save() method which will save all data for th
 When a new scene is needed or the game is closed, the notify() method should be used. If a new scene is specified then scenehandler initiates a scene transition. If no new scene is specified, it is assumed that the user is attempting to exit the game, and the gamehandler will be notified to allow the user to save their game before closing.
 """
 
+import os
 import json
 import functools
 
@@ -49,6 +50,13 @@ class SceneHandler(actionsequencer.ActionSequencer):
     
     def __repr__(self):
         return "SceneHandler(scene_object=%s)" % str(self.scene)
+    
+    def make_or_load_scene(self, scene_name):
+        p = os.path.join(self.handler.save_path, 'autosave', scene_name)
+        if os.path.exists(p + '.json'):
+            return scene.Scene(scene_name, self, self.handler.ui, load_path=p)
+        else:
+            return scene.Scene(scene_name, self, self.handler.ui)
 
     # Called by a scene to load a new scene.
     # If dir is specified a sliding transition is used
@@ -65,7 +73,7 @@ class SceneHandler(actionsequencer.ActionSequencer):
             elif direction == NONE:
                 gamestate.event_manager.set_scene(None)
                 self.scene.exit()
-                new_scene = scene.Scene(next_scene, self, self.handler.ui)
+                new_scene = self.make_or_load_scene(make_or_load_scene)
                 new_scene.transition_from(self.scene.name)
                 self.set_scenes(new_scene)
                 gamestate.event_manager.set_scene(self.scene)
@@ -76,7 +84,7 @@ class SceneHandler(actionsequencer.ActionSequencer):
     def slide_to(self, next_scene, direction=RIGHT):
         InterpClass = interpolator.LinearInterpolator
         gamestate.event_manager.set_scene(None)
-        slide_scene = scene.Scene(next_scene, self, self.handler.ui)
+        slide_scene = self.make_or_load_scene(next_scene)
         slide_scene.pause(show_sprites=False)
         self.set_scenes(self.scene, slide_scene)
         # Determine offset
@@ -138,7 +146,7 @@ class SceneHandler(actionsequencer.ActionSequencer):
             # Remove scene
             self.handler.save()
             self.scene.exit()
-            new_scene = scene.Scene(next_scene, self, self.handler.ui)
+            new_scene = self.make_or_load_scene(next_scene)
             new_scene.transition_from(self.scene.name)
             new_scene.pause(show_sprites=False)
             

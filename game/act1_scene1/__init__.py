@@ -44,7 +44,7 @@ def init(fresh=False):
         myscene.interaction_enabled = True
 
 def transition_from(old_scene):
-    if old_scene == 'act_scene2':
+    if old_scene == 'act1_scene2':
         myscene.interaction_enabled = True
         myscene.actors['main'].walkpath_point = 'transition_left'
         myscene.actors['main'].sprite.position = myscene.walkpath.points['transition_left']
