@@ -34,8 +34,6 @@ class Actor(actionsequencer.ActionSequencer):
         if self.scene and batch is None:
             batch = self.scene.batch
         
-        print '---', self.name
-        print Actor.images[self.name]
         self.sprite = pyglet.sprite.Sprite(Actor.images[self.name][self.current_state], batch=batch)
         
         try:
