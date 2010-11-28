@@ -25,12 +25,12 @@ comment:
     - main: I am Inga! What is your name?
     - shamus: I'm Shamus! Nice to meet you!
     - choice:
-        What will you do in Space France?:
+        What will you do on Planet Deux?:
             goto: future
         
 
 future:
-    - main: What will you do in Space France?
+    - main: What will you do on Planet Deux?
     - shamus: Me and Potato are going to see everything! We're going to build a tree house near a beach and make friends with monkeys!
     - main: Are your parents coming too?
 

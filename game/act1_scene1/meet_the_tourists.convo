@@ -28,7 +28,7 @@ ask_reading:
     - goto: start
 
 ask_direction:
-    - tourist: It's our 10th wedding anniversary! Don got us tickets to Space France. It's going to be SO romantic!
+    - tourist: It's our 10th wedding anniversary! Don got us tickets to Planet Deux. It's going to be SO romantic!
     - tourist: Best vacation I could afford! I'll have so many great pictures!
     - tourist: Right. Don put us in this LOVELY economy-class car.
     - tourist: Come on Nicole, it's fun! Say, would you mind taking our picture?
