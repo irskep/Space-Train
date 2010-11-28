@@ -5,7 +5,7 @@ TODO:
 - Preload conversations (make sure to *copy*, not *reference* convo_info)
 """
 
-import pyglet, yaml, collections, functools, re
+import pyglet, yaml, collections, functools, re, random
 
 import actor, gamestate
 
@@ -16,6 +16,24 @@ nonedict = functools.partial(collections.defaultdict, lambda: None)
 
 # Match 'give:' syntax
 parens_match = re.compile(r'(?P<name>[^(]+\S+)\s+\((?P<id>[^)]+)\)')
+
+colors = {
+    'main': (255,201,215,255)
+}
+
+more_colors = [
+    (229,201,255,255),
+    (201,206,255,255),
+    (201,249,255,255),
+    (201,255,211,255),
+    (255,255,201,255),
+    (255,228,201,255),
+    (255,201,201,255),
+]
+
+random.shuffle(more_colors)
+
+next_color = 0
 
 class Conversation(object):
     """
@@ -127,6 +145,7 @@ class Conversation(object):
         self.convo_position = 0
         self.background = background
         self.convo_label = None
+        self.text_color = (255,255,255,255)
     
     def delete(self):
         pass
@@ -163,8 +182,9 @@ class Conversation(object):
                 rect_args = (x - (w / 2) - 5,  y - 5,
                              x + (w / 2) + 5,  y + h + 5)
 
-            draw.rect(*rect_args)
             draw.set_color(0,0,0,1)
+            draw.rect(*rect_args)
+            draw.set_color(*map(lambda c:c/255.0, self.text_color))
             draw.rect_outline(*rect_args)
             self.convo_label.draw()
     
@@ -343,8 +363,16 @@ class Conversation(object):
         if isinstance(arg, str):
             act.update_state(self.animations['speaking'][actor_id])
             self.clear_speech_bubble()
+            
+            if not colors.has_key(actor_id):
+                global next_color
+                colors[actor_id] = more_colors[next_color]
+                next_color += 1
+            self.text_color = colors[actor_id]
+            
             if len(arg) > 47:
-                self.convo_label = pyglet.text.Label(arg, color = (0,0,0,255), font_size=12, 
+                self.convo_label = pyglet.text.Label(arg, color=self.text_color, font_size=12, 
+                                                     font_name=['Verdana', 'Helvetica'],
                                                      anchor_x='center', anchor_y='bottom',
                                                      x=act.sprite.x,
                                                      y=act.sprite.y + 20 + \
@@ -352,7 +380,8 @@ class Conversation(object):
                                                         act.current_image().anchor_y,
                                                      multiline=True, width=400)
             else:
-                self.convo_label = pyglet.text.Label(arg, color = (0,0,0,255), font_size=12, 
+                self.convo_label = pyglet.text.Label(arg, color=self.text_color, font_size=12, 
+                                                     font_name=['Verdana', 'Helvetica'],
                                                      anchor_x='center', anchor_y='bottom',
                                                      x=act.sprite.x,
                                                      y=act.sprite.y + 20 + \
