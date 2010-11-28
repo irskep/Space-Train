@@ -40,6 +40,7 @@ def init(fresh=False):
     
         spcbux = myscene.new_actor('space_bucks', 'space_bucks')
         myscene.ui.inventory.put_item(spcbux)
+        
     else:
         myscene.interaction_enabled = True
 
@@ -123,15 +124,17 @@ def sneelock_walk(actor, point):
     
 def potato_roll(actor, point):
     point_match = re.search(r"potato_(\d+)", point)
-    if point_match and False: #disabled
+    if point_match:
         current_index = int(point_match.group(1))
         next_index = current_index + 1
-        if current_index > 40:
-            current_index = 1
+        if next_index > 40:
+            next_index = 1
         next_point = "potato_%d" % next_index
         print "Potato rolling from %s to %s" % (point, next_point)
-        actor.prepare_walkpath_move(next_index)
-        actor.next_action()
+        #actor.prepare_walkpath_move(next_point)
+        pyglet.clock.schedule_once(util.make_dt_wrapper(actor.prepare_walkpath_move), 0, next_point)
+        #actor.next_action()
+        pyglet.clock.schedule_once(util.make_dt_wrapper(actor.next_action), 0)
 
 def end_conversation(convo_name):
     if convo_name == "introduction":
@@ -156,6 +159,7 @@ def end_conversation(convo_name):
         
     if convo_name == "hamster_from_a_baby":
         potato = myscene.new_actor('potato', 'potato')
+        potato.walk_speed = 200.0
         potato.walkpath_point = "potato_1"
         potato.prepare_walkpath_move("potato_2")
         potato.next_action()
