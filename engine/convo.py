@@ -372,6 +372,7 @@ class Conversation(object):
             
             if len(arg) > 47:
                 self.convo_label = pyglet.text.Label(arg, color=self.text_color, font_size=12, 
+                                                     font_name=['Verdana', 'Helvetica'],
                                                      anchor_x='center', anchor_y='bottom',
                                                      x=act.sprite.x,
                                                      y=act.sprite.y + 20 + \
@@ -380,6 +381,7 @@ class Conversation(object):
                                                      multiline=True, width=400)
             else:
                 self.convo_label = pyglet.text.Label(arg, color=self.text_color, font_size=12, 
+                                                     font_name=['Verdana', 'Helvetica'],
                                                      anchor_x='center', anchor_y='bottom',
                                                      x=act.sprite.x,
                                                      y=act.sprite.y + 20 + \

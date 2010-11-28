@@ -28,7 +28,6 @@ class CAM(object):
     
     # Init
     def __init__(self, actions, x, y, ui):
-        print "Drawing CAM at (%d, %d)" % (x, y)
         self.visible = False
         self.actions = actions
         self.x = x
@@ -57,8 +56,9 @@ class CAM(object):
                                                                       streaming=False)
             self.buttons.append((rect, callback))
             self.labels.add(pyglet.text.Label("%d: %s" % (i+1, text), multiline=True,
+                                    font_name=['Synchro LET', 'Verdana', 'Helvetica'],
                                     x=rect[0], y=rect[1], width=rect[2], height=rect[3],
-                                    font_size=10, anchor_y="top",
+                                    font_size=12, anchor_y="top",
                                     batch=self.batch, color=(255,255,255,255)))
         
         self.set_visible(True)
