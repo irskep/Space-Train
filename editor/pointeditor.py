@@ -96,6 +96,7 @@ class PointEditor(abstracteditor.AbstractEditor):
         self.placing_point = True
     
     def delete_point(self, button=None):
+        self.selected_item = None
         def point_deleter(x, y):
             identifier = self.scene.walkpath.path_point_near_point((x, y))
             self.scene.walkpath.remove_point(identifier)
