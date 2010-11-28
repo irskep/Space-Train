@@ -73,7 +73,7 @@ class SceneHandler(actionsequencer.ActionSequencer):
             elif direction == NONE:
                 gamestate.event_manager.set_scene(None)
                 self.scene.exit()
-                new_scene = self.make_or_load_scene(make_or_load_scene)
+                new_scene = self.make_or_load_scene(next_scene)
                 new_scene.transition_from(self.scene.name)
                 self.set_scenes(new_scene)
                 gamestate.event_manager.set_scene(self.scene)
