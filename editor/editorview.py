@@ -58,13 +58,13 @@ class EditorView(object):
     def check_camera_keys(self):
         c = self.scene.camera
         if gamestate.keys[pyglet.window.key.LEFT]:
-            c.set_target(c.target[0]-10, c.target[1])
+            c.position = (c.position[0]-10, c.position[1])
         if gamestate.keys[pyglet.window.key.RIGHT]:
-            c.set_target(c.target[0]+10, c.target[1])
+            c.position = (c.position[0]+10, c.position[1])
         if gamestate.keys[pyglet.window.key.DOWN]:
-            c.set_target(c.target[0], c.target[1]-10)
+            c.position = (c.position[0], c.position[1]-10)
         if gamestate.keys[pyglet.window.key.UP]:
-            c.set_target(c.target[0], c.target[1]+10)
+            c.position = (c.position[0], c.position[1]+10)
     
     def on_key_press(self, symbol, modifiers):
         if modifiers & (pyglet.window.key.MOD_ACCEL):
