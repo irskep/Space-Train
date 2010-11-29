@@ -2,56 +2,75 @@ import pyglet
 import functools
 
 from engine import actor
-from engine.interpolator import FadeInterpolator
+from engine.interpolator import FadeInterpolator, LinearInterpolator
 from engine.gamestate import norm_w, norm_h
 
 
 # myscene is set by scene.py
 myscene = None
 
+wait_time = lambda text: max(len(text)*0.015, 3.0)+3.0
+
 def init(fresh=True):
-    sequence = (
-        ("It's the year 3030", 0.05, 0.5, 0.5),
-        # ("And here at the Corporate Institutional Bank of Time", 0.04, 0.5, 0.5),
-        # ("We find ourselves reflecting", 0.05, 0.5, 0.5),
-        # ("Finding out, that in fact, we came back", 0.04, 0.5, 0.5),
-        # ("We were always coming back...", 0.04, 0.5, 0.5),
-    )
-    pyglet.clock.schedule_once(show_sequence, 2.0, sequence)
+    pyglet.clock.schedule_once(begin, 2.0)
+    
+    # t = show_sequence(sequence)
+    myscene.ui.inventory.visible = False
 
-def show_sequence(dt=0, sequence=()):
-    sequence_item(sequence, 0, end_sequence)
+def begin(dt=0):
+    t = spawn_text("I knew I was going to take the wrong train, so I left early.\n" + 
+                   "--Yogi Berra (1925-2014)", 0.05, 0.5, 0.75)
+    
+    pyglet.clock.schedule_once(show_letter, t+2.0)
 
-def end_sequence():
+def show_letter(dt=0):
+    new_actor = myscene.new_actor('intro_billboards', 'note', attrs=dict(x=640, y=360, opacity=0))
+    
+    def fade_in():
+        interp = LinearInterpolator(new_actor.sprite, 'opacity', start=0, end=255, name="fade", duration=3.0)
+        myscene.interp.add_interpolator(interp)
+    
+    def fade_out(dt=0):
+        interp = LinearInterpolator(new_actor.sprite, 'opacity', start=255, end=0, name="fade", duration=3.0)
+        myscene.interp.add_interpolator(interp)
+    
+    fade_in()
+
+def show_sequence(sequence=(), t=2.0):
+    for args in sequence:
+        pyglet.clock.schedule_once(functools.partial(spawn_text, *args), t)
+        t += wait_time(args[0])
+    pyglet.clock.schedule_once(end_sequence, t)
+    return t
+
+def end_sequence(dt=0):
     myscene.handler.notify('act1_scene1')
 
-def sequence_item(sequence, item, final_callback, l=None, _=None):
-    if l:
-        l.delete()
-    if item >= len(sequence):
-        final_callback()
-        return
-    text, size, x, y = sequence[item]
-    l = pyglet.text.Label(text, font_name='Helvetica', font_size=norm_h*size, 
-                          anchor_x='center', anchor_y='baseline', batch=myscene.batch,
+def spawn_text(text, size, x, y, dt=0):
+    l = pyglet.text.Label(text, font_name=['Verdana', 'Helvetica'], font_size=norm_h*size, 
+                          anchor_x='center', anchor_y='center', batch=myscene.batch,
                           color=(255, 255, 255, 255), x=norm_w*x, y=norm_h*y)
-    interp = FadeInterpolator(l, 'color', start=0, end=255, name="fade", duration=3.0, 
-                                done_function=functools.partial(end_sequence_item, sequence, 
-                                                                 item, final_callback, l))
-    myscene.interp.add_interpolator(interp)
-
-def end_sequence_item(sequence, item, final_callback, l, _=None):
-    interp = FadeInterpolator(l, 'color', start=255, end=0, name="fade", duration=3.0, 
-                                done_function=functools.partial(sequence_item, sequence, item+1,
-                                                                 final_callback, l))
-    myscene.interp.add_interpolator(interp)
+    if l.content_width > 960:
+        l.delete()
+        l = pyglet.text.Label(text, font_name=['Courier', 'Helvetica'], font_size=norm_h*size, 
+                              anchor_x='center', anchor_y='center', batch=myscene.batch,
+                              color=(255, 255, 255, 255), x=norm_w*x, y=norm_h*y,
+                              multiline=True, width=960)
+    def start_text():
+        interp = FadeInterpolator(l, 'color', start=0, end=255, name="fade", duration=2.0)
+        myscene.interp.add_interpolator(interp)
+    
+    def end_text(dt=0):
+        interp = FadeInterpolator(l, 'color', start=255, end=0, name="fade", duration=2.0)
+        myscene.interp.add_interpolator(interp)
+    
+    start_text()
+    pyglet.clock.schedule_once(end_text, wait_time(text)+3.0)
+    return wait_time(text)+3
 
 def handle_event(event, *args):
     print "Handled", event, "with", args
 
 def actor_clicked(clicked_actor):
-    print "Clicked on %s" % clicked_actor.name
-    if clicked_actor.identifier == "logo":
+    if clicked_actor.identifier == "note":
         myscene.handler.notify("act1_scene1")
-        interp = LinearInterpolator(clicked_actor.sprite, 'rotation', 0.0, 360, speed=500.0)
-        myscene.add_interpolator(interp)
