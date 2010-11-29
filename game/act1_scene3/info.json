@@ -1,0 +1,273 @@
+{
+    "environment": "act1_scene3", 
+    "camera_points": {}, 
+    "actors": {
+        "russian_lamp_3": {
+            "y": 569, 
+            "x": 1053, 
+            "walk_speed": 400.0, 
+            "name": "russian_lamp", 
+            "start_state": "LightOff"
+        }, 
+        "russian_lamp_2": {
+            "y": 569, 
+            "x": 1999, 
+            "walk_speed": 400.0, 
+            "name": "russian_lamp", 
+            "start_state": "LightOff"
+        }, 
+        "russian_lamp_1": {
+            "y": 569, 
+            "x": 1509, 
+            "walk_speed": 400.0, 
+            "name": "russian_lamp", 
+            "start_state": "LightOff"
+        }, 
+        "seat_8": {
+            "y": 180, 
+            "x": 2130, 
+            "walk_speed": 400.0, 
+            "name": "seat", 
+            "start_state": "couch"
+        }, 
+        "luggage_1": {
+            "y": -18, 
+            "x": 2433, 
+            "walk_speed": 400.0, 
+            "name": "luggage", 
+            "start_state": "luggage"
+        }, 
+        "russian_lamp_4": {
+            "y": 569, 
+            "x": 565, 
+            "walk_speed": 400.0, 
+            "name": "russian_lamp", 
+            "start_state": "LightOff"
+        }, 
+        "seat_4": {
+            "y": 166, 
+            "x": 1531, 
+            "walk_speed": 400.0, 
+            "name": "seat", 
+            "start_state": "chair_left"
+        }, 
+        "seat_5": {
+            "y": 180, 
+            "x": 783, 
+            "walk_speed": 400.0, 
+            "name": "seat", 
+            "start_state": "couch"
+        }, 
+        "seat_6": {
+            "y": 180, 
+            "x": 421, 
+            "walk_speed": 400.0, 
+            "name": "seat", 
+            "start_state": "couch"
+        }, 
+        "seat_7": {
+            "y": 180, 
+            "x": 1768, 
+            "walk_speed": 400.0, 
+            "name": "seat", 
+            "start_state": "couch"
+        }, 
+        "seat_1": {
+            "y": 185, 
+            "x": 1083, 
+            "walk_speed": 400.0, 
+            "name": "seat", 
+            "start_state": "chair"
+        }, 
+        "seat_2": {
+            "y": 166, 
+            "x": 1042, 
+            "walk_speed": 400.0, 
+            "name": "seat", 
+            "start_state": "chair"
+        }, 
+        "seat_3": {
+            "y": 185, 
+            "x": 1490, 
+            "walk_speed": 400.0, 
+            "name": "seat", 
+            "start_state": "chair_left"
+        }, 
+        "hipster_liam": {
+            "y": 151, 
+            "x": 2029, 
+            "walk_speed": 400.0, 
+            "name": "hipster_liam", 
+            "start_state": "hipster_liam"
+        }, 
+        "russian_table_full_1": {
+            "scale": 0.8, 
+            "name": "russian_table_full", 
+            "walk_speed": 400.0, 
+            "y": 165, 
+            "x": 1292, 
+            "start_state": "Table"
+        }, 
+        "main": {
+            "walk_speed": 400.0, 
+            "walkpath_point": "point_1", 
+            "name": "inga", 
+            "start_state": "stand_front"
+        }, 
+        "monitor_2": {
+            "y": 416, 
+            "x": 561, 
+            "walk_speed": 400.0, 
+            "name": "monitor", 
+            "start_state": "StaticTV"
+        }, 
+        "monitor_1": {
+            "y": 416, 
+            "x": 1998, 
+            "walk_speed": 400.0, 
+            "name": "monitor", 
+            "start_state": "StaticTV"
+        }, 
+        "hipster_amanda": {
+            "walk_speed": 400.0, 
+            "walkpath_point": "amanda_1", 
+            "name": "hipster_amanda", 
+            "start_state": "hipster_amanda"
+        }, 
+        "hipster_fran": {
+            "y": 150, 
+            "x": 2277, 
+            "walk_speed": 400.0, 
+            "name": "hipster_fran", 
+            "start_state": "hipster_fran"
+        }, 
+        "outlet_wire_1": {
+            "y": 195, 
+            "x": 1654, 
+            "walk_speed": 400.0, 
+            "name": "outlet_wire", 
+            "start_state": "outlet_wire"
+        }, 
+        "outlet_wire_2": {
+            "y": 195, 
+            "x": 963, 
+            "walk_speed": 400.0, 
+            "name": "outlet_wire", 
+            "start_state": "outlet_wire"
+        }
+    }, 
+    "walkpath": {
+        "points": {
+            "amanda_2": {
+                "y": 100, 
+                "x": 2174
+            }, 
+            "amanda_1": {
+                "y": 150, 
+                "x": 2159
+            }, 
+            "point_8": {
+                "y": 100, 
+                "x": 175
+            }, 
+            "point_4": {
+                "y": 100, 
+                "x": 1826
+            }, 
+            "point_5": {
+                "y": 101, 
+                "x": 1478
+            }, 
+            "point_6": {
+                "y": 100, 
+                "x": 990
+            }, 
+            "point_7": {
+                "y": 101, 
+                "x": 569
+            }, 
+            "point_1": {
+                "y": 100, 
+                "x": 2622
+            }, 
+            "point_2": {
+                "y": 100, 
+                "x": 2347
+            }, 
+            "point_3": {
+                "y": 100, 
+                "x": 2106
+            }
+        }, 
+        "edges": [
+            {
+                "a": "point_4", 
+                "b": "point_5"
+            }, 
+            {
+                "a": "point_7", 
+                "b": "point_6"
+            }, 
+            {
+                "a": "point_8", 
+                "b": "point_7"
+            }, 
+            {
+                "a": "point_7", 
+                "b": "point_8"
+            }, 
+            {
+                "a": "point_1", 
+                "b": "point_1"
+            }, 
+            {
+                "a": "point_1", 
+                "b": "point_2"
+            }, 
+            {
+                "a": "point_5", 
+                "b": "point_4"
+            }, 
+            {
+                "a": "point_2", 
+                "b": "point_1"
+            }, 
+            {
+                "a": "point_6", 
+                "b": "point_7"
+            }, 
+            {
+                "a": "point_5", 
+                "b": "point_6"
+            }, 
+            {
+                "a": "point_3", 
+                "b": "point_4"
+            }, 
+            {
+                "a": "point_6", 
+                "b": "point_5"
+            }, 
+            {
+                "a": "amanda_1", 
+                "b": "amanda_2"
+            }, 
+            {
+                "a": "amanda_2", 
+                "b": "amanda_1"
+            }, 
+            {
+                "a": "point_2", 
+                "b": "point_3"
+            }, 
+            {
+                "a": "point_3", 
+                "b": "point_2"
+            }, 
+            {
+                "a": "point_4", 
+                "b": "point_3"
+            }
+        ]
+    }
+}

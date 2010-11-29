@@ -74,14 +74,14 @@ def inga_walk(actor, point):
     if re.match(r"seat_\d+", point) and do_sit:
         myscene.actors['main'].update_state("sit")
         do_sit = False
-            
+
 def inga_sit(seat):
     global do_sit
     inga = myscene.actors['main']
     inga.prepare_walkpath_move(seat.identifier)
     inga.next_action()
     do_sit = True
-    
+
 #TODO: Find a more pythonic way to do some of this...
 def levity_walk(actor, point):
     print "Walk handler called..."
@@ -165,7 +165,7 @@ def end_conversation(convo_name):
         myscene.actors['sneelock'].next_action()
         myscene.handler.handler.save()
         
-    if convo_name == "hamster_from_a_baby":
+    if convo_name == "a_young_irish_boy" and myscene.handler.handler.game_variables['hamster_dropped']:
         potato = myscene.new_actor('potato', 'potato')
         potato.walk_speed = 200.0
         potato.walkpath_point = "potato_1"

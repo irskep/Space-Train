@@ -9,7 +9,8 @@ from engine.gamestate import norm_w, norm_h
 # myscene is set by scene.py
 myscene = None
 
-wait_time = lambda text: max(len(text)*0.015, 3.0)+3.0
+# wait_time = lambda text: max(len(text)*0.015, 3.0)+3.0
+wait_time = lambda text: 1.0
 
 def init(fresh=True):
     pyglet.clock.schedule_once(begin, 2.0)

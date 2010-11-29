@@ -8,7 +8,6 @@ def shortest_path(G, start, end):
 
     q = [(0, start, ())]  # Heap of (cost, path_head, path_rest).
     visited = set()       # Visited vertices.
-
        
     #try:
     while True:

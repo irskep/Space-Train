@@ -7,6 +7,7 @@ from engine import gamestate, util
 from editor import editorview
 
 # pyglet.options['debug_gl'] = False
+pyglet.options['graphics_vbo'] = False
 
 class AdventureMakerWindow(pyglet.window.Window):
     def __init__(self):
