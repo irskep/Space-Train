@@ -18,6 +18,9 @@ def init(fresh=True):
     # t = show_sequence(sequence)
     myscene.ui.inventory.visible = False
 
+def transition_from(old_scene):
+    pass
+    
 def begin(dt=0):
     t = spawn_text("I knew I was going to take the wrong train, so I left early.\n" + 
                    "--Yogi Berra (1925-2014)", 0.05, 0.5, 0.75)
