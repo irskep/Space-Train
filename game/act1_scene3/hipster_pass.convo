@@ -1,0 +1,59 @@
+﻿# Initialization
+
+at_rest:
+    main: stand_left
+    hipster_liam: hipster_liam
+    hipster_amanda: hipster_amanda
+    hipster_fran: hipster_fran
+
+speaking:
+    main: talk_left
+    hipster_liam: talk_front
+    hipster_amanda: talk_front
+    hipster_fran: talk_front
+    
+variables:
+    knows_about_baron: false
+
+# States
+
+start:
+    - hipster_fran: What is she doing here?
+    - hipster_amanda: Hey, you can't come in!
+    - hipster_liam: Ja. This train is reserved.
+    - choice:
+        Comment on the music:
+            goto: comment
+            
+comment:
+    - main: I think I recognize this music...
+    - hipster_fran: Pssh. Like, no. You like, totally don't understand our generation.
+    - hipster_liam: Ja. I bet you haven't even heard of the band Rampant Lizards.
+    - hipster_amanda: Or Lieutenant McSpazz's Shoelace Extravaganza.
+    - hipster_fran: Or the best band ever, Deep Couch.
+    - main: This is Deep Couch's music!
+    - hipster_liam: Ja. They broke up like, fifty years ago.
+    - hipster_amanda: Sold thirteen records and played one show.
+    - hipster_fran: We have ein original record!
+    - main: You are all so young...
+    - main: Too young to remember how Deep Couch was when they formed.
+    - update_animations:
+        at_rest:
+            hipster_liam: surprised
+            hipster_amanda: surprised
+            hipster_fran: surprised
+    - main: You see, the members of Deep Couch were my cousins. Musical geniuses, all of them.
+    - main: My uncle converted his textile factory to produce records, but it burned down after only 13 were made.
+    - main: Such a pity that after their first show, the lead singer married a Hawaiian dancer and moved away.
+    - update_animations:
+        at_rest:
+            hipster_liam: hipster_liam
+            hipster_amanda: hipster_amanda
+            hipster_fran: hipster_fran
+    - hipster_amanda: ...wow...
+    - hipster_fran: We are so sorry for doubting you!
+    - update_globals:
+        deep_couch: True
+
+end:
+    - hipster_liam: Get out of here!
