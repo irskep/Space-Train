@@ -31,6 +31,8 @@ def walk_from_right():
         
 def end_conversation(convo_name):
     if convo_name == "hipster_pass":
+        myscene.actors['hipster_amanda'].prepare_walkpath_move('amanda_1')
+        myscene.actors['hipster_amanda'].next_action()
         if not myscene.handler.handler.game_variables['deep_couch']:
             myscene.actors['main'].prepare_walkpath_move('point_1')
             myscene.actors['main'].next_action()
@@ -39,11 +41,16 @@ def end_conversation(convo_name):
             
 def inga_walk(actor, point):
     if point == "point_2" and not myscene.handler.handler.game_variables['deep_couch']:
+        myscene.actors['hipster_amanda'].prepare_walkpath_move('amanda_2')
+        myscene.actors['hipster_amanda'].next_action()
         myscene.begin_conversation("hipster_pass")
         
 walk_handlers = {
     'main': inga_walk
 }
+
+def transition_from(old_scene):
+    pass
 
 def handle_event(event, *args):
     if event == WALK_PATH_COMPLETED:
