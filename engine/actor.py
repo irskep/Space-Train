@@ -70,8 +70,8 @@ class Actor(actionsequencer.ActionSequencer):
     def icon_covers_point(self, x, y):
         min_x = self.icon.x - self.icon.image.anchor_x
         min_y = self.icon.y - self.icon.image.anchor_y
-        max_x = self.icon.x - self.icon.image.anchor_x + self.icon.width*self.icon.scale
-        max_y = self.icon.y - self.icon.image.anchor_y + self.icon.height*self.icon.scale
+        max_x = self.icon.x - self.icon.image.anchor_x + self.icon.width
+        max_y = self.icon.y - self.icon.image.anchor_y + self.icon.height
         return min_x <= x <= max_x and min_y <= y <= max_y
             
     def covers_visible_point(self, x, y):
