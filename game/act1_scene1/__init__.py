@@ -66,14 +66,14 @@ def inga_walk(actor, point):
     if re.match(r"seat_\d+", point) and do_sit:
         myscene.actors['main'].update_state("sit")
         do_sit = False
-            
+
 def inga_sit(seat):
     global do_sit
     inga = myscene.actors['main']
     inga.prepare_walkpath_move(seat.identifier)
     inga.next_action()
     do_sit = True
-    
+
 #TODO: Find a more pythonic way to do some of this...
 def levity_walk(actor, point):
     print "Walk handler called..."

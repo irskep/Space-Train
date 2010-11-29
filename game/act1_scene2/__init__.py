@@ -7,7 +7,6 @@ from engine.interpolator import PulseInterpolator, LinearInterpolator, Linear2DI
 from engine.util.const import WALK_PATH_COMPLETED
 from engine import ui
 from engine import cam
-from engine import camera
 from engine import gamestate
 from engine import convo
 from engine import util

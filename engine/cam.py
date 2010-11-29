@@ -46,7 +46,6 @@ class CAM(object):
         
         rects = [(90, 138, 330, 40), (455, 130, 380, 40), (880, 138, 330, 40), 
                  (90, 70, 330, 40),  (455, 70, 380, 40), (880, 70, 330, 40)]
-        print rects
         
         self.sound_for_callback = {}
         
@@ -106,7 +105,6 @@ class CAM(object):
     # Note that this function's behaviour is undefined when buttons overlap
     # this is intended but should later be changed to return the topmost button
     def button_under(self, x, y):
-        print x, y
         for rect, callback in self.buttons:
             if rect[0] < x < rect[0]+rect[2] and rect[1]-rect[3] < y < rect[1]:
                 return callback
