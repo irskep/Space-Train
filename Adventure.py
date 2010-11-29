@@ -97,6 +97,9 @@ class AdventureWindow(pyglet.window.Window):
         self.on_draw()
         self.flip()
         i = 0
+        for s in ['options_appear.wav', 'select_1.wav', 'select_2.wav', 'select_3.wav', 
+                  'select_4.wav', 'select_5.wav', 'select_6.wav', 'give.wav', 'take.wav']:
+            pyglet.resource.media('sound/%s' % s, streaming=False)
         for item in util.preload:
             try:
                 util.load_image(item)

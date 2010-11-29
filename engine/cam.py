@@ -28,6 +28,7 @@ class CAM(object):
     
     # Init
     def __init__(self, actions, x, y, ui):
+        self.vis_sound = pyglet.resource.media('sound/options_appear.wav', streaming=False)
         self.visible = False
         self.actions = actions
         self.x = x
@@ -66,6 +67,7 @@ class CAM(object):
     # Make this into a property instead. I can't remember how right now. --Steve
     def set_visible(self, visible):
         if visible:
+            self.vis_sound.play()
             gamestate.event_manager.set_cam(self)
         else:
             gamestate.event_manager.set_cam(None)
