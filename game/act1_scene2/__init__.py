@@ -19,6 +19,7 @@ def init(fresh=False):
     myscene.handler.handler.game_variables['no_groupies_intro'] = False
     myscene.handler.handler.game_variables['guards_appeased'] = False
     myscene.handler.handler.game_variables['groupies_blocked'] = False
+        
     myscene.play_music('bach', fade=False)
     if fresh:
         walk_from_right()
@@ -41,7 +42,7 @@ def begin_smoke_conv():
 def queue_need_a_smoke():
     pyglet.clock.schedule_once(util.make_dt_wrapper(start_cutscene), 0)
     interp = Linear2DInterpolator(myscene.camera, 'position', (0,0), speed=400.0, done_function=util.make_dt_wrapper(begin_smoke_conv))
-    pyglet.clock.schedule_once(util.make_dt_wrapper(myscene.add_interpolator), 5, interp)
+    pyglet.clock.schedule_once(util.make_dt_wrapper(myscene.add_interpolator), 3, interp)
     
 def start_cutscene():
     myscene.interaction_enabled = False
@@ -68,14 +69,18 @@ def end_conversation(convo_name):
             interp = Linear2DInterpolator(myscene.camera, 'position', (myscene.actors['main'].abs_position_x(), myscene.actors['main'].abs_position_y()), speed=400.0, done_function=util.make_dt_wrapper(end_cutscene))
             pyglet.clock.schedule_once(util.make_dt_wrapper(myscene.add_interpolator), 1, interp)
     if convo_name == "a_convenient_opening":
-        pass
-        #add potato and make him roll around a bit before leaving
+        myscene.interaction_enabled = False
+        potato = myscene.actors['potato']
+        potato.walk_speed = 200.0
+        potato.walkpath_point = "potato_1"
+        potato.prepare_walkpath_move("potato_9")
+        potato.next_action()
             
 def inga_walk(actor, point):
     mikhail = myscene.actors['mikhail']
     moritz = myscene.actors['moritz']
     if point == "point_2":
-        if myscene.handler.handler.game_variables['groupies_blocked']:
+        if myscene.handler.handler.game_variables['groupies_blocked'] and myscene.handler.handler.game_variables['potato_rolling']:
             myscene.begin_conversation("a_convenient_opening")
             myscene.handler.handler.game_variables['groupies_blocked'] = False
     if point == "inga_attempt_stanislov":
@@ -90,8 +95,17 @@ def inga_walk(actor, point):
         else:
             myscene.begin_conversation("no_groupies")
         
+def potato_roll(actor, point):
+    if point == "potato_15":
+        myscene.interaction_enabled = True
+    if point == "potato_9":
+        myscene.actors['potato'].update_state("run_right")
+        myscene.actors['potato'].prepare_walkpath_move("potato_15")
+        myscene.actors['potato'].next_action()
+        
 walk_handlers = {
-    'main': inga_walk
+    'main': inga_walk,
+    'potato': potato_roll
 }
 
 def handle_event(event, *args):

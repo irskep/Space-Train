@@ -31,6 +31,7 @@ def init(fresh=False):
     myscene.play_background('Train_Loop1', fade=True)
     
     myscene.handler.handler.game_variables['temperature'] = 72
+    myscene.handler.handler.game_variables['potato_rolling'] = False
     
     if fresh:
         print 'fresh'
@@ -51,6 +52,13 @@ def transition_from(old_scene):
         myscene.actors['main'].sprite.position = myscene.walkpath.points['transition_left']
         myscene.actors['main'].prepare_walkpath_move('inga_attempt_silver_class')
         myscene.actors['main'].next_action()
+        
+        if myscene.handler.handler.game_variables['potato_rolling']:
+            myscene.actors['potato'].walkpath_point = "potato_1"
+            myscene.actors['potato'].prepare_walkpath_move("potato_2")
+            myscene.actors['potato'].next_action()
+        
+        levity_walk(myscene.actors['levity'], myscene.actors['levity'].walkpath_point)
 
 def inga_walk(actor, point):
     global do_sit
@@ -163,6 +171,7 @@ def end_conversation(convo_name):
         potato.walkpath_point = "potato_1"
         potato.prepare_walkpath_move("potato_2")
         potato.next_action()
+        myscene.handler.handler.game_variables['potato_rolling'] = True
     
     if convo_name == "thermostat_discover":
         print myscene.handler.handler.game_variables['temperature']

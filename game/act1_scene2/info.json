@@ -167,6 +167,12 @@
             "name": "moritz", 
             "start_state": "stand_front"
         }, 
+        "potato": {
+            "walk_speed": 400.0, 
+            "walkpath_point": "potato_1", 
+            "name": "potato", 
+            "start_state": "run"
+        }, 
         "outlet_wire_1": {
             "y": 179, 
             "x": 1859, 
@@ -177,25 +183,85 @@
     }, 
     "walkpath": {
         "points": {
-            "moritz_guard": {
-                "y": 104, 
-                "x": 870
+            "potato_8": {
+                "y": 199, 
+                "x": 1890
+            }, 
+            "potato_9": {
+                "y": 174, 
+                "x": 1866
+            }, 
+            "potato_4": {
+                "y": 125, 
+                "x": 2303
             }, 
             "moritz_idle": {
                 "y": 34, 
                 "x": 506
             }, 
+            "potato_6": {
+                "y": 194, 
+                "x": 2084
+            }, 
+            "potato_7": {
+                "y": 202, 
+                "x": 1977
+            }, 
+            "potato_1": {
+                "y": 143, 
+                "x": 2755
+            }, 
+            "potato_2": {
+                "y": 119, 
+                "x": 2553
+            }, 
+            "potato_3": {
+                "y": 137, 
+                "x": 2403
+            }, 
             "mikhail_guard": {
                 "y": 151, 
                 "x": 898
+            }, 
+            "moritz_guard": {
+                "y": 104, 
+                "x": 870
+            }, 
+            "potato_15": {
+                "y": 124, 
+                "x": 2753
+            }, 
+            "mikhail_idle": {
+                "y": 31, 
+                "x": 660
+            }, 
+            "potato_5": {
+                "y": 149, 
+                "x": 2163
+            }, 
+            "potato_14": {
+                "y": 137, 
+                "x": 2503
             }, 
             "inga_attempt_stanislov": {
                 "y": 130, 
                 "x": 964
             }, 
-            "mikhail_idle": {
-                "y": 31, 
-                "x": 660
+            "potato_12": {
+                "y": 110, 
+                "x": 2165
+            }, 
+            "potato_13": {
+                "y": 146, 
+                "x": 2316
+            }, 
+            "potato_10": {
+                "y": 143, 
+                "x": 1889
+            }, 
+            "potato_11": {
+                "y": 114, 
+                "x": 2002
             }, 
             "point_4": {
                 "y": 130, 
@@ -220,8 +286,8 @@
                 "b": "inga_attempt_stanislov"
             }, 
             {
-                "a": "moritz_guard", 
-                "b": "moritz_idle"
+                "a": "potato_6", 
+                "b": "potato_7"
             }, 
             {
                 "a": "point_1", 
@@ -232,36 +298,92 @@
                 "b": "point_1"
             }, 
             {
-                "a": "inga_attempt_stanislov", 
-                "b": "point_4"
+                "a": "potato_4", 
+                "b": "potato_5"
             }, 
             {
-                "a": "point_3", 
-                "b": "point_4"
+                "a": "potato_3", 
+                "b": "potato_4"
             }, 
             {
-                "a": "mikhail_guard", 
-                "b": "mikhail_idle"
+                "a": "potato_10", 
+                "b": "potato_11"
+            }, 
+            {
+                "a": "mikhail_idle", 
+                "b": "mikhail_guard"
+            }, 
+            {
+                "a": "potato_12", 
+                "b": "potato_13"
             }, 
             {
                 "a": "point_2", 
                 "b": "point_3"
             }, 
             {
+                "a": "potato_7", 
+                "b": "potato_8"
+            }, 
+            {
+                "a": "potato_8", 
+                "b": "potato_9"
+            }, 
+            {
+                "a": "potato_5", 
+                "b": "potato_6"
+            }, 
+            {
+                "a": "potato_14", 
+                "b": "potato_15"
+            }, 
+            {
+                "a": "mikhail_guard", 
+                "b": "mikhail_idle"
+            }, 
+            {
+                "a": "potato_9", 
+                "b": "potato_10"
+            }, 
+            {
                 "a": "point_3", 
                 "b": "point_2"
             }, 
             {
-                "a": "moritz_idle", 
-                "b": "moritz_guard"
+                "a": "potato_13", 
+                "b": "potato_14"
             }, 
             {
                 "a": "point_4", 
                 "b": "point_3"
             }, 
             {
-                "a": "mikhail_idle", 
-                "b": "mikhail_guard"
+                "a": "moritz_idle", 
+                "b": "moritz_guard"
+            }, 
+            {
+                "a": "inga_attempt_stanislov", 
+                "b": "point_4"
+            }, 
+            {
+                "a": "potato_1", 
+                "b": "potato_2"
+            }, 
+            {
+                "a": "point_3", 
+                "b": "point_4"
+            }, 
+            {
+                "a": "potato_2", 
+                "b": "potato_3"
+            }, 
+            {
+                "a": "potato_11", 
+                "b": "potato_12"
+            }, 
+            {
+                "a": "moritz_guard", 
+                "b": "moritz_idle"
             }
         ]
     }
