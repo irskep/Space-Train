@@ -157,7 +157,7 @@ def end_conversation(convo_name):
         myscene.actors['sneelock'].next_action()
         myscene.handler.handler.save()
         
-    if convo_name == "hamster_from_a_baby":
+    if convo_name == "a_young_irish_boy" and myscene.handler.handler.game_variables['hamster_dropped']:
         potato = myscene.new_actor('potato', 'potato')
         potato.walk_speed = 200.0
         potato.walkpath_point = "potato_1"

@@ -17,6 +17,11 @@ start:
     - choice:
         Comment on the Hamster:
             goto: comment
+        Hand over bean soup:
+            require: beans
+            goto: give_soup
+        I'll be going now.:
+            goto: leave
             
 comment:
     - main: Your pet is so cute!
@@ -27,6 +32,8 @@ comment:
     - choice:
         What will you do on Planet Deux?:
             goto: future
+        I'll be going now.:
+            goto: leave
         
 
 future:
@@ -47,3 +54,13 @@ future:
             main: talk_right
 
     #INGA turns and leaves the conversation.
+
+give_soup:
+  - main: I know you love beans, so I found you some bean soup to eat.
+  - shamus: Wow, bean soup! I love bean soup! Thanks!
+  - take: beans
+  - update_globals:
+      hamster_dropped: true
+
+leave:
+  - main: See you later.

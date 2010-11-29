@@ -28,7 +28,14 @@ give_actor(receiving_actor, item)
     set variables, etc.
 """
 
-import os, sys, shutil, json, importlib, pyglet, functools
+import os
+import sys
+import shutil
+import json
+import importlib
+import pyglet
+import functools
+import itertools
 
 import camera, actor, gamestate, util, interpolator, convo
 from util import walkpath, zenforcer, pushmatrix, shadow
@@ -174,7 +181,8 @@ class Scene(object):
         return 'Scene(name="%s")' % self.name
     
     def actor_under_point(self, x, y):
-        possible_actors = {act for act in self.actors.viewvalues() if act.covers_point(x, y)}
+        possible_actors = {act for act in self.actors.viewvalues() 
+                            if act.covers_visible_point(x, y)}
         try:
             closest = possible_actors.pop()
             for act in possible_actors:
@@ -201,8 +209,8 @@ class Scene(object):
         else:
             return False
     
-    def transition_from(self, old_scene):
-        self.module.transition_from(old_scene)
+    def transition_from(self, old_scene_name):
+        self.module.transition_from(old_scene_name)
     
     def begin_conversation(self, convo_name):
         self.convo.begin_conversation(convo_name)
@@ -277,6 +285,10 @@ class Scene(object):
             return
         
         clicked_actor = self.actor_under_point(*self.camera.mouse_to_canvas(x, y))
+        icon_actors = {act for act in self.ui.inventory.items.viewvalues() 
+                                                if act.icon_covers_point(x, y)}
+        if icon_actors:
+            clicked_actor = icon_actors.pop()
         
         if clicked_actor:
             self.click_actor(clicked_actor)
@@ -292,7 +304,6 @@ class Scene(object):
             self.ui.inventory.held_item = None
         else:
             self.module.actor_clicked(clicked_actor)
-            # self.call_if_available('actor_clicked', clicked_actor)
     
     def on_key_press(self, symbol, modifiers):
         if symbol == key.ESCAPE:
