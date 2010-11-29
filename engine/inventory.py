@@ -18,6 +18,7 @@ import copy
 import json, pyglet
 
 import gamestate, util
+from interpolator import LinearInterpolator
 
 class Inventory(object):
 
@@ -31,6 +32,10 @@ class Inventory(object):
         self.sprites['open'] = []
         self.sprites['closed'] = []
         self.batches['items'] = pyglet.graphics.Batch()
+        img = pyglet.resource.image('ui/inventory.png')
+        img.anchor_x = 0
+        img.anchor_y = img.height
+        self.background = pyglet.sprite.Sprite(img, x=gamestate.norm_w, y=gamestate.norm_h)
         
         self.visible = True
         
@@ -41,11 +46,15 @@ class Inventory(object):
         self.isopen = False
         
         # Create the inventory closed state first
-        self.sprites['closed'].append( util.load_sprite(['ui', 'purse.png'], x = gamestate.norm_w, y = gamestate.norm_h, batch = self.batches['closed']) )
+        self.sprites['closed'].append(util.load_sprite(['ui', 'purse.png'], 
+                                      x=gamestate.norm_w, y=gamestate.norm_h-15, 
+                                      batch=self.batches['closed']))
         self.translate_bottomleft_to_topright(self.sprites['closed'])
                       
         # Create the inventory open state now
-        self.sprites['open'].append( util.load_sprite(['ui', 'purseopen.png'], x = gamestate.norm_w-5, y = gamestate.norm_h-5, batch = self.batches['open']) )
+        self.sprites['open'].append(util.load_sprite(['ui', 'purseopen.png'], 
+                                    x=gamestate.norm_w-5, y=gamestate.norm_h-21, 
+                                    batch=self.batches['open']) )
         self.translate_bottomleft_to_topright(self.sprites['open'])
         
         self.height = self.sprites['open'][0].height
@@ -86,6 +95,7 @@ class Inventory(object):
             sprite.y = inventory_y
             leftmost_x -= sprite.width
             self.rect_left = leftmost_x-sprite.width/2-3
+        self.background.x = self.rect_left-30
     
     #needs to go in util sometime?
     def translate_bottomleft_to_topright(self, sprites):
@@ -150,8 +160,7 @@ class Inventory(object):
             if(self.isopen is False):
                 self.batches['closed'].draw()
             else:
-                util.draw.set_color(1,1,1,0.5)
-                x, y = self.sprites['open'][0].position
-                util.draw.rect(self.rect_left, y-2, x-10, gamestate.norm_h-3)
+                self.background.draw()
                 self.batches['open'].draw()
                 self.batches['items'].draw()
+    
