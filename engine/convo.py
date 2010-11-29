@@ -8,6 +8,7 @@ TODO:
 import pyglet, yaml, collections, functools, re, random
 
 import actor, gamestate
+from interpolator import LinearInterpolator
 
 from util import draw
 
@@ -265,10 +266,12 @@ class Conversation(object):
         else:
             new_actor = self.scene.new_actor(val)
         self.scene.ui.inventory.put_item(new_actor)
+        pyglet.resource.media('sound/give.wav').play()
         return True
     
     def _take(self, val):
-        self.scene.ui.inventory.get_item(val)
+        act = self.scene.ui.inventory.get_item(val)
+        pyglet.resource.media('sound/take.wav').play()
         return True
     
     def _update_animations(self, val):
