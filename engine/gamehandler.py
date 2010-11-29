@@ -67,7 +67,7 @@ class GameHandler(object):
             my_info = util.load_json(os.path.join(base_path, 'game'))
             self.game_variables = my_info['game_variables']
             return scene.Scene(my_info['first_scene'], self.scene_handler, self.ui,
-                               load_path=os.path.join(base_path, my_info['first_scene'] + '.json'))
+                               load_path=os.path.join(base_path, my_info['first_scene']))
     
     def save(self, folder_name="autosave"):
         base_path = os.path.join(self.save_path, folder_name)
