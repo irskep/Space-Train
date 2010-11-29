@@ -107,6 +107,7 @@ def actor_clicked(clicked_actor):
         "hipster_fran": talk_to_fran,
         "hipster_liam": talk_to_liam,
         "hipster_amanda": talk_to_amanda,
+        "door": functools.partial(myscene.begin_conversation, "locked_door"),
         "button": functools.partial(myscene.ui.show_cam, clicked_actor, {'Inspect': functools.partial(myscene.begin_conversation, "inspect_button")})
     }
     
