@@ -114,10 +114,7 @@ class Linear2DInterpolator(Interpolator):
             return
         new_tuple = ((self.start_tuple[0] + self.progress*self.x_speed),
                      (self.start_tuple[1] + self.progress*self.y_speed))
-        try:
-            setattr(self.host_object, self.attr_name, new_tuple)
-        except AttributeError:
-            pass # Oh well, we have deadlines here
+        setattr(self.host_object, self.attr_name, new_tuple)
     
     def __repr__(self):
         fmt = "Linear2DInterpolator '%s' on %s.%s from %s to %s taking %0.2f seconds)"
