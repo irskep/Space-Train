@@ -1,0 +1,15 @@
+# Initialization
+
+at_rest:
+    main: stand_left
+
+speaking:
+    main: talk_left
+
+variables:
+    knows_about_baron: false
+
+# States
+
+start:
+    - main: Oops...

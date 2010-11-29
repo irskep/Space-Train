@@ -1,0 +1,18 @@
+# Initialization
+
+at_rest:
+    main: stand_left
+    hipster_amanda: hipster_amanda
+
+speaking:
+    main: talk_left
+    hipster_amanda: talk_front
+    
+variables:
+    knows_about_baron: false
+
+# States
+
+start:
+    - hipster_amanda: Hey, wanna jam to McSpazz's Shoelace Extravaganza?
+    - main: Not right now, thank you.
