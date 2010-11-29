@@ -39,3 +39,5 @@ ask_direction:
             goto: start
             
 bai:
+    - update_locals:    #dummy action
+        knows_about_baron: true

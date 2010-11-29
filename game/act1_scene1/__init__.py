@@ -30,11 +30,11 @@ def init(fresh=False):
     myscene.play_music('simple', fade=False)
     myscene.play_background('Train_Loop1', fade=True)
     
-    myscene.handler.handler.game_variables['temperature'] = 72
-    myscene.handler.handler.game_variables['potato_rolling'] = False
+
     
     if fresh:
-        print 'fresh'
+        myscene.handler.handler.game_variables['temperature'] = 72
+        myscene.handler.handler.game_variables['potato_rolling'] = False
         myscene.interaction_enabled = False
         myscene.actors['levity'].prepare_walkpath_move("levity_4")
         myscene.actors['levity'].next_action()
@@ -55,11 +55,11 @@ def transition_from(old_scene):
         myscene.actors['main'].next_action()
         
         if myscene.handler.handler.game_variables['potato_rolling']:
-            myscene.actors['potato'].walkpath_point = "potato_1"
-            myscene.actors['potato'].prepare_walkpath_move("potato_2")
+            myscene.actors['potato'].prepare_walkpath_move("potato_40")
             myscene.actors['potato'].next_action()
         
-        levity_walk(myscene.actors['levity'], myscene.actors['levity'].walkpath_point)
+        myscene.actors['levity'].prepare_walkpath_move("levity_right")
+        myscene.actors['levity'].next_action()
 
 def inga_walk(actor, point):
     global do_sit
@@ -119,7 +119,7 @@ def levity_walk(actor, point):
         
         if next_point is not point:    
             levity.prepare_walkpath_move(next_point)
-    print "Moving from %s to %s..." % (point, next_point)
+            print "Moving from %s to %s..." % (point, next_point)
 
 def tourist_walk(actor, point):
     global sneelock_distracted
@@ -169,8 +169,8 @@ def end_conversation(convo_name):
     if convo_name == "a_young_irish_boy" and myscene.handler.handler.game_variables['hamster_dropped']:
         potato = myscene.new_actor('potato', 'potato')
         potato.walk_speed = 200.0
-        potato.walkpath_point = "potato_1"
-        potato.prepare_walkpath_move("potato_2")
+        potato.walkpath_point = "potato_9"
+        potato.prepare_walkpath_move("potato_10")
         potato.next_action()
         myscene.handler.handler.game_variables['potato_rolling'] = True
     

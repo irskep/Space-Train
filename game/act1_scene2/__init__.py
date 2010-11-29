@@ -36,7 +36,7 @@ def walk_from_right():
     myscene.actors['main'].next_action()
      
 def begin_smoke_conv():
-    myscene.begin_background_conversation("need_a_smoke")
+    myscene.begin_conversation("need_a_smoke")
      
 def queue_need_a_smoke():
     pyglet.clock.schedule_once(util.make_dt_wrapper(start_cutscene), 0)
