@@ -10,9 +10,10 @@ from engine.gamestate import norm_w, norm_h
 myscene = None
 
 # wait_time = lambda text: max(len(text)*0.015, 3.0)+3.0
-wait_time = lambda text: 1.0
+wait_time = lambda text: 3.0
 
 def init(fresh=True):
+    myscene.play_music('intro', fade=False)
     pyglet.clock.schedule_once(begin, 2.0)
     
     # t = show_sequence(sequence)
@@ -77,4 +78,5 @@ def handle_event(event, *args):
 
 def actor_clicked(clicked_actor):
     if clicked_actor.identifier == "note":
+        myscene.fade_music(1.0)
         myscene.handler.notify("act1_scene1")
