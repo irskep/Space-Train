@@ -175,8 +175,8 @@ def end_conversation(convo_name):
         myscene.handler.handler.game_variables['potato_rolling'] = True
     
     if convo_name == "thermostat_discover":
-        print myscene.handler.handler.game_variables['temperature']
         if myscene.handler.handler.game_variables['temperature'] >= 80:
+            myscene.actors['thermostat'].update_state('rising')
             # Nicole complains!
             tourist = myscene.actors['tourist']
             pyglet.clock.schedule_once(util.make_dt_wrapper(tourist.prepare_walkpath_move), 5, "tourist_complain")

@@ -73,7 +73,7 @@ class Actor(actionsequencer.ActionSequencer):
         max_x = self.icon.x - self.icon.image.anchor_x + self.icon.width*self.icon.scale
         max_y = self.icon.y - self.icon.image.anchor_y + self.icon.height*self.icon.scale
         return min_x <= x <= max_x and min_y <= y <= max_y
-            
+    
     def covers_visible_point(self, x, y):
         min_x = self.abs_position_x()
         min_y = self.abs_position_y()
@@ -251,15 +251,19 @@ class Actor(actionsequencer.ActionSequencer):
                 else:
                     make_img = lambda i: self.image_named("%s_%d" % (state_name, i), ax, ay)
                     images = [make_img(i) for i in range(1, num_frames+1)]
-                    # It may make sense to add this animation to its own texture bin later
-                    if my_info.has_key("randomize") and state_name in my_info["randomize"]:
+                    loop = True
+                    if state_name in my_info.get('noloop', []):
+                        loop = False
+                    if state_name in my_info.get('randomize', []):
                         random_images = [i for i in images]
                         random.shuffle(random_images) # Guarantee at least one occurrence per image
                         random_images.extend([random.choice(images) for i in xrange(20)])
                         anim = pyglet.image.Animation.from_image_sequence(random_images,
-                                                                          time_per_frame)
+                                                                          time_per_frame,
+                                                                          loop)
                     else:
-                        anim = pyglet.image.Animation.from_image_sequence(images, time_per_frame)
+                        anim = pyglet.image.Animation.from_image_sequence(images, time_per_frame,
+                                                                          loop)
                     Actor.images[self.name][state_name] = anim
     
     def dict_repr(self):
