@@ -51,7 +51,7 @@ def end_conversation(convo_name):
     elif convo_name == 'oops':
         myscene.play_sound('space_train_explode')
         #myscene.handler.notify('credits')
-    elif clicked_actor.identifier == 'amanda' or 'amanda_l' or 'fran' or 'fran_l' or 'liam' or 'liam_l':
+    elif convo_name == 'amanda' or 'amanda_l' or 'fran' or 'fran_l' or 'liam' or 'liam_l':
         myscene.begin_background_conversation('hipster_argument')
         pass
             
