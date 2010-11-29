@@ -22,8 +22,10 @@ start:
     - hipster_amanda: Hey, you can't come in!
     - hipster_liam: Ja. This train is reserved.
     - choice:
-        Comment on the music:
+        Comment on the music.:
             goto: comment
+        I'll just be going then.:
+            goto: end
             
 comment:
     - main: I think I recognize this music...
