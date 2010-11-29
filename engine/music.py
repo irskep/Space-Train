@@ -36,6 +36,13 @@ class DJ(object):
         for arg in args:
             self.get_sound(arg)
     
+    def fade_out(self, time=3.0):
+        fade_out = interpolator.LinearInterpolator(self.player, 'volume', 
+                                                   start=self.volume,
+                                                   end=0.0, name="volume", duration=time,
+                                                   done_function=self.next_track)
+        self.interp.add_interpolator(fade_out)
+    
     def transition_to(self, sound_name, fade=True):
         if fade:
             self.next_sound_name = sound_name
@@ -52,11 +59,7 @@ class DJ(object):
                 if not new_sound.is_queued:
                     self.player.queue(new_sound)
                 if self.player.playing:
-                    fade_out = interpolator.LinearInterpolator(self.player, 'volume', 
-                                                               start=self.volume,
-                                                               end=0.0, name="volume", duration=3.0,
-                                                               done_function=self.next_track)
-                    self.interp.add_interpolator(fade_out)
+                    self.fade_out()
                 else:
                     self.player.play()
     

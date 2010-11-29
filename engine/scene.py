@@ -235,6 +235,9 @@ class Scene(object):
     def play_music(self, name, fade=True):
         self.handler.handler.dj.transition_to(name, fade=fade)
     
+    def fade_music(self, time=3.0):
+        self.handler.handler.dj.fade_out(time=time)
+    
     def play_background(self, name, fade=True):
         self.handler.handler.background_dj.transition_to(name, fade=fade)
     
