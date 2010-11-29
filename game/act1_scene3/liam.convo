@@ -1,0 +1,20 @@
+# Initialization
+
+at_rest:
+    main: stand_left
+    hipster_liam: hipster_liam
+
+speaking:
+    main: talk_left
+    hipster_liam: talk_front
+    
+variables:
+    knows_about_baron: false
+
+# States
+
+start:
+    - hipster_liam: So what happened to the other twelve records?
+    - main: They have all been lost, I believe you hold the only Deep Couch record in existence.
+    - hipster_liam: My life is complete now.
+    - main: I'll be going now.

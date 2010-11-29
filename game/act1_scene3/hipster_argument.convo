@@ -1,0 +1,25 @@
+# Initialization
+
+at_rest:
+    hipster_liam: hipster_liam
+    hipster_amanda: hipster_amanda
+    hipster_fran: hipster_fran
+
+speaking:
+    hipster_liam: talk_front
+    hipster_amanda: talk_front
+    hipster_fran: talk_front
+    
+variables:
+    knows_about_baron: false
+
+# States
+
+start:
+    - hipster_liam: You know, the only reason you two have even heard of Deep Couch is because of me.
+    - hipster_fran: That is just not true!
+    - hipster_amanda: Besides, I introduced you to the Rampant Lizards
+    - hipster_liam: Whatever. The Rampant Lizards aren't even that good. They've already done, like, four shows.
+    - hipster_fran: Like you're so pure.
+    - hipster_amanda: Yeah! I heard you listening to a track from Nickelfront last month!
+    - hipster_liam: What? No! Never!

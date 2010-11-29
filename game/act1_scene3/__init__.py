@@ -26,6 +26,7 @@ def init(fresh=False):
         myscene.handler.handler.game_variables['button_inspected'] = False
         myscene.handler.handler.game_variables['button_pressed'] = False
     else:
+        myscene.begin_background_conversation('hipster_argument')
         myscene.interaction_enabled = True
 
 def walk_from_right():
@@ -41,6 +42,7 @@ def end_conversation(convo_name):
             myscene.actors['main'].prepare_walkpath_move('point_1')
             myscene.actors['main'].next_action()
         else:
+            myscene.begin_background_conversation('hipster_argument')
             myscene.interaction_enabled = True
     elif convo_name == 'inspect_button' and myscene.handler.handler.game_variables['button_pressed'] == True:
         myscene.fade_music(time=0.0)
@@ -49,6 +51,9 @@ def end_conversation(convo_name):
     elif convo_name == 'oops':
         myscene.play_sound('space_train_explode')
         #myscene.handler.notify('credits')
+    elif clicked_actor.identifier == 'amanda' or 'amanda_l' or 'fran' or 'fran_l' or 'liam' or 'liam_l':
+        myscene.begin_background_conversation('hipster_argument')
+        pass
             
 def inga_walk(actor, point):
     if point == "point_2" and not myscene.handler.handler.game_variables['deep_couch']:
@@ -75,17 +80,32 @@ def handle_event(event, *args):
     print "Handled", event, "with", args
     
 def talk_to_amanda():
-    #myscene.end_background_conversation('hipster_argument')
-    print myscene.actors['main'].walkpath_point
+    myscene.end_background_conversation('hipster_argument')
     if myscene.actors['main'].walkpath_point == 'point_2':
         myscene.begin_conversation('amanda')
     elif myscene.actors['main'].walkpath_point == 'point_3':
         myscene.begin_conversation('amanda_l')
+        
+def talk_to_liam():
+    myscene.end_background_conversation('hipster_argument')
+    if myscene.actors['main'].walkpath_point == 'point_2':
+        myscene.begin_conversation('liam')
+    elif myscene.actors['main'].walkpath_point == 'point_3':
+        myscene.begin_conversation('liam_l')
+    
+def talk_to_fran():
+    myscene.end_background_conversation('hipster_argument')
+    if myscene.actors['main'].walkpath_point == 'point_2':
+        myscene.begin_conversation('fran')
+    elif myscene.actors['main'].walkpath_point == 'point_3':
+        myscene.begin_conversation('fran_l')
 
 def actor_clicked(clicked_actor):
     print clicked_actor
     
     click_handlers = {
+        "hipster_fran": talk_to_fran,
+        "hipster_liam": talk_to_liam,
         "hipster_amanda": talk_to_amanda,
         "button": functools.partial(myscene.ui.show_cam, clicked_actor, {'Inspect': functools.partial(myscene.begin_conversation, "inspect_button")})
     }
