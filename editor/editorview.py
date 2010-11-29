@@ -138,7 +138,7 @@ class EditorView(object):
     
     def draw(self):
         draw.set_color(0,0,0,1)
-        draw.rect(0,0,gamestate.norm_w,gamestate.norm_h)
+        #draw.rect(0,0,gamestate.norm_w,gamestate.norm_h)
         self.scene.draw()
         
         for ed in self.editors:

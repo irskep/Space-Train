@@ -209,7 +209,7 @@ class Scene(object):
         else:
             return False
     
-    def transition_from(self, old_scene_name):
+    def transition_from(self, old_scene):
         self.module.transition_from(old_scene)
     
     def begin_conversation(self, convo_name):
