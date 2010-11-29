@@ -110,17 +110,8 @@ class Inventory(object):
             sprite.y -= y_trans
     
     def on_mouse_release(self, x, y, button, modifiers):
-        if self.intersects_active_area(x, y) and self.visible:
-            print "Inventory handling click at (%d, %d)" % (x, y)
-            if(self.held_item is not None):
-                self.put_item(self.held_item)
-                self.held_item = None
-            else:
-                clicked_item = self.item_under_point(x, y)
-                if(clicked_item is not None):
-                    self.held_item = self.get_item(clicked_item.identifier)
-                if(util.intersects_sprite(x, y, self.sprites['closed'][0])):
-                    self.toggle()
+        if(util.intersects_sprite(x, y, self.sprites['closed'][0])):
+            self.toggle()
             return pyglet.event.EVENT_HANDLED
         else:
             return pyglet.event.EVENT_UNHANDLED
