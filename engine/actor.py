@@ -45,7 +45,7 @@ class Actor(actionsequencer.ActionSequencer):
                     self.icon.scale = float(self.scene.ui.inventory.height) / float(self.icon.height)
         
         # Update attributes
-        for attr in ['x', 'y', 'scale', 'rotation']:
+        for attr in ['x', 'y', 'scale', 'rotation', 'opacity']:
             if attrs.has_key(attr):
                 setattr(self.sprite, attr, attrs[attr])
     

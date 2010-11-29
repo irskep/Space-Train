@@ -12,7 +12,12 @@ myscene = None
 # wait_time = lambda text: max(len(text)*0.015, 3.0)+3.0
 wait_time = lambda text: 3.0
 
+note_actor = None
+
 def init(fresh=True):
+    global note_actor
+    note_actor = myscene.new_actor('intro_billboards', 'note', attrs=dict(x=640, y=360, opacity=0))
+    
     myscene.play_music('intro', fade=False)
     pyglet.clock.schedule_once(begin, 2.0)
     
@@ -23,33 +28,19 @@ def transition_from(old_scene):
     pass
     
 def begin(dt=0):
-    t = spawn_text("I knew I was going to take the wrong train, so I left early.\n" + 
-                   "--Yogi Berra (1925-2014)", 0.05, 0.5, 0.75)
+    q1 = "The only way of catching a train I have ever discovered is to miss the train before.\n" +\
+         "- Gilbert K. Chesterton (1874-1936)"
+    q2 = "I knew I was going to take the wrong train, so I left early.\n" + \
+         "--Yogi Berra (1925-2014)"
+    t = spawn_text(q1, 0.045, 0.45, 0.75)
     
-    pyglet.clock.schedule_once(show_letter, t+2.0)
+    pyglet.clock.schedule_once(functools.partial(spawn_text, q2, 0.045, 0.55, 0.25), 4.0)
+    
+    pyglet.clock.schedule_once(show_letter, t+7.0)
 
 def show_letter(dt=0):
-    new_actor = myscene.new_actor('intro_billboards', 'note', attrs=dict(x=640, y=360, opacity=0))
-    
-    def fade_in():
-        interp = LinearInterpolator(new_actor.sprite, 'opacity', start=0, end=255, name="fade", duration=3.0)
-        myscene.interp.add_interpolator(interp)
-    
-    def fade_out(dt=0):
-        interp = LinearInterpolator(new_actor.sprite, 'opacity', start=255, end=0, name="fade", duration=3.0)
-        myscene.interp.add_interpolator(interp)
-    
-    fade_in()
-
-def show_sequence(sequence=(), t=2.0):
-    for args in sequence:
-        pyglet.clock.schedule_once(functools.partial(spawn_text, *args), t)
-        t += wait_time(args[0])
-    pyglet.clock.schedule_once(end_sequence, t)
-    return t
-
-def end_sequence(dt=0):
-    myscene.handler.notify('act1_scene1')
+    interp = LinearInterpolator(note_actor.sprite, 'opacity', start=0, end=255, name="fade", duration=3.0)
+    myscene.interp.add_interpolator(interp)    
 
 def spawn_text(text, size, x, y, dt=0):
     l = pyglet.text.Label(text, font_name=['Verdana', 'Helvetica'], font_size=norm_h*size, 
