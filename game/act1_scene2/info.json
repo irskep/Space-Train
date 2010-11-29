@@ -85,6 +85,13 @@
             "name": "luggage", 
             "start_state": "luggage"
         }, 
+        "airduct": {
+            "y": 182, 
+            "x": 2372, 
+            "walk_speed": 400.0, 
+            "name": "airduct", 
+            "start_state": "airduct"
+        }, 
         "main": {
             "walk_speed": 400.0, 
             "walkpath_point": "point_1", 
@@ -209,24 +216,24 @@
         }, 
         "edges": [
             {
+                "a": "point_4", 
+                "b": "inga_attempt_stanislov"
+            }, 
+            {
+                "a": "moritz_guard", 
+                "b": "moritz_idle"
+            }, 
+            {
                 "a": "point_1", 
                 "b": "point_2"
-            }, 
-            {
-                "a": "inga_attempt_stanislov", 
-                "b": "point_4"
-            }, 
-            {
-                "a": "mikhail_idle", 
-                "b": "mikhail_guard"
             }, 
             {
                 "a": "point_2", 
                 "b": "point_1"
             }, 
             {
-                "a": "point_4", 
-                "b": "inga_attempt_stanislov"
+                "a": "inga_attempt_stanislov", 
+                "b": "point_4"
             }, 
             {
                 "a": "point_3", 
@@ -253,8 +260,8 @@
                 "b": "point_3"
             }, 
             {
-                "a": "moritz_guard", 
-                "b": "moritz_idle"
+                "a": "mikhail_idle", 
+                "b": "mikhail_guard"
             }
         ]
     }
