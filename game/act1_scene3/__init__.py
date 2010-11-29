@@ -73,11 +73,20 @@ def handle_event(event, *args):
         if walk_handlers.has_key(actor.identifier):
             walk_handlers[actor.identifier](actor, point)
     print "Handled", event, "with", args
+    
+def talk_to_amanda():
+    #myscene.end_background_conversation('hipster_argument')
+    print myscene.actors['main'].walkpath_point
+    if myscene.actors['main'].walkpath_point == 'point_2':
+        myscene.begin_conversation('amanda')
+    elif myscene.actors['main'].walkpath_point == 'point_3':
+        myscene.begin_conversation('amanda_l')
 
 def actor_clicked(clicked_actor):
     print clicked_actor
     
     click_handlers = {
+        "hipster_amanda": talk_to_amanda,
         "button": functools.partial(myscene.ui.show_cam, clicked_actor, {'Inspect': functools.partial(myscene.begin_conversation, "inspect_button")})
     }
     

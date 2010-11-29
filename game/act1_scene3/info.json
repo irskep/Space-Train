@@ -158,6 +158,10 @@
     }, 
     "walkpath": {
         "points": {
+            "door": {
+                "y": 100, 
+                "x": 196
+            }, 
             "amanda_2": {
                 "y": 100, 
                 "x": 2174
@@ -166,17 +170,9 @@
                 "y": 150, 
                 "x": 2159
             }, 
-            "point_8": {
-                "y": 100, 
-                "x": 175
-            }, 
             "point_9": {
                 "y": 100, 
                 "x": 538
-            }, 
-            "point_4": {
-                "y": 100, 
-                "x": 1768
             }, 
             "point_5": {
                 "y": 101, 
@@ -200,17 +196,17 @@
             }, 
             "point_3": {
                 "y": 100, 
-                "x": 2048
+                "x": 1946
             }
         }, 
         "edges": [
             {
-                "a": "amanda_2", 
-                "b": "amanda_1"
+                "a": "point_9", 
+                "b": "door"
             }, 
             {
-                "a": "point_9", 
-                "b": "point_8"
+                "a": "point_3", 
+                "b": "point_5"
             }, 
             {
                 "a": "point_6", 
@@ -226,7 +222,7 @@
             }, 
             {
                 "a": "point_5", 
-                "b": "point_4"
+                "b": "point_3"
             }, 
             {
                 "a": "point_7", 
@@ -241,24 +237,16 @@
                 "b": "point_1"
             }, 
             {
-                "a": "point_4", 
-                "b": "point_5"
+                "a": "amanda_2", 
+                "b": "amanda_1"
             }, 
             {
-                "a": "point_8", 
+                "a": "door", 
                 "b": "point_9"
             }, 
             {
-                "a": "point_6", 
-                "b": "point_5"
-            }, 
-            {
-                "a": "point_3", 
-                "b": "point_4"
-            }, 
-            {
-                "a": "point_4", 
-                "b": "point_3"
+                "a": "amanda_1", 
+                "b": "amanda_2"
             }, 
             {
                 "a": "point_2", 
@@ -273,8 +261,8 @@
                 "b": "point_6"
             }, 
             {
-                "a": "amanda_1", 
-                "b": "amanda_2"
+                "a": "point_6", 
+                "b": "point_5"
             }
         ]
     }
