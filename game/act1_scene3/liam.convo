@@ -7,7 +7,7 @@ at_rest:
 speaking:
     main: talk_left
     hipster_liam: talk_front
-    
+
 variables:
     knows_about_baron: false
 
@@ -17,4 +17,16 @@ start:
     - hipster_liam: So what happened to the other twelve records?
     - main: They have all been lost, I believe you hold the only Deep Couch record in existence.
     - hipster_liam: My life is complete now.
+    - choice:
+        What is that red button over there?:
+            require: button_inspected
+            goto: button
+        I'll be going now.:
+            goto: end
+
+button:
+    - hipster_liam: Like, why would I know? Pressing it would just be too conformist.
+    - main: I'll be going now.
+    
+end:
     - main: I'll be going now.

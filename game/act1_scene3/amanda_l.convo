@@ -15,4 +15,16 @@ variables:
 
 start:
     - hipster_amanda: Hey, wanna jam to McSpazz's Shoelace Extravaganza?
+    - choice:
+        What is that red button over there?:
+            require: button_inspected
+            goto: button
+        Not right now, thank you.:
+            goto: end
+
+button:
+    - hipster_amanda: I don't know, but isn't this music great?
+    - main: I'll be going now.
+    
+end:
     - main: Not right now, thank you.
