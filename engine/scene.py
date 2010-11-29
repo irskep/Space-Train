@@ -11,8 +11,6 @@ handle_event(event_type, *args, **kwargs)
     event_type: see util.const
     args, kwargs: usually just a single dictionary 'info' is passed as a positional argument
 
-OPTIONAL
-
 init()
     Scene is finished loading, perform any necessary setup not done at the module level
 
@@ -22,10 +20,6 @@ transition_from(previous_scene)
 
 actor_clicked(clicked_actor)
     clicked_actor was clicked by the user, do whatever or nothing
-
-give_actor(receiving_actor, item)
-    Return True if receiving_actor can/should receive item. Also start any event chains, 
-    set variables, etc.
 """
 
 import os
