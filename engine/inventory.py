@@ -76,9 +76,9 @@ class Inventory(object):
         #self.items[identifier].sprite.batch = self.items[identifier].scene.batch
         self.items[identifier].icon.batch = None
         ret = self.items[identifier]
+        ret.delete()
         del self.items[identifier]
         self.update_item_positions()
-        return ret
     
     def has_item(self, identifier):
         return identifier in self.items

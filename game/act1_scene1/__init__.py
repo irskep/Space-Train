@@ -38,7 +38,8 @@ def init(fresh=False):
         myscene.actors['levity'].prepare_walkpath_move("levity_4")
         myscene.actors['levity'].next_action()
     
-        spcbux = myscene.new_actor('space_bucks', 'space_bucks')
+        # spcbux = myscene.new_actor('space_bucks', 'space_bucks')
+        spcbux = actor.Actor('space_bucks', 'space_bucks', myscene)
         myscene.ui.inventory.put_item(spcbux)
         
     else:

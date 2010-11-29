@@ -262,15 +262,22 @@ class Conversation(object):
     def _give(self, val):
         match = parens_match.match(val)
         if match:
-            new_actor = self.scene.new_actor(match.group('name'), match.group('id'))
+            new_actor = actor.Actor(match.group('id'), match.group('name'), self.scene)
+            # new_actor = self.scene.new_actor(match.group('name'), match.group('id'))
         else:
-            new_actor = self.scene.new_actor(val)
+            next_identifier = 1
+            while self.scene.actors.has_key("%s_%d" % (actor_name, next_identifier)):
+                next_identifier += 1
+            identifier = "%s_%d" % (actor_name, next_identifier)
+            
+            new_actor = actor.Actor(next_identifier, val, self.scene)
+        
         self.scene.ui.inventory.put_item(new_actor)
         pyglet.resource.media('sound/give.wav').play()
         return True
     
     def _take(self, val):
-        act = self.scene.ui.inventory.get_item(val)
+        self.scene.ui.inventory.get_item(val)
         pyglet.resource.media('sound/take.wav').play()
         return True
     
