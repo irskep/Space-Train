@@ -30,11 +30,12 @@ def init(fresh=False):
     myscene.play_music('simple', fade=False)
     myscene.play_background('Train_Loop1', fade=True)
     
-    myscene.handler.handler.game_variables['temperature'] = 72
-    myscene.handler.handler.game_variables['potato_rolling'] = False
+
     
     if fresh:
-        print 'fresh'
+        myscene.handler.handler.game_variables['temperature'] = 72
+        myscene.handler.handler.game_variables['potato_rolling'] = False
+        myscene.handler.handler.game_variables['potato_stop'] = False
         myscene.interaction_enabled = False
         myscene.actors['levity'].prepare_walkpath_move("levity_4")
         myscene.actors['levity'].next_action()
@@ -42,6 +43,12 @@ def init(fresh=False):
         # spcbux = myscene.new_actor('space_bucks', 'space_bucks')
         spcbux = actor.Actor('space_bucks', 'space_bucks', myscene)
         myscene.ui.inventory.put_item(spcbux)
+        
+        pen = actor.Actor('pen', 'pen', myscene)
+        myscene.ui.inventory.put_item(pen)
+        
+        notepad = actor.Actor('notepad', 'notepad', myscene)
+        myscene.ui.inventory.put_item(notepad)
         
     else:
         myscene.interaction_enabled = True
@@ -55,11 +62,11 @@ def transition_from(old_scene):
         myscene.actors['main'].next_action()
         
         if myscene.handler.handler.game_variables['potato_rolling']:
-            myscene.actors['potato'].walkpath_point = "potato_1"
-            myscene.actors['potato'].prepare_walkpath_move("potato_2")
+            myscene.actors['potato'].prepare_walkpath_move("potato_40")
             myscene.actors['potato'].next_action()
         
-        levity_walk(myscene.actors['levity'], myscene.actors['levity'].walkpath_point)
+        myscene.actors['levity'].prepare_walkpath_move("levity_right")
+        myscene.actors['levity'].next_action()
 
 def inga_walk(actor, point):
     global do_sit
@@ -119,7 +126,7 @@ def levity_walk(actor, point):
         
         if next_point is not point:    
             levity.prepare_walkpath_move(next_point)
-    print "Moving from %s to %s..." % (point, next_point)
+            print "Moving from %s to %s..." % (point, next_point)
 
 def tourist_walk(actor, point):
     global sneelock_distracted
@@ -133,7 +140,7 @@ def sneelock_walk(actor, point):
     
 def potato_roll(actor, point):
     point_match = re.search(r"potato_(\d+)", point)
-    if point_match:
+    if point_match and not myscene.handler.handler.game_variables['potato_stop']:
         current_index = int(point_match.group(1))
         next_index = current_index + 1
         if next_index > 40:
@@ -169,8 +176,8 @@ def end_conversation(convo_name):
     if convo_name == "a_young_irish_boy" and myscene.handler.handler.game_variables['hamster_dropped']:
         potato = myscene.new_actor('potato', 'potato')
         potato.walk_speed = 200.0
-        potato.walkpath_point = "potato_1"
-        potato.prepare_walkpath_move("potato_2")
+        potato.walkpath_point = "potato_9"
+        potato.prepare_walkpath_move("potato_10")
         potato.next_action()
         myscene.handler.handler.game_variables['potato_rolling'] = True
     
@@ -226,7 +233,12 @@ def actor_clicked(clicked_actor):
     if clicked_actor.identifier == "hipster_amanda" or clicked_actor.identifier == "hipster_liam" or clicked_actor.identifier == "hipster_fran":
         if not sneelock_distracted:
             myscene.begin_conversation("grunt")
-        
+    
+    if clicked_actor.identifier == "potato":
+        if myscene.ui.inventory.has_item("note"):
+            myscene.handler.handler.game_variables['potato_stop'] = True
+            #myscene.ui.show_cam(clicked_actor, {'Place note into ball': 
+            
         
 def give_actor(actor, item):
     print "Attemping to give %s %s" % (actor.identifier, item.identifier)
