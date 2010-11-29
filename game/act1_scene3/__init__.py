@@ -40,6 +40,8 @@ def end_conversation(convo_name):
 def inga_walk(actor, point):
     if point == "point_2" and not myscene.handler.handler.game_variables['deep_couch']:
         myscene.begin_conversation("hipster_pass")
+    #elif point == "point_1":
+        #myscene.handler.notify('act1_scene2')
         
 walk_handlers = {
     'main': inga_walk
