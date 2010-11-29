@@ -17,12 +17,16 @@ myscene = None
 
 def init(fresh=False):
     myscene.ui.inventory.visible = True
-    myscene.handler.handler.game_variables['deep_couch'] = False
     
     myscene.play_music('deepcouch', fade=False)
     myscene.play_background('Train_Loop1', fade=True)
     
-    walk_from_right()
+    if fresh:
+        myscene.handler.handler.game_variables['deep_couch'] = False
+        myscene.handler.handler.game_variables['button_inspected'] = False
+        myscene.handler.handler.game_variables['button_pressed'] = False
+    else:
+        myscene.interaction_enabled = True
 
 def walk_from_right():
     myscene.actors['main'].walkpath_point = 'point_1'
@@ -38,6 +42,13 @@ def end_conversation(convo_name):
             myscene.actors['main'].next_action()
         else:
             myscene.interaction_enabled = True
+    elif convo_name == 'inspect_button' and myscene.handler.handler.game_variables['button_pressed'] == True:
+        myscene.fade_music(time=0.0)
+        myscene.play_sound('klaxon')
+        myscene.begin_conversation('oops')
+    elif convo_name == 'oops':
+        myscene.play_sound('space_train_explode')
+        #myscene.handler.notify('credits')
             
 def inga_walk(actor, point):
     if point == "point_2" and not myscene.handler.handler.game_variables['deep_couch']:
@@ -50,7 +61,7 @@ walk_handlers = {
 }
 
 def transition_from(old_scene):
-    pass
+    walk_from_right()
 
 def handle_event(event, *args):
     if event == WALK_PATH_COMPLETED:
@@ -64,7 +75,14 @@ def handle_event(event, *args):
     print "Handled", event, "with", args
 
 def actor_clicked(clicked_actor):
-    pass
+    print clicked_actor
+    
+    click_handlers = {
+        "button": functools.partial(myscene.ui.show_cam, clicked_actor, {'Inspect': functools.partial(myscene.begin_conversation, "inspect_button")})
+    }
+    
+    if click_handlers.has_key(clicked_actor.identifier):
+        click_handlers[clicked_actor.identifier]()
     
 def give_actor(actor, item):
     return False

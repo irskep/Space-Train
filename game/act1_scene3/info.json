@@ -86,13 +86,6 @@
             "name": "seat", 
             "start_state": "chair_left"
         }, 
-        "button_1": {
-            "y": 275, 
-            "x": 439, 
-            "walk_speed": 400.0, 
-            "name": "button", 
-            "start_state": "ButtonOff"
-        }, 
         "hipster_liam": {
             "y": 151, 
             "x": 2029, 
@@ -141,6 +134,13 @@
             "name": "hipster_fran", 
             "start_state": "hipster_fran"
         }, 
+        "button": {
+            "y": 275, 
+            "x": 438, 
+            "walk_speed": 400.0, 
+            "name": "button", 
+            "start_state": "ButtonOff"
+        }, 
         "outlet_wire_1": {
             "y": 195, 
             "x": 1654, 
@@ -172,7 +172,7 @@
             }, 
             "point_9": {
                 "y": 100, 
-                "x": 421
+                "x": 538
             }, 
             "point_4": {
                 "y": 100, 
@@ -257,8 +257,8 @@
                 "b": "point_4"
             }, 
             {
-                "a": "amanda_1", 
-                "b": "amanda_2"
+                "a": "point_4", 
+                "b": "point_3"
             }, 
             {
                 "a": "point_2", 
@@ -273,8 +273,8 @@
                 "b": "point_6"
             }, 
             {
-                "a": "point_4", 
-                "b": "point_3"
+                "a": "amanda_1", 
+                "b": "amanda_2"
             }
         ]
     }
