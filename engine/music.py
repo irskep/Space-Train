@@ -45,15 +45,12 @@ class DJ(object):
         self.interp.add_interpolator(fade_out)
     
     def transition_to(self, sound_name, fade=True):
-        print 'transition to', sound_name, fade
         if fade:
             self.next_sound_name = sound_name
             self.fade_in(sound_name)
         else:
-            print self.interp.interpolators
             new_sound = self.get_sound(sound_name)
             if self.current_sound_name == sound_name:
-                print 'fading self back in'
                 if self.interp.interpolators:
                     self.interp.delete()
                 fade_out = interpolator.LinearInterpolator(self.player, 'volume', 
@@ -62,16 +59,11 @@ class DJ(object):
                                                            duration=3.0)
                 self.interp.add_interpolator(fade_out)
             else:
-                print 'loading new sound'
                 if not new_sound.is_queued:
-                    print 'it worked?'
                     self.player.queue(new_sound)
-                    print self.player.source
                 if self.player.playing:
-                    print 'playing, doing fade'
                     self.fade_out(next_sound=sound_name)
                 else:
-                    print 'not playing, starting'
                     self.player.volume = self.volume
                     self.player.play()
     
