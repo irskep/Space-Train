@@ -1,0 +1,28 @@
+# Initialization
+
+at_rest:
+    main: stand_left
+
+speaking:
+    main: talk_left
+
+variables:
+    knows_about_baron: false
+
+# States
+
+start:
+    - main: A large red button, I wonder what it's for?
+    - choice:
+        Press the button.:
+            goto: explosion
+        I better leave it alone.:
+            goto: end
+    
+explosion:
+    - update_globals:
+        button_pressed: True
+    
+end:
+    - update_globals:
+        button_inspected: True

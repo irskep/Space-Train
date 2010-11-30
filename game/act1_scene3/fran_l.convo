@@ -1,0 +1,32 @@
+# Initialization
+
+at_rest:
+    main: stand_right
+    hipster_fran: hipster_fran
+
+speaking:
+    main: talk_right
+    hipster_fran: talk_front
+    
+variables:
+    knows_about_baron: false
+
+# States
+
+start:
+    - hipster_fran: Want a smoke?
+    - main: I don't smoke.
+    - hipster_fran: How can you survive such a commercial existence without smokes?
+    - choice:
+        What is that red button over there?:
+            require: button_inspected
+            goto: button
+        I'll be going now.:
+            goto: end
+
+button:
+    - hipster_fran: Don't touch it! It would ruin the sanctity of this place.
+    - main: I'll be going now.
+    
+end:
+    - main: I'll be going now.
