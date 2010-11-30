@@ -158,6 +158,7 @@ def end_conversation(convo_name):
         myscene.actors['levity'].prepare_walkpath_move("levity_right")
         myscene.actors['levity'].next_action()
         myscene.handler.handler.save()
+        myscene.actors['main'].update_state('sit')
 
     if convo_name == "you_shall_not_pass":
         myscene.actors['sneelock'].prepare_walkpath_move("sneelock_guard")
