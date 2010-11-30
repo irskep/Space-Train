@@ -70,4 +70,7 @@ def handle_event(event, *args):
 def actor_clicked(clicked_actor):
     if clicked_actor.identifier == "note":
         myscene.fade_music(1.0)
-        myscene.handler.notify("act1_scene1")
+        pyglet.clock.schedule_once(next, 1.1)
+
+def next(dt=0):
+    myscene.handler.notify("act1_scene1")
