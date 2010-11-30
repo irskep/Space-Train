@@ -18,6 +18,7 @@ def next(*args, **kwargs):
 
 def actor_clicked(clicked_actor):
     if clicked_actor.identifier == "go":
+        myscene.play_sound("new_game")
         interp = LinearInterpolator(myscene.actors['go'].sprite, 'scale', end=3.0, duration=0.72)
         myscene.add_interpolator(interp)
         interp = LinearInterpolator(myscene.actors['go'].sprite, 'opacity', 0.0, 

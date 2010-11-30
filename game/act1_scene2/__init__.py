@@ -115,6 +115,7 @@ def handle_event(event, *args):
         actor = info['actor']
         point = info['point']
         if actor.identifier == 'main' and point == 'point_1':
+            myscene.play_sound("door_open")
             myscene.handler.notify('act1_scene1')
         if walk_handlers.has_key(actor.identifier):
             walk_handlers[actor.identifier](actor, point)

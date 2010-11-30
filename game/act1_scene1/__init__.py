@@ -78,6 +78,7 @@ def inga_walk(actor, point):
             sneelock.next_action()
             myscene.convo.begin_conversation("you_shall_not_pass")
     if point == "transition_left":
+        myscene.play_sound("door_open")
         myscene.handler.notify("act1_scene2")
     if re.match(r"seat_\d+", point) and do_sit:
         myscene.actors['main'].update_state("sit")
