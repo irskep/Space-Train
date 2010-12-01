@@ -241,6 +241,14 @@ class Scene(object):
     def play_background(self, name, fade=True):
         self.handler.handler.background_dj.transition_to(name, fade=fade)
     
+    def _global_dict(self):
+        return self.handler.handler.game_variables
+    
+    global_dict = property(_global_dict)
+    
+    def get_global(self, k):
+        return self.handler.handler.game_variables[k]
+    
     def camera_sequence(self, points, speed=400.0, return_to_start=True):
         points = list(points)
         if return_to_start:
