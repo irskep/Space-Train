@@ -37,6 +37,11 @@ random.shuffle(more_colors)
 next_color = 0
 multiline_w = 400
 
+stupid_cheap_pointer_position_hack = {
+    'cart_lady': (-50, 0),
+    'conspiracy_theorist': (10, 0)
+}
+
 class Conversation(object):
     """
     Starts, runs, and stops cutscenes.
@@ -392,14 +397,14 @@ class Conversation(object):
             cw = self.convo_label.content_width/2+40
             self.convo_label.x = max(cw, self.convo_label.x)
             self.convo_label.x = min(self.scene.camera.position[0]+gamestate.norm_w/2-cw, self.convo_label.x)
-            self._update_vertices()
+            self._update_vertices(act)
             self.scene.clock.schedule_once(self.next_line, max(len(arg)*0.05, 3.0))
         else:
             if arg.has_key('action'):
                 getattr(act, arg['action'])()
                 self.next_line()
     
-    def _update_vertices(self):
+    def _update_vertices(self, act):
         x = self.convo_label.x
         y = self.convo_label.y
         w = self.convo_label.content_width
@@ -412,11 +417,12 @@ class Conversation(object):
             x1, y1 = x - (w / 2) - 5,   y - 5
             x2, y2 = x + (w / 2) + 5,   y + h + 5
         
-        point_x = x
-        point_y = y-20
-        point_left_x = max(x-20, x1)
+        offset_x, offset_y = stupid_cheap_pointer_position_hack.get(act.name, (0, 0))
+        point_x = x + offset_x
+        point_y = y + offset_y - 20
+        point_left_x = max(x - 20 + offset_x*0.5, x1)
         point_left_y = y1
-        point_right_x = min(x+20, x2)
+        point_right_x = min(x + 20 + offset_y*0.5, x2)
         point_right_y = y1
         
         self.vertices_outline = (x1, y1, x1, y2, x2, y2, x2, y1,
