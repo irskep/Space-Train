@@ -37,11 +37,6 @@ random.shuffle(more_colors)
 next_color = 0
 multiline_w = 400
 
-stupid_cheap_pointer_position_hack = {
-    'cart_lady': (-50, 0),
-    'conspiracy_theorist': (10, 0)
-}
-
 class Conversation(object):
     """
     Starts, runs, and stops cutscenes.
@@ -179,7 +174,7 @@ class Conversation(object):
         """Draw dialogue box and text"""
         if self.convo_label:
             draw.set_color(0,0,0,1)
-            pyglet.graphics.draw(9, pyglet.gl.GL_TRIANGLE_STRIP,('v2f', self.vertices_fill))
+            pyglet.graphics.draw(9, pyglet.gl.GL_TRIANGLES,('v2f', self.vertices_fill))
             draw.set_color(*map(lambda c:c/255.0, self.text_color))
             pyglet.graphics.draw(7, pyglet.gl.GL_LINE_LOOP, ('v2f', self.vertices_outline))
             self.convo_label.draw()
@@ -417,7 +412,7 @@ class Conversation(object):
             x1, y1 = x - (w / 2) - 5,   y - 5
             x2, y2 = x + (w / 2) + 5,   y + h + 5
         
-        offset_x, offset_y = stupid_cheap_pointer_position_hack.get(act.name, (0, 0))
+        offset_x, offset_y = act.dialogue_offset
         point_x = x + offset_x
         point_y = y + offset_y - 20
         point_left_x = max(x - 20 + offset_x*0.5, x1)
@@ -429,11 +424,11 @@ class Conversation(object):
                                  point_right_x, point_right_y,
                                  point_x, point_y,
                                  point_left_x, point_left_y)
-        self.vertices_fill = (point_left_x, point_left_y,
+        self.vertices_fill = (x1, y1, x1, y2, x2, y2,
+                              x2, y2, x2, y1, x1, y1,
                               point_right_x, point_right_y,
                               point_x, point_y,
-                              x1, y1, x1, y2, x2, y2,
-                              x2, y2, x2, y1, x1, y1)
+                              point_left_x, point_left_y)
     
     def clear_speech_bubble(self):
         """Clear all spoken text"""

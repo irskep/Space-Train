@@ -58,6 +58,7 @@ class Actor(actionsequencer.ActionSequencer):
     
     # Access
     
+    dialogue_offset = property(lambda self: Actor.info[self.name].get('dialogue_offset', (0, 0)))
     def covers_point(self, x, y):
         if not self.sprite.visible:
             return False
