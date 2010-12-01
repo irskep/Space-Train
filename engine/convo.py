@@ -420,15 +420,12 @@ class Conversation(object):
         point_right_x = min(x + 20 + offset_y*0.5, x2)
         point_right_y = y1
         
-        self.vertices_outline = (x1, y1, x1, y2, x2, y2, x2, y1,
-                                 point_right_x, point_right_y,
-                                 point_x, point_y,
-                                 point_left_x, point_left_y)
-        self.vertices_fill = (x1, y1, x1, y2, x2, y2,
-                              x2, y2, x2, y1, x1, y1,
-                              point_right_x, point_right_y,
-                              point_x, point_y,
-                              point_left_x, point_left_y)
+        first_tri = (x1, y1, x1, y2, x2, y2)
+        last_tri = (point_right_x, point_right_y, point_x, point_y,
+                    point_left_x, point_left_y)
+        
+        self.vertices_outline = first_tri + (x2, y1) + last_tri
+        self.vertices_fill = first_tri + (x2, y2, x2, y1, x1, y1) + last_tri
     
     def clear_speech_bubble(self):
         """Clear all spoken text"""
