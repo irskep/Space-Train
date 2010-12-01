@@ -121,6 +121,12 @@ class Actor(actionsequencer.ActionSequencer):
     
     # Possible actions to put in a sequence. Pay attention for parameter values.
     
+    def play_speaking_sound(self):
+        try:
+            pyglet.resource.media(self.resource_path('speak.wav'), streaming=False).play()
+        except pyglet.resource.ResourceNotFoundException:
+            pass
+    
     def move_to(self, pos, anim=None):
         """Set up an interpolator to move between this actor's current position and
         the given position, choosing a walk animation automatically if non is provided"""

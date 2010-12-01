@@ -238,7 +238,7 @@ class Conversation(object):
         """Update variables dictionary"""
         self.scene.handler.handler.game_variables.update(val)
         return True
-
+    
     def _play_sound(self, val):
         self.scene.play_sound(val)
         return True
@@ -382,22 +382,29 @@ class Conversation(object):
                                                         act.current_image().height - \
                                                         act.current_image().anchor_y)
             
-            
-            cw = self.convo_label.content_width/2+40
-            self.convo_label.x = max(cw, self.convo_label.x)
-            self.convo_label.x = min(self.scene.camera.position[0]+gamestate.norm_w/2-cw, self.convo_label.x)
             self._update_vertices(act)
             self.scene.clock.schedule_once(self.next_line, max(len(arg)*0.05, 3.0))
+            if not self.background:
+                act.play_speaking_sound()
         else:
             if arg.has_key('action'):
                 getattr(act, arg['action'])()
                 self.next_line()
     
     def _update_vertices(self, act):
+        offset_x, offset_y = act.dialogue_offset
+        
+        cw = self.convo_label.content_width/2+40
+        self.convo_label.x = max(cw, self.convo_label.x)
+        self.convo_label.x = min(self.scene.camera.position[0]+gamestate.norm_w/2-cw, self.convo_label.x)
+        
         x = self.convo_label.x
         y = self.convo_label.y
         w = self.convo_label.content_width
         h = self.convo_label.content_height
+        
+        point_x = act.sprite.x + offset_x
+        point_y = y + offset_y - 20
         
         if self.convo_label.multiline:
             x1, y1 = x - (multiline_w / 2) - 5, y - 5
@@ -406,12 +413,9 @@ class Conversation(object):
             x1, y1 = x - (w / 2) - 5,   y - 5
             x2, y2 = x + (w / 2) + 5,   y + h + 5
         
-        offset_x, offset_y = act.dialogue_offset
-        point_x = x + offset_x
-        point_y = y + offset_y - 20
-        point_left_x = max(x - 20 + offset_x*0.5, x1)
+        point_left_x = max(point_x - 20 + offset_x*0.5, x1)
         point_left_y = y1
-        point_right_x = min(x + 20 + offset_y*0.5, x2)
+        point_right_x = min(point_x + 20 + offset_y*0.5, x2)
         point_right_y = y1
         
         first_tri = (x1, y1, x1, y2, x2, y2)
