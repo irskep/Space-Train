@@ -1,3 +1,6 @@
+import functools
+import pyglet
+
 from engine import actor
 from engine.interpolator import PulseInterpolator, LinearInterpolator
 from engine.util.const import WALK_PATH_COMPLETED
@@ -8,38 +11,47 @@ from engine import gamestate
 from engine import convo
 from engine import util
 
-click_handlers = {}
+import state
 
-def handles_click(f, *labels):
-    for label in labels:
-        click_handlers[label] = f
-    return f
+@state.handles_convo('introduction')
+def handle_intro():
+    state.myscene.interaction_enabled = True
+    state.myscene.actors['levity'].prepare_walkpath_move("levity_right")
+    state.myscene.actors['levity'].next_action()
+    state.myscene.handler.handler.save()
+    state.myscene.actors['main'].update_state('sit')
 
-@handles_click('shamus')
-def talk_to_shamus():
-    myscene.begin_conversation('a_young_irish_boy')
+@state.handles_convo('you_shall_not_pass')
+def handle_block_door():
+    state.myscene.actors['sneelock'].prepare_walkpath_move("sneelock_guard")
+    state.myscene.actors['sneelock'].next_action()
 
-@handles_click('gregg_briggs')
-def talk_to_briggs():
-    myscene.end_background_conversation('mumblestiltskin')
-    myscene.begin_conversation("briggs_exposition")
+    state.myscene.actors['main'].prepare_walkpath_move("point_6")
+    state.myscene.actors['main'].next_action()
+    
+    state.myscene.handler.handler.save()
 
-@handles_click('tourist', 'tourist_1')
-def talk_to_tourists():
-    if myscene.actors['tourist'].walkpath_point == "tourist_start":
-        myscene.begin_conversation("meet_the_tourists")
+@state.handles_convo('its_too_hot')
+def handle_complaint():
+    state.myscene.actors['sneelock'].prepare_walkpath_move("sneelock_inspect")
+    state.myscene.actors['sneelock'].next_action()
+    state.myscene.handler.handler.save()
 
-@handles_click('hipster_amanda', 'hipster_liam', 'hipster_fran')
-def talk_to_hipsters():
-    if not sneelock_distracted:
-        myscene.begin_conversation("grunt")
+@state.handles_convo('a_young_irish_boy')
+def handle_shamus():
+    if state.myscene.handler.handler.game_variables.get('hamster_dropped', False):
+        potato = state.myscene.new_actor('potato', 'potato')
+        potato.walk_speed = 200.0
+        potato.walkpath_point = "potato_9"
+        potato.prepare_walkpath_move("potato_10")
+        potato.next_action()
+        state.myscene.handler.handler.game_variables['potato_rolling'] = True
 
-@handles_click('potato')
-def potato_options():
-    if myscene.ui.inventory.has_item("note"):
-        myscene.handler.handler.game_variables['potato_stop'] = True
-
-@handles_click('thermostat')
-def thermostat_options():
-    inspect_func = functools.partial(myscene.begin_conversation, "thermostat_discover")
-    myscene.ui.show_cam(clicked_actor, {'Inspect': inspect_func})
+@state.handles_convo('thermostat_discover')
+def handle_thermostat():
+    if state.myscene.handler.handler.game_variables['temperature'] >= 80:
+        state.myscene.actors['thermostat'].update_state('rising')
+        # Nicole complains!
+        tourist = state.myscene.actors['tourist']
+        pyglet.clock.schedule_once(util.make_dt_wrapper(tourist.prepare_walkpath_move), 5, "tourist_complain")
+        pyglet.clock.schedule_once(tourist.next_action, 5)
