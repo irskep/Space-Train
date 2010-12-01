@@ -58,6 +58,7 @@ class Actor(actionsequencer.ActionSequencer):
     
     # Access
     
+    dialogue_offset = property(lambda self: Actor.info[self.name].get('dialogue_offset', (0, 0)))
     def covers_point(self, x, y):
         if not self.sprite.visible:
             return False
@@ -73,7 +74,7 @@ class Actor(actionsequencer.ActionSequencer):
         max_x = self.icon.x - self.icon.image.anchor_x + self.icon.width
         max_y = self.icon.y - self.icon.image.anchor_y + self.icon.height
         return min_x <= x <= max_x and min_y <= y <= max_y
-            
+    
     def covers_visible_point(self, x, y):
         min_x = self.abs_position_x()
         min_y = self.abs_position_y()
@@ -119,6 +120,12 @@ class Actor(actionsequencer.ActionSequencer):
             self.set_image_if_exists(new_state)
     
     # Possible actions to put in a sequence. Pay attention for parameter values.
+    
+    def play_speaking_sound(self):
+        try:
+            pyglet.resource.media(self.resource_path('speak.wav'), streaming=False).play()
+        except pyglet.resource.ResourceNotFoundException:
+            pass
     
     def move_to(self, pos, anim=None):
         """Set up an interpolator to move between this actor's current position and
@@ -251,15 +258,19 @@ class Actor(actionsequencer.ActionSequencer):
                 else:
                     make_img = lambda i: self.image_named("%s_%d" % (state_name, i), ax, ay)
                     images = [make_img(i) for i in range(1, num_frames+1)]
-                    # It may make sense to add this animation to its own texture bin later
-                    if my_info.has_key("randomize") and state_name in my_info["randomize"]:
+                    loop = True
+                    if state_name in my_info.get('noloop', []):
+                        loop = False
+                    if state_name in my_info.get('randomize', []):
                         random_images = [i for i in images]
                         random.shuffle(random_images) # Guarantee at least one occurrence per image
                         random_images.extend([random.choice(images) for i in xrange(20)])
                         anim = pyglet.image.Animation.from_image_sequence(random_images,
-                                                                          time_per_frame)
+                                                                          time_per_frame,
+                                                                          loop)
                     else:
-                        anim = pyglet.image.Animation.from_image_sequence(images, time_per_frame)
+                        anim = pyglet.image.Animation.from_image_sequence(images, time_per_frame,
+                                                                          loop)
                     Actor.images[self.name][state_name] = anim
     
     def dict_repr(self):

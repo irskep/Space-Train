@@ -112,9 +112,12 @@ class Linear2DInterpolator(Interpolator):
         super(Linear2DInterpolator, self).update(dt)
         if not self.host_object:
             return
-        new_tuple = ((self.start_tuple[0] + self.progress*self.x_speed),
-                     (self.start_tuple[1] + self.progress*self.y_speed))
-        setattr(self.host_object, self.attr_name, new_tuple)
+        try:
+            new_tuple = ((self.start_tuple[0] + self.progress*self.x_speed),
+                         (self.start_tuple[1] + self.progress*self.y_speed))
+            setattr(self.host_object, self.attr_name, new_tuple)
+        except AttributeError:
+            print 'Interpolator error on', self.host_object
     
     def __repr__(self):
         fmt = "Linear2DInterpolator '%s' on %s.%s from %s to %s taking %0.2f seconds)"

@@ -36,7 +36,8 @@ class DJ(object):
         for arg in args:
             self.get_sound(arg)
     
-    def fade_out(self, time=3.0):
+    def fade_out(self, time=3.0, next_sound=None):
+        self.next_sound_name = next_sound
         fade_out = interpolator.LinearInterpolator(self.player, 'volume', 
                                                    start=self.volume,
                                                    end=0.0, name="volume", duration=time,
@@ -50,8 +51,10 @@ class DJ(object):
         else:
             new_sound = self.get_sound(sound_name)
             if self.current_sound_name == sound_name:
+                if self.interp.interpolators:
+                    self.interp.delete()
                 fade_out = interpolator.LinearInterpolator(self.player, 'volume', 
-                                                           start=0.0,
+                                                           start=self.player.volume,
                                                            end=self.volume, name="volume", 
                                                            duration=3.0)
                 self.interp.add_interpolator(fade_out)
@@ -59,8 +62,9 @@ class DJ(object):
                 if not new_sound.is_queued:
                     self.player.queue(new_sound)
                 if self.player.playing:
-                    self.fade_out()
+                    self.fade_out(next_sound=sound_name)
                 else:
+                    self.player.volume = self.volume
                     self.player.play()
     
     def fade_in(self, sound_name):
@@ -83,7 +87,11 @@ class DJ(object):
         self.player.play()
     
     def next_track(self, dt=0):
-        self.current_sound_name = self.next_sound_name
-        self.player.volume = 1.0
-        self.player.next()
+        if self.next_sound_name:
+            self.current_sound_name = self.next_sound_name
+            self.player.volume = 1.0
+            self.player.next()
+        else:
+            self.player.next()
+            self.player.pause()
     

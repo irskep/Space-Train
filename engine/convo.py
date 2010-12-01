@@ -1,11 +1,109 @@
 """
-Cutscenes, mostly just 1-on-1 dialogue. This stuff is complicated, read carefully.
+Starts, runs, and stops cutscenes.
 
-TODO:
-- Preload conversations (make sure to *copy*, not *reference* convo_info)
+The file format is JSON/YAML. Either syntax can be used, but YAML is easier on the eyes.
+
+A conversation file should reside in its scene's data folder and have the extension ".convo".
+At the top level, it is a dictionary with a few required keys and as many non-required keys
+as you desire.
+
+Required keys:
+
+    # Animations
+    at_rest:    # actor ID: image to show when actor is not speaking
+        main: stand_right
+        bean_salesman: stand_front
+    
+    speaking:   # actor ID: image to show when actor is speaking
+        main: talk_right
+        bean_salesman: stand_front
+    
+    variables:  # Variable name: initial value (can be updated with update_locals)
+        bean_hate: false
+        bean_interest: false
+    
+    # Dialogue entry point
+    start:
+        [action list]
+
+Action list format:
+    - command: argument
+    - command: argument
+    - ...
+
+Commands:
+    goto: <label>
+        Start executing the action list under the top-level label <label>
+        
+        EXAMPLE: goto start
+    
+    give: <actor_name>
+        Add a new instance of <actor_name> to the inventory with an ID of the form actor_name_#,
+        where # is the highest unused number in this form.
+    
+    give: <actor_name> (new_id)
+        Like give, but you can also specify the object's identifier string.
+    
+    actor_id: <text>
+        Make an actor speak a phrase. Delay the next action.
+        
+        EXAMPLE:
+            bean_salesman: What a nice day it is today!
+    
+    actor_id: <dictionary>
+        Perform actions on one actor. Currently only accepts one key:
+            action: <action_name>
+                Calls actor.action_name()
+        
+        EXAMPLE:
+            bean_salesman:
+                action: jump
+    
+    update_animations:
+        Update the animations dictionary (top level dictionary), like so:
+        
+        - update_animations:
+            at_rest:
+                main: stand_front
+    
+    update_locals:
+        name: value
+        name: value
+        ...
+        
+        Set/update the values of any conversation-local variables
+    
+    update_globals:
+        name: value
+        name: value
+        ...
+        
+        Set/update the values of any game global variables
+    
+    choice:
+        <choice text>:
+            [action list]
+        <another choice>:
+            [action list]
+        
+        Present a contextual action menu to the user with dialogue options.
+        
+        The action list accepts two extra commands:
+            hide_after_use: true
+                Do not show this choice again in this conversation.
+            require: <local>
+                Require that the conversation variable <local> be set to some true value
+        
+        (hide_after_use is somewhat redundant to update_locals+require, but it's convenient.)
 """
 
-import pyglet, yaml, collections, functools, re, random
+import collections
+import functools
+import itertools
+import pyglet
+import random
+import re
+import yaml
 
 import actor, gamestate
 from interpolator import LinearInterpolator
@@ -22,7 +120,7 @@ colors = {
     'main': (255,201,215,255)
 }
 
-more_colors = [
+more_colors = itertools.cycle(random.sample([
     (229,201,255,255),
     (201,206,255,255),
     (201,249,255,255),
@@ -30,111 +128,11 @@ more_colors = [
     (255,255,201,255),
     (255,228,201,255),
     (255,201,201,255),
-]
+], 7))
 
-random.shuffle(more_colors)
-
-next_color = 0
+multiline_w = 400
 
 class Conversation(object):
-    """
-    Starts, runs, and stops cutscenes.
-    
-    The file format is JSON/YAML. Either syntax can be used, but YAML is easier on the eyes.
-    
-    A conversation file should reside in its scene's data folder and have the extension ".convo".
-    At the top level, it is a dictionary with a few required keys and as many non-required keys
-    as you desire.
-    
-    Required keys:
-    
-        # Animations
-        at_rest:    # actor ID: image to show when actor is not speaking
-            main: stand_right
-            bean_salesman: stand_front
-        
-        speaking:   # actor ID: image to show when actor is speaking
-            main: talk_right
-            bean_salesman: stand_front
-        
-        variables:  # Variable name: initial value (can be updated with update_locals)
-            bean_hate: false
-            bean_interest: false
-        
-        # Dialogue entry point
-        start:
-            [action list]
-    
-    Action list format:
-        - command: argument
-        - command: argument
-        - ...
-    
-    Commands:
-        goto: <label>
-            Start executing the action list under the top-level label <label>
-            
-            EXAMPLE: goto start
-        
-        give: <actor_name>
-            Add a new instance of <actor_name> to the inventory with an ID of the form actor_name_#,
-            where # is the highest unused number in this form.
-        
-        give: <actor_name> (new_id)
-            Like give, but you can also specify the object's identifier string.
-        
-        actor_id: <text>
-            Make an actor speak a phrase. Delay the next action.
-            
-            EXAMPLE:
-                bean_salesman: What a nice day it is today!
-        
-        actor_id: <dictionary>
-            Perform actions on one actor. Currently only accepts one key:
-                action: <action_name>
-                    Calls actor.action_name()
-            
-            EXAMPLE:
-                bean_salesman:
-                    action: jump
-        
-        update_animations:
-            Update the animations dictionary (top level dictionary), like so:
-            
-            - update_animations:
-                at_rest:
-                    main: stand_front
-        
-        update_locals:
-            name: value
-            name: value
-            ...
-            
-            Set/update the values of any conversation-local variables
-        
-        update_globals:
-            name: value
-            name: value
-            ...
-            
-            Set/update the values of any game global variables
-        
-        choice:
-            <choice text>:
-                [action list]
-            <another choice>:
-                [action list]
-            
-            Present a contextual action menu to the user with dialogue options.
-            
-            The action list accepts two extra commands:
-                hide_after_use: true
-                    Do not show this choice again in this conversation.
-                require: <local>
-                    Require that the conversation variable <local> be set to some true value
-            
-            (hide_after_use is somewhat redundant to update_locals+require, but it's convenient.)
-    """
     def __init__(self, scn, background=False):
         super(Conversation, self).__init__()
         self.scene = scn
@@ -147,6 +145,8 @@ class Conversation(object):
         self.background = background
         self.convo_label = None
         self.text_color = (255,255,255,255)
+        self.vertices_outline = None
+        self.vertices_fill = None
     
     def delete(self):
         pass
@@ -170,23 +170,10 @@ class Conversation(object):
     def draw(self):
         """Draw dialogue box and text"""
         if self.convo_label:
-            draw.set_color(1,1,1,1)
-            x = self.convo_label.x
-            y = self.convo_label.y
-            w = self.convo_label.content_width
-            h = self.convo_label.content_height
-            
-            if self.convo_label.multiline:
-                rect_args = (x - (400 / 2) - 5,  y - 5,
-                             x + (400 / 2) + 5,  y + h + 5)
-            else:
-                rect_args = (x - (w / 2) - 5,  y - 5,
-                             x + (w / 2) + 5,  y + h + 5)
-
             draw.set_color(0,0,0,1)
-            draw.rect(*rect_args)
+            pyglet.graphics.draw(9, pyglet.gl.GL_TRIANGLES,('v2f', self.vertices_fill))
             draw.set_color(*map(lambda c:c/255.0, self.text_color))
-            draw.rect_outline(*rect_args)
+            pyglet.graphics.draw(7, pyglet.gl.GL_LINE_LOOP, ('v2f', self.vertices_outline))
             self.convo_label.draw()
     
     def _update_anim_dict(self, newdict):
@@ -254,7 +241,7 @@ class Conversation(object):
         """Update variables dictionary"""
         self.scene.handler.handler.game_variables.update(val)
         return True
-
+    
     def _play_sound(self, val):
         self.scene.play_sound(val)
         return True
@@ -375,9 +362,7 @@ class Conversation(object):
             self.clear_speech_bubble()
             
             if not colors.has_key(actor_id):
-                global next_color
-                colors[actor_id] = more_colors[next_color]
-                next_color += 1
+                colors[actor_id] = more_colors.next()
             self.text_color = colors[actor_id]
             
             if len(arg) > 47:
@@ -388,7 +373,7 @@ class Conversation(object):
                                                      y=act.sprite.y + 20 + \
                                                         act.current_image().height - \
                                                         act.current_image().anchor_y,
-                                                     multiline=True, width=400)
+                                                     multiline=True, width=multiline_w)
             else:
                 self.convo_label = pyglet.text.Label(arg, color=self.text_color, font_size=12, 
                                                      font_name=['Verdana', 'Helvetica'],
@@ -398,15 +383,48 @@ class Conversation(object):
                                                         act.current_image().height - \
                                                         act.current_image().anchor_y)
             
-            
-            cw = self.convo_label.content_width/2+40
-            self.convo_label.x = max(cw, self.convo_label.x)
-            self.convo_label.x = min(self.scene.camera.position[0]+gamestate.norm_w/2-cw, self.convo_label.x)
+            self._update_vertices(act)
             self.scene.clock.schedule_once(self.next_line, max(len(arg)*0.05, 3.0))
+            if not self.background:
+                act.play_speaking_sound()
         else:
             if arg.has_key('action'):
                 getattr(act, arg['action'])()
                 self.next_line()
+    
+    def _update_vertices(self, act):
+        offset_x, offset_y = act.dialogue_offset
+        
+        cw = self.convo_label.content_width/2+40
+        self.convo_label.x = max(cw, self.convo_label.x)
+        self.convo_label.x = min(self.scene.camera.position[0]+gamestate.norm_w/2-cw, self.convo_label.x)
+        
+        x = self.convo_label.x
+        y = self.convo_label.y
+        w = self.convo_label.content_width
+        h = self.convo_label.content_height
+        
+        point_x = act.sprite.x + offset_x
+        point_y = y + offset_y - 20
+        
+        if self.convo_label.multiline:
+            x1, y1 = x - (multiline_w / 2) - 5, y - 5
+            x2, y2 = x + (multiline_w / 2) + 5, y + h + 5
+        else:
+            x1, y1 = x - (w / 2) - 5,   y - 5
+            x2, y2 = x + (w / 2) + 5,   y + h + 5
+        
+        point_left_x = max(point_x - 20 + offset_x*0.5, x1)
+        point_left_y = y1
+        point_right_x = min(point_x + 20 + offset_y*0.5, x2)
+        point_right_y = y1
+        
+        first_tri = (x1, y1, x1, y2, x2, y2)
+        last_tri = (point_right_x, point_right_y, point_x, point_y,
+                    point_left_x, point_left_y)
+        
+        self.vertices_outline = first_tri + (x2, y1) + last_tri
+        self.vertices_fill = first_tri + (x2, y2, x2, y1, x1, y1) + last_tri
     
     def clear_speech_bubble(self):
         """Clear all spoken text"""

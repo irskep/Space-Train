@@ -58,13 +58,6 @@
             "name": "seat", 
             "start_state": "couch"
         }, 
-        "seat_6": {
-            "y": 180, 
-            "x": 421, 
-            "walk_speed": 400.0, 
-            "name": "seat", 
-            "start_state": "couch"
-        }, 
         "seat_7": {
             "y": 180, 
             "x": 1768, 
@@ -141,6 +134,13 @@
             "name": "hipster_fran", 
             "start_state": "hipster_fran"
         }, 
+        "button": {
+            "y": 275, 
+            "x": 438, 
+            "walk_speed": 400.0, 
+            "name": "button", 
+            "start_state": "ButtonOff"
+        }, 
         "outlet_wire_1": {
             "y": 195, 
             "x": 1654, 
@@ -158,6 +158,10 @@
     }, 
     "walkpath": {
         "points": {
+            "door": {
+                "y": 100, 
+                "x": 196
+            }, 
             "amanda_2": {
                 "y": 100, 
                 "x": 2174
@@ -166,25 +170,21 @@
                 "y": 150, 
                 "x": 2159
             }, 
-            "point_8": {
+            "point_9": {
                 "y": 100, 
-                "x": 175
-            }, 
-            "point_4": {
-                "y": 100, 
-                "x": 1826
+                "x": 538
             }, 
             "point_5": {
                 "y": 101, 
                 "x": 1478
             }, 
             "point_6": {
-                "y": 100, 
-                "x": 990
+                "y": 101, 
+                "x": 1109
             }, 
             "point_7": {
                 "y": 101, 
-                "x": 569
+                "x": 783
             }, 
             "point_1": {
                 "y": 100, 
@@ -196,61 +196,57 @@
             }, 
             "point_3": {
                 "y": 100, 
-                "x": 2106
+                "x": 1946
             }
         }, 
         "edges": [
             {
-                "a": "point_4", 
+                "a": "point_9", 
+                "b": "door"
+            }, 
+            {
+                "a": "point_3", 
                 "b": "point_5"
             }, 
             {
-                "a": "point_7", 
-                "b": "point_6"
-            }, 
-            {
-                "a": "point_8", 
+                "a": "point_6", 
                 "b": "point_7"
             }, 
             {
-                "a": "point_7", 
-                "b": "point_8"
-            },
+                "a": "point_9", 
+                "b": "point_7"
+            }, 
             {
                 "a": "point_1", 
                 "b": "point_2"
             }, 
             {
                 "a": "point_5", 
-                "b": "point_4"
+                "b": "point_3"
+            }, 
+            {
+                "a": "point_7", 
+                "b": "point_9"
+            }, 
+            {
+                "a": "point_7", 
+                "b": "point_6"
             }, 
             {
                 "a": "point_2", 
                 "b": "point_1"
             }, 
             {
-                "a": "point_6", 
-                "b": "point_7"
+                "a": "amanda_2", 
+                "b": "amanda_1"
             }, 
             {
-                "a": "point_5", 
-                "b": "point_6"
-            }, 
-            {
-                "a": "point_3", 
-                "b": "point_4"
-            }, 
-            {
-                "a": "point_6", 
-                "b": "point_5"
+                "a": "door", 
+                "b": "point_9"
             }, 
             {
                 "a": "amanda_1", 
                 "b": "amanda_2"
-            }, 
-            {
-                "a": "amanda_2", 
-                "b": "amanda_1"
             }, 
             {
                 "a": "point_2", 
@@ -261,8 +257,12 @@
                 "b": "point_2"
             }, 
             {
-                "a": "point_4", 
-                "b": "point_3"
+                "a": "point_5", 
+                "b": "point_6"
+            }, 
+            {
+                "a": "point_6", 
+                "b": "point_5"
             }
         ]
     }
