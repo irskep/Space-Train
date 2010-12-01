@@ -97,7 +97,13 @@ Commands:
         (hide_after_use is somewhat redundant to update_locals+require, but it's convenient.)
 """
 
-import pyglet, yaml, collections, functools, re, random
+import collections
+import functools
+import itertools
+import pyglet
+import random
+import re
+import yaml
 
 import actor, gamestate
 from interpolator import LinearInterpolator
@@ -114,7 +120,7 @@ colors = {
     'main': (255,201,215,255)
 }
 
-more_colors = [
+more_colors = itertools.cycle(random.sample([
     (229,201,255,255),
     (201,206,255,255),
     (201,249,255,255),
@@ -122,11 +128,8 @@ more_colors = [
     (255,255,201,255),
     (255,228,201,255),
     (255,201,201,255),
-]
+], 7))
 
-random.shuffle(more_colors)
-
-next_color = 0
 multiline_w = 400
 
 class Conversation(object):
@@ -359,9 +362,7 @@ class Conversation(object):
             self.clear_speech_bubble()
             
             if not colors.has_key(actor_id):
-                global next_color
-                colors[actor_id] = more_colors[next_color]
-                next_color += 1
+                colors[actor_id] = more_colors.next()
             self.text_color = colors[actor_id]
             
             if len(arg) > 47:
