@@ -293,14 +293,14 @@ class Scene(object):
             self.move_main(x, y)
     
     def click_actor(self, clicked_actor):
-        if(self.ui.inventory.held_item is not None):
-            can_receive_item = self.call_if_available('give_actor', clicked_actor, 
-                                                      self.ui.inventory.held_item)
-            if not can_receive_item:
-                self.ui.inventory.put_item(self.ui.inventory.held_item)
-            self.ui.inventory.held_item = None
-        else:
-            self.module.actor_clicked(clicked_actor)
+        # if(self.ui.inventory.held_item is not None):
+        #     can_receive_item = self.call_if_available('give_actor', clicked_actor, 
+        #                                               self.ui.inventory.held_item)
+        #     if not can_receive_item:
+        #         self.ui.inventory.put_item(self.ui.inventory.held_item)
+        #     self.ui.inventory.held_item = None
+        # else:
+        self.module.actor_clicked(clicked_actor)
     
     def on_key_press(self, symbol, modifiers):
         if symbol == key.ESCAPE:
