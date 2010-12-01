@@ -36,6 +36,7 @@ def init(fresh=False):
         myscene.handler.handler.game_variables['temperature'] = 72
         myscene.handler.handler.game_variables['potato_rolling'] = False
         myscene.handler.handler.game_variables['potato_stop'] = False
+        myscene.handler.handler.game_variables['groupies_blocked'] = False
         myscene.interaction_enabled = False
         myscene.actors['levity'].prepare_walkpath_move("levity_4")
         myscene.actors['levity'].next_action()
@@ -239,7 +240,17 @@ def actor_clicked(clicked_actor):
             myscene.handler.handler.game_variables['potato_stop'] = True
             #myscene.ui.show_cam(clicked_actor, {'Place note into ball': 
             
-        
+    #inventory items
+    if clicked_actor.identifier == "pen" and myscene.handler.handler.game_variables['groupies_blocked']:
+        myscene.ui.show_cam(clicked_actor, {'Write a lovely note': write_lovely_note, 'Clicka-Clicka': lambda: 1 + 1})
+            
+            
+def write_lovely_note():
+    myscene.ui.inventory.get_item("pen")
+    myscene.ui.inventory.get_item("notepad")
+    note = actor.Actor('note', 'note', myscene)
+    myscene.ui.inventory.put_item(note)
+            
 def give_actor(actor, item):
     print "Attemping to give %s %s" % (actor.identifier, item.identifier)
     if actor.identifier == "shamus" and item.identifier == "beans":
