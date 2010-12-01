@@ -35,6 +35,7 @@ more_colors = [
 random.shuffle(more_colors)
 
 next_color = 0
+multiline_w = 400
 
 class Conversation(object):
     """
@@ -147,6 +148,8 @@ class Conversation(object):
         self.background = background
         self.convo_label = None
         self.text_color = (255,255,255,255)
+        self.vertices_outline = None
+        self.vertices_fill = None
     
     def delete(self):
         pass
@@ -170,23 +173,10 @@ class Conversation(object):
     def draw(self):
         """Draw dialogue box and text"""
         if self.convo_label:
-            draw.set_color(1,1,1,1)
-            x = self.convo_label.x
-            y = self.convo_label.y
-            w = self.convo_label.content_width
-            h = self.convo_label.content_height
-            
-            if self.convo_label.multiline:
-                rect_args = (x - (400 / 2) - 5,  y - 5,
-                             x + (400 / 2) + 5,  y + h + 5)
-            else:
-                rect_args = (x - (w / 2) - 5,  y - 5,
-                             x + (w / 2) + 5,  y + h + 5)
-
             draw.set_color(0,0,0,1)
-            draw.rect(*rect_args)
+            pyglet.graphics.draw(9, pyglet.gl.GL_TRIANGLE_STRIP,('v2f', self.vertices_fill))
             draw.set_color(*map(lambda c:c/255.0, self.text_color))
-            draw.rect_outline(*rect_args)
+            pyglet.graphics.draw(7, pyglet.gl.GL_LINE_LOOP, ('v2f', self.vertices_outline))
             self.convo_label.draw()
     
     def _update_anim_dict(self, newdict):
@@ -388,7 +378,7 @@ class Conversation(object):
                                                      y=act.sprite.y + 20 + \
                                                         act.current_image().height - \
                                                         act.current_image().anchor_y,
-                                                     multiline=True, width=400)
+                                                     multiline=True, width=multiline_w)
             else:
                 self.convo_label = pyglet.text.Label(arg, color=self.text_color, font_size=12, 
                                                      font_name=['Verdana', 'Helvetica'],
@@ -402,11 +392,42 @@ class Conversation(object):
             cw = self.convo_label.content_width/2+40
             self.convo_label.x = max(cw, self.convo_label.x)
             self.convo_label.x = min(self.scene.camera.position[0]+gamestate.norm_w/2-cw, self.convo_label.x)
+            self._update_vertices()
             self.scene.clock.schedule_once(self.next_line, max(len(arg)*0.05, 3.0))
         else:
             if arg.has_key('action'):
                 getattr(act, arg['action'])()
                 self.next_line()
+    
+    def _update_vertices(self):
+        x = self.convo_label.x
+        y = self.convo_label.y
+        w = self.convo_label.content_width
+        h = self.convo_label.content_height
+        
+        if self.convo_label.multiline:
+            x1, y1 = x - (multiline_w / 2) - 5, y - 5
+            x2, y2 = x + (multiline_w / 2) + 5, y + h + 5
+        else:
+            x1, y1 = x - (w / 2) - 5,   y - 5
+            x2, y2 = x + (w / 2) + 5,   y + h + 5
+        
+        point_x = x
+        point_y = y-20
+        point_left_x = max(x-20, x1)
+        point_left_y = y1
+        point_right_x = min(x+20, x2)
+        point_right_y = y1
+        
+        self.vertices_outline = (x1, y1, x1, y2, x2, y2, x2, y1,
+                                 point_right_x, point_right_y,
+                                 point_x, point_y,
+                                 point_left_x, point_left_y)
+        self.vertices_fill = (point_left_x, point_left_y,
+                              point_right_x, point_right_y,
+                              point_x, point_y,
+                              x1, y1, x1, y2, x2, y2,
+                              x2, y2, x2, y1, x1, y1)
     
     def clear_speech_bubble(self):
         """Clear all spoken text"""
