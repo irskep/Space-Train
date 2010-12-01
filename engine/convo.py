@@ -1,8 +1,100 @@
 """
-Cutscenes, mostly just 1-on-1 dialogue. This stuff is complicated, read carefully.
+Starts, runs, and stops cutscenes.
 
-TODO:
-- Preload conversations (make sure to *copy*, not *reference* convo_info)
+The file format is JSON/YAML. Either syntax can be used, but YAML is easier on the eyes.
+
+A conversation file should reside in its scene's data folder and have the extension ".convo".
+At the top level, it is a dictionary with a few required keys and as many non-required keys
+as you desire.
+
+Required keys:
+
+    # Animations
+    at_rest:    # actor ID: image to show when actor is not speaking
+        main: stand_right
+        bean_salesman: stand_front
+    
+    speaking:   # actor ID: image to show when actor is speaking
+        main: talk_right
+        bean_salesman: stand_front
+    
+    variables:  # Variable name: initial value (can be updated with update_locals)
+        bean_hate: false
+        bean_interest: false
+    
+    # Dialogue entry point
+    start:
+        [action list]
+
+Action list format:
+    - command: argument
+    - command: argument
+    - ...
+
+Commands:
+    goto: <label>
+        Start executing the action list under the top-level label <label>
+        
+        EXAMPLE: goto start
+    
+    give: <actor_name>
+        Add a new instance of <actor_name> to the inventory with an ID of the form actor_name_#,
+        where # is the highest unused number in this form.
+    
+    give: <actor_name> (new_id)
+        Like give, but you can also specify the object's identifier string.
+    
+    actor_id: <text>
+        Make an actor speak a phrase. Delay the next action.
+        
+        EXAMPLE:
+            bean_salesman: What a nice day it is today!
+    
+    actor_id: <dictionary>
+        Perform actions on one actor. Currently only accepts one key:
+            action: <action_name>
+                Calls actor.action_name()
+        
+        EXAMPLE:
+            bean_salesman:
+                action: jump
+    
+    update_animations:
+        Update the animations dictionary (top level dictionary), like so:
+        
+        - update_animations:
+            at_rest:
+                main: stand_front
+    
+    update_locals:
+        name: value
+        name: value
+        ...
+        
+        Set/update the values of any conversation-local variables
+    
+    update_globals:
+        name: value
+        name: value
+        ...
+        
+        Set/update the values of any game global variables
+    
+    choice:
+        <choice text>:
+            [action list]
+        <another choice>:
+            [action list]
+        
+        Present a contextual action menu to the user with dialogue options.
+        
+        The action list accepts two extra commands:
+            hide_after_use: true
+                Do not show this choice again in this conversation.
+            require: <local>
+                Require that the conversation variable <local> be set to some true value
+        
+        (hide_after_use is somewhat redundant to update_locals+require, but it's convenient.)
 """
 
 import pyglet, yaml, collections, functools, re, random
@@ -38,104 +130,6 @@ next_color = 0
 multiline_w = 400
 
 class Conversation(object):
-    """
-    Starts, runs, and stops cutscenes.
-    
-    The file format is JSON/YAML. Either syntax can be used, but YAML is easier on the eyes.
-    
-    A conversation file should reside in its scene's data folder and have the extension ".convo".
-    At the top level, it is a dictionary with a few required keys and as many non-required keys
-    as you desire.
-    
-    Required keys:
-    
-        # Animations
-        at_rest:    # actor ID: image to show when actor is not speaking
-            main: stand_right
-            bean_salesman: stand_front
-        
-        speaking:   # actor ID: image to show when actor is speaking
-            main: talk_right
-            bean_salesman: stand_front
-        
-        variables:  # Variable name: initial value (can be updated with update_locals)
-            bean_hate: false
-            bean_interest: false
-        
-        # Dialogue entry point
-        start:
-            [action list]
-    
-    Action list format:
-        - command: argument
-        - command: argument
-        - ...
-    
-    Commands:
-        goto: <label>
-            Start executing the action list under the top-level label <label>
-            
-            EXAMPLE: goto start
-        
-        give: <actor_name>
-            Add a new instance of <actor_name> to the inventory with an ID of the form actor_name_#,
-            where # is the highest unused number in this form.
-        
-        give: <actor_name> (new_id)
-            Like give, but you can also specify the object's identifier string.
-        
-        actor_id: <text>
-            Make an actor speak a phrase. Delay the next action.
-            
-            EXAMPLE:
-                bean_salesman: What a nice day it is today!
-        
-        actor_id: <dictionary>
-            Perform actions on one actor. Currently only accepts one key:
-                action: <action_name>
-                    Calls actor.action_name()
-            
-            EXAMPLE:
-                bean_salesman:
-                    action: jump
-        
-        update_animations:
-            Update the animations dictionary (top level dictionary), like so:
-            
-            - update_animations:
-                at_rest:
-                    main: stand_front
-        
-        update_locals:
-            name: value
-            name: value
-            ...
-            
-            Set/update the values of any conversation-local variables
-        
-        update_globals:
-            name: value
-            name: value
-            ...
-            
-            Set/update the values of any game global variables
-        
-        choice:
-            <choice text>:
-                [action list]
-            <another choice>:
-                [action list]
-            
-            Present a contextual action menu to the user with dialogue options.
-            
-            The action list accepts two extra commands:
-                hide_after_use: true
-                    Do not show this choice again in this conversation.
-                require: <local>
-                    Require that the conversation variable <local> be set to some true value
-            
-            (hide_after_use is somewhat redundant to update_locals+require, but it's convenient.)
-    """
     def __init__(self, scn, background=False):
         super(Conversation, self).__init__()
         self.scene = scn
