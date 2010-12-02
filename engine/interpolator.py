@@ -149,7 +149,6 @@ class Random2DInterpolator(Interpolator):
         super(Random2DInterpolator, self).update(dt)
         if self.progress/self.duration >= 0.9:
             self.magnitude *= 0.95
-            print self.magnitude
         if not self.host_object:
             return
         try:
