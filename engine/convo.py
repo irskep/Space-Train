@@ -196,22 +196,10 @@ class Conversation(object):
             self.convo_info = yaml.load(f)
             # Variables default to None
             self.convo_info['variables'] = nonedict(self.convo_info['variables'])
-            # Bare minimum of animations
-            if self.background:
-                # Probably doesn't move the player around
-                self.animations = {
-                    'at_rest': {},
-                    'speaking': {}
-                }
-            else:
-                self.animations = {
-                    'at_rest': {
-                        'main': 'stand_right'
-                    },
-                    'speaking': {
-                        'main': 'talk_right'
-                    }
-                }
+            self.animations = {
+                'at_rest': {},
+                'speaking': {}
+            }
             # Add animations from YAML file
             self._update_anim_dict(self.convo_info)
             
