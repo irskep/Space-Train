@@ -14,9 +14,10 @@ variables:
 # States
 
 start:
-    - tourist: It's too hot in here! I'm sweating fire!
+    - tourist: Why did it get so warm just now? I'm uncomfortable.
     - sneelock: It is a bit hot. Let me see if there's an engineer on board.
-    - tourist: NO! I need it fixed NOW!
-    - sneelock: But I'm just a guard...
-    - tourist: You could be the ultra-pope for all I care! Just FIX IT!
+    - tourist: I'm not going to stand here and sweat bullets while you hunt for some lazy engineer!
+    - tourist: You've got a toolbox, you can do it! I want it fixed NOW!
+    - sneelock: But it's not my job...
+    - tourist: I don't care what your job is, I paid good money for my ticket! GO!
     - sneelock: Right away...
