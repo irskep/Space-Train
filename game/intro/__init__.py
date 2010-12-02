@@ -13,6 +13,7 @@ myscene = None
 wait_time = lambda text: 3.0
 
 note_actor = None
+can_continue = False
 
 def init(fresh=True):
     global note_actor
@@ -39,6 +40,8 @@ def begin(dt=0):
     pyglet.clock.schedule_once(show_letter, t+7.0)
 
 def show_letter(dt=0):
+    global can_continue
+    can_continue = True
     interp = LinearInterpolator(note_actor.sprite, 'opacity', start=0, end=255, name="fade", duration=3.0)
     myscene.interp.add_interpolator(interp)    
 
@@ -68,6 +71,6 @@ def handle_event(event, *args):
     print "Handled", event, "with", args
 
 def actor_clicked(clicked_actor):
-    if clicked_actor.identifier == "note":
+    if clicked_actor.identifier == "note" and can_continue:
         myscene.fade_music(0.95)
         myscene.handler.notify("act1_scene1")
