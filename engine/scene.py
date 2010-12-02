@@ -32,7 +32,7 @@ import functools
 import itertools
 
 import camera, actor, gamestate, util, interpolator, convo
-from util import walkpath, zenforcer, pushmatrix, shadow
+from util import walkpath, zenforcer, pushmatrix, shadow, draw
 
 import cam, environment, gamehandler, scenehandler, sound
 
@@ -76,6 +76,7 @@ class Scene(object):
         self.actors = {}
         self.camera_points = {}
         self.interaction_enabled = True
+        self.blackout = False
         
         self.game_time = 0.0
         self.accum_time = 0.0
@@ -384,6 +385,10 @@ class Scene(object):
         self.zenforcer.update(dt)
     
     def draw(self, dt=0):
+        if self.blackout:
+            draw.set_color(0,0,0,1)
+            draw.rect(0, 0, gamestate.norm_w, gamestate.norm_h)
+            return
         self.env.behind.blit(0,0,0)
         with camera.apply_camera(self.camera):
             if self.main_group:
