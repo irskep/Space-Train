@@ -17,7 +17,6 @@ def init(fresh=False):
     myscene.ui.inventory.visible = True
     
     myscene.play_music('deepcouch', fade=False)
-    myscene.play_background('Train_Loop1', fade=True)
     
     if fresh:
         myscene.handler.handler.game_variables['deep_couch'] = False

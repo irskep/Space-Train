@@ -241,6 +241,9 @@ class Scene(object):
     def play_background(self, name, fade=True):
         self.handler.handler.background_dj.transition_to(name, fade=fade)
     
+    def fade_background(self, time=3.0):
+        self.handler.handler.background_dj.fade_out(time=time)
+    
     def _global_dict(self):
         return self.handler.handler.game_variables
     
