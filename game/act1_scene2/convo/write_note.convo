@@ -1,0 +1,17 @@
+# Initialization
+
+at_rest:
+    main: stand_front
+
+speaking:
+    main: stand_front
+
+variables:
+    knows_about_baron: false
+
+# States
+
+start:
+    - main: Dear Mr. Slavinsky, 
+    - main: I have been following your work for the past few years and would be delighted if you would have tea with me to discuss the utsmer-yezzish form. Shall we? 
+    - main: -Inga Borga
