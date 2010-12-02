@@ -6,7 +6,7 @@ at_rest:
 
 speaking:
     main: talk_sit_left
-    levity: stand_right
+    levity: talk_right
 
 variables:
     bean_hate: false
