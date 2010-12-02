@@ -316,13 +316,11 @@ class Conversation(object):
         temp_choices = choices.copy()
         for choice, tags in choices.viewitems():
             if tags.has_key('require'):
-                in_local = (tags['require'] in self.convo_info['variables']) \
-                            and self.convo_info['variables'][tags['require']]
-                in_global = (tags['require'] in self.scene.handler.handler.game_variables) \
-                            and self.scene.handler.handler.game_variables[tags['require']]
-                in_inventory = (tags['require'] in self.scene.ui.inventory.items)
-                if not (in_local or in_global or in_inventory):   # gotta watch naming variables & items
-                    del temp_choices[choice]
+                v = self.convo_info['variables']
+                for r in tags['require'].split(', '):
+                    if not (r in v and v[r]) and not (r in self.scene.global_dict and self.scene.global_dict[r]) and not (r in self.scene.ui.inventory.items):
+                        del temp_choices[choice]
+                        break
         return temp_choices
     
     # OTHER CUTSCENE STUFF

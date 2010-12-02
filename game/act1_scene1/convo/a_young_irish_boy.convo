@@ -18,10 +18,15 @@ stand_at: shamus_talk_point
 start:
     - choice:
         Your pet is so cute!:
+            hide_after_use: true
             goto: comment
         Have some bean soup:
             require: beans
             goto: give_soup
+        What will you do on Planet Deux?:
+            require: greeted_shamus
+            hide_after_use: true
+            goto: future
         I'll be going now:
             goto: leave
             
@@ -31,11 +36,7 @@ comment:
     - play_sound: "hamster"
     - main: I am Inga! What is your name?
     - shamus: I'm Shamus! Nice to meet you!
-    - choice:
-        What will you do on Planet Deux?:
-            goto: future
-        I'll be going now.:
-            goto: leave
+    - goto: start
         
 
 future:
@@ -47,15 +48,8 @@ future:
 
     - shamus: No... my parents passed away in a space boating accident when I was little. And I am done with foster care!
     - shamus: But there are downsides. I can't buy much food from this train and I'm hungry.
-    - update_animations:
-        speaking:
-            main: stand_front
-    - main: Maybe I can help him.
-    - update_animations:
-        speaking:
-            main: talk_right
-
-    #INGA turns and leaves the conversation.
+    - shamus: All I want is some bean soup.
+    - goto: start
 
 give_soup:
   - main: I know you love beans, so I found you some bean soup to eat.

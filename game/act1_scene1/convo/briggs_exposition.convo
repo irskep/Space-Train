@@ -40,6 +40,11 @@ main_choice:
             goto: ask_saying   
         What's in the bag?:
             hide_after_use: true
+            require: doesnt_know_about_beans
+            goto: sell_beans
+        I would like to buy some beans:
+            hide_after_use: true
+            require: knows_about_beans, beans_not_bought
             goto: sell_beans
         I'll be going now:
             hide_after_use: true
@@ -72,6 +77,9 @@ ask_saying:
 sell_beans:
     - main: What's in the bag?
     - gregg_briggs: Beans. Want to buy some?
+    - update_globals:
+        knows_about_beans: true
+        doesnt_know_about_beans: false
     - choice:
         Sure:
             goto: negotiate_beans
@@ -79,7 +87,7 @@ sell_beans:
             goto: no_thanks
 
 negotiate_beans:
-    - main: Yes please! One bowl of bean soup!
+    - main: One bowl of bean soup please!
     - gregg_briggs: That'll be five space bucks.
     - choice:
         I don't have any more space bucks. Can I trade in this bag of Tasty Nuts and this bottle of lemonade?:
@@ -98,6 +106,8 @@ trade_for_beans:
     - take: nuts
     - take: lemonade
     - give: beans (beans)
+    - update_locals:
+        beans_not_bought: false
     - goto: main_choice
 
 purchase:
@@ -105,6 +115,8 @@ purchase:
     - take: space_bucks
     - gregg_briggs: And your beans.
     - give: beans (beans)
+    - update_locals:
+        beans_not_bought: false
     - goto: main_choice
 
 no_thanks:

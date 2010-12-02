@@ -33,11 +33,11 @@ def handle_shamus():
     if state.myscene.handler.handler.game_variables.get('hamster_dropped', False):
         state.myscene.global_dict['hamster_dropped'] = True
         potato = state.myscene.new_actor('potato', 'potato')
-        potato.walk_speed = 200.0
-        potato.walkpath_point = "potato_9"
+        potato.walkpath_point = "potato_32"
+        potato.sprite.position = state.myscene.walkpath.points['potato_32']
         potato.prepare_walkpath_move("potato_10")
         potato.next_action()
-        state.myscene.handler.handler.game_variables['potato_rolling'] = True
+        state.myscene.global_dict['potato_rolling'] = True
 
 @state.handles_convo('thermostat_discover')
 def handle_thermostat():
