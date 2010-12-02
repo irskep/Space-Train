@@ -30,7 +30,7 @@ def handle_small_talk():
         y = state.myscene.actors['main'].abs_position_y()
         interp = Linear2DInterpolator(state.myscene.camera, 'position',
                 (x, y), speed=400.0, done_function=make_dt_wrapper(state.end_cutscene))
-        pyglet.clock.schedule_once(make_dt_wrapper(state.myscene.add_interpolator), 1, interp)
+        state.myscene.add_interpolator(interp)
 
 @state.handles_convo('a_convenient_opening')
 def handle_duct():
