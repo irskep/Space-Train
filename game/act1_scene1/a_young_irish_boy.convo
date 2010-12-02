@@ -11,6 +11,8 @@ speaking:
 variables:
     knows_about_baron: false
 
+stand_at: shamus_talk_point
+
 # States
 
 start:
