@@ -46,6 +46,8 @@ main_choice:
         Is anyone famous on the train right now?:
             require: explained_space_train
             goto: stanislov
+        How long until we reach Planet Deux?:
+            goto: hahafunny
         No, thank you!:
             goto: done
 
@@ -68,6 +70,10 @@ stanislov:
     - levity: How wonderful!
     - levity: Just please try not to disturb him.
     - goto: main_choice
+
+hahafunny:
+    - main: How long until we reach Planet Deux?
+    - levity: How good of a gamer are you?
 
 done:
     - main: No, that's all.
