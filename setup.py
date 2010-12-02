@@ -14,7 +14,7 @@ OPTIONS = dict(
     argv_emulation=True,
     frameworks=['libavbin.dylib'],
     plist = dict(CFBundleIconFile='spacetrain.icns'), 
-    # PyRuntimeLocations=['/Library/Frameworks/Python.framework/Versions/Current/Python']
+    # PyRuntimeLocations=['/Library/Frameworks/Python.framework/Versions/2.7/Python']
     #, '/System/Library/Frameworks/Python.framework/Versions/Current/Python'])
 )
 
@@ -26,19 +26,6 @@ if sys.platform == 'darwin':
          # Cross-platform applications generally expect sys.argv to
          # be used for opening files.
          options={'py2app': OPTIONS},
-     )
-elif sys.platform == 'win32':
-     from distutils.core import setup
-     import py2exe
-     extra_options = dict(
-         setup_requires=['py2exe'],
-         app=[mainscript],
-     )
-else:
-     extra_options = dict(
-         # Normally unix-like platforms will use "setup.py install"
-         # and install the main script as such
-         scripts=[mainscript],
      )
 
 setup(

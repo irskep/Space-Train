@@ -196,22 +196,10 @@ class Conversation(object):
             self.convo_info = yaml.load(f)
             # Variables default to None
             self.convo_info['variables'] = nonedict(self.convo_info['variables'])
-            # Bare minimum of animations
-            if self.background:
-                # Probably doesn't move the player around
-                self.animations = {
-                    'at_rest': {},
-                    'speaking': {}
-                }
-            else:
-                self.animations = {
-                    'at_rest': {
-                        'main': 'stand_right'
-                    },
-                    'speaking': {
-                        'main': 'talk_right'
-                    }
-                }
+            self.animations = {
+                'at_rest': {},
+                'speaking': {}
+            }
             # Add animations from YAML file
             self._update_anim_dict(self.convo_info)
             
@@ -339,6 +327,9 @@ class Conversation(object):
     
     def next_line(self, dt=0):
         """Advance the cutscene by one line in the current action list"""
+        if not self.active:
+            print 'Somehow we are trying to call next_line on an inactive conversation'
+            return
         if self.convo_position >= len(self.convo_lines):
             self.stop_speaking()
         else:    
@@ -450,6 +441,9 @@ class Conversation(object):
         """Stop the cutscene"""
         self.clear_speech_bubble()
         self.scene.clock.unschedule(self.next_line)
+        
+        for identifier, new_state in self.animations['at_rest'].viewitems():
+            self.scene.actors[identifier].update_state(new_state)
         
         # Order matters here in case the script starts a new conversation
         cn = self.convo_name
