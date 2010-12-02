@@ -48,7 +48,7 @@ main_choice:
             goto: stanislov
         How long until we reach Planet Deux?:
             goto: hahafunny
-        No, thank you!:
+        No, thank you.:
             goto: done
 
 explain_space_train:

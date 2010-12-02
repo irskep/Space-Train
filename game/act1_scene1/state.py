@@ -1,7 +1,5 @@
 myscene = None
 
-sneelock_distracted = False
-
 convo_handlers = {}
 
 def handles_convo(*labels):

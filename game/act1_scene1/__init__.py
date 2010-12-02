@@ -42,6 +42,8 @@ def init(fresh=False):
         
     else:
         myscene.interaction_enabled = True
+        if myscene.global_dict.get('sneelock_distracted', False):
+            myscene.actors['sneelock'].walkpath_point = 'sneelock_inspect'
 
 @state.handles_transition('act1_scene2')
 def come_from_left():
@@ -60,7 +62,7 @@ def come_from_left():
 
 def transition_from(old_scene):
     if state.transition_handlers.has_key(old_scene):
-        state.transition_handlers[old_Scene]()
+        state.transition_handlers[old_scene]()
 
 def end_conversation(convo_name):
     if state.convo_handlers.has_key(convo_name):
@@ -79,7 +81,7 @@ def actor_clicked(clicked_actor):
         state.click_handlers[clicked_actor.identifier](clicked_actor)
 
 def filter_move(point):
-    if point == "transition_left" and not state.sneelock_distracted:
+    if point == "transition_left" and not myscene.global_dict.get('sneelock_distracted', False):
         return "inga_attempt_silver_class"
     else:
         return point

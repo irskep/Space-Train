@@ -27,7 +27,6 @@ def handle_block_door():
 def handle_complaint():
     state.myscene.actors['sneelock'].prepare_walkpath_move("sneelock_inspect")
     state.myscene.actors['sneelock'].next_action()
-    state.myscene.handler.handler.save()
 
 @state.handles_convo('a_young_irish_boy')
 def handle_shamus():

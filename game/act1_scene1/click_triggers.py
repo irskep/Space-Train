@@ -17,11 +17,6 @@ def talk_to_tourists(clicked_actor):
     if state.myscene.actors['tourist'].walkpath_point == "tourist_start":
         state.myscene.begin_conversation("meet_the_tourists")
 
-@state.handles_click('hipster_amanda', 'hipster_liam', 'hipster_fran')
-def talk_to_hipsters(clicked_actor):
-    if not state.sneelock_distracted:
-        state.myscene.begin_conversation("grunt")
-
 @state.handles_click('potato')
 def potato_options(clicked_actor):
     if state.myscene.ui.inventory.has_item("note"):

@@ -10,7 +10,7 @@ import state
 @state.handles_walk('main')
 def inga_walk(actor, point):
     if point == "inga_attempt_silver_class":
-        if not state.sneelock_distracted:
+        if not state.myscene.global_dict.get('sneelock_distracted', False):
             sneelock = state.myscene.actors['sneelock']
             sneelock.prepare_walkpath_move("sneelock_block")
             sneelock.next_action()
@@ -59,7 +59,8 @@ def levity_walk(actor, point):
 @state.handles_walk('tourist')
 def tourist_walk(actor, point):
     if point == "tourist_complain":
-        state.sneelock_distracted = True
+        state.myscene.global_dict['sneelock_distracted'] = True
+        state.myscene.handler.handler.save()
         state.myscene.begin_background_conversation("its_too_hot")
 
 @state.handles_walk('sneelock')
