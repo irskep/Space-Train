@@ -451,6 +451,9 @@ class Conversation(object):
         self.clear_speech_bubble()
         self.scene.clock.unschedule(self.next_line)
         
+        for identifier, new_state in self.animations['at_rest'].viewitems():
+            self.scene.actors[identifier].update_state(new_state)
+        
         # Order matters here in case the script starts a new conversation
         cn = self.convo_name
         self.convo_name = None
