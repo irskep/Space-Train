@@ -12,11 +12,9 @@ myscene = None
 # wait_time = lambda text: max(len(text)*0.015, 3.0)+3.0
 wait_time = lambda text: 3.0
 
-note_actor = None
 can_continue = False
 
 def init(fresh=True):
-    global note_actor
     note_actor = myscene.new_actor('intro_billboards', 'note', attrs=dict(x=640, y=360, opacity=0))
     
     myscene.play_music('intro', fade=False)
@@ -24,6 +22,14 @@ def init(fresh=True):
     
     # t = show_sequence(sequence)
     myscene.ui.inventory.visible = False
+    
+    def show_letter(dt=0):
+        global can_continue
+        can_continue = True
+        interp = LinearInterpolator(note_actor.sprite, 'opacity', start=0, end=255, name="fade", duration=3.0)
+        myscene.interp.add_interpolator(interp)
+    
+    pyglet.clock.schedule_once(show_letter, 14.0)
 
 def transition_from(old_scene):
     pass
@@ -35,15 +41,7 @@ def begin(dt=0):
          "--Yogi Berra (1925-2014)"
     t = spawn_text(q1, 0.045, 0.45, 0.75)
     
-    pyglet.clock.schedule_once(functools.partial(spawn_text, q2, 0.045, 0.55, 0.25), 4.0)
-    
-    pyglet.clock.schedule_once(show_letter, t+7.0)
-
-def show_letter(dt=0):
-    global can_continue
-    can_continue = True
-    interp = LinearInterpolator(note_actor.sprite, 'opacity', start=0, end=255, name="fade", duration=3.0)
-    myscene.interp.add_interpolator(interp)
+    pyglet.clock.schedule_once(functools.partial(spawn_text, q2, 0.045, 0.55, 0.25), 5.0)
 
 
 def spawn_text(text, size, x, y, dt=0):
