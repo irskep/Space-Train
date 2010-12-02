@@ -2,6 +2,12 @@
     "environment": "act1_scene2", 
     "camera_points": {}, 
     "actors": {
+        "potato_drop": {
+            "walk_speed": 200, 
+            "walkpath_point": "potato_drop_start", 
+            "name": "potato", 
+            "start_state": "run_note"
+        }, 
         "seat_8": {
             "y": 184, 
             "x": 820, 
@@ -186,6 +192,13 @@
             "walk_speed": 400.0, 
             "name": "outlet_wire", 
             "start_state": "outlet_wire"
+        }, 
+        "sneaky_bastard_1": {
+            "y": 175, 
+            "x": 1697, 
+            "walk_speed": 400.0, 
+            "name": "sneaky_bastard", 
+            "start_state": "sit_left"
         }
     }, 
     "walkpath": {
@@ -230,9 +243,13 @@
                 "y": 151, 
                 "x": 898
             }, 
-            "moritz_guard": {
-                "y": 104, 
-                "x": 870
+            "potato_exit": {
+                "y": 143, 
+                "x": -73
+            }, 
+            "potato_drop_end": {
+                "y": 80, 
+                "x": 314
             }, 
             "potato_15": {
                 "y": 124, 
@@ -245,6 +262,30 @@
             "potato_5": {
                 "y": 149, 
                 "x": 2163
+            }, 
+            "potato_drop_start": {
+                "y": 740, 
+                "x": 314
+            }, 
+            "shake_4": {
+                "y": 76, 
+                "x": 327
+            }, 
+            "shake_1": {
+                "y": 82, 
+                "x": 297
+            }, 
+            "shake_2": {
+                "y": 86, 
+                "x": 328
+            }, 
+            "shake_3": {
+                "y": 90, 
+                "x": 310
+            }, 
+            "moritz_guard": {
+                "y": 104, 
+                "x": 870
             }, 
             "potato_14": {
                 "y": 137, 
@@ -309,8 +350,8 @@
                 "b": "potato_5"
             }, 
             {
-                "a": "potato_3", 
-                "b": "potato_4"
+                "a": "point_3", 
+                "b": "point_4"
             }, 
             {
                 "a": "point_1", 
@@ -321,6 +362,10 @@
                 "b": "potato_11"
             }, 
             {
+                "a": "potato_3", 
+                "b": "potato_4"
+            }, 
+            {
                 "a": "point_2", 
                 "b": "point_5"
             }, 
@@ -329,8 +374,16 @@
                 "b": "mikhail_guard"
             }, 
             {
+                "a": "potato_drop_end", 
+                "b": "shake_1"
+            }, 
+            {
                 "a": "potato_12", 
                 "b": "potato_13"
+            }, 
+            {
+                "a": "shake_4", 
+                "b": "potato_exit"
             }, 
             {
                 "a": "point_2", 
@@ -389,12 +442,24 @@
                 "b": "potato_2"
             }, 
             {
-                "a": "point_3", 
-                "b": "point_4"
-            }, 
-            {
                 "a": "potato_2", 
                 "b": "potato_3"
+            }, 
+            {
+                "a": "potato_drop_start", 
+                "b": "potato_drop_end"
+            }, 
+            {
+                "a": "shake_1", 
+                "b": "shake_2"
+            }, 
+            {
+                "a": "shake_3", 
+                "b": "shake_4"
+            }, 
+            {
+                "a": "shake_2", 
+                "b": "shake_3"
             }, 
             {
                 "a": "potato_11", 

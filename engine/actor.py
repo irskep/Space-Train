@@ -36,6 +36,14 @@ class Actor(actionsequencer.ActionSequencer):
         
         self.sprite = pyglet.sprite.Sprite(Actor.images[self.name][self.current_state], batch=batch)
         
+        self.make_icon()
+        
+        # Update attributes
+        for attr in ['x', 'y', 'scale', 'rotation', 'opacity']:
+            if attrs.has_key(attr):
+                setattr(self.sprite, attr, attrs[attr])
+    
+    def make_icon(self):
         try:
             self.icon = pyglet.sprite.Sprite(self.image_named("icon", 0, 0), batch = None)
         except pyglet.resource.ResourceNotFoundException:
@@ -43,11 +51,7 @@ class Actor(actionsequencer.ActionSequencer):
             if self.scene.ui:
                 if self.icon.height > self.scene.ui.inventory.height:
                     self.icon.scale = float(self.scene.ui.inventory.height) / float(self.icon.height)
-        
-        # Update attributes
-        for attr in ['x', 'y', 'scale', 'rotation', 'opacity']:
-            if attrs.has_key(attr):
-                setattr(self.sprite, attr, attrs[attr])
+    
     
     def delete(self):
         self.sprite.delete()
@@ -118,6 +122,7 @@ class Actor(actionsequencer.ActionSequencer):
         if new_state != self.current_state and Actor.images[self.name].has_key(new_state):
             self.current_state = new_state
             self.set_image_if_exists(new_state)
+            self.make_icon()
     
     # Possible actions to put in a sequence. Pay attention for parameter values.
     

@@ -10,13 +10,12 @@ import state
 @state.handles_walk('main')
 def inga_walk(actor, point):
     if point == 'point_1':
-        myscene.play_sound("door_open")
-        myscene.handler.notify('act1_scene1')
+        state.myscene.play_sound("door_open")
+        state.myscene.handler.notify('act1_scene1')
     elif point == "point_2":
         if state.myscene.global_dict['groupies_blocked'] and \
         state.myscene.global_dict['potato_rolling']:
             state.myscene.begin_conversation("a_convenient_opening")
-            state.myscene.global_dict['groupies_blocked'] = False
     elif point == "inga_attempt_stanislov":
         mikhail = state.myscene.actors['mikhail']
         moritz = state.myscene.actors['moritz']
@@ -39,3 +38,15 @@ def potato_roll(actor, point):
         state.myscene.actors['potato'].update_state("run_right")
         state.myscene.actors['potato'].prepare_walkpath_move("potato_15")
         state.myscene.actors['potato'].next_action()
+        
+@state.handles_walk('potato_drop')
+def potato_drop(actor, point):
+    if point == "potato_drop_end":
+        actor.update_state('run')
+        #stanislav is surprised at the critter
+        state.myscene.begin_conversation("a_visitor")
+    
+ 
+    if point == "shake_4":
+        actor.prepare_walkpath_move('potato_exit')
+        pyglet.clock.schedule_once(make_dt_wrapper(actor.next_action), 5)

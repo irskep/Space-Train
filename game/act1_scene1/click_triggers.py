@@ -32,7 +32,9 @@ def note_potato():
     state.myscene.actors['potato'].update_state("run_note")
     state.myscene.remove_actor('potato')
     
-    potato_note = actor.Actor('potato', 'potato', state.myscene)
+    state.myscene.ui.inventory.get_item('note')
+    
+    potato_note = actor.Actor('potato_note', 'potato', state.myscene)
     potato_note.anchor_x = 0.0
     potato_note.update_state('sit_note')
     state.myscene.ui.inventory.put_item(potato_note)
@@ -50,6 +52,8 @@ def pen_options(clicked_actor):
 def make_note():
     state.myscene.ui.inventory.get_item('pen')
     state.myscene.ui.inventory.get_item('notepad')
+    
+    state.myscene.begin_conversation("write_note")
     
     note = actor.Actor('note', 'note', state.myscene)
     state.myscene.ui.inventory.put_item(note)

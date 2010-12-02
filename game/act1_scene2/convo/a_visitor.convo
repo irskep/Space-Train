@@ -1,0 +1,21 @@
+# Initialization
+
+at_rest:
+    stanislav: stand_front
+    mikhail: stand_right
+    moritz: stand_right
+    
+speaking:
+    stanislav: stand_front
+    mikhail: stand_right
+    moritz: stand_right
+
+variables:
+    knows_about_baron: false
+
+# States
+
+start:
+    - stanislav: What's this? A new friend?
+    - stanislav: He looks a bit like a potato!
+    - stanislav: It appears he has a note with him, too!

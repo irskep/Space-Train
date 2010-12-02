@@ -1,10 +1,11 @@
 import functools
 import pyglet
 
+from engine import actor
 from engine.interpolator import PulseInterpolator, LinearInterpolator, Linear2DInterpolator
+from engine.util import make_dt_wrapper
 
 import state
-from engine import util
 
 @state.handles_click('airduct')
 def airduct_click(clicked_actor):
@@ -16,15 +17,20 @@ def airduct_click(clicked_actor):
     state.myscene.ui.show_cam(clicked_actor, options)
     
 def inspect_duct():
+    state.myscene.begin_conversation("airduct_inspect")
+    
+def potato_adventure():
+
+    def potato_drop():
+        potato = state.myscene.actors['potato_drop']
+        potato.prepare_walkpath_move('potato_drop_end')
+        potato.next_action()
+
     state.start_cutscene()
     interp = Linear2DInterpolator(state.myscene.camera, 'position', (0.0, 360.0), 
                                   start_tuple=(1920,360), speed=400.0, 
-                                  done_function=util.make_dt_wrapper(state.end_cutscene))
-    myscene.add_interpolator(interp)
-    pass
-    
-def potato_adventure():
-    pass
+                                  done_function=make_dt_wrapper(potato_drop))
+    state.myscene.add_interpolator(interp)
 
 @state.handles_click('pen')
 def pen_options(clicked_actor):
@@ -34,6 +40,8 @@ def pen_options(clicked_actor):
 def make_note():
     state.myscene.ui.inventory.get_item('pen')
     state.myscene.ui.inventory.get_item('notepad')
+    
+    state.myscene.begin_conversation("write_note")
     
     note = actor.Actor('note', 'note', state.myscene)
     state.myscene.ui.inventory.put_item(note)

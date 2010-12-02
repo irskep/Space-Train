@@ -26,11 +26,7 @@ def handle_groupies():
 @state.handles_convo('need_a_smoke')
 def handle_small_talk():
     if not state.myscene.interaction_enabled and state.myscene.moving_camera:
-        x = state.myscene.actors['main'].abs_position_x()
-        y = state.myscene.actors['main'].abs_position_y()
-        interp = Linear2DInterpolator(state.myscene.camera, 'position',
-                (x, y), speed=400.0, done_function=make_dt_wrapper(state.end_cutscene))
-        state.myscene.add_interpolator(interp)
+        return_to_inga()
 
 @state.handles_convo('a_convenient_opening')
 def handle_duct():
@@ -40,3 +36,57 @@ def handle_duct():
     potato.walkpath_point = "potato_1"
     potato.prepare_walkpath_move("potato_9")
     potato.next_action()
+    
+@state.handles_convo('airduct_inspect')
+def inspect_duct():
+    state.start_cutscene()
+    interp = Linear2DInterpolator(state.myscene.camera, 'position', (0.0, 360.0), 
+                                  start_tuple=(1920,360), speed=400.0, 
+                                  done_function=make_dt_wrapper(return_to_inga))
+    state.myscene.add_interpolator(interp)
+    
+def return_to_inga():
+    x = state.myscene.actors['main'].abs_position_x()
+    y = state.myscene.actors['main'].abs_position_y()
+    interp = Linear2DInterpolator(state.myscene.camera, 'position',
+            (x, y), speed=400.0, done_function=make_dt_wrapper(state.end_cutscene))
+    state.myscene.add_interpolator(interp)
+
+@state.handles_convo('a_visitor')
+def ball_drop():
+    #pause for a moment, then shake it off
+    state.myscene.actors['potato_drop'].prepare_walkpath_move('shake_4')
+    pyglet.clock.schedule_once(make_dt_wrapper(state.myscene.actors['potato_drop'].next_action), 5)
+    
+    state.myscene.begin_conversation('surprise_note')
+    
+@state.handles_convo('surprise_note')
+def stanislav_loves_inga():
+    
+    x = state.myscene.actors['main'].abs_position_x()
+    y = state.myscene.actors['main'].abs_position_y()
+    interp = Linear2DInterpolator(state.myscene.camera, 'position',
+            (x, y), speed=400.0, done_function=make_dt_wrapper(beckon_inga))
+    state.myscene.add_interpolator(interp)
+    
+def beckon_inga():
+    state.myscene.begin_conversation('beckon_inga')
+    
+    
+@state.handles_convo('beckon_inga')
+def inga_to_stanny():
+    mikhail = state.myscene.actors['mikhail']
+    moritz = state.myscene.actors['moritz']
+    
+    mikhail.prepare_walkpath_move('mikhail_idle')
+    mikhail.next_action()
+    
+    moritz.prepare_walkpath_move('moritz')
+    moritz.next_action()
+
+    inga = state.myscene.actors['main']
+    inga.prepare_walkpath_move('inga_attempt_stanislav')
+    inga.next_action()
+    
+    
+    

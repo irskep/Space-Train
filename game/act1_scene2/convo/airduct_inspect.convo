@@ -1,0 +1,17 @@
+# Initialization
+
+at_rest:
+    main: stand_right
+
+speaking:
+    main: talk_right
+
+variables:
+    knows_about_baron: false
+    
+# States
+start:
+    - main: Hmmm...
+    - main: What a large duct!
+    - main: You could fit a small ball in here!
+    - main: I wonder where this leads to...
