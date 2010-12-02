@@ -28,6 +28,9 @@ main_choice:
         Why can't I come in?:
             goto: explain_hipsterism
             hide_after_use: true
+        Did you see anything unusual just now?:
+            goto: no_heroes
+            hide_after_use: true
         I think I recognize this music:
             goto: comment
         I'll just be going then:
@@ -40,6 +43,16 @@ explain_hipsterism:
     - hipster_fran: This is the ORIGINAL Mustachio Express car. No one has EVER been in it!
     - hipster_amanda: We had to have it for ourselves or we would be riding with everyone else.
     - hipster_liam: We did what we had to do. We reserved ALL the seats in this car.
+    - goto: main_choice
+
+no_heroes:
+    - main: Did you see anything unusual just now? A kidnapping, perhaps?
+    - hipster_fran: Sure, we saw something. The lights flickered.
+    - hipster_amanda: A man dragged a sack through this door and out the other.
+    - hipster_liam: There was probably a person in the sack. It was making sounds...
+    - main: Did you try to stop him?
+    - hipster_liam: Of course not!
+    - hipster_fran: The whole hero thing is SO overdone.
     - goto: main_choice
 
 comment:
