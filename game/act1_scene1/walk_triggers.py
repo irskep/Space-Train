@@ -71,7 +71,7 @@ def sneelock_walk(actor, point):
 @state.handles_walk('potato')  
 def potato_roll(actor, point):
     point_match = re.search(r"potato_(\d+)", point)
-    if point_match and not state.myscene.handler.handler.game_variables['potato_stop']:
+    if point_match and not state.myscene.global_dict['potato_stop']:
         current_index = int(point_match.group(1))
         next_index = current_index + 1
         if next_index > 40:

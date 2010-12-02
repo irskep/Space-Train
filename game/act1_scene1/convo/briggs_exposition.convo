@@ -94,7 +94,7 @@ negotiate_beans:
             require: nuts
             require: lemonade
             goto: trade_for_beans
-        Sure, here you go!:
+        Here you go:
             require: space_bucks
             goto: purchase
         On second thought...:
