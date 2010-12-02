@@ -1,0 +1,22 @@
+{
+    "environment": "the_vast_emptiness_of_space", 
+    "camera_points": {
+        "start": {
+            "y": 360, 
+            "x": 640
+        }
+    }, 
+    "actors": {
+        "pic": {
+            "y": 245, 
+            "x": 964, 
+            "walk_speed": 400.0, 
+            "name": "caricatures", 
+            "start_state": "steve"
+        }
+    }, 
+    "walkpath": {
+        "points": {}, 
+        "edges": []
+    }
+}

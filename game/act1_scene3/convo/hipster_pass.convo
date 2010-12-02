@@ -41,7 +41,7 @@ explain_hipsterism:
     - hipster_amanda: We had to have it for ourselves or we would be riding with everyone else.
     - hipster_liam: We did what we had to do. We reserved ALL the seats in this car.
     - goto: main_choice
-            
+
 comment:
     - main: I think I recognize this music...
     - hipster_fran: Pssh. Like, no. You like, totally don't understand our generation.
