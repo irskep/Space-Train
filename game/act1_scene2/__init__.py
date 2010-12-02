@@ -83,7 +83,6 @@ def inga_walk(actor, point):
     if point == "point_2":
         if myscene.handler.handler.game_variables['groupies_blocked'] and myscene.handler.handler.game_variables['potato_rolling']:
             myscene.begin_conversation("a_convenient_opening")
-            myscene.handler.handler.game_variables['groupies_blocked'] = False
     if point == "inga_attempt_stanislov":
         if myscene.background_convo_in_progress("need_a_smoke"):
             myscene.end_background_conversation("need_a_smoke")

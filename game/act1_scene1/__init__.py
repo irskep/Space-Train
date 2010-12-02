@@ -39,6 +39,7 @@ def init(fresh=False):
         
         notepad = actor.Actor('notepad', 'notepad', myscene)
         myscene.ui.inventory.put_item(notepad)
+       
         
     else:
         myscene.interaction_enabled = True

@@ -462,6 +462,7 @@ class Scene(object):
         self.actors[identifier].sprite.delete()
         del self.actors[identifier]
         self.zenforcer.init_groups()
+        self.shadow.set_targets([a.sprite for a in self.actors.viewvalues() if a.casts_shadow])
     
     def load_song(self, song_name):
         self.song = pyglet.resource.media(song_name)

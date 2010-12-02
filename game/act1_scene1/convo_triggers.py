@@ -31,6 +31,7 @@ def handle_complaint():
 @state.handles_convo('a_young_irish_boy')
 def handle_shamus():
     if state.myscene.handler.handler.game_variables.get('hamster_dropped', False):
+        state.myscene.global_dict['hamster_dropped'] = True
         potato = state.myscene.new_actor('potato', 'potato')
         potato.walk_speed = 200.0
         potato.walkpath_point = "potato_9"
