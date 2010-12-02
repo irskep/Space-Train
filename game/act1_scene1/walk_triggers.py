@@ -66,7 +66,8 @@ def tourist_walk(actor, point):
 @state.handles_walk('sneelock')
 def sneelock_walk(actor, point):
     if point == "sneelock_inspect":
-        pyglet.clock.schedule_once(make_dt_wrapper(state.myscene.begin_background_conversation), 5, "sneelock_checks_it_out")
+        state.myscene.begin_background_conversation('sneelock_checks_it_out')
+        # pyglet.clock.schedule_once(make_dt_wrapper(state.myscene.begin_background_conversation), 5, "sneelock_checks_it_out")
 
 @state.handles_walk('potato')  
 def potato_roll(actor, point):

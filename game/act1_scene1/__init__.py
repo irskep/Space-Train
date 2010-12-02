@@ -44,6 +44,8 @@ def init(fresh=False):
         myscene.interaction_enabled = True
         if myscene.global_dict.get('sneelock_distracted', False):
             myscene.actors['sneelock'].walkpath_point = 'sneelock_inspect'
+            myscene.actors['sneelock'].sprite.position = myscene.walkpath.points['sneelock_inspect']
+            myscene.begin_background_conversation('sneelock_checks_it_out')
 
 @state.handles_transition('act1_scene2')
 def come_from_left():
