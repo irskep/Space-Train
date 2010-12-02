@@ -83,7 +83,7 @@ def handle_event(event, *args):
 
 def actor_clicked(clicked_actor):
     if state.click_handlers.has_key(clicked_actor.identifier):
-        state.click_handlers[clicked_actor.identifier]()
+        state.click_handlers[clicked_actor.identifier](clicked_actor)
 
 def filter_move(point):
     if point == "transition_left" and not state.sneelock_distracted:
