@@ -106,6 +106,9 @@ class Scene(object):
         if gamestate.scripts_enabled:
             self.load_script()
         
+        for i in xrange(10):
+            self.zenforcer.update()
+        
         self.update(0)
     
     def init_convenience_bindings(self):
