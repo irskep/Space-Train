@@ -81,7 +81,7 @@ negotiate_beans:
     - main: Yes please! One bowl of bean soup!
     - gregg_briggs: That'll be five space bucks.
     - choice:
-        Care to trade?:
+        I don't have any more space bucks. Can I trade in this bag of Tasty Nuts and this bottle of lemonade?:
             goto: trade_for_beans
         On second thought...:
             goto: no_thanks
