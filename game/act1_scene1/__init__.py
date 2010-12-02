@@ -7,14 +7,7 @@ import click_triggers
 import walk_triggers
 
 from engine import actor
-from engine.interpolator import PulseInterpolator, LinearInterpolator
 from engine.util.const import WALK_PATH_COMPLETED
-from engine import ui
-from engine import cam
-from engine import gamehandler
-from engine import gamestate
-from engine import convo
-from engine import util
 
 # myscene is set by scene.py
 myscene = None
