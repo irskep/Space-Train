@@ -105,9 +105,16 @@
             "name": "stanislav", 
             "start_state": "stand_front"
         }, 
+        "airduct_1": {
+            "y": 649, 
+            "x": 304, 
+            "walk_speed": 400.0, 
+            "name": "airduct", 
+            "start_state": "airduct_down"
+        }, 
         "monitor_2": {
-            "y": 415, 
-            "x": 1990, 
+            "y": 425, 
+            "x": 1650, 
             "walk_speed": 400.0, 
             "name": "monitor", 
             "start_state": "StaticTV"
@@ -120,8 +127,8 @@
             "start_state": "chair_left"
         }, 
         "monitor_1": {
-            "y": 434, 
-            "x": 557, 
+            "y": 425, 
+            "x": 927, 
             "walk_speed": 400.0, 
             "name": "monitor", 
             "start_state": "StaticTV"
@@ -184,12 +191,12 @@
     "walkpath": {
         "points": {
             "potato_8": {
-                "y": 199, 
+                "y": 155, 
                 "x": 1890
             }, 
             "potato_9": {
-                "y": 174, 
-                "x": 1866
+                "y": 123, 
+                "x": 1859
             }, 
             "potato_4": {
                 "y": 125, 
@@ -200,12 +207,12 @@
                 "x": 506
             }, 
             "potato_6": {
-                "y": 194, 
-                "x": 2084
+                "y": 155, 
+                "x": 2081
             }, 
             "potato_7": {
-                "y": 202, 
-                "x": 1977
+                "y": 159, 
+                "x": 1975
             }, 
             "potato_1": {
                 "y": 143, 
@@ -227,9 +234,9 @@
                 "y": 104, 
                 "x": 870
             }, 
-            "inga_attempt_stanislov": {
-                "y": 130, 
-                "x": 964
+            "potato_15": {
+                "y": 124, 
+                "x": 2753
             }, 
             "mikhail_idle": {
                 "y": 31, 
@@ -243,9 +250,9 @@
                 "y": 137, 
                 "x": 2503
             }, 
-            "potato_15": {
-                "y": 124, 
-                "x": 2753
+            "inga_attempt_stanislov": {
+                "y": 130, 
+                "x": 964
             }, 
             "potato_12": {
                 "y": 110, 
@@ -256,12 +263,12 @@
                 "x": 2316
             }, 
             "potato_10": {
-                "y": 143, 
-                "x": 1889
+                "y": 89, 
+                "x": 1900
             }, 
             "potato_11": {
-                "y": 114, 
-                "x": 2002
+                "y": 79, 
+                "x": 2033
             }, 
             "point_4": {
                 "y": 130, 
@@ -286,6 +293,10 @@
         }, 
         "edges": [
             {
+                "a": "point_5", 
+                "b": "point_1"
+            }, 
+            {
                 "a": "point_4", 
                 "b": "inga_attempt_stanislov"
             }, 
@@ -294,20 +305,16 @@
                 "b": "potato_7"
             }, 
             {
-                "a": "point_1", 
-                "b": "point_5"
-            }, 
-            {
-                "a": "point_5", 
-                "b": "point_1"
-            }, 
-            {
                 "a": "potato_4", 
                 "b": "potato_5"
             }, 
             {
                 "a": "potato_3", 
                 "b": "potato_4"
+            }, 
+            {
+                "a": "point_1", 
+                "b": "point_5"
             }, 
             {
                 "a": "potato_10", 
@@ -324,6 +331,10 @@
             {
                 "a": "potato_12", 
                 "b": "potato_13"
+            }, 
+            {
+                "a": "point_2", 
+                "b": "point_3"
             }, 
             {
                 "a": "potato_7", 
@@ -378,16 +389,12 @@
                 "b": "potato_2"
             }, 
             {
-                "a": "potato_2", 
-                "b": "potato_3"
-            }, 
-            {
                 "a": "point_3", 
                 "b": "point_4"
             }, 
             {
-                "a": "point_2", 
-                "b": "point_3"
+                "a": "potato_2", 
+                "b": "potato_3"
             }, 
             {
                 "a": "potato_11", 
