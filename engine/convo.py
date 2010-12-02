@@ -192,7 +192,7 @@ class Conversation(object):
     def begin_conversation(self, convo_name):
         """Start a cutscene named <convo_name>"""
         self.convo_name = convo_name
-        with pyglet.resource.file(self.scene.resource_path("%s.convo" % convo_name), 'r') as f:
+        with pyglet.resource.file(self.scene.resource_path("convo/%s.convo" % convo_name), 'r') as f:
             self.convo_info = yaml.load(f)
             # Variables default to None
             self.convo_info['variables'] = nonedict(self.convo_info['variables'])
