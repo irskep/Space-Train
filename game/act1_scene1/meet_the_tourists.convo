@@ -36,10 +36,12 @@ ask_direction:
     - tourist: Come on Nicole, it's fun! Say, would you mind taking our picture?
     - choice:
         Sure!:
-            goto: start
+            goto: camera
         No thanks, I don't like cameras.:
             goto: start
-            
+
+camera:
+- play_sound: "camera"
+goto: start
+
 bai:
-    - update_locals:    #dummy action
-        knows_about_baron: true

@@ -23,6 +23,7 @@ def inga_walk(actor, point):
             sneelock.next_action()
             state.myscene.convo.begin_conversation("you_shall_not_pass")
     if point == "transition_left":
+        myscene.play_sound("door_open")
         state.myscene.handler.notify("act1_scene2")
 
 @state.handles_walk('levity')
