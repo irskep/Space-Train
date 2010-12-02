@@ -1,11 +1,11 @@
 # Initialization
 
 at_rest:
-    sneelock: sneelock
+    sneelock: stand_right
     tourist: ftouriststand
 
 speaking:
-    sneelock: sneelock
+    sneelock: stand_right
     tourist: ftouriststand
 
 variables:

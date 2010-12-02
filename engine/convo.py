@@ -216,6 +216,8 @@ class Conversation(object):
                                                                 callback=callback)
                 self.scene.actors['main'].next_action()
             else:
+                for identifier, new_state in self.animations['at_rest'].viewitems():
+                    self.scene.actors[identifier].update_state(new_state)
                 self.next_line()
     
     # ACTION LIST COMMANDS
