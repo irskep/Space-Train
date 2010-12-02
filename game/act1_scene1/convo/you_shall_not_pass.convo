@@ -2,11 +2,11 @@
 
 at_rest:
     main: stand_left
-    sneelock: stand_front
+    sneelock: stand_right
 
 speaking:
     main: talk_left
-    sneelock: stand_front
+    sneelock: stand_right
 
 variables:
     knows_about_baron: false

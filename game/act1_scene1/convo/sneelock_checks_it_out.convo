@@ -1,10 +1,10 @@
 # Initialization
 
 at_rest:
-    sneelock: sneelock
+    sneelock: stand_right
 
 speaking:
-    sneelock: sneelock
+    sneelock: stand_right
 
 variables:
     knows_about_baron: false
