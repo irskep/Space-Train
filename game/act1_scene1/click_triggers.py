@@ -40,4 +40,4 @@ def potato_options():
 @state.handles_click('thermostat')
 def thermostat_options():
     inspect_func = functools.partial(state.myscene.begin_conversation, "thermostat_discover")
-    state.myscene.ui.show_cam(clicked_actor, {'Inspect': inspect_func})
+    state.myscene.ui.show_cam(state.myscene.actors['thermostat'], {'Inspect': inspect_func})

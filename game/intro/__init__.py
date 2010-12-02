@@ -39,8 +39,10 @@ def begin(dt=0):
     pyglet.clock.schedule_once(show_letter, t+7.0)
 
 def show_letter(dt=0):
+    print "Look at me I'm like some kind of monster"
     interp = LinearInterpolator(note_actor.sprite, 'opacity', start=0, end=255, name="fade", duration=3.0)
-    myscene.interp.add_interpolator(interp)    
+    myscene.interp.add_interpolator(interp)
+
 
 def spawn_text(text, size, x, y, dt=0):
     l = pyglet.text.Label(text, font_name=['Verdana', 'Helvetica'], font_size=norm_h*size, 
