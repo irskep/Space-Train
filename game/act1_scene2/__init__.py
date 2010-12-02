@@ -28,15 +28,11 @@ def init(fresh=False):
         #pan to show the guards        
         queue_need_a_smoke()
 
-def start_cutscene():
-    myscene.interaction_enabled = False
-    myscene.moving_camera = True
-
 def queue_need_a_smoke():
     def begin_smoke_conv():
         myscene.begin_conversation("need_a_smoke")
     
-    start_cutscene()
+    state.start_cutscene()
     interp = Linear2DInterpolator(myscene.camera, 'position', (0.0, 360.0), 
                                   start_tuple=(1920,360), speed=400.0, 
                                   done_function=util.make_dt_wrapper(begin_smoke_conv))

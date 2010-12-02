@@ -1,7 +1,10 @@
 import functools
 import pyglet
 
+from engine.interpolator import PulseInterpolator, LinearInterpolator, Linear2DInterpolator
+
 import state
+from engine import util
 
 @state.handles_click('airduct')
 def airduct_click(clicked_actor):
@@ -13,6 +16,11 @@ def airduct_click(clicked_actor):
     state.myscene.ui.show_cam(clicked_actor, options)
     
 def inspect_duct():
+    state.start_cutscene()
+    interp = Linear2DInterpolator(state.myscene.camera, 'position', (0.0, 360.0), 
+                                  start_tuple=(1920,360), speed=400.0, 
+                                  done_function=util.make_dt_wrapper(state.end_cutscene))
+    myscene.add_interpolator(interp)
     pass
     
 def potato_adventure():

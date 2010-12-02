@@ -35,3 +35,12 @@ def handles_transition(*labels):
             transition_handlers[label] = f
         return f
     return inner
+
+    
+def start_cutscene():
+    myscene.interaction_enabled = False
+    myscene.moving_camera = True
+    
+def end_cutscene():
+    myscene.interaction_enabled = True
+    myscene.moving_camera = False

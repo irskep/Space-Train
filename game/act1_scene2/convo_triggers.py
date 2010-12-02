@@ -6,9 +6,7 @@ from engine.util import make_dt_wrapper
 
 import state
 
-def end_cutscene():
-    state.myscene.interaction_enabled = True
-    state.myscene.moving_camera = False
+
 
 @state.handles_convo('no_groupies_intro')
 def handle_groupies_intro():
@@ -31,7 +29,7 @@ def handle_small_talk():
         x = state.myscene.actors['main'].abs_position_x()
         y = state.myscene.actors['main'].abs_position_y()
         interp = Linear2DInterpolator(state.myscene.camera, 'position',
-                (x, y), speed=400.0, done_function=make_dt_wrapper(end_cutscene))
+                (x, y), speed=400.0, done_function=make_dt_wrapper(state.end_cutscene))
         pyglet.clock.schedule_once(make_dt_wrapper(state.myscene.add_interpolator), 1, interp)
 
 @state.handles_convo('a_convenient_opening')
