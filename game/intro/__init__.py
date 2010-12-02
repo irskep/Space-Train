@@ -43,7 +43,8 @@ def show_letter(dt=0):
     global can_continue
     can_continue = True
     interp = LinearInterpolator(note_actor.sprite, 'opacity', start=0, end=255, name="fade", duration=3.0)
-    myscene.interp.add_interpolator(interp)    
+    myscene.interp.add_interpolator(interp)
+
 
 def spawn_text(text, size, x, y, dt=0):
     l = pyglet.text.Label(text, font_name=['Verdana', 'Helvetica'], font_size=norm_h*size, 
