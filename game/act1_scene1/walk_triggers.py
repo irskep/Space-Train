@@ -3,14 +3,7 @@ import pyglet
 import re
 
 from engine import actor
-from engine.interpolator import PulseInterpolator, LinearInterpolator
-from engine.util.const import WALK_PATH_COMPLETED
-from engine import ui
-from engine import cam
-from engine import gamehandler
-from engine import gamestate
-from engine import convo
-from engine import util
+from engine.util import make_dt_wrapper
 
 import state
 
@@ -40,7 +33,7 @@ def levity_walk(actor, point):
             state.myscene.global_dict['levity_direction'] = 'left'
             next_point = "levity_4"
         #levity.prepare_walkpath_move(next_point)
-        pyglet.clock.schedule_once(util.make_dt_wrapper(levity.prepare_walkpath_move), 1, next_point)
+        pyglet.clock.schedule_once(make_dt_wrapper(levity.prepare_walkpath_move), 1, next_point)
         pyglet.clock.schedule_once(levity.next_action, 60)
         
     else:
@@ -72,7 +65,7 @@ def tourist_walk(actor, point):
 @state.handles_walk('sneelock')
 def sneelock_walk(actor, point):
     if point == "sneelock_inspect":
-        pyglet.clock.schedule_once(util.make_dt_wrapper(state.myscene.begin_background_conversation), 5, "sneelock_checks_it_out")
+        pyglet.clock.schedule_once(make_dt_wrapper(state.myscene.begin_background_conversation), 5, "sneelock_checks_it_out")
 
 @state.handles_walk('potato')  
 def potato_roll(actor, point):
@@ -84,7 +77,5 @@ def potato_roll(actor, point):
             next_index = 1
         next_point = "potato_%d" % next_index
         print "Potato rolling from %s to %s" % (point, next_point)
-        #actor.prepare_walkpath_move(next_point)
-        pyglet.clock.schedule_once(util.make_dt_wrapper(actor.prepare_walkpath_move), 0, next_point)
-        #actor.next_action()
-        pyglet.clock.schedule_once(util.make_dt_wrapper(actor.next_action), 0)
+        pyglet.clock.schedule_once(make_dt_wrapper(actor.prepare_walkpath_move), 0, next_point)
+        pyglet.clock.schedule_once(make_dt_wrapper(actor.next_action), 0)

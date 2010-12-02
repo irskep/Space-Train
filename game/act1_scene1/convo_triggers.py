@@ -1,15 +1,7 @@
 import functools
 import pyglet
 
-from engine import actor
-from engine.interpolator import PulseInterpolator, LinearInterpolator
-from engine.util.const import WALK_PATH_COMPLETED
-from engine import ui
-from engine import cam
-from engine import gamehandler
-from engine import gamestate
-from engine import convo
-from engine import util
+from engine.util import make_dt_wrapper
 
 import state
 
@@ -53,5 +45,5 @@ def handle_thermostat():
         state.myscene.actors['thermostat'].update_state('rising')
         # Nicole complains!
         tourist = state.myscene.actors['tourist']
-        pyglet.clock.schedule_once(util.make_dt_wrapper(tourist.prepare_walkpath_move), 5, "tourist_complain")
+        pyglet.clock.schedule_once(make_dt_wrapper(tourist.prepare_walkpath_move), 5, "tourist_complain")
         pyglet.clock.schedule_once(tourist.next_action, 5)

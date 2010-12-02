@@ -1,16 +1,6 @@
 import functools
 import pyglet
 
-from engine import actor
-from engine.interpolator import PulseInterpolator, LinearInterpolator
-from engine.util.const import WALK_PATH_COMPLETED
-from engine import ui
-from engine import cam
-from engine import gamehandler
-from engine import gamestate
-from engine import convo
-from engine import util
-
 import state
 
 @state.handles_click('shamus')
