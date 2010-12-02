@@ -20,7 +20,7 @@ can_continue = False
 def init(fresh=True):
     myscene.ui.inventory.visible = False
     myscene.actors['pic'].sprite.opacity = 0
-    myscene.play_music('intro', fade=False)
+    myscene.play_music('sonata', fade=False)
     
     with pyglet.resource.file(myscene.resource_path('credits.yaml'), 'r') as f:
         t = 0
