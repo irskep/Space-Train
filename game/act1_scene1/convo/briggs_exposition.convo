@@ -39,6 +39,7 @@ main_choice:
             hide_after_use: true
             goto: ask_saying   
         What's in the bag?:
+            hide_after_use: true
             goto: sell_beans
         I'll be going now:
             hide_after_use: true
