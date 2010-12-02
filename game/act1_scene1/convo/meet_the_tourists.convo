@@ -18,16 +18,8 @@ start:
     - choice:
         Where are you headed?:
             goto: ask_direction
-        What are you reading?:
-            goto: ask_reading
         Seeya:
             goto: bai
-
-ask_reading:
-    - main: What are you reading?
-    - tourist: I'm reading all about the flower gardens of Vootka!
-    - tourist: "Zetzo's Guide to Popular Space Train Destinations."
-    - goto: start
 
 ask_direction:
     - tourist: It's our 10th wedding anniversary! Don got us tickets to Planet Deux. It's going to be SO romantic!

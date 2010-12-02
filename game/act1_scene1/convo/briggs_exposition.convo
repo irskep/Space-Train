@@ -40,7 +40,7 @@ main_choice:
             goto: ask_saying   
         What's in the bag?:
             goto: sell_beans
-        I'll be going now.:
+        I'll be going now:
             hide_after_use: true
             goto: goodbye
         Who's the Baron?:

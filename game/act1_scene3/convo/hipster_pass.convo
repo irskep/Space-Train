@@ -21,11 +21,26 @@ start:
     - hipster_fran: What is she doing here?
     - hipster_amanda: Hey, you can't come in!
     - hipster_liam: Ja. This train is reserved.
+    - goto: main_choice
+
+main_choice:
     - choice:
-        Comment on the music.:
+        Why can't I come in?:
+            goto: explain_hipsterism
+            hide_after_use: true
+        I think I recognize this music:
             goto: comment
-        I'll just be going then.:
+        I'll just be going then:
             goto: end
+
+explain_hipsterism:
+    - main: Why can't I come in?
+    - hipster_liam: Because of the sellouts, ugh!
+    - hipster_amanda: We can't let this car get taken over by posers and corporate shills!
+    - hipster_fran: This is the ORIGINAL Mustachio Express car. No one has EVER been in it!
+    - hipster_amanda: We had to have it for ourselves or we would be riding with everyone else.
+    - hipster_liam: We did what we had to do. We reserved ALL the seats in this car.
+    - goto: main_choice
             
 comment:
     - main: I think I recognize this music...

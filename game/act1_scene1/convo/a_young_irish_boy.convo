@@ -17,12 +17,12 @@ stand_at: shamus_talk_point
 
 start:
     - choice:
-        Comment on the Hamster:
+        Your pet is so cute!:
             goto: comment
-        Hand over bean soup:
+        Have some bean soup:
             require: beans
             goto: give_soup
-        I'll be going now.:
+        I'll be going now:
             goto: leave
             
 comment:
