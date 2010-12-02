@@ -128,4 +128,7 @@ def give_actor(actor, item):
     return False
     
 def filter_move(point):
-    return point
+    if point == 'point_5':
+        return 'point_1'
+    else:
+        return point

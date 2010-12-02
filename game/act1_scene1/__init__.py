@@ -83,7 +83,10 @@ def actor_clicked(clicked_actor):
         state.click_handlers[clicked_actor.identifier](clicked_actor)
 
 def filter_move(point):
-    if point == "transition_left" and not myscene.global_dict.get('sneelock_distracted', False):
+    dist = myscene.global_dict.get('sneelock_distracted', False)
+    if point == "transition_left" and not dist:
         return "inga_attempt_silver_class"
+    elif point == "inga_attempt_silver_class" and dist:
+        return 'transition_left'
     else:
         return point
