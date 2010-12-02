@@ -21,8 +21,10 @@ def inspect_duct():
     
 def potato_adventure():
     state.myscene.ui.inventory.get_item('potato_note')
+
     def potato_drop():
         potato = state.myscene.actors['potato_drop']
+        potato.walk_speed = 800
         potato.prepare_walkpath_move('potato_drop_end')
         potato.next_action()
 

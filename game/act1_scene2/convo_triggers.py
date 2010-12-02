@@ -89,3 +89,8 @@ def inga_to_stanny():
     
     state.myscene.global_dict['kidnap_stanislav'] = True
     
+@state.handles_convo('disaster_strikes')
+def disaster_struck():
+    state.myscene.actors['tourist'].prepare_walkpath_move('tourist_start')
+    state.myscene.actors['tourist'].next_action()
+    state.end_cutscene()

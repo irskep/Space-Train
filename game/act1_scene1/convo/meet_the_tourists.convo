@@ -2,11 +2,13 @@
 
 at_rest:
     main: stand_left
-    tourist: tourist
+    tourist: stand_front
+    tourist_1: stand_front
 
 speaking:
     main: talk_left
-    tourist: tourist
+    tourist: stand_front
+    tourist_1: stand_front
 
 variables:
     knows_about_baron: false
@@ -23,9 +25,9 @@ start:
 
 ask_direction:
     - tourist: It's our 10th wedding anniversary! Don got us tickets to Planet Deux. It's going to be SO romantic!
-    - tourist: Best vacation I could afford! I'll have so many great pictures!
+    - tourist_1: Best vacation I could afford! I'll have so many great pictures!
     - tourist: Right. Don put us in this LOVELY economy-class car.
-    - tourist: Come on Nicole, it's fun! Say, would you mind taking our picture?
+    - tourist_1: Come on Nicole, it's fun! Say, would you mind taking our picture?
     - choice:
         Sure!:
             goto: camera

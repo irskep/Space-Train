@@ -40,7 +40,7 @@ def init(fresh=True):
         myscene.add_interpolator(interp)
     
     pyglet.clock.schedule_once(shakeshakeshake, 3.0)
-    pyglet.clock.schedule_cone(make_dt_wrapper(functools.partial(myscene.handler.notify, 'credits2')), 12)
+    pyglet.clock.schedule_once(make_dt_wrapper(functools.partial(myscene.handler.notify, 'credits2')), 12)
     
 
 def transition_from(old_scene):

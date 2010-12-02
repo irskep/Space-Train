@@ -1,6 +1,7 @@
 import functools
 import pyglet
 import re
+from time import sleep
 
 from engine import actor
 from engine.util import make_dt_wrapper
@@ -12,6 +13,9 @@ def inga_walk(actor, point):
     if point == 'point_1':
         state.myscene.play_sound("door_open")
         state.myscene.handler.notify('act1_scene1')
+    elif point == 'inga_exit':
+        state.myscene.play_sound("door_open")
+        state.myscene.handler.notify('act1_scene3')
     elif point == "point_2":
         if state.myscene.global_dict['groupies_blocked'] and \
         state.myscene.global_dict['potato_rolling']:
@@ -32,13 +36,47 @@ def inga_walk(actor, point):
                 state.myscene.begin_conversation("no_groupies")
     if point == "meet_stanislav" and 'kidnap_stanislav' in state.myscene.global_dict and state.myscene.global_dict['kidnap_stanislav']:
         kidnap_stanislav()
+        state.myscene.global_dict['kidnap_stanislav'] = False
             
             
 def kidnap_stanislav():
-    blackout = actor.Actor('black', 'black', state.myscene)
-    blackout.walkpath_point = 'blackout_p'
-    state.myscene.add_actor(blackout)
+    count = 2
+    def show_stanislav_bag(count):
+        state.myscene.blackout = False
+        pyglet.clock.schedule_once(make_dt_wrapper(blackout), 0.2, count)
+        
+    def blackout(count):
+        state.myscene.blackout = True
+        if count > 0:  
+            count = count - 1
+            pyglet.clock.schedule_once(make_dt_wrapper(show_stanislav_bag), 1.4, count)
+        else:
+            pyglet.clock.schedule_once(make_dt_wrapper(stanislav_gone), 3)
+        
+    state.myscene.fade_music(0)
+    state.myscene.blackout = True
+    
+    pos = (state.myscene.actors['stanislav'].abs_position_x(), state.myscene.actors['stanislav'].abs_position_y())
+    state.myscene.remove_actor('stanislav')
+    state.myscene.remove_actor('sneaky_bastard_1')
+    
+    scream_snd = pyglet.resource.media('sound/scream.wav', streaming=False)
+    scream_snd.play()
 
+    
+    pyglet.clock.schedule_once(make_dt_wrapper(show_stanislav_bag), 2, count)
+    
+def stanislav_gone():
+    state.myscene.blackout = False
+    state.myscene.play_music("beethoven", fade=False)
+    state.myscene.actors['tourist'].prepare_walkpath_move('tourist_inga')
+    state.myscene.actors['tourist'].next_action()
+
+@state.handles_walk('tourist')
+def tourist_to_inga(actor, point):
+    if point == 'tourist_inga':
+        state.myscene.begin_conversation("disaster_strikes")
+    
 @state.handles_walk('potato')
 def potato_roll(actor, point):
     if point == "potato_15":
@@ -51,8 +89,12 @@ def potato_roll(actor, point):
 @state.handles_walk('potato_drop')
 def potato_drop(actor, point):
     if point == "potato_drop_end":
+        squeak_snd = pyglet.resource.media('sound/squeak.wav', streaming=False)
+        squeak_snd.play()
+        
+        actor.walk_speed = 200
         #stanislav is surprised at the critter
-        state.myscene.begin_conversation("a_visitor")
+        pyglet.clock.schedule_once(make_dt_wrapper(state.myscene.begin_conversation), 1, "a_visitor")
     
         actor.update_state('run_note_4')
  

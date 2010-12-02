@@ -91,6 +91,12 @@
             "name": "luggage", 
             "start_state": "luggage"
         }, 
+        "tourist": {
+            "walk_speed": 600, 
+            "walkpath_point": "tourist_start", 
+            "name": "femtourist", 
+            "start_state": "stand_front"
+        }, 
         "airduct": {
             "y": 182, 
             "x": 2372, 
@@ -267,6 +273,14 @@
                 "y": 149, 
                 "x": 2163
             }, 
+            "potato_enter_start": {
+                "y": 239, 
+                "x": 2305
+            }, 
+            "tourist_start": {
+                "y": 112, 
+                "x": 2801
+            }, 
             "potato_drop_start": {
                 "y": 746, 
                 "x": 246
@@ -287,25 +301,29 @@
                 "y": 80, 
                 "x": 240
             }, 
-            "inga_attempt_stanislov": {
-                "y": 130, 
-                "x": 964
+            "potato_enter_end": {
+                "y": 240, 
+                "x": 2396
+            }, 
+            "tourist_inga": {
+                "y": 120, 
+                "x": 780
             }, 
             "moritz_guard": {
                 "y": 104, 
                 "x": 870
             }, 
-            "point_1": {
-                "y": 129, 
-                "x": 2619
+            "inga_exit": {
+                "y": 140, 
+                "x": -51
             }, 
             "potato_14": {
                 "y": 137, 
                 "x": 2503
             }, 
-            "potato_15": {
-                "y": 124, 
-                "x": 2753
+            "inga_attempt_stanislov": {
+                "y": 130, 
+                "x": 964
             }, 
             "potato_12": {
                 "y": 110, 
@@ -331,9 +349,17 @@
                 "y": 129, 
                 "x": 2409
             }, 
-            "inga_exit": {
-                "y": 140, 
-                "x": -51
+            "point_6": {
+                "y": 117, 
+                "x": 1795
+            }, 
+            "potato_15": {
+                "y": 124, 
+                "x": 2753
+            }, 
+            "point_1": {
+                "y": 129, 
+                "x": 2619
             }, 
             "point_2": {
                 "y": 130, 
@@ -354,6 +380,10 @@
                 "b": "inga_attempt_stanislov"
             }, 
             {
+                "a": "tourist_start", 
+                "b": "point_6"
+            }, 
+            {
                 "a": "potato_6", 
                 "b": "potato_7"
             }, 
@@ -366,8 +396,8 @@
                 "b": "potato_5"
             }, 
             {
-                "a": "point_3", 
-                "b": "point_4"
+                "a": "potato_3", 
+                "b": "potato_4"
             }, 
             {
                 "a": "shake_2", 
@@ -382,16 +412,16 @@
                 "b": "potato_11"
             }, 
             {
-                "a": "potato_3", 
-                "b": "potato_4"
-            }, 
-            {
                 "a": "point_2", 
                 "b": "point_5"
             }, 
             {
-                "a": "mikhail_idle", 
-                "b": "mikhail_guard"
+                "a": "meet_stanislav", 
+                "b": "inga_attempt_stanislov"
+            }, 
+            {
+                "a": "potato_14", 
+                "b": "potato_15"
             }, 
             {
                 "a": "potato_drop_end", 
@@ -406,6 +436,10 @@
                 "b": "potato_exit"
             }, 
             {
+                "a": "mikhail_idle", 
+                "b": "mikhail_guard"
+            }, 
+            {
                 "a": "potato_7", 
                 "b": "potato_8"
             }, 
@@ -418,16 +452,20 @@
                 "b": "potato_9"
             }, 
             {
-                "a": "meet_stanislav", 
-                "b": "inga_attempt_stanislov"
+                "a": "point_6", 
+                "b": "tourist_inga"
             }, 
             {
                 "a": "potato_5", 
                 "b": "potato_6"
             }, 
             {
-                "a": "potato_14", 
-                "b": "potato_15"
+                "a": "point_6", 
+                "b": "tourist_start"
+            }, 
+            {
+                "a": "point_2", 
+                "b": "point_3"
             }, 
             {
                 "a": "mikhail_guard", 
@@ -458,6 +496,10 @@
                 "b": "point_4"
             }, 
             {
+                "a": "potato_enter_start", 
+                "b": "potato_enter_end"
+            }, 
+            {
                 "a": "point_5", 
                 "b": "point_2"
             }, 
@@ -482,12 +524,16 @@
                 "b": "shake_2"
             }, 
             {
+                "a": "tourist_inga", 
+                "b": "point_6"
+            }, 
+            {
                 "a": "shake_3", 
                 "b": "shake_4"
             }, 
             {
-                "a": "point_2", 
-                "b": "point_3"
+                "a": "point_3", 
+                "b": "point_4"
             }, 
             {
                 "a": "potato_11", 

@@ -27,9 +27,7 @@ def init(fresh=False):
         
         #pan to show the guards        
         queue_need_a_smoke()
-    
-    potato_note = actor.Actor('potato_note', 'potato', state.myscene)
-    state.myscene.ui.inventory.put_item(potato_note)
+
 
 def queue_need_a_smoke():
     def begin_smoke_conv():
