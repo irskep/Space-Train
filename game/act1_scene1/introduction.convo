@@ -22,7 +22,11 @@ food_choice:
         Yes please! I'll have some Tasty Nuts and a lemonade.:
           goto: ask_for_food
         No thank you.:
-          goto: main_choice
+          goto: decline
+
+decline:
+    - main: No, thank you.
+    - goto: main_choice
 
 ask_for_food:
     - main: Yes please! I'll have some Tasty Nuts and a lemonade.
@@ -66,4 +70,5 @@ stanislov:
     - goto: main_choice
 
 done:
+    - main: No, that's all.
     - levity: Have a pleasant trip!

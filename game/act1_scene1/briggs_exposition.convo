@@ -82,7 +82,12 @@ negotiate_beans:
     - gregg_briggs: That'll be five space bucks.
     - choice:
         I don't have any more space bucks. Can I trade in this bag of Tasty Nuts and this bottle of lemonade?:
+            require: nuts
+            require: lemonade
             goto: trade_for_beans
+        Sure, here you go!:
+            require: space_bucks
+            goto: purchase
         On second thought...:
             goto: no_thanks
         
@@ -91,6 +96,13 @@ trade_for_beans:
     - gregg_briggs: Sold! Here you go!
     - take: nuts
     - take: lemonade
+    - give: beans (beans)
+    - goto: main_choice
+
+purchase:
+    - main: Sure, here you go!
+    - take: space_bucks
+    - gregg_briggs: And your beans.
     - give: beans (beans)
     - goto: main_choice
 
