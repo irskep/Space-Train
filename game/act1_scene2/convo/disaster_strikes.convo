@@ -1,0 +1,21 @@
+# Initialization
+
+at_rest:
+    main: stand_right
+    tourist: stand_front
+    
+speaking:
+    main: talk_right
+    tourist: stand_front
+
+variables:
+    knows_about_baron: false
+
+# States
+
+start:
+    - tourist: What in the world just happened? The whole train jolted and the lights went out!
+    - main: They've taken Stanislov Slavinsky!
+    - tourist: Stan who?
+    - main: Stanislov Slavinsky! Baron von Sniffmeinschorts must have kidnapped him!
+    - tourist: Whatever. This is entirely unacceptable. I'm going to go talk to the conductor!
