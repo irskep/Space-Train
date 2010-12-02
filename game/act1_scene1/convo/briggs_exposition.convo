@@ -26,7 +26,7 @@ talk:
     - main: Hello!
     - gregg_briggs: ...ampersand...what? Oh, hi.
     - goto: main_choice
-    
+
 main_choice:
     - choice:
         What's your name?:
@@ -48,7 +48,7 @@ main_choice:
             require: knows_about_baron
             hide_after_use: true
             goto: explain_baron
-            
+
 ask_name:
     - main: What's your name?
     - gregg_briggs: Greg Briggs. Astrophysician and Psychomusicist. Professor of Celestial Wonder. Who're you.
@@ -112,11 +112,12 @@ no_thanks:
     - goto: main_choice
 
 explain_baron:
+    - main: Tell me more about the Baron.
     - gregg_briggs: Ah, Baron von Sniffmeinschorts. Interesting character. No pants.
     - gregg_briggs: Got some kinda mental complex. Won't let anyone else wear pants either. Space pirate, steals for a living.
     - gregg_briggs: Leaves victims pantsless. Not nice. Shouldn't do that. But someone could make a killing selling pants at spaceports, I guess.
     - gregg_briggs: All the space trains been hit by the Baron, save this one. Might still be safe. Baron might be somewhere else.
     - goto: main_choice
-    
+
 goodbye:
     - main: Goodbye now!

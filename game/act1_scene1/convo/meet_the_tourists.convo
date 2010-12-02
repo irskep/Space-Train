@@ -27,15 +27,22 @@ ask_direction:
     - tourist: It's our 10th wedding anniversary! Don got us tickets to Planet Deux. It's going to be SO romantic!
     - tourist_1: Best vacation I could afford! I'll have so many great pictures!
     - tourist: Right. Don put us in this LOVELY economy-class car.
-    - tourist_1: Come on Nicole, it's fun! Say, would you mind taking our picture?
-    - choice:
-        Sure!:
-            goto: camera
-        No thanks, I don't like cameras.:
-            goto: start
+    - tourist_1: Come on Nicole, it's fun! Besides, we're on the same train as Stanislov Slavinsky!
+    - tourist: I suppose...
+    - goto: second
 
-camera:
-- play_sound: "camera"
-goto: start
+second:
+    - choice:
+        We're on the same train as Stanislov?:
+            goto: stanislov
+        Seeya:
+            goto: bai
+
+stanislov:
+    - tourist_1: Oh yes! We are going to his reading of "Sage Pyramid Of The Poor Competition" on Planet Deux.
+    - tourist: Most poetry is boring, but Stanislov's work is wonderful!
+    - main: How exciting!
+    - main: See you later.
 
 bai:
+    - main: See you later.
