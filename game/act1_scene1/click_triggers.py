@@ -41,3 +41,15 @@ def potato_options(clicked_actor):
 def thermostat_options(clicked_actor):
     inspect_func = functools.partial(state.myscene.begin_conversation, "thermostat_discover")
     state.myscene.ui.show_cam(state.myscene.actors['thermostat'], {'Inspect': inspect_func})
+
+@state.handles_click('pen')
+def pen_options(clicked_actor):
+    if state.myscene.global_dict['groupies_blocked']:
+        state.myscene.ui.inventory.show_cam(clicked_actor, {'Write a lovely note to Stanislav': make_note, 'Clicka-clicka': lambda: 1+1})
+
+def make_note(clicked_actor):
+    state.myscene.ui.inventory.get_item('pen')
+    state.myscene.ui.inventory.get_item('notepad')
+    
+    note = actor.Actor('note', 'note', state.myscene)
+    state.myscene.ui.inventory.put_item(note)
