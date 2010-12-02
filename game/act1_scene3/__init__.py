@@ -28,7 +28,7 @@ def init(fresh=False):
         myscene.interaction_enabled = True
 
 @state.handles_transition('act1_scene2')
-def come_from_right(old_scene):
+def come_from_right():
     walk_from_right()
 
 def walk_from_right():
