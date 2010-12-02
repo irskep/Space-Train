@@ -46,9 +46,15 @@ main_choice:
         Is anyone famous on the train right now?:
             require: explained_space_train
             goto: stanislov
+        Why do people think it's safer?:
+            require: explained_space_train
+            goto: safety
+        Tell me more about the Baron:
+            require: explained_safety
+            goto: baron
         How long until we reach Planet Deux?:
             goto: hahafunny
-        No, thank you.:
+        No, thank you:
             goto: done
 
 explain_space_train:
@@ -58,6 +64,7 @@ explain_space_train:
     - levity: Some say it is full of secret passages and mysterious devices.
     - levity: The Mustachio Express covers the Earth-Planet Deux-Solaris route, making it a popular way to travel between cultural centers.
     - levity: Many famous people travel on the Mustachio Express, including musicians, artists, scientists, and poets.
+    - levity: It's been more popular recently because people think it's safer than the others.
     - update_locals:
         explained_space_train: true
     - goto: main_choice
@@ -69,6 +76,23 @@ stanislov:
     - main: I just can't wait to hear him read from his latest work, "Sage Pyramid Of The Poor Competition."
     - levity: How wonderful!
     - levity: Just please try not to disturb him.
+    - goto: main_choice
+
+safer:
+    - main: Why do people think the Mustachio Express is safer than the other space trains?
+    - levity: The Baron, of course!
+    - levity: Baron von Sniffmeinschorts has been robbing space trains from here to Deltron Six. This is the only train he hasn't hit...yet.
+    - update_locals:
+        explained_safety: true
+    - goto: main_choice
+
+baron:
+    - main: Tell me more about the Baron.
+    - levity: Surely you've read the stories? He is a fearsome space pirate. He and his crew fly a huge space zeppelin.
+    - levity: They plunder planets, ships, and space trains alike, but lately he seems to prefer space trains more and more.
+    - levity: The worst part is, when he has struck, he doesn't just take his victims' money...
+    - levity: He takes their pants.
+    - levity: The doesn't wear any pants himself, just polka dotted boxer shorts.
     - goto: main_choice
 
 hahafunny:

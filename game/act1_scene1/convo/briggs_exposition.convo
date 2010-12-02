@@ -43,7 +43,7 @@ main_choice:
         I'll be going now:
             hide_after_use: true
             goto: goodbye
-        Who's the Baron?:
+        Tell me more about the Baron:
             require: knows_about_baron
             hide_after_use: true
             goto: explain_baron
@@ -62,7 +62,7 @@ ask_direction:
     - update_locals:
         knows_about_baron: True
     - goto: main_choice
-    
+
 ask_saying:
     - main: What was that you were saying earlier? I didn't quite catch it.
     - gregg_briggs: I was coming up with a way to cure galactic hunger using shoelaces.
@@ -76,7 +76,7 @@ sell_beans:
             goto: negotiate_beans
         No Thanks:
             goto: no_thanks
-            
+
 negotiate_beans:
     - main: Yes please! One bowl of bean soup!
     - gregg_briggs: That'll be five space bucks.
@@ -90,7 +90,7 @@ negotiate_beans:
             goto: purchase
         On second thought...:
             goto: no_thanks
-        
+
 trade_for_beans:
     - main: I don't have any more space bucks, but I do have this Tasty Nuts and a lemonade...
     - gregg_briggs: Sold! Here you go!
@@ -109,11 +109,12 @@ purchase:
 no_thanks:
     - main: No thank you...
     - goto: main_choice
-    
+
 explain_baron:
-    - gregg_briggs: (Long and interesting exposition about how the Baron has hit every Space Train but this one looking for something, and Levity knows something about it)
-    - update_locals:
-        knows_about_baron: True
+    - gregg_briggs: Ah, Baron von Sniffmeinschorts. Interesting character. No pants.
+    - gregg_briggs: Got some kinda mental complex. Won't let anyone else wear pants either. Space pirate, steals for a living.
+    - gregg_briggs: Leaves victims pantsless. Not nice. Shouldn't do that. But someone could make a killing selling pants at spaceports, I guess.
+    - gregg_briggs: All the space trains been hit by the Baron, save this one. Might still be safe. Baron might be somewhere else.
     - goto: main_choice
     
 goodbye:
