@@ -159,13 +159,13 @@ class Scene(object):
     
     def exit(self):
         pyglet.clock.unschedule(self.zenforcer.update)
+        for convo in self.background_convos:
+            convo.stop_speaking()
+        self.background_convos = None
         self.interp.delete()
         for actor in self.actors.viewvalues():
             actor.delete()
         self.actors = None
-        for convo in self.background_convos:
-            convo.stop_speaking()
-        self.background_convos = None
         self.env.exit()
     
     
