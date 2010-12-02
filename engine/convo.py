@@ -173,7 +173,8 @@ class Conversation(object):
             draw.set_color(0,0,0,1)
             pyglet.graphics.draw(9, pyglet.gl.GL_TRIANGLES,('v2f', self.vertices_fill))
             draw.set_color(*map(lambda c:c/255.0, self.text_color))
-            pyglet.graphics.draw(7, pyglet.gl.GL_LINE_LOOP, ('v2f', self.vertices_outline))
+            pyglet.graphics.draw(len(self.vertices_outline)/2,
+                                 pyglet.gl.GL_LINE_LOOP, ('v2f', self.vertices_outline))
             self.convo_label.draw()
     
     def _update_anim_dict(self, newdict):
@@ -414,17 +415,30 @@ class Conversation(object):
             x1, y1 = x - (w / 2) - 5,   y - 5
             x2, y2 = x + (w / 2) + 5,   y + h + 5
         
-        point_left_x = max(point_x - 20 + offset_x*0.5, x1)
-        point_left_y = y1
-        point_right_x = min(point_x + 20 + offset_y*0.5, x2)
-        point_right_y = y1
-        
         first_tri = (x1, y1, x1, y2, x2, y2)
-        last_tri = (point_right_x, point_right_y, point_x, point_y,
-                    point_left_x, point_left_y)
+        if x1 <= point_x <= x2:
+            point_left_x = max(point_x - 20 + offset_x*0.5, x1)
+            point_left_y = y1
+            point_right_x = min(point_x + 20 + offset_y*0.5, x2)
+            point_right_y = y1
         
-        self.vertices_outline = first_tri + (x2, y1) + last_tri
-        self.vertices_fill = first_tri + (x2, y2, x2, y1, x1, y1) + last_tri
+            last_tri = (point_right_x, point_right_y, point_x, point_y,
+                        point_left_x, point_left_y)
+        
+            self.vertices_outline = first_tri + (x2, y1) + last_tri
+            self.vertices_fill = first_tri + (x2, y2, x2, y1, x1, y1) + last_tri
+        else:           
+            mid_y = (y1 + y2) / 2                                           
+            if point_x < x1:
+                mid_x = x1 - 20
+                self.vertices_outline = (x1, y1, mid_x, mid_y, x1, y2, x2, y2, x2, y1)
+                self.vertices_fill = (x1, y1, mid_x, mid_y, x1, y2) + \
+                                     first_tri + (x1, y1, x2, y2, x2, y1)
+            elif point_x > x2:
+                mid_x = x2 + 20
+                self.vertices_outline = first_tri + (mid_x, mid_y, x2, y1)
+                self.vertices_fill = first_tri + (x2, y2, x2, y1, x1, y1) + \
+                                     (x2, y2, mid_x, mid_y, x2, y1)
     
     def clear_speech_bubble(self):
         """Clear all spoken text"""
