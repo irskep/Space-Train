@@ -56,8 +56,8 @@ def return_to_inga():
 def ball_drop():
     #pause for a moment, then shake it off
     state.myscene.actors['potato_drop'].prepare_walkpath_move('shake_4')
-    pyglet.clock.schedule_once(make_dt_wrapper(state.myscene.actors['potato_drop'].next_action), 5)
-    
+    pyglet.clock.schedule_once(make_dt_wrapper(state.myscene.actors['potato_drop'].next_action), 3)
+    state.myscene.actors['potato_drop'].update_state('run')
     state.myscene.begin_conversation('surprise_note')
     
 @state.handles_convo('surprise_note')
@@ -66,14 +66,9 @@ def stanislav_loves_inga():
     x = state.myscene.actors['main'].abs_position_x()
     y = state.myscene.actors['main'].abs_position_y()
     interp = Linear2DInterpolator(state.myscene.camera, 'position',
-            (x, y), speed=400.0, done_function=make_dt_wrapper(beckon_inga))
+            (x, y), speed=400.0, done_function=make_dt_wrapper(inga_to_stanny))
     state.myscene.add_interpolator(interp)
     
-def beckon_inga():
-    state.myscene.begin_conversation('beckon_inga')
-    
-    
-@state.handles_convo('beckon_inga')
 def inga_to_stanny():
     mikhail = state.myscene.actors['mikhail']
     moritz = state.myscene.actors['moritz']
@@ -81,12 +76,16 @@ def inga_to_stanny():
     mikhail.prepare_walkpath_move('mikhail_idle')
     mikhail.next_action()
     
-    moritz.prepare_walkpath_move('moritz')
+    moritz.prepare_walkpath_move('moritz_idle')
     moritz.next_action()
 
+    state.myscene.global_dict['guards_appeased'] = True
+    state.myscene.global_dict['groupies_blocked'] = False
+    
+    state.myscene.moving_camera = False
     inga = state.myscene.actors['main']
-    inga.prepare_walkpath_move('inga_attempt_stanislav')
+    inga.prepare_walkpath_move('meet_stanislav')
     inga.next_action()
     
-    
+    state.myscene.global_dict['kidnap_stanislav'] = True
     

@@ -105,15 +105,15 @@
             "start_state": "stand_front"
         }, 
         "stanislav": {
-            "y": 95, 
-            "x": 320, 
+            "y": 96, 
+            "x": 369, 
             "walk_speed": 400.0, 
             "name": "stanislav", 
             "start_state": "stand_front"
         }, 
         "airduct_1": {
-            "y": 649, 
-            "x": 304, 
+            "y": 650, 
+            "x": 234, 
             "walk_speed": 400.0, 
             "name": "airduct", 
             "start_state": "airduct_down"
@@ -243,17 +243,21 @@
                 "y": 151, 
                 "x": 898
             }, 
+            "blackout_p": {
+                "y": 0, 
+                "x": 0
+            }, 
             "potato_exit": {
                 "y": 143, 
                 "x": -73
             }, 
             "potato_drop_end": {
                 "y": 80, 
-                "x": 314
+                "x": 246
             }, 
-            "potato_15": {
-                "y": 124, 
-                "x": 2753
+            "meet_stanislav": {
+                "y": 126, 
+                "x": 564
             }, 
             "mikhail_idle": {
                 "y": 31, 
@@ -264,36 +268,44 @@
                 "x": 2163
             }, 
             "potato_drop_start": {
-                "y": 740, 
-                "x": 314
+                "y": 746, 
+                "x": 246
             }, 
             "shake_4": {
-                "y": 76, 
-                "x": 327
+                "y": 79, 
+                "x": 248
             }, 
             "shake_1": {
-                "y": 82, 
-                "x": 297
+                "y": 83, 
+                "x": 238
             }, 
             "shake_2": {
-                "y": 86, 
-                "x": 328
+                "y": 82, 
+                "x": 250
             }, 
             "shake_3": {
-                "y": 90, 
-                "x": 310
+                "y": 80, 
+                "x": 240
+            }, 
+            "inga_attempt_stanislov": {
+                "y": 130, 
+                "x": 964
             }, 
             "moritz_guard": {
                 "y": 104, 
                 "x": 870
             }, 
+            "point_1": {
+                "y": 129, 
+                "x": 2619
+            }, 
             "potato_14": {
                 "y": 137, 
                 "x": 2503
             }, 
-            "inga_attempt_stanislov": {
-                "y": 130, 
-                "x": 964
+            "potato_15": {
+                "y": 124, 
+                "x": 2753
             }, 
             "potato_12": {
                 "y": 110, 
@@ -319,9 +331,9 @@
                 "y": 129, 
                 "x": 2409
             }, 
-            "point_1": {
-                "y": 129, 
-                "x": 2619
+            "inga_exit": {
+                "y": 140, 
+                "x": -51
             }, 
             "point_2": {
                 "y": 130, 
@@ -346,12 +358,20 @@
                 "b": "potato_7"
             }, 
             {
+                "a": "inga_exit", 
+                "b": "meet_stanislav"
+            }, 
+            {
                 "a": "potato_4", 
                 "b": "potato_5"
             }, 
             {
                 "a": "point_3", 
                 "b": "point_4"
+            }, 
+            {
+                "a": "shake_2", 
+                "b": "shake_3"
             }, 
             {
                 "a": "point_1", 
@@ -386,16 +406,20 @@
                 "b": "potato_exit"
             }, 
             {
-                "a": "point_2", 
-                "b": "point_3"
-            }, 
-            {
                 "a": "potato_7", 
                 "b": "potato_8"
             }, 
             {
+                "a": "inga_attempt_stanislov", 
+                "b": "meet_stanislav"
+            }, 
+            {
                 "a": "potato_8", 
                 "b": "potato_9"
+            }, 
+            {
+                "a": "meet_stanislav", 
+                "b": "inga_attempt_stanislov"
             }, 
             {
                 "a": "potato_5", 
@@ -438,6 +462,10 @@
                 "b": "point_2"
             }, 
             {
+                "a": "meet_stanislav", 
+                "b": "inga_exit"
+            }, 
+            {
                 "a": "potato_1", 
                 "b": "potato_2"
             }, 
@@ -458,8 +486,8 @@
                 "b": "shake_4"
             }, 
             {
-                "a": "shake_2", 
-                "b": "shake_3"
+                "a": "point_2", 
+                "b": "point_3"
             }, 
             {
                 "a": "potato_11", 

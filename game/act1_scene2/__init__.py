@@ -71,7 +71,10 @@ def actor_clicked(clicked_actor):
         state.click_handlers[clicked_actor.identifier](clicked_actor)
     
 def filter_move(point):
-    if point == 'point_5':
-        return 'point_1'
+    if point == 'meet_stanislav' or point == 'inga_exit':
+        if not state.myscene.global_dict['guards_appeased']:
+            return 'inga_attempt_stanislov'
+        else:
+            return point
     else:
         return point

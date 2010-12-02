@@ -20,7 +20,7 @@ def inspect_duct():
     state.myscene.begin_conversation("airduct_inspect")
     
 def potato_adventure():
-
+    state.myscene.ui.inventory.get_item('potato_note')
     def potato_drop():
         potato = state.myscene.actors['potato_drop']
         potato.prepare_walkpath_move('potato_drop_end')

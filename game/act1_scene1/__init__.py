@@ -26,6 +26,7 @@ def init(fresh=False):
         myscene.handler.handler.game_variables['potato_rolling'] = False
         myscene.handler.handler.game_variables['potato_stop'] = False
         myscene.handler.handler.game_variables['groupies_blocked'] = False
+        myscene.global_dict['guards_appeased'] = False
         myscene.interaction_enabled = False
         myscene.actors['levity'].prepare_walkpath_move("levity_4")
         myscene.actors['levity'].next_action()
