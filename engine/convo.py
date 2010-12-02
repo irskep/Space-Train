@@ -327,6 +327,9 @@ class Conversation(object):
     
     def next_line(self, dt=0):
         """Advance the cutscene by one line in the current action list"""
+        if not self.active:
+            print 'Somehow we are trying to call next_line on an inactive conversation'
+            return
         if self.convo_position >= len(self.convo_lines):
             self.stop_speaking()
         else:    
