@@ -26,7 +26,9 @@ def handle_button():
 
 @state.handles_convo('oops')
 def handle_oops():
-    state.myscene.play_sound('space_train_explode')
+    state.myscene.fade_music(0.95)
+    state.myscene.fade_background(0.95)
+    state.myscene.handler.notify('credits')
 
 @state.handles_convo('amanda', 'amanda_1', 'fran', 'fran_1', 'liam', 'liam_1')
 def handle_argument():
