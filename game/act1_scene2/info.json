@@ -306,16 +306,16 @@
                 "x": 2396
             }, 
             "tourist_inga": {
-                "y": 120, 
-                "x": 780
+                "y": 122.0, 
+                "x": 853.0
             }, 
             "moritz_guard": {
                 "y": 104, 
                 "x": 870
             }, 
-            "inga_exit": {
-                "y": 140, 
-                "x": -51
+            "point_1": {
+                "y": 129, 
+                "x": 2619
             }, 
             "potato_14": {
                 "y": 137, 
@@ -357,9 +357,9 @@
                 "y": 124, 
                 "x": 2753
             }, 
-            "point_1": {
-                "y": 129, 
-                "x": 2619
+            "inga_exit": {
+                "y": 140, 
+                "x": -51
             }, 
             "point_2": {
                 "y": 130, 
@@ -416,16 +416,16 @@
                 "b": "point_5"
             }, 
             {
-                "a": "meet_stanislav", 
-                "b": "inga_attempt_stanislov"
-            }, 
-            {
-                "a": "potato_14", 
-                "b": "potato_15"
+                "a": "inga_attempt_stanislov", 
+                "b": "meet_stanislav"
             }, 
             {
                 "a": "potato_drop_end", 
                 "b": "shake_1"
+            }, 
+            {
+                "a": "point_3", 
+                "b": "point_4"
             }, 
             {
                 "a": "potato_12", 
@@ -436,6 +436,10 @@
                 "b": "potato_exit"
             }, 
             {
+                "a": "point_2", 
+                "b": "point_3"
+            }, 
+            {
                 "a": "mikhail_idle", 
                 "b": "mikhail_guard"
             }, 
@@ -444,16 +448,12 @@
                 "b": "potato_8"
             }, 
             {
-                "a": "inga_attempt_stanislov", 
-                "b": "meet_stanislav"
+                "a": "meet_stanislav", 
+                "b": "inga_attempt_stanislov"
             }, 
             {
                 "a": "potato_8", 
                 "b": "potato_9"
-            }, 
-            {
-                "a": "point_6", 
-                "b": "tourist_inga"
             }, 
             {
                 "a": "potato_5", 
@@ -464,8 +464,8 @@
                 "b": "tourist_start"
             }, 
             {
-                "a": "point_2", 
-                "b": "point_3"
+                "a": "potato_14", 
+                "b": "potato_15"
             }, 
             {
                 "a": "mikhail_guard", 
@@ -532,8 +532,8 @@
                 "b": "shake_4"
             }, 
             {
-                "a": "point_3", 
-                "b": "point_4"
+                "a": "point_6", 
+                "b": "tourist_inga"
             }, 
             {
                 "a": "potato_11", 
