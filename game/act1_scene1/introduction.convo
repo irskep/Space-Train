@@ -20,20 +20,50 @@ start:
 food_choice:
     - choice:
         Yes please! I'll have some Tasty Nuts and a lemonade.:
-          hide_after_use: true
           goto: ask_for_food
-        
+        No thank you.:
+          goto: main_choice
 
 ask_for_food:
     - main: Yes please! I'll have some Tasty Nuts and a lemonade.
-    - levity: That'll be five space bucks please.
+    - levity: Five space bucks, please.
     - take: space_bucks
+    - main: Here you go.
     - give: tasty_nuts (nuts)
     - give: lemonade (lemonade)
-    - levity: Here you go.
-    - levity: Oh, I see you're reading "Motherland Poems Monthly!"
-    - main: Yes, I just love Stanislov Slavinsky's series about comets this month! I'm traveling now to see him read on Planet Deux.
-    - levity: Lucky woman! I love Stanislov's work as well.
-    - levity: He is actually traveling on this same train to get to his reading!
-    - levity: I wish I could speak with him, but his bouncers are very insistent.
-    - levity: Anyway, enjoy your Tasty Nuts!
+    - levity: And here is your food!
+    - goto: main_choice
+
+main_choice:
+    - levity: Is there anything else you need?
+    - choice:
+        Could you tell me about the Mustachio Express?:
+            goto: explain_space_train
+        Is anyone famous on the train right now?:
+            require: explained_space_train
+            goto: stanislov
+        No, thank you!:
+            goto: done
+
+explain_space_train:
+    - levity: I'd be happy to!
+    - levity: The Mustachio Express was built in 2099, the third space train ever built.
+    - levity: It is unique among the ten currently operational space trains in that it was designed by a very eccentric engineer.
+    - levity: Some say it is full of secret passages and mysterious devices.
+    - levity: The Mustachio Express covers the Earth-Planet Deux-Solaris route, making it a popular way to travel between cultural centers.
+    - levity: Many famous people travel on the Mustachio Express, including musicians, artists, scientists, and poets.
+    - update_locals:
+        explained_space_train: true
+    - goto: main_choice
+
+stanislov:
+    - main: Do you know if anyone famous is on the train right now?
+    - levity: In fact there is! The great poet Stanislov Slavinsky is traveling to a reading.
+    - main: You don't say! I am going to that very reading!
+    - main: I just can't wait to hear him read from his latest work, "Sage Pyramid Of The Poor Competition."
+    - levity: How wonderful!
+    - levity: Just please try not to disturb him.
+    - goto: main_choice
+
+done:
+    - levity: Have a pleasant trip!
