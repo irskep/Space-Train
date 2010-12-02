@@ -10,6 +10,8 @@ speaking:
 
 variables:
     knows_about_baron: false
+
+stand_at: tourist_talk_point
     
 # States
 start:

@@ -11,7 +11,7 @@ speaking:
 variables:
     knows_about_baron: False
 
-stand_at: point_2
+stand_at: tourist_talk_point
     
 # States
 
