@@ -2,7 +2,7 @@ import pyglet
 import functools
 
 from engine import actor
-from engine.interpolator import FadeInterpolator, LinearInterpolator
+from engine.interpolator import FadeInterpolator, LinearInterpolator, Random2DInterpolator
 from engine.gamestate import norm_w, norm_h
 
 
@@ -16,20 +16,29 @@ note_actor = None
 can_continue = False
 
 def init(fresh=True):
+    myscene.interaction_enabled = False
+    myscene.moving_camera = True
+    # I'M A GIANT CHEATER
+    myscene.camera.constrain_point = lambda x, y: (x, y)
+    
     myscene.ui.inventory.visible = False
     billboard = myscene.new_actor('a_train_in_spain', 'billboard', attrs=dict(x=640, y=360))
     billboard.update_state('explode_1')
     
     def show_n(n):
         def show(dt=0):
-            print 'show', n
-            if n == 2:
-                myscene.play_sound('space_train_explode')
             billboard.update_state('explode_%d' % n)
         return show
     
     for t in xrange(1, 4):
-        pyglet.clock.schedule_once(show_n(t+1), 2.0*t)
+        pyglet.clock.schedule_once(show_n(t+1), 3.0*t)
+    
+    def shakeshakeshake(dt=0):
+        myscene.play_sound('space_train_explode')
+        interp = Random2DInterpolator(myscene.camera, 'position', 20.0, duration=9.0)
+        myscene.add_interpolator(interp)
+    
+    pyglet.clock.schedule_once(shakeshakeshake, 3.0)
     
 
 def transition_from(old_scene):

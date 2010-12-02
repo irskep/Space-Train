@@ -1,4 +1,5 @@
 import math
+import random
 
 class InterpolatorController(object):
     """Keeps track of the lifecycles of multiple interpolators"""
@@ -124,6 +125,46 @@ class Linear2DInterpolator(Interpolator):
         return fmt % (self.name, str(self.host_object), self.attr_name, 
                       str(self.start_tuple), str(self.end_tuple), self.duration)
     
+
+class Random2DInterpolator(Interpolator):
+    def __init__(self, host_object, attr_name, magnitude, name="position", 
+                 start_tuple=None, speed=0.0, duration=0.0, done_function=None):
+        if start_tuple is None:
+            start_tuple = getattr(host_object, attr_name)
+        self.start_tuple = start_tuple
+        self.magnitude = magnitude
+        
+        self.speed = speed
+        self.duration = duration
+        
+        super(Random2DInterpolator, self).__init__(host_object, attr_name, 
+                                                   end=1.0, start=0.0, 
+                                                   speed=self.speed, 
+                                                   name=name, done_function=done_function,
+                                                   duration=self.duration)
+        
+        self.update(0.0)
+    
+    def update(self, dt=0):
+        super(Random2DInterpolator, self).update(dt)
+        if self.progress/self.duration >= 0.9:
+            self.magnitude *= 0.95
+            print self.magnitude
+        if not self.host_object:
+            return
+        try:
+            new_tuple = (self.start_tuple[0] + random.random()*self.magnitude,
+                         self.start_tuple[1] + random.random()*self.magnitude)
+            setattr(self.host_object, self.attr_name, new_tuple)
+        except AttributeError:
+            print 'Interpolator error on', self.host_object
+    
+    def __repr__(self):
+        fmt = "Random2DInterpolator '%s' on %s.%s from %s to %s taking %0.2f seconds)"
+        return fmt % (self.name, str(self.host_object), self.attr_name, 
+                      str(self.start_tuple), str(self.end_tuple), self.duration)
+    
+
 
 class JumpInterpolator(Interpolator):
     """Cause the target to 'jump' using a sine wave"""
