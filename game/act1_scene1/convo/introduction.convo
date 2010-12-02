@@ -43,17 +43,22 @@ main_choice:
     - choice:
         Could you tell me about the Mustachio Express?:
             goto: explain_space_train
+            hide_after_use: true
         Is anyone famous on the train right now?:
             require: explained_space_train
+            hide_after_use: true
             goto: stanislov
         Why do people think it's safer?:
             require: explained_space_train
+            hide_after_use: true
             goto: safety
         Tell me more about the Baron:
             require: explained_safety
+            hide_after_use: true
             goto: baron
         How long until we reach Planet Deux?:
             goto: hahafunny
+            hide_after_use: true
         No, thank you:
             goto: done
 
@@ -78,7 +83,7 @@ stanislov:
     - levity: Just please try not to disturb him.
     - goto: main_choice
 
-safer:
+safety:
     - main: Why do people think the Mustachio Express is safer than the other space trains?
     - levity: The Baron, of course!
     - levity: Baron von Sniffmeinschorts has been robbing space trains from here to Deltron Six. This is the only train he hasn't hit...yet.
@@ -98,6 +103,8 @@ baron:
 hahafunny:
     - main: How long until we reach Planet Deux?
     - levity: How good of a gamer are you?
+    - levity: LOL
+    - goto: main_choice
 
 done:
     - main: No, that's all.
