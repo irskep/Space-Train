@@ -54,7 +54,8 @@ def kidnap_stanislav():
         sb.walkpath_point = None
         sb.sprite.position = state.myscene.actors['stanislav'].sprite.position
         sb.update_state('kidnap_left')
-        i = LinearInterpolator(sb.sprite, 'y', end=0, duration=1.5)
+        i = LinearInterpolator(sb.sprite, 'x', end=0, duration=1.5)
+        state.myscene.add_interpolator(i)
         state.myscene.remove_actor('stanislav')
         state.myscene.blackout = False
     
