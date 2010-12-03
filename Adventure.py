@@ -138,7 +138,7 @@ def run_game():
         else:
             main_window = AdventureWindow(True, sys.argv[1])
     else:
-        main_window = AdventureWindow(False)
+        main_window = AdventureWindow(True) # LOL
     pyglet.app.run()
 
 if __name__ == '__main__':
