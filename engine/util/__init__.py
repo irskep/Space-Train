@@ -37,7 +37,6 @@ preload = [
 'environments/transitions/test.png',
 'actors/inga/walk_right_1.png',
 'actors/inga/stand_front.png',
-'actors/fist/stand_front.png',
 'actors/inga/talk_left_2.png',
 'actors/seat/chair_left.png',
 'actors/intro_billboards/note.png',
