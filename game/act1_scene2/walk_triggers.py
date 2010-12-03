@@ -52,7 +52,7 @@ def kidnap_stanislav():
         sb = state.myscene.actors['sneaky_bastard_1']
         pos = (state.myscene.actors['stanislav'].abs_position_x(), state.myscene.actors['stanislav'].abs_position_y())
         sb.walkpath_point = None
-        sb.sprite.position = state.myscene.actors['stanislav'].sprite.position
+        sb.sprite.position = state.myscene.walkpath.points['s_stand']
         sb.update_state('kidnap_left')
         i = LinearInterpolator(sb.sprite, 'x', end=0, duration=1.5)
         state.myscene.add_interpolator(i)

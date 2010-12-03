@@ -8,19 +8,12 @@
             "name": "potato", 
             "start_state": "run_note"
         }, 
-        "seat_8": {
-            "y": 184, 
-            "x": 820, 
+        "luggage_1": {
+            "y": 179, 
+            "x": 1296, 
             "walk_speed": 400.0, 
-            "name": "seat", 
-            "start_state": "chair"
-        }, 
-        "seat_9": {
-            "y": 164, 
-            "x": 779, 
-            "walk_speed": 400.0, 
-            "name": "seat", 
-            "start_state": "chair"
+            "name": "luggage", 
+            "start_state": "luggage"
         }, 
         "luggage_2": {
             "y": -7, 
@@ -35,20 +28,6 @@
             "walk_speed": 400.0, 
             "name": "luggage", 
             "start_state": "luggage"
-        }, 
-        "seat_4": {
-            "y": 184, 
-            "x": 607, 
-            "walk_speed": 400.0, 
-            "name": "seat", 
-            "start_state": "chair"
-        }, 
-        "seat_5": {
-            "y": 164, 
-            "x": 566, 
-            "walk_speed": 400.0, 
-            "name": "seat", 
-            "start_state": "chair"
         }, 
         "seat_6": {
             "y": 184, 
@@ -72,24 +51,17 @@
             "start_state": "couch"
         }, 
         "seat_2": {
-            "y": 184, 
-            "x": 394, 
+            "y": 167, 
+            "x": 399, 
             "walk_speed": 400.0, 
             "name": "seat", 
-            "start_state": "chair"
+            "start_state": "chair_left"
         }, 
         "moritz": {
             "walk_speed": 400.0, 
             "walkpath_point": "moritz_idle", 
             "name": "moritz", 
             "start_state": "stand_right"
-        }, 
-        "luggage_1": {
-            "y": 179, 
-            "x": 1296, 
-            "walk_speed": 400.0, 
-            "name": "luggage", 
-            "start_state": "luggage"
         }, 
         "tourist": {
             "walk_speed": 600, 
@@ -111,11 +83,10 @@
             "start_state": "stand_front"
         }, 
         "stanislav": {
-            "y": 96, 
-            "x": 369, 
             "walk_speed": 400.0, 
+            "walkpath_point": "s_sit", 
             "name": "stanislav", 
-            "start_state": "stand_front"
+            "start_state": "sit_left"
         }, 
         "airduct_1": {
             "y": 630, 
@@ -124,12 +95,11 @@
             "name": "airduct", 
             "start_state": "airduct_shaft"
         }, 
-        "monitor_2": {
-            "y": 425, 
-            "x": 1650, 
+        "mikhail": {
             "walk_speed": 400.0, 
-            "name": "monitor", 
-            "start_state": "StaticTV"
+            "walkpath_point": "mikhail_idle", 
+            "name": "moritz", 
+            "start_state": "stand_front"
         }, 
         "seat_14": {
             "y": 164, 
@@ -173,18 +143,12 @@
             "name": "seat", 
             "start_state": "chair_left"
         }, 
-        "seat_3": {
-            "y": 164, 
-            "x": 354, 
+        "monitor_2": {
+            "y": 425, 
+            "x": 1650, 
             "walk_speed": 400.0, 
-            "name": "seat", 
-            "start_state": "chair"
-        }, 
-        "mikhail": {
-            "walk_speed": 400.0, 
-            "walkpath_point": "mikhail_idle", 
-            "name": "moritz", 
-            "start_state": "stand_front"
+            "name": "monitor", 
+            "start_state": "StaticTV"
         }, 
         "potato": {
             "walk_speed": 100, 
@@ -257,6 +221,10 @@
                 "y": 143, 
                 "x": -73
             }, 
+            "s_sit": {
+                "y": 160, 
+                "x": 376
+            }, 
             "potato_drop_end": {
                 "y": 80, 
                 "x": 246
@@ -308,6 +276,10 @@
             "tourist_inga": {
                 "y": 122, 
                 "x": 964
+            }, 
+            "s_stand": {
+                "y": 124, 
+                "x": 335
             }, 
             "moritz_guard": {
                 "y": 104, 
@@ -396,8 +368,8 @@
                 "b": "potato_5"
             }, 
             {
-                "a": "potato_3", 
-                "b": "potato_4"
+                "a": "point_3", 
+                "b": "point_4"
             }, 
             {
                 "a": "shake_2", 
@@ -532,8 +504,8 @@
                 "b": "shake_4"
             }, 
             {
-                "a": "point_3", 
-                "b": "point_4"
+                "a": "potato_3", 
+                "b": "potato_4"
             }, 
             {
                 "a": "potato_11", 

@@ -76,7 +76,9 @@ def ball_drop():
     
 @state.handles_convo('surprise_note')
 def stanislav_loves_inga():
-    
+    stan = state.myscene.actors['stanislav']
+    stan.update_state('stand_front')
+    stan.walkpath_point = 's_stand'
     x = state.myscene.actors['main'].abs_position_x()
     y = state.myscene.actors['main'].abs_position_y()
     interp = Linear2DInterpolator(state.myscene.camera, 'position',

@@ -1,14 +1,14 @@
 # Initialization
 
 at_rest:
-    stanislav: stand_front
-    mikhail: stand_right
+    stanislav: sit_left
     moritz: stand_right
+    mikhail: stand_front
     
 speaking:
-    stanislav: stand_front
-    mikhail: stand_right
+    stanislav: sit_left
     moritz: stand_right
+    mikhail: stand_front
 
 variables:
     knows_about_baron: false
