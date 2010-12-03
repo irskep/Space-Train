@@ -43,6 +43,7 @@ def kidnap_stanislav():
     count = 2
     def show_stanislav_bag(count):
         state.myscene.blackout = False
+        state.myscene.play_sound("lights_out")
         pyglet.clock.schedule_once(make_dt_wrapper(blackout), 0.2, count)
         
     def blackout(count):
@@ -67,6 +68,7 @@ def kidnap_stanislav():
     pyglet.clock.schedule_once(make_dt_wrapper(show_stanislav_bag), 2, count)
     
 def stanislav_gone():
+    state.myscene.play_sound("lights_on")
     state.myscene.blackout = False
     state.myscene.play_music("beethoven", fade=False)
     state.myscene.actors['tourist'].prepare_walkpath_move('tourist_inga')
