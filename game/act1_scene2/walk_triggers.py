@@ -40,37 +40,40 @@ def inga_walk(actor, point):
             
             
 def kidnap_stanislav():
-    count = 2
-    def show_stanislav_bag(count):
-        state.myscene.blackout = False
-        pyglet.clock.schedule_once(make_dt_wrapper(blackout), 0.2, count)
-        
-    def blackout(count):
-        state.myscene.blackout = True
-        if count > 0:  
-            count = count - 1
-            pyglet.clock.schedule_once(make_dt_wrapper(show_stanislav_bag), 1.4, count)
-        else:
-            pyglet.clock.schedule_once(make_dt_wrapper(stanislav_gone), 3)
-        
-    state.myscene.fade_music(0)
+    pyglet.resource.media('sound/lights_out.ogg', streaming=False).play()
     state.myscene.blackout = True
+    state.myscene.fade_music(0)
     
-    pos = (state.myscene.actors['stanislav'].abs_position_x(), state.myscene.actors['stanislav'].abs_position_y())
-    state.myscene.remove_actor('stanislav')
-    state.myscene.remove_actor('sneaky_bastard_1')
+    def scream(dt=0):
+        pyglet.resource.media('sound/scream.wav', streaming=False).play()
     
-    scream_snd = pyglet.resource.media('sound/scream.wav', streaming=False)
-    scream_snd.play()
-
+    def flash_drag_away(dt=0):
+        pos = (state.myscene.actors['stanislav'].abs_position_x(), state.myscene.actors['stanislav'].abs_position_y())
+        state.myscene.actors['sneaky_bastard_1'].walkpath_point = None
+        state.myscene.actors['sneaky_bastard_1'].sprite.position = state.myscene.actors['stanislav'].sprite.position
+        state.myscene.remove_actor('stanislav')
+        state.myscene.blackout = False
     
-    pyglet.clock.schedule_once(make_dt_wrapper(show_stanislav_bag), 2, count)
+    def re_blackout(dt=0):
+        state.myscene.blackout = True
     
-def stanislav_gone():
-    state.myscene.blackout = False
-    state.myscene.play_music("beethoven", fade=False)
-    state.myscene.actors['tourist'].prepare_walkpath_move('tourist_inga')
-    state.myscene.actors['tourist'].next_action()
+    def un_blackout(dt=0):
+        mor = state.myscene.actors['moritz']
+        mik = state.myscene.actors['mikhail']
+        mor.update_state('knocked_out')
+        mik.update_state('dizzy_stars')
+        mik.casts_shadow = False
+        mik.sprite.position = (mor.sprite.x, mor.sprite.y + 100)
+        state.myscene.play_music("beethoven", fade=False)
+        state.myscene.actors['tourist'].prepare_walkpath_move('tourist_inga')
+        state.myscene.actors['tourist'].next_action()
+        state.myscene.remove_actor('sneaky_bastard_1')
+        state.myscene.blackout = False
+    
+    pyglet.clock.schedule_once(scream, 1.0)
+    pyglet.clock.schedule_once(flash_drag_away, 2.5)
+    pyglet.clock.schedule_once(re_blackout, 3.5)
+    pyglet.clock.schedule_once(un_blackout, 5.0)
 
 @state.handles_walk('tourist')
 def tourist_to_inga(actor, point):

@@ -142,6 +142,9 @@ class Scene(object):
                 new_actor.walkpath_point = attrs['walkpath_point']
                 new_actor.sprite.position = self.walkpath.points[new_actor.walkpath_point]
             self.add_actor(new_actor, reset_shadows=False)
+        self.update_shadows()
+    
+    def update_shadows(self):
         self.shadow.set_targets([a.sprite for a in self.actors.viewvalues() if a.casts_shadow])
     
     def add_actor(self, actor, reset_shadows=True):
@@ -150,7 +153,7 @@ class Scene(object):
         self.zenforcer.init_groups()
         self.zenforcer.update()
         if reset_shadows:
-            self.shadow.set_targets([a.sprite for a in self.actors.viewvalues() if a.casts_shadow])
+            self.update_shadows()
     
     def load_script(self):
         # Requires that game/scenes is in PYTHONPATH
@@ -473,7 +476,7 @@ class Scene(object):
         self.actors[identifier].sprite.delete()
         del self.actors[identifier]
         self.zenforcer.init_groups()
-        self.shadow.set_targets([a.sprite for a in self.actors.viewvalues() if a.casts_shadow])
+        self.update_shadows()
     
     def load_song(self, song_name):
         self.song = pyglet.resource.media(song_name)
