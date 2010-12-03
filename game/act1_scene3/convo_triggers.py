@@ -20,6 +20,7 @@ def handle_hipsters():
 @state.handles_convo('inspect_button')
 def handle_button():
     if state.myscene.global_dict['button_pressed'] == True:
+        state.myscene.actors['button'].update_state('ButtonOn')
         state.myscene.fade_music(time=0.0)
         state.myscene.play_sound('klaxon')
         state.myscene.begin_conversation('oops')
