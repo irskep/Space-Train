@@ -5,6 +5,7 @@ from time import sleep
 
 from engine import actor
 from engine.util import make_dt_wrapper
+from engine.interpolator import LinearInterpolator
 
 import state
 
@@ -53,6 +54,7 @@ def kidnap_stanislav():
         sb.walkpath_point = None
         sb.sprite.position = state.myscene.actors['stanislav'].sprite.position
         sb.update_state('kidnap_left')
+        i = LinearInterpolator(sb.sprite, 'y', end=0, duration=1.5)
         state.myscene.remove_actor('stanislav')
         state.myscene.blackout = False
     
