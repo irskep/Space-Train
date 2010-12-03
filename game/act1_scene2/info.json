@@ -307,15 +307,15 @@
             }, 
             "tourist_inga": {
                 "y": 122, 
-                "x": 853
+                "x": 964
             }, 
             "moritz_guard": {
                 "y": 104, 
                 "x": 870
             }, 
-            "point_1": {
-                "y": 129, 
-                "x": 2619
+            "inga_exit": {
+                "y": 140, 
+                "x": -51
             }, 
             "potato_14": {
                 "y": 137, 
@@ -357,9 +357,9 @@
                 "y": 124, 
                 "x": 2753
             }, 
-            "inga_exit": {
-                "y": 140, 
-                "x": -51
+            "point_1": {
+                "y": 129, 
+                "x": 2619
             }, 
             "point_2": {
                 "y": 130, 
@@ -396,8 +396,8 @@
                 "b": "potato_5"
             }, 
             {
-                "a": "point_3", 
-                "b": "point_4"
+                "a": "potato_3", 
+                "b": "potato_4"
             }, 
             {
                 "a": "shake_2", 
@@ -416,16 +416,16 @@
                 "b": "point_5"
             }, 
             {
-                "a": "inga_attempt_stanislov", 
-                "b": "meet_stanislav"
+                "a": "meet_stanislav", 
+                "b": "inga_attempt_stanislov"
+            }, 
+            {
+                "a": "potato_14", 
+                "b": "potato_15"
             }, 
             {
                 "a": "potato_drop_end", 
                 "b": "shake_1"
-            }, 
-            {
-                "a": "potato_3", 
-                "b": "potato_4"
             }, 
             {
                 "a": "potato_12", 
@@ -436,10 +436,6 @@
                 "b": "potato_exit"
             }, 
             {
-                "a": "point_2", 
-                "b": "point_3"
-            }, 
-            {
                 "a": "mikhail_idle", 
                 "b": "mikhail_guard"
             }, 
@@ -448,12 +444,16 @@
                 "b": "potato_8"
             }, 
             {
-                "a": "meet_stanislav", 
-                "b": "inga_attempt_stanislov"
+                "a": "inga_attempt_stanislov", 
+                "b": "meet_stanislav"
             }, 
             {
                 "a": "potato_8", 
                 "b": "potato_9"
+            }, 
+            {
+                "a": "point_6", 
+                "b": "tourist_inga"
             }, 
             {
                 "a": "potato_5", 
@@ -464,8 +464,8 @@
                 "b": "tourist_start"
             }, 
             {
-                "a": "potato_14", 
-                "b": "potato_15"
+                "a": "point_2", 
+                "b": "point_3"
             }, 
             {
                 "a": "mikhail_guard", 
@@ -532,8 +532,8 @@
                 "b": "shake_4"
             }, 
             {
-                "a": "point_6", 
-                "b": "tourist_inga"
+                "a": "point_3", 
+                "b": "point_4"
             }, 
             {
                 "a": "potato_11", 

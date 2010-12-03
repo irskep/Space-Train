@@ -9,6 +9,8 @@ speaking:
 variables:
     knows_about_baron: false
 
+stand_at: point_2
+
 # States
 
 start:

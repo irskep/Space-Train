@@ -48,14 +48,17 @@ def kidnap_stanislav():
         pyglet.resource.media('sound/scream.wav', streaming=False).play()
     
     def flash_drag_away(dt=0):
+        sb = state.myscene.actors['sneaky_bastard_1']
         pos = (state.myscene.actors['stanislav'].abs_position_x(), state.myscene.actors['stanislav'].abs_position_y())
-        state.myscene.actors['sneaky_bastard_1'].walkpath_point = None
-        state.myscene.actors['sneaky_bastard_1'].sprite.position = state.myscene.actors['stanislav'].sprite.position
+        sb.walkpath_point = None
+        sb.sprite.position = state.myscene.actors['stanislav'].sprite.position
+        sb.update_state('kidnap_left')
         state.myscene.remove_actor('stanislav')
         state.myscene.blackout = False
     
     def re_blackout(dt=0):
         state.myscene.blackout = True
+        pyglet.resource.media('sound/clonk.mp3', streaming=False).play()
     
     def un_blackout(dt=0):
         mor = state.myscene.actors['moritz']
@@ -72,8 +75,8 @@ def kidnap_stanislav():
     
     pyglet.clock.schedule_once(scream, 1.0)
     pyglet.clock.schedule_once(flash_drag_away, 2.5)
-    pyglet.clock.schedule_once(re_blackout, 3.5)
-    pyglet.clock.schedule_once(un_blackout, 5.0)
+    pyglet.clock.schedule_once(re_blackout, 4.0)
+    pyglet.clock.schedule_once(un_blackout, 7.0)
 
 @state.handles_walk('tourist')
 def tourist_to_inga(actor, point):
