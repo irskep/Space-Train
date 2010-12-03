@@ -23,6 +23,11 @@ def init(fresh=False):
         
     myscene.play_music('bach', fade=False)
     if fresh:
+        potato_note = actor.Actor('potato_note', 'potato', state.myscene)
+        potato_note.anchor_x = 0.0
+        potato_note.update_state('sit')
+        state.myscene.ui.inventory.put_item(potato_note)
+        
         walk_from_right()
         
         #pan to show the guards        

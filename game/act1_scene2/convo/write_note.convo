@@ -12,6 +12,7 @@ variables:
 # States
 
 start:
+    - main: I better write a note to send along with Potato.
     - main: Dear Mr. Slavinsky, 
     - main: I have been following your work for the past few years and would be delighted if you would have tea with me to discuss the utsmer-yezzish form. Shall we? 
     - main: -Inga Borga

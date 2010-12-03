@@ -6,8 +6,6 @@ from engine.util import make_dt_wrapper
 
 import state
 
-
-
 @state.handles_convo('no_groupies_intro')
 def handle_groupies_intro():
     state.myscene.begin_conversation("no_groupies")
@@ -50,6 +48,22 @@ def return_to_inga():
     y = state.myscene.actors['main'].abs_position_y()
     interp = Linear2DInterpolator(state.myscene.camera, 'position',
             (x, y), speed=400.0, done_function=make_dt_wrapper(state.end_cutscene))
+    state.myscene.add_interpolator(interp)
+
+@state.handles_convo('write_note')
+def potato_adventure():
+    state.myscene.ui.inventory.get_item('potato_note')
+
+    def potato_drop():
+        potato = state.myscene.actors['potato_drop']
+        potato.walk_speed = 800
+        potato.prepare_walkpath_move('potato_drop_end')
+        potato.next_action()
+
+    state.start_cutscene()
+    interp = Linear2DInterpolator(state.myscene.camera, 'position', (0.0, 360.0), 
+                                  start_tuple=(1920,360), speed=400.0, 
+                                  done_function=make_dt_wrapper(potato_drop))
     state.myscene.add_interpolator(interp)
 
 @state.handles_convo('a_visitor')
