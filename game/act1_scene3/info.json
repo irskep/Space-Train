@@ -2,26 +2,18 @@
     "environment": "act1_scene3", 
     "camera_points": {}, 
     "actors": {
-        "russian_lamp_3": {
-            "y": 569, 
-            "x": 1053, 
+        "hipster_amanda": {
             "walk_speed": 400.0, 
-            "name": "russian_lamp", 
-            "start_state": "LightOff"
+            "walkpath_point": "amanda_1", 
+            "name": "hipster_amanda", 
+            "start_state": "hipster_amanda"
         }, 
-        "russian_lamp_2": {
-            "y": 569, 
-            "x": 1999, 
+        "hipster_fran": {
+            "y": 150, 
+            "x": 2277, 
             "walk_speed": 400.0, 
-            "name": "russian_lamp", 
-            "start_state": "LightOff"
-        }, 
-        "russian_lamp_1": {
-            "y": 569, 
-            "x": 1509, 
-            "walk_speed": 400.0, 
-            "name": "russian_lamp", 
-            "start_state": "LightOff"
+            "name": "hipster_fran", 
+            "start_state": "hipster_fran"
         }, 
         "seat_8": {
             "y": 180, 
@@ -37,13 +29,6 @@
             "name": "luggage", 
             "start_state": "luggage"
         }, 
-        "russian_lamp_4": {
-            "y": 569, 
-            "x": 565, 
-            "walk_speed": 400.0, 
-            "name": "russian_lamp", 
-            "start_state": "LightOff"
-        }, 
         "seat_4": {
             "y": 166, 
             "x": 1531, 
@@ -58,12 +43,26 @@
             "name": "seat", 
             "start_state": "couch"
         }, 
+        "button": {
+            "y": 275, 
+            "x": 438, 
+            "walk_speed": 400.0, 
+            "name": "button", 
+            "start_state": "ButtonOff"
+        }, 
         "seat_7": {
             "y": 180, 
             "x": 1768, 
             "walk_speed": 400.0, 
             "name": "seat", 
             "start_state": "couch"
+        }, 
+        "outlet_wire_1": {
+            "y": 195, 
+            "x": 1654, 
+            "walk_speed": 400.0, 
+            "name": "outlet_wire", 
+            "start_state": "outlet_wire"
         }, 
         "seat_1": {
             "y": 185, 
@@ -86,6 +85,20 @@
             "name": "seat", 
             "start_state": "chair_left"
         }, 
+        "monitor_2": {
+            "y": 416, 
+            "x": 561, 
+            "walk_speed": 400.0, 
+            "name": "monitor", 
+            "start_state": "StaticTV"
+        }, 
+        "monitor_1": {
+            "y": 416, 
+            "x": 1998, 
+            "walk_speed": 400.0, 
+            "name": "monitor", 
+            "start_state": "StaticTV"
+        }, 
         "hipster_liam": {
             "y": 151, 
             "x": 2029, 
@@ -106,47 +119,6 @@
             "walkpath_point": "point_1", 
             "name": "inga", 
             "start_state": "stand_front"
-        }, 
-        "monitor_2": {
-            "y": 416, 
-            "x": 561, 
-            "walk_speed": 400.0, 
-            "name": "monitor", 
-            "start_state": "StaticTV"
-        }, 
-        "monitor_1": {
-            "y": 416, 
-            "x": 1998, 
-            "walk_speed": 400.0, 
-            "name": "monitor", 
-            "start_state": "StaticTV"
-        }, 
-        "hipster_amanda": {
-            "walk_speed": 400.0, 
-            "walkpath_point": "amanda_1", 
-            "name": "hipster_amanda", 
-            "start_state": "hipster_amanda"
-        }, 
-        "hipster_fran": {
-            "y": 150, 
-            "x": 2277, 
-            "walk_speed": 400.0, 
-            "name": "hipster_fran", 
-            "start_state": "hipster_fran"
-        }, 
-        "button": {
-            "y": 275, 
-            "x": 438, 
-            "walk_speed": 400.0, 
-            "name": "button", 
-            "start_state": "ButtonOff"
-        }, 
-        "outlet_wire_1": {
-            "y": 195, 
-            "x": 1654, 
-            "walk_speed": 400.0, 
-            "name": "outlet_wire", 
-            "start_state": "outlet_wire"
         }, 
         "outlet_wire_2": {
             "y": 195, 
@@ -201,12 +173,12 @@
         }, 
         "edges": [
             {
-                "a": "point_9", 
-                "b": "door"
+                "a": "point_5", 
+                "b": "point_6"
             }, 
             {
-                "a": "point_3", 
-                "b": "point_5"
+                "a": "point_7", 
+                "b": "point_6"
             }, 
             {
                 "a": "point_6", 
@@ -225,14 +197,6 @@
                 "b": "point_3"
             }, 
             {
-                "a": "point_7", 
-                "b": "point_9"
-            }, 
-            {
-                "a": "point_7", 
-                "b": "point_6"
-            }, 
-            {
                 "a": "point_2", 
                 "b": "point_1"
             }, 
@@ -241,28 +205,36 @@
                 "b": "amanda_1"
             }, 
             {
-                "a": "door", 
-                "b": "point_9"
-            }, 
-            {
-                "a": "amanda_1", 
-                "b": "amanda_2"
+                "a": "point_9", 
+                "b": "door"
             }, 
             {
                 "a": "point_2", 
                 "b": "point_3"
             }, 
             {
+                "a": "point_6", 
+                "b": "point_5"
+            }, 
+            {
+                "a": "point_3", 
+                "b": "point_5"
+            }, 
+            {
+                "a": "door", 
+                "b": "point_9"
+            }, 
+            {
+                "a": "point_7", 
+                "b": "point_9"
+            }, 
+            {
                 "a": "point_3", 
                 "b": "point_2"
             }, 
             {
-                "a": "point_5", 
-                "b": "point_6"
-            }, 
-            {
-                "a": "point_6", 
-                "b": "point_5"
+                "a": "amanda_1", 
+                "b": "amanda_2"
             }
         ]
     }
