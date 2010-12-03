@@ -38,6 +38,12 @@ def handle_shamus():
         potato.prepare_walkpath_move("potato_10")
         potato.next_action()
         state.myscene.global_dict['potato_rolling'] = True
+        
+        shamus = state.myscene.actors['shamus']
+        shamus.update_state('eating')
+        shamus.walkpath_point = "shamus_sit"
+        shamus.sprite.position = state.myscene.walkpath.points['shamus_sit']
+        
 
 @state.handles_convo('thermostat_discover')
 def handle_thermostat():
