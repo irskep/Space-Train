@@ -36,6 +36,8 @@ comment:
     - play_sound: "hamster"
     - main: I am Inga! What is your name?
     - shamus: I'm Shamus! Nice to meet you!
+    - update_globals:
+        greeted_shamus: true
     - goto: start
         
 
