@@ -24,6 +24,7 @@ start:
             goto: bai
 
 ask_direction:
+    - main: Where are you headed?
     - tourist: It's our 10th wedding anniversary! Don got us tickets to Planet Deux. It's going to be SO romantic!
     - tourist_1: Best vacation I could afford! I'll have so many great pictures!
     - tourist: Right. Don put us in this LOVELY economy-class car.
@@ -39,6 +40,7 @@ second:
             goto: bai
 
 stanislov:
+    - main: We're on the same train as Stanislov?
     - tourist_1: Oh yes! We are going to his reading of "Sage Pyramid Of The Poor Competition" on Planet Deux.
     - tourist: Most poetry is boring, but Stanislov's work is wonderful!
     - main: How exciting!
