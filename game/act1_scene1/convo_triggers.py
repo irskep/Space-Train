@@ -32,17 +32,18 @@ def handle_complaint():
 def handle_shamus():
     if state.myscene.global_dict.get('hamster_dropped', False):
         state.myscene.global_dict['hamster_dropped'] = True
-        potato = state.myscene.new_actor('potato', 'potato')
-        potato.walkpath_point = "potato_32"
-        potato.sprite.position = state.myscene.walkpath.points['potato_32']
-        potato.prepare_walkpath_move("potato_10")
-        potato.next_action()
-        state.myscene.global_dict['potato_rolling'] = True
+        if not state.myscene.ui.inventory.has_item('potato') and not 'potato' in myscene.actors:
+            potato = state.myscene.new_actor('potato', 'potato')
+            potato.walkpath_point = "potato_32"
+            potato.sprite.position = state.myscene.walkpath.points['potato_32']
+            potato.prepare_walkpath_move("potato_10")
+            potato.next_action()
+            state.myscene.global_dict['potato_rolling'] = True
         
-        shamus = state.myscene.actors['shamus']
-        shamus.update_state('eating')
-        shamus.walkpath_point = "shamus_sit"
-        shamus.sprite.position = state.myscene.walkpath.points['shamus_sit']
+            shamus = state.myscene.actors['shamus']
+            shamus.update_state('eating')
+            shamus.walkpath_point = "shamus_sit"
+            shamus.sprite.position = state.myscene.walkpath.points['shamus_sit']
         
 
 @state.handles_convo('thermostat_discover')
