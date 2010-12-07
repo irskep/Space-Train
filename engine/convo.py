@@ -208,7 +208,7 @@ class Conversation(object):
             self.convo_position = 0
             
             # Or not!
-            if self.convo_info.has_key('stand_at'):
+            if self.convo_info.has_key('stand_at') and self.scene.actors['main'].walkpath_point != self.convo_info['stand_at']:
                 def callback(*args):
                     self.scene.actors['main'].next_action()
                     self.next_line()
@@ -330,9 +330,9 @@ class Conversation(object):
     
     def next_line(self, dt=0):
         """Advance the cutscene by one line in the current action list"""
-        # if not self.active:
-        #     print 'Somehow we are trying to call next_line on an inactive conversation'
-        #     return
+        if not self.active:
+            print 'Somehow we are trying to call next_line on an inactive conversation'
+            return
         if self.convo_position >= len(self.convo_lines):
             self.stop_speaking()
         else:    
