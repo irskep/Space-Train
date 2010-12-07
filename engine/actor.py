@@ -17,6 +17,7 @@ class Actor(actionsequencer.ActionSequencer):
         attrs = attrs or {}
         self.name = name
         self.scene = scene
+        self.use_mask_to_detect_clicks = True
         
         self.identifier = identifier
         self.walkpath_point = None
@@ -85,7 +86,10 @@ class Actor(actionsequencer.ActionSequencer):
         max_x = self.abs_position_x() + self.width()
         max_y = self.abs_position_y() + self.height()
         if min_x <= x <= max_x and min_y <= y <= max_y:
-            return (util.image_alpha_at_point(self.current_image(),  x-min_x, y-min_y))
+            if self.use_mask_to_detect_clicks:
+                return (util.image_alpha_at_point(self.current_image(),  x-min_x, y-min_y))
+            else:
+                return True
     
     # Convenience methods to tell the position, width, and height of the actor
     def width(self):
