@@ -12,10 +12,8 @@ import state
 @state.handles_walk('main')
 def inga_walk(actor, point):
     if point == 'point_1':
-        state.myscene.play_sound("door_open")
         state.myscene.handler.notify('act1_scene1')
     elif point == 'inga_exit':
-        state.myscene.play_sound("door_open")
         state.myscene.handler.notify('act1_scene3')
     elif point == "point_2":
         if state.myscene.global_dict['groupies_blocked'] and \
