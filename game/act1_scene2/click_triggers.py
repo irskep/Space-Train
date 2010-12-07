@@ -21,7 +21,6 @@ def inspect_duct():
 
 def potato_adventure():
     state.myscene.begin_conversation('write_note')
-    state.myscene.convo.next_line()
 
 @state.handles_click('potato')
 def potato_options(clicked_actor):
