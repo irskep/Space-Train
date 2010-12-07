@@ -32,7 +32,7 @@ def handle_complaint():
 def handle_shamus():
     if state.myscene.global_dict.get('hamster_dropped', False):
         state.myscene.global_dict['hamster_dropped'] = True
-        if not state.myscene.ui.inventory.has_item('potato') and not 'potato' in myscene.actors:
+        if not state.myscene.ui.inventory.has_item('potato') and not 'potato' in state.myscene.actors:
             potato = state.myscene.new_actor('potato', 'potato')
             potato.walkpath_point = "potato_32"
             potato.sprite.position = state.myscene.walkpath.points['potato_32']
