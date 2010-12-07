@@ -7,6 +7,7 @@ myscene = None
 def init(fresh=True):
     myscene.ui.inventory.visible = False
     title = myscene.actors['go']
+    title.use_mask_to_detect_clicks = False
     interp = PulseInterpolator(title.sprite, 'scale', 0.9, 1.0, speed=4)
     myscene.add_interpolator(interp)
 
