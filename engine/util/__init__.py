@@ -10,7 +10,7 @@ import walkpath
 
 # Intercept resource loads
 
-print_loads = True
+print_loads = False
 
 preload = [
 'actors/inga/stand_right.png',
