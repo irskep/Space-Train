@@ -308,7 +308,10 @@ class Conversation(object):
             if tags['hide_after_use']:
                 del choice_dict[choice]
             self._parse_command_dict(tags)
-            self.next_line()
+            if self.convo_lines:
+                self.next_line()
+            else:
+                self.stop_speaking()
         return decision
     
     def _enforce_choice_requirements(self, choices):
@@ -327,9 +330,9 @@ class Conversation(object):
     
     def next_line(self, dt=0):
         """Advance the cutscene by one line in the current action list"""
-        if not self.active:
-            print 'Somehow we are trying to call next_line on an inactive conversation'
-            return
+        # if not self.active:
+        #     print 'Somehow we are trying to call next_line on an inactive conversation'
+        #     return
         if self.convo_position >= len(self.convo_lines):
             self.stop_speaking()
         else:    
@@ -439,8 +442,11 @@ class Conversation(object):
     
     def stop_speaking(self, dt=0):
         """Stop the cutscene"""
+        if not self.active:
+            return
         self.clear_speech_bubble()
         self.scene.clock.unschedule(self.next_line)
+        self.convo_lines = []
         
         for identifier, new_state in self.animations['at_rest'].viewitems():
             self.scene.actors[identifier].update_state(new_state)
