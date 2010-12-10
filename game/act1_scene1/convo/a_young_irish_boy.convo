@@ -21,7 +21,7 @@ start:
             hide_after_use: true
             goto: comment
         Have some bean soup:
-            require: beans, knows_about_beans
+            require: beans, knows_about_shamus_beans
             goto: give_soup
         What will you do on Planet Deux?:
             require: greeted_shamus
@@ -52,7 +52,7 @@ future:
     - shamus: But there are downsides. I can't buy much food from this train and I'm hungry.
     - shamus: All I want is some bean soup.
     - update_globals:
-        knows_about_beans: True
+        knows_about_shamus_beans: True
     - goto: start
 
 give_soup:
